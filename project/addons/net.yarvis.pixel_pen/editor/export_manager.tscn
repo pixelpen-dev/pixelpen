@@ -1,0 +1,340 @@
+[gd_scene load_steps=20 format=3 uid="uid://cn5q432ln7srp"]
+
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_eikdn"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/layout_split.gd" id="2_5ge48"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/export_sheet/export_sheet.gd" id="2_paiee"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/branch.gd" id="3_aitvw"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/data_branch.gd" id="4_lnqw5"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="5_oodws"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/tree_properties/tree_properties.gd" id="6_a6y63"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/export_sheet/canvas_export_2d.gd" id="6_rof74"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/tree_properties/tree_row.gd" id="7_sqmv5"]
+
+[sub_resource type="Resource" id="Resource_5buie"]
+script = ExtResource("3_aitvw")
+name = ""
+parent = NodePath(".")
+child = NodePath("Canvas")
+split_ratio = 0.0
+vertical = false
+parent_size = 0.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_hadps"]
+script = ExtResource("3_aitvw")
+name = ""
+parent = NodePath("Canvas")
+child = NodePath("Menu")
+split_ratio = 0.612837
+vertical = false
+parent_size = 0.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_14shc"]
+script = ExtResource("4_lnqw5")
+data = Array[ExtResource("3_aitvw")]([SubResource("Resource_5buie"), SubResource("Resource_hadps")])
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nqp2i"]
+shader = ExtResource("5_oodws")
+shader_parameter/origin = Vector2(0, 0)
+shader_parameter/tint = Vector4(0, 0, 0, 0)
+shader_parameter/tile_size = Vector2(128, 80)
+shader_parameter/lock_to_global = 1.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bjl1a"]
+size = Vector2(1408, 80)
+
+[sub_resource type="Resource" id="Resource_8kh0c"]
+script = ExtResource("7_sqmv5")
+label = "Sheets"
+field = 5
+int_value = 0
+int_min = 0
+int_max = 100
+int_step = 1
+float_value = 0.0
+float_min = 0.0
+float_max = 1.0
+float_step = 0.001
+range_value = 0.0
+range_min = 0.0
+range_max = 1.0
+range_step = 0.001
+string_value = ""
+vector2_label_x = "X"
+vector2_label_y = "Y"
+vector2_value = Vector2(0, 0)
+vector2_min = Vector2(0, 0)
+vector2_max = Vector2(1, 1)
+vector2_step = Vector2(0.001, 0.001)
+vector2i_label_x = "Column"
+vector2i_label_y = "Row"
+vector2i_value = Vector2i(11, 1)
+vector2i_min = Vector2i(1, 1)
+vector2i_max = Vector2i(16384, 16384)
+vector2i_step = Vector2i(1, 1)
+enum_value = 0
+enum_option = Array[String]([])
+file_value = ""
+file_mode = 4
+file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
+
+[sub_resource type="Resource" id="Resource_w8643"]
+script = ExtResource("7_sqmv5")
+label = "Margin"
+field = 5
+int_value = 0
+int_min = 0
+int_max = 100
+int_step = 1
+float_value = 0.0
+float_min = 0.0
+float_max = 1.0
+float_step = 0.001
+range_value = 0.0
+range_min = 0.0
+range_max = 1.0
+range_step = 0.001
+string_value = ""
+vector2_label_x = "X"
+vector2_label_y = "Y"
+vector2_value = Vector2(0, 0)
+vector2_min = Vector2(0, 0)
+vector2_max = Vector2(1, 1)
+vector2_step = Vector2(0.001, 0.001)
+vector2i_label_x = "X"
+vector2i_label_y = "Y"
+vector2i_value = Vector2i(0, 0)
+vector2i_min = Vector2i(0, 0)
+vector2i_max = Vector2i(16384, 16384)
+vector2i_step = Vector2i(1, 1)
+enum_value = 0
+enum_option = Array[String]([])
+file_value = ""
+file_mode = 4
+file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
+
+[sub_resource type="Resource" id="Resource_a0wck"]
+script = ExtResource("7_sqmv5")
+label = "Linked Frame"
+field = 6
+int_value = 0
+int_min = 0
+int_max = 100
+int_step = 1
+float_value = 0.0
+float_min = 0.0
+float_max = 1.0
+float_step = 0.001
+range_value = 0.0
+range_min = 0.0
+range_max = 1.0
+range_step = 0.001
+string_value = ""
+vector2_label_x = "X"
+vector2_label_y = "Y"
+vector2_value = Vector2(0, 0)
+vector2_min = Vector2(0, 0)
+vector2_max = Vector2(1, 1)
+vector2_step = Vector2(0.001, 0.001)
+vector2i_label_x = "X"
+vector2i_label_y = "Y"
+vector2i_value = Vector2i(0, 0)
+vector2i_min = Vector2i(0, 0)
+vector2i_max = Vector2i(100, 100)
+vector2i_step = Vector2i(1, 1)
+enum_value = 0
+enum_option = Array[String](["Keep All", "Keep One"])
+file_value = ""
+file_mode = 4
+file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
+
+[sub_resource type="Resource" id="Resource_r0lea"]
+script = ExtResource("7_sqmv5")
+label = "Directions"
+field = 6
+int_value = 0
+int_min = 0
+int_max = 100
+int_step = 1
+float_value = 0.0
+float_min = 0.0
+float_max = 1.0
+float_step = 0.001
+range_value = 0.0
+range_min = 0.0
+range_max = 1.0
+range_step = 0.001
+string_value = ""
+vector2_label_x = "X"
+vector2_label_y = "Y"
+vector2_value = Vector2(0, 0)
+vector2_min = Vector2(0, 0)
+vector2_max = Vector2(1, 1)
+vector2_step = Vector2(0.001, 0.001)
+vector2i_label_x = "X"
+vector2i_label_y = "Y"
+vector2i_value = Vector2i(0, 0)
+vector2i_min = Vector2i(0, 0)
+vector2i_max = Vector2i(100, 100)
+vector2i_step = Vector2i(1, 1)
+enum_value = 0
+enum_option = Array[String](["Horizontal", "Vertical"])
+file_value = ""
+file_mode = 4
+file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
+
+[sub_resource type="Resource" id="Resource_tu37v"]
+script = ExtResource("7_sqmv5")
+label = "Export Location"
+field = 7
+int_value = 0
+int_min = 0
+int_max = 100
+int_step = 1
+float_value = 0.0
+float_min = 0.0
+float_max = 1.0
+float_step = 0.001
+range_value = 0.0
+range_min = 0.0
+range_max = 1.0
+range_step = 0.001
+string_value = ""
+vector2_label_x = "X"
+vector2_label_y = "Y"
+vector2_value = Vector2(0, 0)
+vector2_min = Vector2(0, 0)
+vector2_max = Vector2(1, 1)
+vector2_step = Vector2(0.001, 0.001)
+vector2i_label_x = "X"
+vector2i_label_y = "Y"
+vector2i_value = Vector2i(0, 0)
+vector2i_min = Vector2i(0, 0)
+vector2i_max = Vector2i(100, 100)
+vector2i_step = Vector2i(1, 1)
+enum_value = 0
+enum_option = Array[String]([])
+file_value = ""
+file_mode = 4
+file_dialog_filters = PackedStringArray("*.png")
+
+[node name="ExportSheet" type="ConfirmationDialog" node_paths=PackedStringArray("properties_node", "canvas_2d")]
+title = "Animation Sheets Export"
+position = Vector2i(0, 21)
+size = Vector2i(1080, 720)
+visible = true
+theme = ExtResource("1_eikdn")
+ok_button_text = "Save"
+dialog_hide_on_ok = false
+script = ExtResource("2_paiee")
+properties_node = NodePath("Wrapper/Layout/Menu/MarginContainer/TreeProperties")
+canvas_2d = NodePath("Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D")
+
+[node name="Wrapper" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.6
+offset_top = 3.6
+offset_right = -3.59998
+offset_bottom = -37.6
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="Control" parent="Wrapper"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_5ge48")
+branches = SubResource("Resource_14shc")
+border_margin = false
+enable = true
+
+[node name="Canvas" type="ColorRect" parent="Wrapper/Layout"]
+show_behind_parent = true
+layout_mode = 2
+anchor_right = 0.612837
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+color = Color(0.38, 0.38, 0.38, 1)
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Wrapper/Layout/Canvas"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Wrapper/Layout/Canvas/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(653, 674)
+render_target_update_mode = 4
+
+[node name="CanvasExport2D" type="Node2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport" node_paths=PackedStringArray("checker", "sprite_sheets", "camera")]
+script = ExtResource("6_rof74")
+checker = NodePath("Checker")
+sprite_sheets = NodePath("SpriteSheet")
+camera = NodePath("Camera2D")
+
+[node name="Checker" type="Sprite2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_nqp2i")
+texture = SubResource("PlaceholderTexture2D_bjl1a")
+centered = false
+
+[node name="SpriteSheet" type="Sprite2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D"]
+show_behind_parent = true
+centered = false
+
+[node name="Camera2D" type="Camera2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D"]
+position = Vector2(704, 40)
+zoom = Vector2(0.417401, 0.417401)
+
+[node name="Menu" type="Panel" parent="Wrapper/Layout"]
+layout_mode = 0
+anchor_left = 0.612837
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+theme_type_variation = &"BoxPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="Wrapper/Layout/Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="TreeProperties" type="Control" parent="Wrapper/Layout/Menu/MarginContainer"]
+layout_mode = 2
+script = ExtResource("6_a6y63")
+structure = Array[ExtResource("7_sqmv5")]([SubResource("Resource_8kh0c"), SubResource("Resource_w8643"), SubResource("Resource_a0wck"), SubResource("Resource_r0lea"), SubResource("Resource_tu37v")])
+list_margin = 8.0
+column_ratio = 0.4
+
+[connection signal="confirmed" from="." to="." method="_on_confirmed"]
+[connection signal="item_rect_changed" from="Wrapper/Layout/Canvas/SubViewportContainer" to="." method="_on_canvas_item_rect_changed"]
+[connection signal="value_changed" from="Wrapper/Layout/Menu/MarginContainer/TreeProperties" to="." method="_on_tree_properties_value_changed"]

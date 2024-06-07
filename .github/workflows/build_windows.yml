@@ -1,0 +1,57 @@
+name: 🪟 Build Windows
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    name: 🪟 Windows ${{ matrix.arch }} ${{ matrix.target }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [windows]
+        precision : [single]
+        target: [debug, release]
+        arch: [x86_64, x86_32]
+
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: 🔗 GDExtension Build
+        uses: godotengine/godot-cpp-template/.github/actions/build@main
+        with:          
+          platform: ${{ matrix.platform }}
+          arch: ${{ matrix.arch }}
+          float-precision: ${{ matrix.precision }}
+          build-target-type: 'template_${{ matrix.target }}'
+
+      - name: Include Files (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path project/addons/net.yarvis.pixel_pen/bin/
+          Copy-Item -Path "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/project/addons/net.yarvis.pixel_pen/"
+          Copy-Item -Path "${{ github.workspace }}/LICENSE.txt" -Destination "${{ github.workspace }}/project/addons/net.yarvis.pixel_pen/"
+
+      - name: Upload Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixelpen-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}
+          path: |
+            ${{ github.workspace }}/project/
+
+  merge:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: ${{ github.event.repository.name }}
+          pattern: pixelpen-*
+          delete-merged: true

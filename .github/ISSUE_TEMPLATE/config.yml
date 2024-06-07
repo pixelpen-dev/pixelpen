@@ -1,0 +1,8 @@
+contact_links:
+  - name: Feature proposals
+    url: https://github.com/pixelpen-dev/pixelpen/discussions/new/choose
+    about: Share ideas for new features in Discussions, under the "Ideas" category.
+    
+  - name: Ask a Question
+    url: https://github.com/pixelpen-dev/pixelpen/discussions/new/choose
+    about: Ask the community for help in Discussions, under the "Q&A" category.

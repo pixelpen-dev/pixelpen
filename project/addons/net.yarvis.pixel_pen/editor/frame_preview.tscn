@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=3 uid="uid://g4rt43ddprks"]
+
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/frame_preview/frame_preview.gd" id="1_mf5e8"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="2_rvwiy"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/frame_preview/sample_border.gd" id="3_5kpbu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yby2t"]
+shader = ExtResource("2_rvwiy")
+shader_parameter/origin = null
+shader_parameter/tint = Vector4(0, 0, 0, 0)
+shader_parameter/tile_size = Vector2(16, 16)
+shader_parameter/lock_to_global = 0.0
+
+[node name="FramePreview" type="Control" node_paths=PackedStringArray("wrapper", "camera", "layers", "sample_layers", "checker_sizing", "viewport_container", "front_control")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_mf5e8")
+wrapper = NodePath("SubViewportContainer/SubViewport/Wrapper")
+camera = NodePath("SubViewportContainer/SubViewport/Wrapper/Camera2D")
+layers = NodePath("SubViewportContainer/SubViewport/Wrapper/Layers")
+sample_layers = NodePath("SubViewportContainer/SubViewport/Wrapper/SampleBorder/SampleLayers")
+checker_sizing = NodePath("CheckerSizing")
+viewport_container = NodePath("SubViewportContainer")
+front_control = NodePath("FrontControl")
+
+[node name="CheckerSizing" type="AspectRatioContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Checker" type="ColorRect" parent="CheckerSizing"]
+material = SubResource("ShaderMaterial_yby2t")
+layout_mode = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+gui_disable_input = true
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="Wrapper" type="Node2D" parent="SubViewportContainer/SubViewport"]
+
+[node name="Layers" type="Node2D" parent="SubViewportContainer/SubViewport/Wrapper"]
+
+[node name="SampleBorder" type="Node2D" parent="SubViewportContainer/SubViewport/Wrapper" node_paths=PackedStringArray("frame_preview")]
+script = ExtResource("3_5kpbu")
+frame_preview = NodePath("../../../..")
+
+[node name="SampleLayers" type="Node2D" parent="SubViewportContainer/SubViewport/Wrapper/SampleBorder"]
+show_behind_parent = true
+
+[node name="Camera2D" type="Camera2D" parent="SubViewportContainer/SubViewport/Wrapper"]
+position = Vector2(0.5, 0.5)
+zoom = Vector2(720, 720)
+
+[node name="FrontControl" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[connection signal="resized" from="SubViewportContainer" to="." method="_on_sub_viewport_container_resized"]

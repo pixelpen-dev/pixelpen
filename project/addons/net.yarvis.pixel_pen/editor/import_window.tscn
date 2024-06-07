@@ -1,0 +1,158 @@
+[gd_scene load_steps=14 format=3 uid="uid://g5dkvguskujt"]
+
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_gihsy"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="2_5yc1d"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/import_window/import_window.gd" id="2_osla2"]
+[ext_resource type="Texture2D" uid="uid://d1bwfe3end0bu" path="res://addons/net.yarvis.pixel_pen/resources/icon/Icon.png" id="3_ipgu5"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas_cursor.gdshader" id="3_ygu2c"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/import_window/import_window_grid.gd" id="5_66m38"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/import_window/input_control.gd" id="5_ws7pf"]
+[ext_resource type="Texture2D" uid="uid://cgb05ladnfctb" path="res://addons/net.yarvis.pixel_pen/resources/icon/grid_3x3_24.svg" id="7_8p84s"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v1bee"]
+shader = ExtResource("2_5yc1d")
+shader_parameter/origin = null
+shader_parameter/tint = Vector4(0, 0, 0, 0)
+shader_parameter/tile_size = 8.0
+shader_parameter/lock_to_global = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a4hac"]
+shader = ExtResource("3_ygu2c")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h68op"]
+shader = ExtResource("3_ygu2c")
+
+[sub_resource type="InputEventKey" id="InputEventKey_jmy3n"]
+device = -1
+command_or_control_autoremap = true
+keycode = 71
+
+[sub_resource type="Shortcut" id="Shortcut_nlou4"]
+events = [SubResource("InputEventKey_jmy3n")]
+
+[node name="ImportWindow" type="ConfirmationDialog" node_paths=PackedStringArray("sprite", "spin_box", "size_label", "grid_button", "grid_view")]
+canvas_item_default_texture_filter = 0
+title = "Import Image..."
+initial_position = 4
+size = Vector2i(720, 520)
+visible = true
+theme = ExtResource("1_gihsy")
+script = ExtResource("2_osla2")
+sprite = NodePath("Control/VBoxContainer/Checker/GridView/SubViewportContainer/SubViewport/NodeWrapper/Sprite2D")
+spin_box = NodePath("Control/VBoxContainer/HBoxContainer/SpinBox")
+size_label = NodePath("Control/VBoxContainer/Size")
+grid_button = NodePath("Control/VBoxContainer/Checker/TextureButton")
+grid_view = NodePath("Control/VBoxContainer/Checker/GridView/SubViewportContainer/SubViewport/NodeWrapper")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.6
+offset_top = 3.6
+offset_right = -3.60004
+offset_bottom = -37.6
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Scale factor"
+
+[node name="SpinBox" type="SpinBox" parent="Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Image will be scaled to the factor of curret value.
+If the value is negative image will be shrinked instead."
+min_value = -64.0
+max_value = 64.0
+alignment = 2
+
+[node name="Control" type="Control" parent="Control/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+
+[node name="UpdatePreview" type="Button" parent="Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Update Preview"
+
+[node name="Size" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Checker" type="ColorRect" parent="Control/VBoxContainer"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_v1bee")
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridView" type="MarginContainer" parent="Control/VBoxContainer/Checker"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_a4hac")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/VBoxContainer/Checker/GridView" node_paths=PackedStringArray("node2d_wrapper")]
+layout_mode = 2
+stretch = true
+script = ExtResource("5_ws7pf")
+node2d_wrapper = NodePath("SubViewport/NodeWrapper")
+
+[node name="SubViewport" type="SubViewport" parent="Control/VBoxContainer/Checker/GridView/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(712, 394)
+render_target_update_mode = 4
+
+[node name="NodeWrapper" type="Node2D" parent="Control/VBoxContainer/Checker/GridView/SubViewportContainer/SubViewport" node_paths=PackedStringArray("sprite", "camera")]
+texture_filter = 1
+material = SubResource("ShaderMaterial_h68op")
+script = ExtResource("5_66m38")
+sprite = NodePath("Sprite2D")
+camera = NodePath("Camera2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="Control/VBoxContainer/Checker/GridView/SubViewportContainer/SubViewport/NodeWrapper"]
+show_behind_parent = true
+texture_filter = 1
+texture = ExtResource("3_ipgu5")
+centered = false
+
+[node name="Camera2D" type="Camera2D" parent="Control/VBoxContainer/Checker/GridView/SubViewportContainer/SubViewport/NodeWrapper"]
+position = Vector2(24, 24)
+zoom = Vector2(6.56667, 6.56667)
+
+[node name="TextureButton" type="TextureButton" parent="Control/VBoxContainer/Checker"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+shortcut = SubResource("Shortcut_nlou4")
+texture_normal = ExtResource("7_8p84s")
+texture_pressed = ExtResource("7_8p84s")
+texture_hover = ExtResource("7_8p84s")
+stretch_mode = 5
+
+[connection signal="pressed" from="Control/VBoxContainer/HBoxContainer/UpdatePreview" to="." method="_on_update_preview_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/Checker/TextureButton" to="." method="_on_grid_pressed"]

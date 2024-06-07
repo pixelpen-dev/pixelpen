@@ -1,0 +1,95 @@
+[gd_scene load_steps=9 format=3 uid="uid://b6j8y8bm5j65r"]
+
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/image_option_btn/image_option_btn.gd" id="1_h5dfv"]
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_uhi4c"]
+[ext_resource type="Texture2D" uid="uid://kdvmmfynifpw" path="res://addons/net.yarvis.pixel_pen/resources/icon/chevron-down.svg" id="2_113l0"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/tint_color.gdshader" id="2_c5kqn"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/image_option_btn/border_draw.gd" id="5_hwd2w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mslmp"]
+bg_color = Color(0.6, 0.6, 0.6, 0.0980392)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4op1s"]
+bg_color = Color(0.6, 0.6, 0.6, 0.156863)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qat0y"]
+shader = ExtResource("2_c5kqn")
+shader_parameter/tint = Color(0.717647, 0.717647, 0.717647, 1)
+
+[node name="ImageOption" type="MarginContainer" node_paths=PackedStringArray("preview", "button", "vbox", "popup_panel")]
+custom_minimum_size = Vector2(80, 0)
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 8.0
+grow_vertical = 2
+theme = ExtResource("1_uhi4c")
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_bottom = 4
+script = ExtResource("1_h5dfv")
+preview = NodePath("Button/HBoxContainer/ImagePreview")
+button = NodePath("Button")
+vbox = NodePath("PopupPanel/ScrollContainer/HFlow")
+popup_panel = NodePath("PopupPanel")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_mslmp")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4op1s")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mslmp")
+text = "--"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ImagePreview" type="TextureRect" parent="Button/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Chevron" type="TextureRect" parent="Button/HBoxContainer"]
+material = SubResource("ShaderMaterial_qat0y")
+layout_mode = 2
+texture = ExtResource("2_113l0")
+stretch_mode = 5
+
+[node name="PopupPanel" type="PopupPanel" parent="."]
+canvas_item_default_texture_filter = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PopupPanel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -422.0
+offset_bottom = -422.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HFlow" type="HFlowContainer" parent="PopupPanel/ScrollContainer" node_paths=PackedStringArray("main_parent")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+script = ExtResource("5_hwd2w")
+main_parent = NodePath("../../..")
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

@@ -1,0 +1,34 @@
+# Exhaustive licensing information for files in the Pixel Pen repository
+# =========================================================================
+#
+# This file aims at documenting the copyright and license for every source
+# file in the Pixel Pen repository, and especially outline the files
+# whose license differs from the MIT license used by Pixel Pen.
+#
+# It is written as a machine-readable format following the debian/copyright
+# specification. Globbing patterns (e.g. "Files: *") mean that they affect
+# all corresponding files (also recursively in subfolders), apart from those
+# with a more explicit copyright statement.
+#
+
+-----------------------------------------------------------------------
+
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Pixel Pen
+Upstream-Contact: Bayu Santoso Widodo <net.yarvis@gmail.com>
+Source: https://github.com/pixelpen-dev/pixelpen
+
+Files: *
+Comment: Pixel Pen
+Copyright: 2024-present, Bayu Santoso Widodo
+License: MIT
+
+Files: ./project/addons/net.yarvis.pixel_pen/resources/fonts/inter/
+Comment: Inter Font
+Copyright: 2020, The Inter Project Authors (https://github.com/rsms/inter)
+License: OFL-1.1
+
+Files: ./project/addons/net.yarvis.pixel_pen/thirdparty/gdgifexporter
+Comment: gdgifexporter
+Copyright: 2020, Igor Santarek (https://github.com/jegor377/godot-gdgifexporter)
+License: MIT

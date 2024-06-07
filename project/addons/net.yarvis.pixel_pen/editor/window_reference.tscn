@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://dexv2bql2g7r1"]
+
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/window_reference/window_reference.gd" id="1_73byk"]
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_fpbej"]
+
+[node name="WindowReference" type="Window" node_paths=PackedStringArray("texture")]
+canvas_item_default_texture_filter = 0
+position = Vector2i(0, 36)
+wrap_controls = true
+transient = true
+theme = ExtResource("1_fpbej")
+script = ExtResource("1_73byk")
+texture = NodePath("TextureRect")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]

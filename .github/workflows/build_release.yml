@@ -1,0 +1,42 @@
+name: 🏹 Build Release
+on: 
+  workflow_dispatch:
+  #push:
+  #  tags:
+  #    - "v*.*.*"
+
+jobs:
+  build:
+    uses: ./.github/workflows/build_all.yml
+
+  release:
+    name: 🏹 Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}
+          path: pixel-pen
+
+      - name: Archive
+        shell: sh
+        run: zip -r "addons.zip" pixel-pen
+  
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: PixelPen
+          files: addons.zip
+          generate_release_notes: true
+          draft: true
+          prerelease: true
+          fail_on_unmatched_files: true

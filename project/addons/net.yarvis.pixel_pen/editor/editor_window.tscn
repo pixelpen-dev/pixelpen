@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://blwhjcxtblxix"]
+
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_bt5sl"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_window/editor_window.gd" id="1_iiacl"]
+
+[node name="EditorWindow" type="Window"]
+canvas_item_default_texture_filter = 0
+gui_embed_subwindows = true
+mode = 2
+title = "Empty - Pixel Pen"
+initial_position = 1
+size = Vector2i(1280, 720)
+theme = ExtResource("1_bt5sl")
+script = ExtResource("1_iiacl")

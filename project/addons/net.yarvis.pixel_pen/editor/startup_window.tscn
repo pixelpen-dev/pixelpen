@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=3 uid="uid://c36lucb42c0pv"]
+
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_xyg4t"]
+[ext_resource type="FontFile" uid="uid://mcetkdnsuw5a" path="res://addons/net.yarvis.pixel_pen/resources/fonts/inter/static/Inter-Regular.ttf" id="1_yy08e"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/startup_window/startup_window.gd" id="2_lavm0"]
+
+[node name="StartupWindow" type="Window"]
+title = "Start With"
+position = Vector2i(0, 36)
+size = Vector2i(320, 152)
+visible = false
+wrap_controls = true
+transient = true
+exclusive = true
+theme = ExtResource("1_xyg4t")
+theme_override_fonts/title_font = ExtResource("1_yy08e")
+script = ExtResource("2_lavm0")
+
+[node name="Background" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="NEW" type="Button" parent="Background/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_yy08e")
+text = "New Project"
+
+[node name="OPEN" type="Button" parent="Background/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_yy08e")
+text = "Open Project"
+
+[node name="IMPORT" type="Button" parent="Background/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Import File"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="pressed" from="Background/MarginContainer/VBoxContainer/NEW" to="." method="_on_new_pressed"]
+[connection signal="pressed" from="Background/MarginContainer/VBoxContainer/OPEN" to="." method="_on_open_pressed"]
+[connection signal="pressed" from="Background/MarginContainer/VBoxContainer/IMPORT" to="." method="_on_import_pressed"]

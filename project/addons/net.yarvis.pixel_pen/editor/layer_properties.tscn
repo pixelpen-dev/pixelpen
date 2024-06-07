@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8n35hn7ffit6"]
+
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_cp2yj"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/layer_properties/layer_properties.gd" id="1_s4vgq"]
+
+[node name="LayerProperties" type="ConfirmationDialog" node_paths=PackedStringArray("line_edit")]
+title = "Layer Properties..."
+size = Vector2i(320, 104)
+theme = ExtResource("1_cp2yj")
+dialog_hide_on_ok = false
+dialog_close_on_escape = false
+script = ExtResource("1_s4vgq")
+line_edit = NodePath("MarginContainer/VBoxContainer/LineEdit")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Layer Name"
+
+[connection signal="about_to_popup" from="." to="." method="_on_about_to_popup"]
+[connection signal="canceled" from="." to="." method="_on_canceled"]
+[connection signal="confirmed" from="." to="." method="_on_confirmed"]

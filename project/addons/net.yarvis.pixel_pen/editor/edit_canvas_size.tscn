@@ -1,0 +1,118 @@
+[gd_scene load_steps=4 format=3 uid="uid://bj0oqgbe4c36d"]
+
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_be7me"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size/edit_canvas_size.gd" id="1_skqr0"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size/anchor_view.gd" id="2_8mnh6"]
+
+[node name="EditCanvasSize" type="ConfirmationDialog" node_paths=PackedStringArray("width_node", "height_node", "checker_size_node")]
+title = "Canvas Size"
+initial_position = 1
+size = Vector2i(520, 240)
+visible = true
+theme = ExtResource("1_be7me")
+script = ExtResource("1_skqr0")
+width_node = NodePath("Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/LineEditW")
+height_node = NodePath("Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditH")
+checker_size_node = NodePath("Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/LineEditChecker")
+anchor = 1
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 3.6
+offset_top = 3.6
+offset_right = 516.4
+offset_bottom = 202.4
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Width"
+
+[node name="LineEditW" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "1"
+alignment = 2
+virtual_keyboard_type = 2
+
+[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "px"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Height"
+
+[node name="LineEditH" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "1"
+alignment = 2
+virtual_keyboard_type = 2
+
+[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "px"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Checker"
+
+[node name="LineEditChecker" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "1"
+alignment = 2
+virtual_keyboard_type = 2
+
+[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "px"
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 16
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="Control/MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AnchorView" type="Control" parent="Control/MarginContainer/HBoxContainer/MarginContainer/AspectRatioContainer" node_paths=PackedStringArray("parent_window")]
+layout_mode = 2
+script = ExtResource("2_8mnh6")
+parent_window = NodePath("../../../../../..")
+
+[connection signal="gui_input" from="Control/MarginContainer/HBoxContainer/MarginContainer/AspectRatioContainer/AnchorView" to="Control/MarginContainer/HBoxContainer/MarginContainer/AspectRatioContainer/AnchorView" method="_on_gui_input"]

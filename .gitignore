@@ -1,0 +1,7 @@
+.DS_Store
+.sconsign.dblite
+.vscode/
+*.os
+/project/addons/net.yarvis.pixel_pen/bin/
+*.o
+project/export_presets.cfg

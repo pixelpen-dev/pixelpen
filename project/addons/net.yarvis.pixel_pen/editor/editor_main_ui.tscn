@@ -1,0 +1,866 @@
+[gd_scene load_steps=44 format=3 uid="uid://cwymkqj20edan"]
+
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_lcbg8"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/editor_main_ui.gd" id="2_7n4p1"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/classes/theme_config.gd" id="2_qv6xe"]
+[ext_resource type="FontFile" uid="uid://c1co68pfdyucx" path="res://addons/net.yarvis.pixel_pen/resources/fonts/inter/static/Inter-SemiBold.ttf" id="3_h0rgc"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/tool_box.gd" id="4_217wj"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/layout_split.gd" id="5_ktvsw"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/button_hover.gd" id="6_fnv4p"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/branch.gd" id="6_uhkao"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/data_branch.gd" id="7_on08i"]
+[ext_resource type="Texture2D" uid="uid://deog0bonjsm4p" path="res://addons/net.yarvis.pixel_pen/resources/icon/information-outline.svg" id="10_i6fsj"]
+[ext_resource type="FontFile" uid="uid://b0re2f6plrnns" path="res://addons/net.yarvis.pixel_pen/resources/fonts/inter/static/Inter-Bold.ttf" id="18_uhe2p"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/grid_pallete.gd" id="19_eprkn"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/sub_tool.gd" id="20_sif0e"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/sub_viewport.gd" id="21_vnetw"]
+[ext_resource type="PackedScene" uid="uid://dde4flu0tmqb3" path="res://addons/net.yarvis.pixel_pen/editor/editor_canvas.tscn" id="22_fuimd"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/debug_label.gd" id="23_lv0tc"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/animation_box.gd" id="25_w1it8"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/layers_tools.gd" id="26_rb4wp"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/tint_color.gdshader" id="27_cc1ks"]
+[ext_resource type="PackedScene" uid="uid://g4rt43ddprks" path="res://addons/net.yarvis.pixel_pen/editor/frame_preview.tscn" id="28_btf0o"]
+[ext_resource type="Texture2D" uid="uid://bldq3n1ujcpxu" path="res://addons/net.yarvis.pixel_pen/resources/icon/add_24.svg" id="30_1ngiw"]
+[ext_resource type="Texture2D" uid="uid://dhlo056qcyjky" path="res://addons/net.yarvis.pixel_pen/resources/icon/delete_24.svg" id="31_4d0km"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/layers.gd" id="32_cqc51"]
+
+[sub_resource type="Resource" id="Resource_w5lex"]
+script = ExtResource("6_uhkao")
+name = "Main"
+parent = NodePath(".")
+child = NodePath("ToolBox")
+split_ratio = 0.0
+vertical = false
+parent_size = 0.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_oe575"]
+script = ExtResource("6_uhkao")
+name = "ToolBox"
+parent = NodePath("ToolBox")
+child = NodePath("Palette")
+split_ratio = 0.03125
+vertical = false
+parent_size = 40.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_id72v"]
+script = ExtResource("6_uhkao")
+name = "Palette"
+parent = NodePath("Palette")
+child = NodePath("SubTool")
+split_ratio = 0.2
+vertical = false
+parent_size = 0.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_jpexo"]
+script = ExtResource("6_uhkao")
+name = "SubTool"
+parent = NodePath("SubTool")
+child = NodePath("Preview")
+split_ratio = 0.75
+vertical = false
+parent_size = 0.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_7tfyg"]
+script = ExtResource("6_uhkao")
+name = "PreviewAndLayer"
+parent = NodePath("Preview")
+child = NodePath("LayerPanel")
+split_ratio = 0.35
+vertical = true
+parent_size = 0.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_3301e"]
+script = ExtResource("6_uhkao")
+name = "Canvas"
+parent = NodePath("SubTool")
+child = NodePath("Canvas")
+split_ratio = 0.0588235
+vertical = true
+parent_size = 40.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_3ibq2"]
+script = ExtResource("6_uhkao")
+name = "Animation"
+parent = NodePath("Canvas")
+child = NodePath("Animation")
+split_ratio = 0.8
+vertical = true
+parent_size = 0.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_e4k8g"]
+script = ExtResource("7_on08i")
+data = Array[ExtResource("6_uhkao")]([SubResource("Resource_w5lex"), SubResource("Resource_oe575"), SubResource("Resource_id72v"), SubResource("Resource_jpexo"), SubResource("Resource_7tfyg"), SubResource("Resource_3301e"), SubResource("Resource_3ibq2")])
+
+[sub_resource type="LabelSettings" id="LabelSettings_ei7lg"]
+font = ExtResource("18_uhe2p")
+font_size = 14
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ml71"]
+shader = ExtResource("27_cc1ks")
+shader_parameter/tint = Color(0.400698, 0.400698, 0.400698, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0is3d"]
+
+[sub_resource type="Shader" id="Shader_l27li"]
+code = "shader_type canvas_item;
+
+
+uniform vec3 tint : source_color;
+
+
+void fragment() {
+	COLOR.rgb = tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sihf2"]
+resource_local_to_scene = true
+shader = SubResource("Shader_l27li")
+shader_parameter/tint = Color(0.745098, 0.745098, 0.745098, 1)
+
+[sub_resource type="Shader" id="Shader_mct3p"]
+code = "shader_type canvas_item;
+
+
+uniform vec3 tint : source_color;
+
+
+void fragment() {
+	COLOR.rgb = tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6jgyp"]
+shader = SubResource("Shader_mct3p")
+shader_parameter/tint = Color(0.698039, 0.698039, 0.698039, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_84xdt"]
+color = Color(0.25, 1, 0.5, 1)
+thickness = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_i1mik"]
+font_size = 12
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_edj35"]
+font_size = 12
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fbob5"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_ojwu8"]
+font_size = 11
+font_color = Color(0.564706, 0.564706, 0.564706, 1)
+
+[node name="EditorMainUI" type="Control" node_paths=PackedStringArray("pixel_pen_menu", "file_menu", "edit_menu", "layer_menu", "palette_menu", "animation_menu", "view_menu", "toolbox_dock", "canvas", "canvas_dock", "debug_label", "preview_node", "animation_panel", "layer_dock", "layers_tool", "theme_config", "layout_node", "subtool_dock")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_lcbg8")
+script = ExtResource("2_7n4p1")
+pixel_pen_menu = NodePath("Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer/PixelPen")
+file_menu = NodePath("Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer/File")
+edit_menu = NodePath("Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer/Edit")
+layer_menu = NodePath("Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer/Layer")
+palette_menu = NodePath("Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer/Palette")
+animation_menu = NodePath("Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer/Animation")
+view_menu = NodePath("Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer/View")
+toolbox_dock = NodePath("Background/VBoxContainer/MarginContainer/Layout/ToolBox")
+canvas = NodePath("Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer/SubViewport/EditorCanvas")
+canvas_dock = NodePath("Background/VBoxContainer/MarginContainer/Layout/Canvas")
+canvas_color_base = Color(0.38, 0.38, 0.38, 1)
+canvas_color_sample = Color(0.18, 0.18, 0.3, 1)
+debug_label = NodePath("Background/VBoxContainer/MarginContainer/Layout/Canvas/DebugLabel")
+preview_node = NodePath("Background/VBoxContainer/MarginContainer/Layout/Preview")
+animation_panel = NodePath("Background/VBoxContainer/MarginContainer/Layout/Animation")
+layer_dock = NodePath("Background/VBoxContainer/MarginContainer/Layout/LayerPanel")
+layers_tool = NodePath("Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools")
+theme_config = NodePath("ThemeConfig")
+layout_node = NodePath("Background/VBoxContainer/MarginContainer/Layout")
+subtool_dock = NodePath("Background/VBoxContainer/MarginContainer/Layout/SubTool")
+
+[node name="ThemeConfig" type="Node" parent="." node_paths=PackedStringArray("editor_main_ui", "main_panel", "main_menu", "palette_title_panel", "preview_wrapper_panel", "preview_title_panel", "layers_wrapper_panel", "layer_title_panel", "animation_menu_panel", "animation_frame_panel", "toolbox_dock", "palette_dock", "subtool_dock", "preview_dock", "layer_dock", "canvas_dock", "animation_dock")]
+script = ExtResource("2_qv6xe")
+editor_main_ui = NodePath("..")
+main_panel = NodePath("../Background")
+main_menu = NodePath("../Background/VBoxContainer/MainMenu")
+palette_title_panel = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Panel")
+preview_wrapper_panel = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Preview/VBoxContainer/Background")
+preview_title_panel = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Preview/VBoxContainer/Panel")
+layers_wrapper_panel = NodePath("../Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/Layers")
+layer_title_panel = NodePath("../Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayerTitle")
+animation_menu_panel = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationMenu")
+animation_frame_panel = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationFrame")
+toolbox_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/ToolBox")
+palette_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Palette")
+subtool_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/SubTool")
+preview_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Preview")
+layer_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/LayerPanel")
+canvas_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Canvas")
+animation_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Animation")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"MainPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="MainMenu" type="Panel" parent="Background/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_type_variation = &"BoxPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/VBoxContainer/MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/VBoxContainer/MainMenu/MarginContainer"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+
+[node name="PixelPen" type="MenuButton" parent="Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_h0rgc")
+theme_override_font_sizes/font_size = 14
+text = "PixelPen"
+switch_on_hover = true
+
+[node name="File" type="MenuButton" parent="Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.05
+theme_override_fonts/font = ExtResource("3_h0rgc")
+theme_override_font_sizes/font_size = 14
+text = "File"
+switch_on_hover = true
+
+[node name="Edit" type="MenuButton" parent="Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.05
+theme_override_fonts/font = ExtResource("3_h0rgc")
+theme_override_font_sizes/font_size = 14
+text = "Edit"
+switch_on_hover = true
+
+[node name="Layer" type="MenuButton" parent="Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_h0rgc")
+theme_override_font_sizes/font_size = 14
+text = "Layer"
+switch_on_hover = true
+
+[node name="Palette" type="MenuButton" parent="Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_h0rgc")
+theme_override_font_sizes/font_size = 14
+disabled = true
+text = "Palette"
+switch_on_hover = true
+
+[node name="Animation" type="MenuButton" parent="Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_h0rgc")
+theme_override_font_sizes/font_size = 14
+text = "Animation"
+switch_on_hover = true
+
+[node name="View" type="MenuButton" parent="Background/VBoxContainer/MainMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_h0rgc")
+theme_override_font_sizes/font_size = 14
+text = "View"
+switch_on_hover = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="Layout" type="Control" parent="Background/VBoxContainer/MarginContainer"]
+layout_mode = 2
+script = ExtResource("5_ktvsw")
+branches = SubResource("Resource_e4k8g")
+enable = true
+
+[node name="ToolBox" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout" node_paths=PackedStringArray("toolbox_list")]
+layout_mode = 0
+anchor_right = 0.03125
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -2.0
+offset_bottom = -2.0
+theme_type_variation = &"BoxPanel"
+script = ExtResource("4_217wj")
+toolbox_list = NodePath("ToolBoxList")
+
+[node name="ToolBoxList" type="FlowContainer" parent="Background/VBoxContainer/MarginContainer/Layout/ToolBox"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Palette" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout"]
+layout_mode = 0
+anchor_left = 0.03125
+anchor_right = 0.225
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 4.0
+offset_right = -2.0
+offset_bottom = -2.0
+theme_type_variation = &"BoxPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Palette"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="Panel" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_type_variation = &"BoxPanelTitle"
+
+[node name="Label" type="Label" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Palette
+"
+label_settings = SubResource("LabelSettings_ei7lg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridTooltip" type="TextureRect" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Panel"]
+material = SubResource("ShaderMaterial_2ml71")
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+tooltip_text = "(LMB)
+Pick active color palette.
+
+(RMB)
+Switch active color palette to given grid position.
+
+(SHIFT+LMB)
+Change image color if the color being used is the current active color palette to given color palette.
+
+(SHIFT+RMB)
+Change given palette color to opaque.
+
+(ALT+LMB)
+Copy active color palette to given color palette."
+mouse_filter = 0
+texture = ExtResource("10_i6fsj")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="Palette" type="MarginContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="Grid" type="Control" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer" node_paths=PackedStringArray("color_picker")]
+custom_minimum_size = Vector2(0, 624)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("19_eprkn")
+color_picker = NodePath("../../../Picker/ScrollContainer/ColorPicker")
+
+[node name="Picker" type="MarginContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.7
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker"]
+layout_mode = 2
+
+[node name="ColorPicker" type="ColorPicker" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/sv_width = 0
+theme_override_constants/sv_height = 200
+color = Color(0, 0, 0, 1)
+color_mode = 1
+picker_shape = 1
+can_add_swatches = false
+sampler_visible = false
+presets_visible = false
+
+[node name="SubTool" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout" node_paths=PackedStringArray("button_list", "toolbar_list", "shift_separator", "shift_label", "canvas")]
+layout_mode = 0
+anchor_left = 0.225
+anchor_right = 0.80625
+anchor_bottom = 0.0588235
+offset_left = 2.0
+offset_top = 4.0
+offset_right = -2.0
+offset_bottom = -2.0
+theme_type_variation = &"BoxPanel"
+script = ExtResource("20_sif0e")
+button_list = NodePath("MarginContainer/HBoxContainer/ButtonList")
+toolbar_list = NodePath("MarginContainer/HBoxContainer/ToolBar")
+shift_separator = NodePath("MarginContainer/HBoxContainer/VSeparator")
+shift_label = NodePath("MarginContainer/HBoxContainer/MarginContainer/ShiftMode")
+canvas = NodePath("../Canvas/SubViewportContainer/SubViewport/EditorCanvas")
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/VBoxContainer/MarginContainer/Layout/SubTool"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/SubTool/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ButtonList" type="HBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/SubTool/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ToolBar" type="HBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/SubTool/MarginContainer/HBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="Background/VBoxContainer/MarginContainer/Layout/SubTool/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/VBoxContainer/MarginContainer/Layout/SubTool/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="ShiftMode" type="Label" parent="Background/VBoxContainer/MarginContainer/Layout/SubTool/MarginContainer/HBoxContainer/MarginContainer"]
+modulate = Color(1, 1, 1, 0.5)
+layout_mode = 2
+size_flags_vertical = 1
+tooltip_text = "(SHIFT)
+When holding SHIFT key and mouse inside canvas viewport it will enable secondary sub tool.
+"
+mouse_filter = 1
+text = "SHIFT"
+label_settings = SubResource("LabelSettings_0is3d")
+vertical_alignment = 1
+
+[node name="Preview" type="Control" parent="Background/VBoxContainer/MarginContainer/Layout"]
+anchors_preset = 0
+anchor_left = 0.80625
+anchor_right = 1.0
+anchor_bottom = 0.35
+offset_left = 2.0
+offset_top = 4.0
+offset_right = -2.0
+offset_bottom = -2.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Preview"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 4
+
+[node name="Panel" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout/Preview/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_type_variation = &"BoxPanelTitle"
+
+[node name="Label" type="Label" parent="Background/VBoxContainer/MarginContainer/Layout/Preview/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Preview
+"
+label_settings = SubResource("LabelSettings_ei7lg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Background" type="ColorRect" parent="Background/VBoxContainer/MarginContainer/Layout/Preview/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.15, 0.15, 0.15, 1)
+
+[node name="FramePreview" parent="Background/VBoxContainer/MarginContainer/Layout/Preview/VBoxContainer/Background" instance=ExtResource("28_btf0o")]
+layout_mode = 1
+size_flags_vertical = 3
+use_canvas_frame = true
+show_cache_frame = true
+stretch_shrink = 2
+
+[node name="LayerPanel" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout"]
+layout_mode = 0
+anchor_left = 0.80625
+anchor_top = 0.35
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.6
+theme_type_variation = &"BoxPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="LayerTitle" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_type_variation = &"BoxPanelTitle"
+
+[node name="Label" type="Label" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayerTitle"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Layers"
+label_settings = SubResource("LabelSettings_ei7lg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LayersTools" type="HBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer" node_paths=PackedStringArray("canvas_node", "add_layer", "delete_layer")]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+alignment = 2
+script = ExtResource("26_rb4wp")
+canvas_node = NodePath("../../../Canvas/SubViewportContainer/SubViewport/EditorCanvas")
+add_layer = NodePath("AddLayer")
+delete_layer = NodePath("DeleteLayer")
+
+[node name="AddLayer" type="TextureButton" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools"]
+material = SubResource("ShaderMaterial_sihf2")
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+focus_mode = 0
+texture_normal = ExtResource("30_1ngiw")
+texture_pressed = ExtResource("30_1ngiw")
+texture_hover = ExtResource("30_1ngiw")
+stretch_mode = 3
+
+[node name="Hover" type="Node" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools/AddLayer"]
+script = ExtResource("6_fnv4p")
+tool_grup = 2
+
+[node name="DeleteLayer" type="TextureButton" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools"]
+material = SubResource("ShaderMaterial_6jgyp")
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+focus_mode = 0
+texture_normal = ExtResource("31_4d0km")
+texture_pressed = ExtResource("31_4d0km")
+texture_hover = ExtResource("31_4d0km")
+stretch_mode = 3
+
+[node name="Hover" type="Node" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools/DeleteLayer"]
+script = ExtResource("6_fnv4p")
+tool_grup = 2
+
+[node name="Layers" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"BoxPanelDarker"
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/Layers"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/Layers/MarginContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Layers" type="VBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/Layers/MarginContainer/ScrollContainer" node_paths=PackedStringArray("separator_hint", "panel_wrapper")]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+script = ExtResource("32_cqc51")
+separator_hint = NodePath("SeparatorHint")
+panel_wrapper = NodePath("../../..")
+
+[node name="SeparatorHint" type="HSeparator" parent="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/Layers/MarginContainer/ScrollContainer/Layers"]
+layout_mode = 2
+theme_override_constants/separation = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_84xdt")
+
+[node name="Canvas" type="ColorRect" parent="Background/VBoxContainer/MarginContainer/Layout"]
+layout_mode = 0
+anchor_left = 0.225
+anchor_top = 0.0588235
+anchor_right = 0.80625
+anchor_bottom = 0.811765
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+size_flags_vertical = 3
+mouse_filter = 1
+color = Color(0.298039, 0.298039, 0.298039, 1)
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Canvas" node_paths=PackedStringArray("editor_canvas")]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+stretch = true
+script = ExtResource("21_vnetw")
+editor_canvas = NodePath("SubViewport/EditorCanvas")
+
+[node name="SubViewport" type="SubViewport" parent="Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+size = Vector2i(740, 508)
+render_target_update_mode = 4
+
+[node name="EditorCanvas" parent="Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer/SubViewport" instance=ExtResource("22_fuimd")]
+
+[node name="DebugLabel" type="Label" parent="Background/VBoxContainer/MarginContainer/Layout/Canvas" groups=["debug_label"]]
+visible = false
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 1
+label_settings = SubResource("LabelSettings_i1mik")
+autowrap_mode = 2
+script = ExtResource("23_lv0tc")
+
+[node name="Animation" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout" node_paths=PackedStringArray("animation_menu_list", "animation_wrapper_frame_list", "animation_frame_list", "animation_unused_frame_list", "playback_timer", "frame_y_size", "animation_fps", "actual_fps")]
+layout_mode = 0
+anchor_left = 0.225
+anchor_top = 0.811765
+anchor_right = 0.80625
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+theme_type_variation = &"BoxPanelDarker"
+script = ExtResource("25_w1it8")
+animation_menu_list = NodePath("VBoxContainer/AnimationMenu/MenuList")
+animation_wrapper_frame_list = NodePath("VBoxContainer/AnimationFrame/ScrollContainer/ListWrapper")
+animation_frame_list = NodePath("VBoxContainer/AnimationFrame/ScrollContainer/ListWrapper/FrameList")
+animation_unused_frame_list = NodePath("VBoxContainer/AnimationFrame/ScrollContainer/ListWrapper/UnusedFrameList")
+playback_timer = NodePath("PlaybackTimer")
+frame_y_size = NodePath("VBoxContainer/AnimationFrame")
+animation_fps = NodePath("VBoxContainer/AnimationMenu/OverlayList/Panel/AnimationFPS")
+actual_fps = NodePath("VBoxContainer/AnimationMenu/OverlayList/ActualFPS")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Animation"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="AnimationMenu" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_type_variation = &"BoxPanel"
+
+[node name="MenuList" type="HBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="OverlayList" type="HBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationMenu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -13.0
+offset_right = -13.0
+offset_bottom = 13.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ActualFPS" type="Label" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationMenu/OverlayList"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+label_settings = SubResource("LabelSettings_edj35")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationMenu/OverlayList"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_type_variation = &"PanelEdit"
+
+[node name="AnimationFPS" type="SpinBox" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationMenu/OverlayList/Panel"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+min_value = 1.0
+max_value = 1000.0
+value = 1.0
+alignment = 1
+suffix = "fps"
+
+[node name="AnimationFrame" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+
+[node name="ListWrapper" type="VBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationFrame/ScrollContainer"]
+custom_minimum_size = Vector2(8, 88)
+layout_mode = 2
+
+[node name="Frame" type="Label" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationFrame/ScrollContainer/ListWrapper"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_fbob5")
+text = "Animation Timeline :"
+label_settings = SubResource("LabelSettings_ojwu8")
+
+[node name="FrameList" type="HBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationFrame/ScrollContainer/ListWrapper"]
+custom_minimum_size = Vector2(8, 88)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="HSeparator" type="HSeparator" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationFrame/ScrollContainer/ListWrapper"]
+layout_mode = 2
+
+[node name="Draft" type="Label" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationFrame/ScrollContainer/ListWrapper"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_fbob5")
+text = "Draft Frames :"
+label_settings = SubResource("LabelSettings_ojwu8")
+
+[node name="UnusedFrameList" type="HBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationFrame/ScrollContainer/ListWrapper"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="PlaybackTimer" type="Timer" parent="Background/VBoxContainer/MarginContainer/Layout/Animation"]
+
+[connection signal="item_rect_changed" from="." to="." method="_on_size_changed"]
+[connection signal="item_rect_changed" from="Background/VBoxContainer/MarginContainer/Layout/Palette" to="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer/Grid" method="_on_palette_item_rect_changed"]
+[connection signal="color_changed" from="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker/ScrollContainer/ColorPicker" to="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer/Grid" method="_on_color_picker_color_changed"]
+[connection signal="pressed" from="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools/AddLayer" to="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools" method="_on_add_pressed"]
+[connection signal="pressed" from="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools/DeleteLayer" to="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools" method="_on_trash_pressed"]
+[connection signal="mouse_entered" from="Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer" to="Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer" to="Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer" method="_on_mouse_exited"]
+[connection signal="resized" from="Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationFrame" to="Background/VBoxContainer/MarginContainer/Layout/Animation" method="_on_animation_frame_resized"]

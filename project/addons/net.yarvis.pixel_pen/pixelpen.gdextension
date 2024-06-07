@@ -1,0 +1,26 @@
+[configuration]
+
+entry_symbol = "pixelpen_init"
+compatibility_minimum = "4.2"
+
+
+[libraries]
+
+macos.debug = "bin/libpixelpen.macos.debug.framework"
+macos.release = "bin/libpixelpen.macos.release.framework"
+
+android.debug.arm64 = "bin/libpixelpen.android.debug.arm64.so"
+android.release.arm64 = "bin/libpixelpen.android.release.arm64.so"
+android.debug.arm32 = "bin/libpixelpen.android.debug.arm32.so"
+android.release.arm32 = "bin/libpixelpen.android.release.arm32.so"
+
+linux.debug.x86_64 = "bin/libpixelpen.linux.debug.x86_64.so"
+linux.release.x86_64 = "bin/libpixelpen.linux.release.x86_64.so"
+
+windows.debug.x86_64 = "bin/libpixelpen.windows.debug.x86_64.dll"
+windows.release.x86_64 = "bin/libpixelpen.windows.release.x86_64.dll"
+windows.debug.x86_32 = "bin/libpixelpen.windows.debug.x86_32.dll"
+windows.release.x86_32 = "bin/libpixelpen.windows.release.x86_32.dll"
+
+web.debug = "bin/libpixelpen.web.debug.wasm32.wasm"
+web.release = "bin/libpixelpen.web.release.wasm32.wasm"

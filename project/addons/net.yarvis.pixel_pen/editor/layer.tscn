@@ -1,0 +1,208 @@
+[gd_scene load_steps=15 format=3 uid="uid://cib0kcem4y30s"]
+
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_3txx7"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_layer/layer.gd" id="1_s40gn"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/classes/theme_config.gd" id="2_iugbb"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/tint_color.gdshader" id="2_q55v8"]
+[ext_resource type="Texture2D" uid="uid://bsckx4fmkk1t1" path="res://addons/net.yarvis.pixel_pen/resources/icon/eye_20.svg" id="3_rqw80"]
+[ext_resource type="FontFile" uid="uid://mcetkdnsuw5a" path="res://addons/net.yarvis.pixel_pen/resources/fonts/inter/static/Inter-Regular.ttf" id="4_gpbab"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="6_jl8wa"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/pickable.gd" id="7_fmnvr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nv7xa"]
+shader = ExtResource("2_q55v8")
+shader_parameter/tint = Color(0.701961, 0.701961, 0.701961, 1)
+
+[sub_resource type="Shader" id="Shader_8wfml"]
+code = "shader_type canvas_item;
+
+
+uniform vec3 tint : source_color;
+
+
+void fragment() {
+	COLOR.rgb = tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_42vci"]
+shader = SubResource("Shader_8wfml")
+shader_parameter/tint = Color(0.701961, 0.701961, 0.701961, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jjhfm"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fa5bl"]
+shader = ExtResource("6_jl8wa")
+shader_parameter/origin = null
+shader_parameter/tint = Vector4(0, 0, 0, 0)
+shader_parameter/tile_size = Vector2(4, 4)
+shader_parameter/lock_to_global = 0.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_5sjw2"]
+font = ExtResource("4_gpbab")
+font_size = 12
+font_color = Color(0.701961, 0.701961, 0.701961, 1)
+
+[node name="Layer" type="ColorRect" node_paths=PackedStringArray("visible_btn", "active_btn", "active_rect", "pickable", "preview", "label")]
+custom_minimum_size = Vector2(0, 40)
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+mouse_filter = 1
+theme = ExtResource("1_3txx7")
+color = Color(0.17, 0.17, 0.17, 1)
+script = ExtResource("1_s40gn")
+default_color = Color(0.19, 0.19, 0.19, 1)
+active_color = Color(0.3, 0.3, 0.3, 1)
+secondary_active_color = Color(0.25, 0.25, 0.25, 1)
+visible_btn = NodePath("DetachedWrapper/HBoxContainer/VisibleHead")
+active_btn = NodePath("DetachedWrapper/HBoxContainer/Button")
+active_rect = NodePath("DetachedWrapper/HBoxContainer/Button/ActiveColor")
+pickable = NodePath("DetachedWrapper/HBoxContainer/Button/Pickable")
+preview = NodePath("DetachedWrapper/HBoxContainer/Button/HBoxContainer/MarginContainer/Rect/ColorRect/AspectRatioContainer/TextureRect")
+label = NodePath("DetachedWrapper/HBoxContainer/Button/HBoxContainer/Label")
+
+[node name="DetachedWrapper" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15, 0.15, 0.15, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DetachedWrapper"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+
+[node name="VisibleHead" type="ColorRect" parent="DetachedWrapper/HBoxContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="OFF" type="CheckBox" parent="DetachedWrapper/HBoxContainer/VisibleHead"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_right = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_filter = 2
+toggle_mode = false
+
+[node name="ON" type="TextureRect" parent="DetachedWrapper/HBoxContainer/VisibleHead"]
+material = SubResource("ShaderMaterial_nv7xa")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_rqw80")
+stretch_mode = 3
+
+[node name="Button" type="Button" parent="DetachedWrapper/HBoxContainer"]
+material = SubResource("ShaderMaterial_42vci")
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_jjhfm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jjhfm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jjhfm")
+flat = true
+alignment = 0
+
+[node name="ActiveColor" type="ColorRect" parent="DetachedWrapper/HBoxContainer/Button"]
+self_modulate = Color(0.19, 0.19, 0.19, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DetachedWrapper/HBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="DetachedWrapper/HBoxContainer/Button/HBoxContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Rect" type="AspectRatioContainer" parent="DetachedWrapper/HBoxContainer/Button/HBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="DetachedWrapper/HBoxContainer/Button/HBoxContainer/MarginContainer/Rect"]
+show_behind_parent = true
+layout_mode = 2
+mouse_filter = 1
+color = Color(0.0705882, 0.0823529, 0.0980392, 1)
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="DetachedWrapper/HBoxContainer/Button/HBoxContainer/MarginContainer/Rect/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="DetachedWrapper/HBoxContainer/Button/HBoxContainer/MarginContainer/Rect/ColorRect/AspectRatioContainer"]
+texture_filter = 1
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="DetachedWrapper/HBoxContainer/Button/HBoxContainer/MarginContainer/Rect/ColorRect/AspectRatioContainer/TextureRect"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_fa5bl")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="DetachedWrapper/HBoxContainer/Button/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Layer Test"
+label_settings = SubResource("LabelSettings_5sjw2")
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Pickable" type="Node" parent="DetachedWrapper/HBoxContainer/Button"]
+script = ExtResource("7_fmnvr")
+
+[node name="ThemeConfig" type="Node" parent="." node_paths=PackedStringArray("wrapper_layer_control", "head_layer_control", "detached_layer_control")]
+script = ExtResource("2_iugbb")
+type = 1
+wrapper_layer_control = NodePath("..")
+head_layer_control = NodePath("../DetachedWrapper/HBoxContainer/VisibleHead")
+detached_layer_control = NodePath("../DetachedWrapper")
+
+[connection signal="gui_input" from="DetachedWrapper/HBoxContainer/VisibleHead" to="." method="_on_visible_gui_input"]

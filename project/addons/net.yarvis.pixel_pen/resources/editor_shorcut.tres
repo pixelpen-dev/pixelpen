@@ -1,0 +1,502 @@
+[gd_resource type="Resource" script_class="EditorShorcut" load_steps=110 format=3 uid="uid://djvoltr03l1k0"]
+
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/classes/editor_shorcut.gd" id="1_bhf3x"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_myml5"]
+device = -1
+shift_pressed = true
+keycode = 83
+unicode = 83
+
+[sub_resource type="Shortcut" id="Shortcut_hwnf7"]
+events = [SubResource("InputEventKey_myml5")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_xkqou"]
+device = -1
+shift_pressed = true
+keycode = 87
+unicode = 87
+
+[sub_resource type="Shortcut" id="Shortcut_508s1"]
+events = [SubResource("InputEventKey_xkqou")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_vivd6"]
+device = -1
+command_or_control_autoremap = true
+shift_pressed = true
+keycode = 79
+
+[sub_resource type="Shortcut" id="Shortcut_vt6t3"]
+events = [SubResource("InputEventKey_vivd6")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_i4vv0"]
+device = -1
+command_or_control_autoremap = true
+keycode = 82
+
+[sub_resource type="Shortcut" id="Shortcut_2glkt"]
+events = [SubResource("InputEventKey_i4vv0")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_xkhv0"]
+device = -1
+shift_pressed = true
+keycode = 65
+unicode = 65
+
+[sub_resource type="Shortcut" id="Shortcut_2gqdo"]
+events = [SubResource("InputEventKey_xkhv0")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_gppyg"]
+device = -1
+shift_pressed = true
+keycode = 68
+unicode = 68
+
+[sub_resource type="Shortcut" id="Shortcut_mw0ur"]
+events = [SubResource("InputEventKey_gppyg")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_p8a71"]
+device = -1
+shift_pressed = true
+keycode = 4194322
+
+[sub_resource type="Shortcut" id="Shortcut_1cugf"]
+events = [SubResource("InputEventKey_p8a71")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_d7wxg"]
+device = -1
+keycode = 83
+unicode = 115
+
+[sub_resource type="Shortcut" id="Shortcut_6tqji"]
+events = [SubResource("InputEventKey_d7wxg")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_y3u4x"]
+device = -1
+shift_pressed = true
+keycode = 4194319
+
+[sub_resource type="Shortcut" id="Shortcut_0v1x2"]
+events = [SubResource("InputEventKey_y3u4x")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_w807g"]
+device = -1
+keycode = 65
+unicode = 97
+
+[sub_resource type="Shortcut" id="Shortcut_8y6nh"]
+events = [SubResource("InputEventKey_w807g")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_m3ypo"]
+device = -1
+shift_pressed = true
+keycode = 4194321
+
+[sub_resource type="Shortcut" id="Shortcut_4846e"]
+events = [SubResource("InputEventKey_m3ypo")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_0mqn4"]
+device = -1
+keycode = 68
+unicode = 100
+
+[sub_resource type="Shortcut" id="Shortcut_tmsp1"]
+events = [SubResource("InputEventKey_0mqn4")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_s3b2s"]
+device = -1
+keycode = 4194320
+
+[sub_resource type="Shortcut" id="Shortcut_s3ns2"]
+events = [SubResource("InputEventKey_s3b2s")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_p5h5n"]
+device = -1
+keycode = 87
+unicode = 119
+
+[sub_resource type="Shortcut" id="Shortcut_r3136"]
+events = [SubResource("InputEventKey_p5h5n")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_j17pa"]
+device = -1
+keycode = 4194309
+
+[sub_resource type="Shortcut" id="Shortcut_a6fx7"]
+events = [SubResource("InputEventKey_j17pa")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_irsoo"]
+device = -1
+command_or_control_autoremap = true
+keycode = 67
+
+[sub_resource type="Shortcut" id="Shortcut_t202x"]
+events = [SubResource("InputEventKey_irsoo")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_v62t5"]
+command_or_control_autoremap = true
+keycode = 88
+
+[sub_resource type="Shortcut" id="Shortcut_6gpw1"]
+events = [SubResource("InputEventKey_v62t5")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_cd6nn"]
+device = -1
+keycode = 51
+unicode = 51
+
+[sub_resource type="Shortcut" id="Shortcut_esl3e"]
+events = [SubResource("InputEventKey_cd6nn")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_yp18h"]
+device = -1
+keycode = 52
+unicode = 52
+
+[sub_resource type="Shortcut" id="Shortcut_r4mkn"]
+events = [SubResource("InputEventKey_yp18h")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_byl73"]
+device = -1
+command_or_control_autoremap = true
+keycode = 78
+physical_keycode = 78
+key_label = 78
+
+[sub_resource type="Shortcut" id="Shortcut_rjktg"]
+events = [SubResource("InputEventKey_byl73")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_2vaix"]
+device = -1
+command_or_control_autoremap = true
+keycode = 79
+physical_keycode = 79
+key_label = 79
+
+[sub_resource type="Shortcut" id="Shortcut_wchbh"]
+events = [SubResource("InputEventKey_2vaix")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_dw78a"]
+device = -1
+command_or_control_autoremap = true
+keycode = 80
+
+[sub_resource type="Shortcut" id="Shortcut_soukh"]
+events = [SubResource("InputEventKey_dw78a")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_wpopv"]
+device = -1
+keycode = 88
+unicode = 120
+
+[sub_resource type="Shortcut" id="Shortcut_n8oig"]
+events = [SubResource("InputEventKey_wpopv")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_vq1gw"]
+device = -1
+command_or_control_autoremap = true
+keycode = 69
+
+[sub_resource type="Shortcut" id="Shortcut_4kiu1"]
+events = [SubResource("InputEventKey_vq1gw")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_m0ub3"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_sn3g7"]
+events = [SubResource("InputEventKey_m0ub3")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_b7405"]
+device = -1
+command_or_control_autoremap = true
+shift_pressed = true
+keycode = 90
+
+[sub_resource type="Shortcut" id="Shortcut_ac0tw"]
+events = [SubResource("InputEventKey_b7405")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_rp6lm"]
+device = -1
+keycode = 53
+unicode = 53
+
+[sub_resource type="Shortcut" id="Shortcut_w2gdl"]
+events = [SubResource("InputEventKey_rp6lm")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_x8oh8"]
+device = -1
+keycode = 49
+unicode = 49
+
+[sub_resource type="Shortcut" id="Shortcut_icc7c"]
+events = [SubResource("InputEventKey_x8oh8")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_byoj6"]
+device = -1
+keycode = 50
+unicode = 50
+
+[sub_resource type="Shortcut" id="Shortcut_76ixq"]
+events = [SubResource("InputEventKey_byoj6")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_r1du7"]
+device = -1
+command_or_control_autoremap = true
+keycode = 83
+physical_keycode = 83
+key_label = 83
+
+[sub_resource type="Shortcut" id="Shortcut_jnm2h"]
+events = [SubResource("InputEventKey_r1du7")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_ow51v"]
+device = -1
+command_or_control_autoremap = true
+shift_pressed = true
+keycode = 83
+
+[sub_resource type="Shortcut" id="Shortcut_1d6vo"]
+events = [SubResource("InputEventKey_ow51v")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_f6v2q"]
+device = -1
+command_or_control_autoremap = true
+keycode = 47
+unicode = 47
+
+[sub_resource type="Shortcut" id="Shortcut_aurkn"]
+events = [SubResource("InputEventKey_f6v2q")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_k6flg"]
+device = -1
+command_or_control_autoremap = true
+keycode = 76
+unicode = 76
+
+[sub_resource type="Shortcut" id="Shortcut_qvns3"]
+events = [SubResource("InputEventKey_k6flg")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_wurx1"]
+device = -1
+keycode = 66
+unicode = 98
+
+[sub_resource type="Shortcut" id="Shortcut_jk55n"]
+events = [SubResource("InputEventKey_wurx1")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_vd7ko"]
+device = -1
+keycode = 73
+unicode = 105
+
+[sub_resource type="Shortcut" id="Shortcut_6g5aw"]
+events = [SubResource("InputEventKey_vd7ko")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_hoqsf"]
+device = -1
+keycode = 4194308
+
+[sub_resource type="Shortcut" id="Shortcut_ths0d"]
+events = [SubResource("InputEventKey_hoqsf")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_bufxn"]
+device = -1
+keycode = 79
+unicode = 111
+
+[sub_resource type="Shortcut" id="Shortcut_vbwfl"]
+events = [SubResource("InputEventKey_bufxn")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_fcskg"]
+device = -1
+keycode = 69
+unicode = 101
+
+[sub_resource type="Shortcut" id="Shortcut_sodjw"]
+events = [SubResource("InputEventKey_fcskg")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_1hrbn"]
+device = -1
+keycode = 70
+unicode = 102
+
+[sub_resource type="Shortcut" id="Shortcut_dfndj"]
+events = [SubResource("InputEventKey_1hrbn")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_23iox"]
+device = -1
+command_or_control_autoremap = true
+keycode = 73
+
+[sub_resource type="Shortcut" id="Shortcut_unj5a"]
+events = [SubResource("InputEventKey_23iox")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_fgqxq"]
+device = -1
+keycode = 76
+unicode = 108
+
+[sub_resource type="Shortcut" id="Shortcut_ccpih"]
+events = [SubResource("InputEventKey_fgqxq")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_iubf8"]
+device = -1
+keycode = 85
+unicode = 117
+
+[sub_resource type="Shortcut" id="Shortcut_a7cmr"]
+events = [SubResource("InputEventKey_iubf8")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_luk10"]
+device = -1
+keycode = 77
+unicode = 109
+
+[sub_resource type="Shortcut" id="Shortcut_cqbyr"]
+events = [SubResource("InputEventKey_luk10")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_7xtd1"]
+device = -1
+keycode = 72
+unicode = 104
+
+[sub_resource type="Shortcut" id="Shortcut_ultj0"]
+events = [SubResource("InputEventKey_7xtd1")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_xxyjd"]
+device = -1
+keycode = 80
+unicode = 112
+
+[sub_resource type="Shortcut" id="Shortcut_ptn5s"]
+events = [SubResource("InputEventKey_xxyjd")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_57r2u"]
+device = -1
+keycode = 82
+unicode = 114
+
+[sub_resource type="Shortcut" id="Shortcut_3g6ip"]
+events = [SubResource("InputEventKey_57r2u")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_fpm52"]
+device = -1
+command_or_control_autoremap = true
+keycode = 68
+
+[sub_resource type="Shortcut" id="Shortcut_8bfac"]
+events = [SubResource("InputEventKey_fpm52")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_s4nss"]
+device = -1
+keycode = 67
+unicode = 99
+
+[sub_resource type="Shortcut" id="Shortcut_wqa1f"]
+events = [SubResource("InputEventKey_s4nss")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_0x5ib"]
+device = -1
+keycode = 81
+unicode = 113
+
+[sub_resource type="Shortcut" id="Shortcut_uvc6r"]
+events = [SubResource("InputEventKey_0x5ib")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_fxyf3"]
+device = -1
+keycode = 89
+unicode = 89
+
+[sub_resource type="Shortcut" id="Shortcut_e2ugo"]
+events = [SubResource("InputEventKey_fxyf3")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_3hyo7"]
+device = -1
+keycode = 90
+unicode = 122
+
+[sub_resource type="Shortcut" id="Shortcut_c8e8j"]
+events = [SubResource("InputEventKey_3hyo7")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_psack"]
+device = -1
+command_or_control_autoremap = true
+keycode = 90
+
+[sub_resource type="Shortcut" id="Shortcut_v2e8j"]
+events = [SubResource("InputEventKey_psack")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_jmy3n"]
+device = -1
+command_or_control_autoremap = true
+keycode = 71
+
+[sub_resource type="Shortcut" id="Shortcut_nlou4"]
+events = [SubResource("InputEventKey_jmy3n")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_xlscs"]
+device = -1
+command_or_control_autoremap = true
+keycode = 84
+
+[sub_resource type="Shortcut" id="Shortcut_w5r0u"]
+events = [SubResource("InputEventKey_xlscs")]
+
+[resource]
+script = ExtResource("1_bhf3x")
+quit_editor = SubResource("Shortcut_sn3g7")
+new_project = SubResource("Shortcut_rjktg")
+open_project = SubResource("Shortcut_wchbh")
+save = SubResource("Shortcut_jnm2h")
+save_as = SubResource("Shortcut_1d6vo")
+quick_export = SubResource("Shortcut_4kiu1")
+undo = SubResource("Shortcut_v2e8j")
+redo = SubResource("Shortcut_ac0tw")
+copy = SubResource("Shortcut_t202x")
+cut = SubResource("Shortcut_6gpw1")
+paste = SubResource("Shortcut_soukh")
+confirm = SubResource("Shortcut_a6fx7")
+arrow_left = SubResource("Shortcut_0v1x2")
+arrow_up = SubResource("Shortcut_s3ns2")
+arrow_right = SubResource("Shortcut_4846e")
+arrow_down = SubResource("Shortcut_1cugf")
+arrow_left_variant = SubResource("Shortcut_8y6nh")
+arrow_up_variant = SubResource("Shortcut_r3136")
+arrow_right_variant = SubResource("Shortcut_tmsp1")
+arrow_down_variant = SubResource("Shortcut_6tqji")
+view_show_grid = SubResource("Shortcut_nlou4")
+view_show_tile = SubResource("Shortcut_w5r0u")
+rotate_canvas_90 = SubResource("Shortcut_icc7c")
+rotate_canvas_min90 = SubResource("Shortcut_76ixq")
+flip_canvas_horizontal = SubResource("Shortcut_esl3e")
+flip_canvas_vertical = SubResource("Shortcut_r4mkn")
+reset_canvas_transform = SubResource("Shortcut_w2gdl")
+toggle_tint_layer = SubResource("Shortcut_qvns3")
+toggle_edit_selection_only = SubResource("Shortcut_aurkn")
+tool_select = SubResource("Shortcut_wqa1f")
+tool_selection = SubResource("Shortcut_uvc6r")
+tool_move = SubResource("Shortcut_cqbyr")
+tool_pan = SubResource("Shortcut_ultj0")
+tool_pen = SubResource("Shortcut_ptn5s")
+tool_brush = SubResource("Shortcut_jk55n")
+tool_stamp = SubResource("Shortcut_e2ugo")
+tool_eraser = SubResource("Shortcut_sodjw")
+tool_magnet = SubResource("Shortcut_a7cmr")
+tool_rectangle = SubResource("Shortcut_3g6ip")
+tool_fill = SubResource("Shortcut_dfndj")
+tool_inverse_selection = SubResource("Shortcut_unj5a")
+tool_remove_selection = SubResource("Shortcut_8bfac")
+tool_delete_selected = SubResource("Shortcut_ths0d")
+tool_line = SubResource("Shortcut_ccpih")
+tool_color_picker = SubResource("Shortcut_6g5aw")
+tool_zoom = SubResource("Shortcut_c8e8j")
+tool_ellipse = SubResource("Shortcut_vbwfl")
+animation_play_pause = SubResource("Shortcut_2glkt")
+animation_shift_frame_left = SubResource("Shortcut_2gqdo")
+animation_shift_frame_right = SubResource("Shortcut_mw0ur")
+animation_move_frame_to_timeline = SubResource("Shortcut_508s1")
+animation_move_frame_to_draft = SubResource("Shortcut_hwnf7")
+animation_onion_skinning = SubResource("Shortcut_vt6t3")
+prev_toolbox = SubResource("Shortcut_n8oig")

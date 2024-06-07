@@ -1,0 +1,35 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="PixelPen"
+run/main_scene="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui.tscn"
+config/features=PackedStringArray("4.2", "Mobile")
+config/icon="res://addons/net.yarvis.pixel_pen/resources/icon/Icon.png"
+
+[autoload]
+
+PixelPen="*res://addons/net.yarvis.pixel_pen/pixelpen_singleton.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/mode=2
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/net.yarvis.pixel_pen/plugin.cfg")
+
+[rendering]
+
+renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true

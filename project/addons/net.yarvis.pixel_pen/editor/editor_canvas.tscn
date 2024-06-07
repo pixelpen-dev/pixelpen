@@ -1,0 +1,116 @@
+[gd_scene load_steps=17 format=3 uid="uid://dde4flu0tmqb3"]
+
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas_cursor.gdshader" id="1_iq3vk"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_canvas/editor_canvas.gd" id="1_je1bm"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="2_ehwxr"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/grayscale.gdshader" id="3_g2v7b"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/skinning_tint.gdshader" id="4_kk6px"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/marching_ant.gdshader" id="4_n22mx"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/marching_ant_filled.gdshader" id="5_6iuph"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c4sdf"]
+shader = ExtResource("1_iq3vk")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kftd1"]
+shader = ExtResource("2_ehwxr")
+shader_parameter/origin = Vector2(0, 0)
+shader_parameter/tint = Vector4(0, 0, 0, 0)
+shader_parameter/tile_size = Vector2(16, 16)
+shader_parameter/lock_to_global = 1.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0pfcl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6qp0i"]
+shader = ExtResource("4_kk6px")
+shader_parameter/tint = Color(0, 0, 1, 0.392157)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ajg5l"]
+shader = ExtResource("4_kk6px")
+shader_parameter/tint = Color(0, 1, 0, 0.392157)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yjwcy"]
+shader = ExtResource("5_6iuph")
+shader_parameter/enable = true
+shader_parameter/marching_ant = true
+shader_parameter/fill = false
+shader_parameter/outline_color = Color(0, 0, 0, 0)
+shader_parameter/zoom_bias = Vector2(0, 0)
+shader_parameter/width = 0.05
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1abm7"]
+shader = ExtResource("4_n22mx")
+shader_parameter/enable = true
+shader_parameter/marching_ant = true
+shader_parameter/zoom_bias = Vector2(0, 0)
+shader_parameter/width = 0.05
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c0u3p"]
+shader = ExtResource("3_g2v7b")
+shader_parameter/grayscale = false
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_kfqvb"]
+size = Vector2(761, 693)
+
+[node name="EditorCanvas" type="Node2D" node_paths=PackedStringArray("tile_node", "background_canvas", "skinning_prev", "skinning_next", "layers", "camera", "overlay_hint", "selection_tool_hint", "filter")]
+material = SubResource("ShaderMaterial_c4sdf")
+script = ExtResource("1_je1bm")
+tile_node = NodePath("Tiled")
+background_canvas = NodePath("BackgroudCanvas")
+skinning_prev = NodePath("AnimSkinningPrev")
+skinning_next = NodePath("AnimSkinningNext")
+layers = NodePath("Layers")
+camera = NodePath("Camera2D")
+overlay_hint = NodePath("Overlay")
+selection_tool_hint = NodePath("SelectionTool")
+filter = NodePath("Filter")
+
+[node name="BackgroudCanvas" type="Sprite2D" parent="."]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_kftd1")
+scale = Vector2(32, 32)
+texture = SubResource("PlaceholderTexture2D_0pfcl")
+centered = false
+
+[node name="AnimSkinningPrev" type="Sprite2D" parent="."]
+show_behind_parent = true
+texture_filter = 1
+material = SubResource("ShaderMaterial_6qp0i")
+centered = false
+
+[node name="AnimSkinningNext" type="Sprite2D" parent="."]
+show_behind_parent = true
+texture_filter = 1
+material = SubResource("ShaderMaterial_ajg5l")
+centered = false
+
+[node name="Tiled" type="Node2D" parent="."]
+show_behind_parent = true
+
+[node name="Layers" type="Node2D" parent="."]
+show_behind_parent = true
+
+[node name="Overlay" type="Sprite2D" parent="."]
+show_behind_parent = true
+texture_filter = 1
+material = SubResource("ShaderMaterial_yjwcy")
+centered = false
+
+[node name="SelectionTool" type="Sprite2D" parent="."]
+show_behind_parent = true
+texture_filter = 1
+material = SubResource("ShaderMaterial_1abm7")
+centered = false
+offset = Vector2(-1, -1)
+
+[node name="FilterBackBufferCopy" type="BackBufferCopy" parent="."]
+show_behind_parent = true
+copy_mode = 2
+
+[node name="Filter" type="Sprite2D" parent="."]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_c0u3p")
+position = Vector2(-16, -16)
+texture = SubResource("PlaceholderTexture2D_kfqvb")
+centered = false
+
+[node name="Camera2D" type="Camera2D" parent="."]

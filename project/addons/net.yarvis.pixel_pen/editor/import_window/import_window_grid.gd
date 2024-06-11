@@ -22,7 +22,11 @@ func _input(event: InputEvent):
 		elif event and event is InputEventPanGesture:
 			pan(event.delta)
 		elif event and event is InputEventMouseButton:
-			if event.is_pressed():
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_LEFT:
+				zoom(0.9)
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN or event.button_index == MOUSE_BUTTON_WHEEL_RIGHT:
+				zoom(1.1)
+			elif event.is_pressed():
 				hold = true
 				pressed_moused_position = to_local(get_global_mouse_position())
 			elif event.is_released():

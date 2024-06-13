@@ -26,13 +26,35 @@ const PATH := "user://pixelpen_user_config.res"
 @export var layer_active_color : Color = Color(0.3, 0.3, 0.3, 1.0)
 @export var layer_secondary_active_color : Color = Color(0.25, 0.25, 0.25, 1.0)
 
+@export_category("Preferences")
+@export_subgroup("General")
+@export var default_grid_size : Vector2i = Vector2i(8, 8)
+@export var checker_size : Vector2i = Vector2i(8, 8)
+@export var default_workspace : String = ""
+@export var default_canvas_size : Vector2i = Vector2i(128, 128)
+@export var hide_cursor_in_canvas : bool = true
+@export var default_animation_fps : int = 24
+
+@export_subgroup("Shorcuts")
+@export var shorcuts : EditorShorcut = preload("../resources/editor_shorcut.tres")
+
 
 static func load_data(reset : bool = false):
 	if not reset and ResourceLoader.exists(PATH):
 		var res = ResourceLoader.load(PATH, "", ResourceLoader.CACHE_MODE_IGNORE)
 		if res and res is UserConfig:
 			return res
-	return UserConfig.new()
+	var new_user = UserConfig.new()
+	new_user.save()
+	return new_user
+
+
+func resolve_null():
+	var default = UserConfig.new()
+	for value in get_property_list():
+		if get(value["name"]) == null and default.get(value["name"]) != null:
+			set(value["name"], default.get(value["name"]))
+			save()
 
 
 func save():

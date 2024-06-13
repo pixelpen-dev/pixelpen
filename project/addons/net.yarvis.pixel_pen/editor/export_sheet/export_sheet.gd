@@ -91,7 +91,7 @@ func _ready():
 	place_frame()
 
 
-func _on_tree_properties_value_changed(index):
+func _on_tree_properties_value_changed(index, _value):
 	var tree_row : TreeRow = properties_node.structure[index]
 	match index:
 		PropertiesID.SHEETS_SIZE:

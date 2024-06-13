@@ -13,12 +13,10 @@ func _on_tool_pressed():
 	editor_window_instance = EditorWindow.instantiate()
 	editor_window_instance.window_running = true
 	EditorInterface.get_base_control().add_child(editor_window_instance)
-	print("PixelPen-v",get_plugin_version(), " running...")
 	editor_window_instance.show()
 	editor_window_instance.grab_focus()
 	editor_window_instance.tree_exited.connect(func():
 			get_window().grab_focus()
-			print("PixelPen-v",get_plugin_version(), " exited...\n")
 			)
 
 

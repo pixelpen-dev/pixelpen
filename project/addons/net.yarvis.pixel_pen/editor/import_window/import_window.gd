@@ -4,7 +4,6 @@ extends ConfirmationDialog
 
 signal closed
 
-const shorcut : EditorShorcut = preload("../../resources/editor_shorcut.tres")
 
 @export var sprite : Sprite2D
 @export var spin_box : SpinBox
@@ -21,7 +20,7 @@ func _init():
 
 
 func _ready():
-	grid_button.shortcut = shorcut.view_show_grid
+	grid_button.shortcut = PixelPen.userconfig.shorcuts.view_show_grid
 
 
 func _process(_delta):

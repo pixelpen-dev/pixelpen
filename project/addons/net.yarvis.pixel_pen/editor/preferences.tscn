@@ -1,0 +1,180 @@
+[gd_scene load_steps=9 format=3 uid="uid://jhd48ca044sy"]
+
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/preferences.gd" id="1_5y7r0"]
+[ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_mhedo"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/tree_properties/tree_properties.gd" id="3_74jry"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/general_preferences.gd" id="3_k57uy"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/tree_properties/tree_row.gd" id="4_6utim"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/shorcuts_preferences.gd" id="6_dsxs8"]
+
+[sub_resource type="Resource" id="Resource_h5vb2"]
+script = ExtResource("4_6utim")
+label = "Grid line repeat"
+field = 5
+int_value = 0
+int_min = 0
+int_max = 100
+int_step = 1
+float_value = 0.0
+float_min = 0.0
+float_max = 1.0
+float_step = 0.001
+range_value = 0.0
+range_min = 0.0
+range_max = 1.0
+range_step = 0.001
+string_value = ""
+vector2_label_x = "X"
+vector2_label_y = "Y"
+vector2_value = Vector2(0, 0)
+vector2_min = Vector2(0, 0)
+vector2_max = Vector2(1, 1)
+vector2_step = Vector2(0.001, 0.001)
+vector2i_label_x = "X"
+vector2i_label_y = "Y"
+vector2i_value = Vector2i(8, 8)
+vector2i_min = Vector2i(1, 1)
+vector2i_max = Vector2i(16384, 16384)
+vector2i_step = Vector2i(1, 1)
+enum_value = 0
+enum_option = Array[String]([])
+file_value = ""
+file_mode = 4
+file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
+
+[sub_resource type="Resource" id="Resource_gogf3"]
+script = ExtResource("4_6utim")
+label = "Checker size"
+field = 5
+int_value = 0
+int_min = 0
+int_max = 100
+int_step = 1
+float_value = 0.0
+float_min = 0.0
+float_max = 1.0
+float_step = 0.001
+range_value = 0.0
+range_min = 0.0
+range_max = 1.0
+range_step = 0.001
+string_value = ""
+vector2_label_x = "X"
+vector2_label_y = "Y"
+vector2_value = Vector2(0, 0)
+vector2_min = Vector2(0, 0)
+vector2_max = Vector2(1, 1)
+vector2_step = Vector2(0.001, 0.001)
+vector2i_label_x = "WIDTH"
+vector2i_label_y = "HEIGHT"
+vector2i_value = Vector2i(8, 8)
+vector2i_min = Vector2i(1, 1)
+vector2i_max = Vector2i(16384, 16384)
+vector2i_step = Vector2i(1, 1)
+enum_value = 0
+enum_option = Array[String]([])
+file_value = ""
+file_mode = 4
+file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
+
+[node name="Preferences" type="AcceptDialog" node_paths=PackedStringArray("tab_container")]
+title = "Preferences"
+initial_position = 1
+size = Vector2i(861, 574)
+visible = true
+theme = ExtResource("1_mhedo")
+ok_button_text = "Close"
+script = ExtResource("1_5y7r0")
+tab_container = NodePath("TabContainer")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.6
+offset_top = 3.6
+offset_right = -3.60004
+offset_bottom = -37.6
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 1
+tab_focus_mode = 0
+
+[node name="General" type="HBoxContainer" parent="TabContainer" node_paths=PackedStringArray("tree", "tree_properties")]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 16
+script = ExtResource("3_k57uy")
+tree = NodePath("GeneralTree")
+tree_properties = NodePath("GeneralProperties")
+
+[node name="GeneralTree" type="Tree" parent="TabContainer/General"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 0
+hide_root = true
+
+[node name="GeneralProperties" type="Control" parent="TabContainer/General"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+script = ExtResource("3_74jry")
+structure = Array[ExtResource("4_6utim")]([SubResource("Resource_h5vb2"), SubResource("Resource_gogf3")])
+
+[node name="Shorcuts" type="HBoxContainer" parent="TabContainer" node_paths=PackedStringArray("shorcuts_tree", "edit_button", "reset_button", "clear_button")]
+layout_mode = 2
+script = ExtResource("6_dsxs8")
+shorcuts_tree = NodePath("ShorcutsTree")
+edit_button = NodePath("ShorcutsEdit/VBoxContainer/Edit")
+reset_button = NodePath("ShorcutsEdit/VBoxContainer/Reset")
+clear_button = NodePath("ShorcutsEdit/VBoxContainer/Clear")
+
+[node name="ShorcutsTree" type="Tree" parent="TabContainer/Shorcuts"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+columns = 2
+column_titles_visible = true
+hide_root = true
+
+[node name="ShorcutsEdit" type="MarginContainer" parent="TabContainer/Shorcuts"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Shorcuts/ShorcutsEdit"]
+layout_mode = 2
+
+[node name="Edit" type="Button" parent="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "EDIT"
+
+[node name="Reset" type="Button" parent="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "RESET"
+
+[node name="Clear" type="Button" parent="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "CLEAR"
+
+[node name="Control" type="Control" parent="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ResetAll" type="Button" parent="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer"]
+layout_mode = 2
+text = "RESET TO DEFAULT"
+
+[connection signal="item_selected" from="TabContainer/General/GeneralTree" to="TabContainer/General" method="_on_general_tree_item_selected"]
+[connection signal="value_changed" from="TabContainer/General/GeneralProperties" to="TabContainer/General" method="_on_general_properties_value_changed"]
+[connection signal="item_selected" from="TabContainer/Shorcuts/ShorcutsTree" to="TabContainer/Shorcuts" method="_on_shorcuts_tree_item_selected"]
+[connection signal="pressed" from="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer/Edit" to="TabContainer/Shorcuts" method="_on_edit_pressed"]
+[connection signal="pressed" from="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer/Reset" to="TabContainer/Shorcuts" method="_on_reset_pressed"]
+[connection signal="pressed" from="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer/Clear" to="TabContainer/Shorcuts" method="_on_clear_pressed"]
+[connection signal="pressed" from="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer/ResetAll" to="TabContainer/Shorcuts" method="_on_reset_all_pressed"]

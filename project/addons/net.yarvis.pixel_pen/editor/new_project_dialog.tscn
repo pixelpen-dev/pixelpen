@@ -10,15 +10,17 @@ bg_color = Color(1, 1, 1, 0.027451)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_auk7k"]
 shader = ExtResource("1_y3rtv")
 shader_parameter/origin = null
-shader_parameter/tile_size = 0.0
+shader_parameter/tint = Vector4(0, 0, 0, 0)
+shader_parameter/tile_size = Vector2(0, 0)
 shader_parameter/lock_to_global = 0.0
 
-[node name="NewProjectDialog" type="ConfirmationDialog" node_paths=PackedStringArray("name_node", "width_node", "height_node", "checker_node", "preview_aspect_ratio", "canvas")]
+[node name="NewProjectDialog" type="ConfirmationDialog" node_paths=PackedStringArray("name_node", "width_node", "height_node", "preview_aspect_ratio", "canvas")]
 snap_2d_transforms_to_pixel = true
 canvas_item_default_texture_filter = 0
 title = "New"
 initial_position = 4
 size = Vector2i(512, 320)
+visible = true
 theme = ExtResource("1_7thd0")
 dialog_hide_on_ok = false
 dialog_close_on_escape = false
@@ -26,7 +28,6 @@ script = ExtResource("1_bewiu")
 name_node = NodePath("Control/Margin/VBoxContainer/HBoxContainer/LineEditName")
 width_node = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditW")
 height_node = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/LineEditH")
-checker_node = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer4/LineEditChecker")
 preview_aspect_ratio = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/AspectRatioCanvas")
 canvas = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/AspectRatioCanvas/Canvas")
 
@@ -35,7 +36,10 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -41.0
+offset_left = 3.6
+offset_top = 3.6
+offset_right = -3.60001
+offset_bottom = -37.6
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -141,27 +145,6 @@ virtual_keyboard_type = 2
 layout_mode = 2
 text = "px"
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Checker" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer4"]
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-text = "checker"
-
-[node name="LineEditChecker" type="LineEdit" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer4"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 3.0
-text = "16"
-alignment = 2
-virtual_keyboard_type = 2
-
-[node name="Pixel2" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer4"]
-layout_mode = 2
-text = "px"
-
 [node name="AspectRatioCanvas" type="AspectRatioContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -176,4 +159,3 @@ layout_mode = 2
 [connection signal="text_changed" from="Control/Margin/VBoxContainer/HBoxContainer/LineEditName" to="." method="_on_line_edit_name_text_changed"]
 [connection signal="text_changed" from="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditW" to="." method="_on_line_edit_w_text_changed"]
 [connection signal="text_changed" from="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/LineEditH" to="." method="_on_line_edit_h_text_changed"]
-[connection signal="text_changed" from="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer4/LineEditChecker" to="." method="_on_line_edit_grid_text_changed"]

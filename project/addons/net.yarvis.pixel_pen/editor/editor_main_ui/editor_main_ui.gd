@@ -3,12 +3,12 @@ extends Control
 
 
 const new_project_dialog := preload("../new_project_dialog.tscn")
+const preferences_dialog := preload("../preferences.tscn")
 const edit_canvas_size := preload("../edit_canvas_size.tscn")
 const startup_window := preload("../startup_window.tscn")
 const image_reference_window := preload("../window_reference.tscn")
 const import_window := preload("../import_window.tscn")
 const export_manager := preload("../export_manager.tscn")
-const shorcut : EditorShorcut = preload("../../resources/editor_shorcut.tres")
 
 const Tool := preload("../editor_canvas/tool.gd")
 const MoveTool := preload("../editor_canvas/move_tool.gd")
@@ -198,6 +198,7 @@ func _ready():
 			layout_node.update_layout()
 		return
 	
+	PixelPen.userconfig.resolve_null()
 	layout_node.branches = theme_config.get_default_layout(layout_node)
 	layout_node.update_layout()
 	_is_prev_landscape = get_viewport().get_visible_rect().size.x > get_viewport().get_visible_rect().size.y
@@ -247,7 +248,6 @@ func _on_project_file_changed():
 	
 	var pixelpen_popup = pixel_pen_menu.get_popup()
 	pixelpen_popup.set_item_disabled(pixelpen_popup.get_item_index(PixelPenID.ABOUT), true)
-	pixelpen_popup.set_item_disabled(pixelpen_popup.get_item_index(PixelPenID.PREFERENCE), true)
 	
 	var disable : bool = PixelPen.current_project == null
 
@@ -404,7 +404,7 @@ func _init_popup_menu():
 	var pixelpen_popup : PopupMenu = pixel_pen_menu.get_popup()
 	pixelpen_popup.add_to_group("pixelpen_popup")
 	pixelpen_popup.add_item("About", PixelPenID.ABOUT)
-	pixelpen_popup.add_item("Preferences", PixelPenID.PREFERENCE)
+	pixelpen_popup.add_item("Preferences...", PixelPenID.PREFERENCE)
 	pixelpen_popup.add_separator("", 100)
 	pixelpen_popup.add_item("Quit PixePen", PixelPenID.QUIT)
 	
@@ -542,8 +542,8 @@ func _init_popup_menu():
 	
 	var view_popup : PopupMenu = view_menu.get_popup()
 	view_popup.add_to_group("pixelpen_popup")
-	view_popup.add_item("Rotate canvas 90", ViewID.ROTATE_CANVAS_90)
 	view_popup.add_item("Rotate canvas -90", ViewID.ROTATE_CANVAS_MIN_90)
+	view_popup.add_item("Rotate canvas 90", ViewID.ROTATE_CANVAS_90)
 	view_popup.add_item("Flip canvas horizontal", ViewID.FLIP_CANVAS_HORIZONTAL)
 	view_popup.add_item("Flip canvas vertical", ViewID.FLIP_CANVAS_VERTICAL)
 	view_popup.add_item("Reset canvas transform", ViewID.RESET_CANVAS_TRANSFORM)
@@ -589,53 +589,95 @@ func _init_popup_menu():
 
 func _set_shorcut():
 	var pixelpen_popup := pixel_pen_menu.get_popup()
-	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.QUIT), shorcut.quit_editor)
+	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.ABOUT), PixelPen.userconfig.shorcuts.about)
+	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.PREFERENCE), PixelPen.userconfig.shorcuts.preferences)
+	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.QUIT), PixelPen.userconfig.shorcuts.quit_editor)
 	
 	var file_popup := file_menu.get_popup()
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.NEW), shorcut.new_project)
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.OPEN), shorcut.open_project)
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.SAVE), shorcut.save)
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.SAVE_AS), shorcut.save_as)
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.QUICK_EXPORT), shorcut.quick_export)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.NEW), PixelPen.userconfig.shorcuts.new_project)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.OPEN), PixelPen.userconfig.shorcuts.open_project)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.SAVE), PixelPen.userconfig.shorcuts.save)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.SAVE_AS), PixelPen.userconfig.shorcuts.save_as)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.IMPORT), PixelPen.userconfig.shorcuts.import)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.QUICK_EXPORT), PixelPen.userconfig.shorcuts.quick_export)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.CLOSE), PixelPen.userconfig.shorcuts.close_project)
 	
+
 	var edit_popup := edit_menu.get_popup()
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.UNDO), shorcut.undo)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.REDO), shorcut.redo)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.INVERSE_SELECTION), shorcut.tool_inverse_selection)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CLEAR_SELECTION), shorcut.tool_remove_selection)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.DELETE_ON_SELECTION), shorcut.tool_delete_selected)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.COPY), shorcut.copy)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CUT), shorcut.cut)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.PASTE), shorcut.paste)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.SWITCH_LAST_TOOLBOX), shorcut.prev_toolbox)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.UNDO), PixelPen.userconfig.shorcuts.undo)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.REDO), PixelPen.userconfig.shorcuts.redo)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.COPY), PixelPen.userconfig.shorcuts.copy)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CUT), PixelPen.userconfig.shorcuts.cut)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.PASTE), PixelPen.userconfig.shorcuts.paste)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.INVERSE_SELECTION), PixelPen.userconfig.shorcuts.inverse_selection)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CLEAR_SELECTION), PixelPen.userconfig.shorcuts.remove_selection)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.DELETE_ON_SELECTION), PixelPen.userconfig.shorcuts.delete_selected)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CREATE_BRUSH), PixelPen.userconfig.shorcuts.create_brush)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.RESET_BRUSH), PixelPen.userconfig.shorcuts.reset_brush)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CREATE_STAMP), PixelPen.userconfig.shorcuts.create_stamp)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.RESET_STAMP), PixelPen.userconfig.shorcuts.reset_stamp)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.SWITCH_LAST_TOOLBOX), PixelPen.userconfig.shorcuts.prev_toolbox)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CANVAS_SIZE), PixelPen.userconfig.shorcuts.canvas_size)
 	
 	var layer_popup := layer_menu.get_popup()
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.LAYER_ACTIVE_GO_UP), shorcut.arrow_up_variant)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.LAYER_ACTIVE_GO_DOWN), shorcut.arrow_down_variant)
-	
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.ADD_LAYER), PixelPen.userconfig.shorcuts.add_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.DELETE_LAYER), PixelPen.userconfig.shorcuts.delete_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.DUPLICATE_LAYER), PixelPen.userconfig.shorcuts.duplicate_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.DUPLICATE_SELECTION), PixelPen.userconfig.shorcuts.duplicate_selection)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.COPY_LAYER), PixelPen.userconfig.shorcuts.copy_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.CUT_LAYER), PixelPen.userconfig.shorcuts.cut_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.PASTE), PixelPen.userconfig.shorcuts.paste_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.RENAME_LAYER), PixelPen.userconfig.shorcuts.rename_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.MERGE_DOWN), PixelPen.userconfig.shorcuts.merge_down)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.MERGE_VISIBLE), PixelPen.userconfig.shorcuts.merge_visible)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.MERGE_ALL), PixelPen.userconfig.shorcuts.merge_all)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.SHOW_ALL_LAYER), PixelPen.userconfig.shorcuts.show_all)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.HIDE_ALL_LAYER), PixelPen.userconfig.shorcuts.hide_all)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.LAYER_ACTIVE_GO_UP), PixelPen.userconfig.shorcuts.active_go_up)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.LAYER_ACTIVE_GO_DOWN), PixelPen.userconfig.shorcuts.active_go_down)
+
 	var animation_popup := animation_menu.get_popup()
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.PLAY_PAUSE), shorcut.animation_play_pause)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.STEP_BACKWARD), shorcut.arrow_left_variant)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.STEP_FORWARD), shorcut.arrow_right_variant)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_LEFT), shorcut.animation_shift_frame_left)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_RIGHT), shorcut.animation_shift_frame_right)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_TIMELINE), shorcut.animation_move_frame_to_timeline)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_DRAFT), shorcut.animation_move_frame_to_draft)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.TOGGLE_ONION_SKINNING), shorcut.animation_onion_skinning)
-	
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.PLAY_PAUSE), PixelPen.userconfig.shorcuts.animation_play_pause)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.SKIP_TO_FRONT), PixelPen.userconfig.shorcuts.animation_skip_to_front)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.STEP_FORWARD), PixelPen.userconfig.shorcuts.animation_step_forward)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.STEP_BACKWARD), PixelPen.userconfig.shorcuts.animation_step_backward)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.SKIP_TO_END), PixelPen.userconfig.shorcuts.animation_skip_to_end)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.TOGGLE_LOOP), PixelPen.userconfig.shorcuts.loop_playback)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.TOGGLE_ONION_SKINNING), PixelPen.userconfig.shorcuts.animation_onion_skinning)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.INSERT_FRAME_RIGHT), PixelPen.userconfig.shorcuts.frame_insert_right)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.INSERT_FRAME_LEFT), PixelPen.userconfig.shorcuts.frame_insert_left)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.DUPLICATE_FRAME), PixelPen.userconfig.shorcuts.duplicate_frame)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.DUPLICATE_FRAME_LINKED), PixelPen.userconfig.shorcuts.duplicate_frame_linked)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.CONVERT_FRAME_LINKED_TO_UNIQUE), PixelPen.userconfig.shorcuts.convert_frame_linked_to_unique)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_LEFT), PixelPen.userconfig.shorcuts.animation_shift_frame_left)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_RIGHT), PixelPen.userconfig.shorcuts.animation_shift_frame_right)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_TIMELINE), PixelPen.userconfig.shorcuts.animation_move_frame_to_timeline)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_DRAFT), PixelPen.userconfig.shorcuts.animation_move_frame_to_draft)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.CREATE_DRAFT_FRAME), PixelPen.userconfig.shorcuts.create_draft_frame)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.DELETE_DRAFT_FRAME), PixelPen.userconfig.shorcuts.delete_draft_frame)
+
 	var view_popup := view_menu.get_popup()
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_GRID), shorcut.view_show_grid)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.ROTATE_CANVAS_90), shorcut.rotate_canvas_90)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.ROTATE_CANVAS_MIN_90), shorcut.rotate_canvas_min90)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FLIP_CANVAS_HORIZONTAL), shorcut.flip_canvas_horizontal)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FLIP_CANVAS_VERTICAL), shorcut.flip_canvas_vertical)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.RESET_CANVAS_TRANSFORM), shorcut.reset_canvas_transform)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.TOGGLE_TINT_SELECTED_LAYER), shorcut.toggle_tint_layer)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.EDIT_SELECTION_ONLY), shorcut.toggle_edit_selection_only)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_TILE), shorcut.view_show_tile)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_GRID), PixelPen.userconfig.shorcuts.view_show_grid)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_TILE), PixelPen.userconfig.shorcuts.view_show_tile)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.ROTATE_CANVAS_90), PixelPen.userconfig.shorcuts.rotate_canvas_90)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.ROTATE_CANVAS_MIN_90), PixelPen.userconfig.shorcuts.rotate_canvas_min90)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FLIP_CANVAS_HORIZONTAL), PixelPen.userconfig.shorcuts.flip_canvas_horizontal)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FLIP_CANVAS_VERTICAL), PixelPen.userconfig.shorcuts.flip_canvas_vertical)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.RESET_CANVAS_TRANSFORM), PixelPen.userconfig.shorcuts.reset_canvas_transform)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.RESET_ZOOM), PixelPen.userconfig.shorcuts.reset_zoom)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_VIRTUAL_MOUSE), PixelPen.userconfig.shorcuts.virtual_mouse)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_VERTICAL_MIRROR_GUIDE), PixelPen.userconfig.shorcuts.vertical_mirror)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE), PixelPen.userconfig.shorcuts.horizontal_mirror)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_PREVIEW), PixelPen.userconfig.shorcuts.show_preview)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_ANIMATION_TIMELINE), PixelPen.userconfig.shorcuts.show_animation_timeline)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.TOGGLE_TINT_SELECTED_LAYER), PixelPen.userconfig.shorcuts.toggle_tint_layer)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FILTER_GRAYSCALE), PixelPen.userconfig.shorcuts.filter_greyscale)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.EDIT_SELECTION_ONLY), PixelPen.userconfig.shorcuts.toggle_edit_selection_only)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_INFO), PixelPen.userconfig.shorcuts.show_info)
 
 
 func connect_signal():
+	PixelPen.shorcut_changed.connect(_set_shorcut)
 	pixel_pen_menu.get_popup().id_pressed.connect(_on_pixelpen_popup_pressed)
 	file_menu.get_popup().id_pressed.connect(_on_file_popup_pressed)
 	file_menu.get_popup().about_to_popup.connect(_on_file_menu_about_to_pop)
@@ -667,6 +709,8 @@ func _on_project_saved(is_saved : bool):
 func _new():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_new_project_dialog = new_project_dialog.instantiate()
+	_new_project_dialog.width_node.text = str(PixelPen.userconfig.default_canvas_size.x)
+	_new_project_dialog.height_node.text = str(PixelPen.userconfig.default_canvas_size.y)
 	_new_project_dialog.confirmed.connect(func():
 			_new_project_dialog.hide()
 			PixelPen.project_file_changed.emit()
@@ -805,7 +849,21 @@ func _on_tool_changed(grup : int, type: int, _grab_active : bool):
 
 
 func _on_pixelpen_popup_pressed(id : int):
-	if id == PixelPenID.QUIT:
+	if id == PixelPenID.PREFERENCE:
+		var window := preferences_dialog.instantiate()
+		window.visible = false
+		add_child(window)
+		window.confirmed.connect(func():
+				window.hide()
+				window.queue_free()
+				)
+		window.canceled.connect(func():
+				window.hide()
+				window.queue_free()
+				)
+		window.popup_centered()
+
+	elif id == PixelPenID.QUIT:
 		if Engine.is_editor_hint():
 			get_window().hide()
 			get_window().queue_free()
@@ -835,7 +893,7 @@ func _on_file_popup_pressed(id : int):
 						var image : Image = window.get_image() 
 						var current_project = PixelPenProject.new()
 						current_project.initialized(
-								image.get_size(), "Untitled", 16, "", false
+								image.get_size(), "Untitled", "", false
 								)
 						PixelPen.current_project = current_project
 						var layer_uid : Vector3i = PixelPen.current_project.import_image(image, file)
@@ -1566,17 +1624,12 @@ func _open_canvas_size_window():
 	var edit_canvas_window = edit_canvas_size.instantiate()
 	edit_canvas_window.canvas_width = PixelPen.current_project.canvas_size.x 
 	edit_canvas_window.canvas_height = PixelPen.current_project.canvas_size.y
-	edit_canvas_window.checker_size = PixelPen.current_project.checker_size
 	edit_canvas_window.custom_action.connect(func(action):
 			if action == "on_reset":
 				edit_canvas_window.canvas_width = PixelPen.current_project.canvas_size.x 
 				edit_canvas_window.canvas_height = PixelPen.current_project.canvas_size.y
-				edit_canvas_window.checker_size = PixelPen.current_project.checker_size
 			)
 	edit_canvas_window.confirmed.connect(func():
-			if edit_canvas_window.checker_size != PixelPen.current_project.checker_size:
-				PixelPen.current_project.checker_size = edit_canvas_window.checker_size
-				canvas.update_background_shader_state()
 			var changed : bool = edit_canvas_window.canvas_width != PixelPen.current_project.canvas_size.x 
 			changed = changed or edit_canvas_window.canvas_height != PixelPen.current_project.canvas_size.y
 			if changed:

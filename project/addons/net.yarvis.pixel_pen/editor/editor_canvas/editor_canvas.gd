@@ -198,7 +198,7 @@ func pan(offset : Vector2):
 
 
 func update_background_shader_state():
-	background_canvas.material.set_shader_parameter("tile_size", Vector2.ONE * (PixelPen.current_project as PixelPenProject).checker_size )
+	background_canvas.material.set_shader_parameter("tile_size", PixelPen.userconfig.checker_size  )
 	background_canvas.visible = true
 
 
@@ -317,10 +317,10 @@ func _draw():
 					_symetric_guid_color_horizontal.a = 0.75
 					canvas_paint.tool.draw_plus_cursor(get_local_mouse_position(), 15)
 	if PixelPen.current_project != null and PixelPen.current_project.show_grid :
-		_draw_grid(1, 0.07)
-		_draw_grid(8, 0.075)
-		_draw_grid(16, 0.1)
-		_draw_grid(32, 0.125)
+		_draw_grid(Vector2i.ONE, 0.07)
+		_draw_grid(PixelPen.userconfig.default_grid_size, 0.075)
+		_draw_grid(PixelPen.userconfig.default_grid_size * 2, 0.1)
+		_draw_grid(PixelPen.userconfig.default_grid_size * 4, 0.125)
 	if PixelPen.current_project != null:
 		_draw_symetric_guid()
 	if PixelPen.current_project != null and PixelPen.current_project.show_tile:
@@ -372,12 +372,12 @@ func start_drag_virtual_mouse_from(mouse_pos : Vector2):
 	virtual_mouse_offset = mouse_pos - virtual_mouse_origin
 
 
-func _draw_grid(grid_size : int, alpha : float):
+func _draw_grid(grid_size : Vector2i, alpha : float):
 	var color = Color(1, 1, 1, alpha)
-	for x in range(1 + canvas_size.x / grid_size):
-		draw_line(Vector2(x * grid_size, 0), Vector2(x * grid_size, canvas_size.y), color)
-	for y in range(1 + canvas_size.y / grid_size):
-		draw_line(Vector2(0, y * grid_size), Vector2(canvas_size.x, y * grid_size), color)
+	for x in range(1 + canvas_size.x / grid_size.x):
+		draw_line(Vector2(x * grid_size.x, 0), Vector2(x * grid_size.x, canvas_size.y), color)
+	for y in range(1 + canvas_size.y / grid_size.y):
+		draw_line(Vector2(0, y * grid_size.y), Vector2(canvas_size.x, y * grid_size.y), color)
 
 
 func _draw_symetric_guid():

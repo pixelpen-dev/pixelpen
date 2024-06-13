@@ -16,6 +16,7 @@ signal layer_visibility_changed(layer_uid, visible)
 signal layer_items_changed
 signal thumbnail_changed
 signal edit_mode_changed(mode)
+signal shorcut_changed
 
 signal request_new_project
 signal request_open_project
@@ -218,6 +219,7 @@ func disconnect_all_signal():
 		"layer_items_changed",
 		"thumbnail_changed",
 		"edit_mode_changed",
+		"shorcut_changed",
 		"request_new_project",
 		"request_open_project",
 		"request_import_image",
@@ -285,8 +287,8 @@ func need_connection(window : Window):
 
 
 func get_directory():
-	if current_project == null:
-		return OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
-	if current_project.file_path == "" or current_project.file_path.get_base_dir() == "":
-		return OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
+	if current_project == null or current_project.file_path == "" or current_project.file_path.get_base_dir() == "":
+		if userconfig.default_workspace == null or userconfig.default_workspace == "":
+			return OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
+		return userconfig.default_workspace
 	return current_project.file_path.get_base_dir()

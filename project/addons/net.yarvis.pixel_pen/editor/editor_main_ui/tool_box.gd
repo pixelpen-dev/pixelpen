@@ -2,7 +2,6 @@
 extends Control
 
 
-const shorcut : EditorShorcut = preload("../../resources/editor_shorcut.tres")
 const shader_tint = preload("../../resources/tint_color.gdshader")
 
 const select := preload("res://addons/net.yarvis.pixel_pen/resources/icon/arrow_selector_24.svg")
@@ -34,26 +33,28 @@ var current_toolbox : PixelPen.ToolBox
 
 func create_toolbox():
 	_clean_up()
-	_build_button("Select", select, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_SELECT, false, shorcut.tool_select)
-	_build_button("Move", move, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_MOVE, false, shorcut.tool_move)
-	_build_button("Pan", pan, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_PAN, false, shorcut.tool_pan)
-	_build_button("Selection", selection, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_SELECTION, false, shorcut.tool_selection)
-	_build_button("Pen", pen, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_PEN, true, shorcut.tool_pen)
-	_build_button("Brush", brush, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_BRUSH, false, shorcut.tool_brush)
-	_build_button("Stamp", stamp, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_STAMP, false, shorcut.tool_stamp)
-	_build_button("Eraser", eraser, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_ERASER, false, shorcut.tool_eraser)
-	_build_button("Magnet", magnet, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_MAGNET, false, shorcut.tool_magnet)
-	_build_button("Line", line, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_LINE, false, shorcut.tool_line)
-	_build_button("Ellipse", oval, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_ELLIPSE, false, shorcut.tool_ellipse)
-	_build_button("Rectangle", rectangle, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_RECTANGLE, false, shorcut.tool_rectangle)
-	_build_button("Fill", fill, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_FILL, false, shorcut.tool_fill)
-	_build_button("Color Picker", color_picker, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_COLOR_PICKER, false, shorcut.tool_color_picker)
-	_build_button("Zoom", zoom, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_ZOOM, false, shorcut.tool_zoom)
+	await get_tree().process_frame
+	_build_button("Select", select, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_SELECT, false, PixelPen.userconfig.shorcuts.tool_select)
+	_build_button("Move", move, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_MOVE, false, PixelPen.userconfig.shorcuts.tool_move)
+	_build_button("Pan", pan, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_PAN, false, PixelPen.userconfig.shorcuts.tool_pan)
+	_build_button("Selection", selection, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_SELECTION, false, PixelPen.userconfig.shorcuts.tool_selection)
+	_build_button("Pen", pen, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_PEN, true, PixelPen.userconfig.shorcuts.tool_pen)
+	_build_button("Brush", brush, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_BRUSH, false, PixelPen.userconfig.shorcuts.tool_brush)
+	_build_button("Stamp", stamp, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_STAMP, false, PixelPen.userconfig.shorcuts.tool_stamp)
+	_build_button("Eraser", eraser, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_ERASER, false, PixelPen.userconfig.shorcuts.tool_eraser)
+	_build_button("Magnet", magnet, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_MAGNET, false, PixelPen.userconfig.shorcuts.tool_magnet)
+	_build_button("Line", line, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_LINE, false, PixelPen.userconfig.shorcuts.tool_line)
+	_build_button("Ellipse", oval, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_ELLIPSE, false, PixelPen.userconfig.shorcuts.tool_ellipse)
+	_build_button("Rectangle", rectangle, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_RECTANGLE, false, PixelPen.userconfig.shorcuts.tool_rectangle)
+	_build_button("Fill", fill, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_FILL, false, PixelPen.userconfig.shorcuts.tool_fill)
+	_build_button("Color Picker", color_picker, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_COLOR_PICKER, false, PixelPen.userconfig.shorcuts.tool_color_picker)
+	_build_button("Zoom", zoom, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_ZOOM, false, PixelPen.userconfig.shorcuts.tool_zoom)
 
 
 func _ready():
 	if not PixelPen.need_connection(get_window()):
 		return
+	PixelPen.shorcut_changed.connect(create_toolbox)
 	create_toolbox()
 	PixelPen.project_file_changed.connect(func ():
 			if PixelPen.current_project != null:

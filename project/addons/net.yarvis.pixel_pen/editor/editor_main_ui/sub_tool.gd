@@ -2,8 +2,6 @@
 extends Control
 
 
-const shorcut : EditorShorcut = preload("../../resources/editor_shorcut.tres")
-
 const SelectTool = preload("../editor_canvas/select_tool.gd")
 const MoveTool = preload("../editor_canvas/move_tool.gd")
 const PenTool = preload("../editor_canvas/pen_tool.gd")
@@ -79,6 +77,10 @@ func _ready():
 	PixelPen.toolbox_shift_mode.connect(func(active):
 			shift_label.label_settings.font_color = PixelPen.userconfig.accent_color if active else PixelPen.userconfig.label_color
 			)
+	PixelPen.shorcut_changed.connect(func():
+			_build_toolbar()
+			_on_tool_changed(current_toolbox)
+			)
 	call_deferred("_build_toolbar")
 
 
@@ -132,7 +134,7 @@ func _build_toolbar():
 			toolbar_list,
 			)
 	_build_button("Undo", undo, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
-			PixelPen.ToolBar.TOOLBAR_UNDO, false, false, shorcut.undo,
+			PixelPen.ToolBar.TOOLBAR_UNDO, false, false, PixelPen.userconfig.shorcuts.undo,
 			func ():
 				if PixelPen.current_project == null:
 					return false
@@ -144,7 +146,7 @@ func _build_toolbar():
 			toolbar_list,
 			)
 	_build_button("Redo", redo, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
-			PixelPen.ToolBar.TOOLBAR_REDO, false, false, shorcut.redo,
+			PixelPen.ToolBar.TOOLBAR_REDO, false, false, PixelPen.userconfig.shorcuts.redo,
 			func ():
 				if PixelPen.current_project == null:
 					return false
@@ -158,7 +160,7 @@ func _build_toolbar():
 			toolbar_list,
 			)
 	_build_button("Reset zoom", fit_screen, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
-			PixelPen.ToolBar.TOOLBAR_RESET_ZOOM, false, false, null,
+			PixelPen.ToolBar.TOOLBAR_RESET_ZOOM, false, false, PixelPen.userconfig.shorcuts.reset_zoom,
 			func ():
 				if PixelPen.current_project == null:
 					return false
@@ -169,7 +171,7 @@ func _build_toolbar():
 			)
 	_build_toggle_button("Grid", "Grid", grid, grid, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
 			PixelPen.ToolBar.TOOLBAR_SHOW_GRID, true, 
-			false, shorcut.view_show_grid,
+			false, PixelPen.userconfig.shorcuts.view_show_grid,
 			func ():
 				if PixelPen.current_project == null:
 					return false
@@ -181,7 +183,7 @@ func _build_toolbar():
 			)
 	_build_toggle_button("Tint black", "Tint black", tint_black, tint_black, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
 			PixelPen.ToolBar.TOOLBAR_TOGGLE_TINT_BLACK_LAYER, true,
-			false, shorcut.toggle_tint_layer,
+			false, PixelPen.userconfig.shorcuts.toggle_tint_layer,
 			func ():
 				if PixelPen.current_project == null:
 					return false
@@ -192,7 +194,7 @@ func _build_toolbar():
 				return false,
 			)
 	_build_toggle_button("Save", "Save", save, save_alert, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
-			PixelPen.ToolBar.TOOLBAR_SAVE, false, false, shorcut.save,
+			PixelPen.ToolBar.TOOLBAR_SAVE, false, false, PixelPen.userconfig.shorcuts.save,
 			func ():
 				if PixelPen.current_project == null:
 					return true
@@ -225,11 +227,11 @@ func _on_move_tool():
 	_clean_up()
 	
 	_build_button("Cut", cut, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPen.ToolBoxMove.TOOL_MOVE_CUT, false, false, shorcut.cut, func():
+			PixelPen.ToolBoxMove.TOOL_MOVE_CUT, false, false, PixelPen.userconfig.shorcuts.cut, func():
 					return MoveTool.mode == MoveTool.Mode.UNKNOWN
 					)
 	_build_button("Copy", copy, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPen.ToolBoxMove.TOOL_MOVE_COPY, false, false, shorcut.copy, func():
+			PixelPen.ToolBoxMove.TOOL_MOVE_COPY, false, false, PixelPen.userconfig.shorcuts.copy, func():
 					return MoveTool.mode == MoveTool.Mode.UNKNOWN
 					)
 	
@@ -262,25 +264,25 @@ func _on_move_tool():
 			return MoveTool.mode != MoveTool.Mode.UNKNOWN)
 	
 	_build_button("Scale Shifted Left", scale_left, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPen.ToolBoxMove.TOOL_SCALE_LEFT, false, false, shorcut.arrow_left,
+			PixelPen.ToolBoxMove.TOOL_SCALE_LEFT, false, false, null,
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
 					return not PixelPen.current_project.multilayer_selected.is_empty())
 	_build_button("Scale Shifted Top", scale_up, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPen.ToolBoxMove.TOOL_SCALE_UP, false, false, shorcut.arrow_up,
+			PixelPen.ToolBoxMove.TOOL_SCALE_UP, false, false, null,
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
 					return not PixelPen.current_project.multilayer_selected.is_empty())
 	_build_button("Scale Shifted Right", scale_right, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPen.ToolBoxMove.TOOL_SCALE_RIGHT, false, false, shorcut.arrow_right,
+			PixelPen.ToolBoxMove.TOOL_SCALE_RIGHT, false, false, null,
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
 					return not PixelPen.current_project.multilayer_selected.is_empty())
 	_build_button("Scale Shifted Down", scale_down, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPen.ToolBoxMove.TOOL_SCALE_DOWN, false, false, shorcut.arrow_down,
+			PixelPen.ToolBoxMove.TOOL_SCALE_DOWN, false, false, null,
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
@@ -293,7 +295,7 @@ func _on_move_tool():
 			func():
 				return MoveTool.mode != MoveTool.Mode.UNKNOWN)
 	_build_button("Commit Transform", commit, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPen.ToolBoxMove.TOOL_MOVE_COMMIT, false, false, shorcut.confirm,
+			PixelPen.ToolBoxMove.TOOL_MOVE_COMMIT, false, false, PixelPen.userconfig.shorcuts.confirm,
 			func():
 				return MoveTool.transformed and  MoveTool.mode != MoveTool.Mode.UNKNOWN)
 	_add_separator()
@@ -309,17 +311,17 @@ func _on_selection_tool():
 			PixelPen.ToolBoxSelection.TOOL_SELECTION_INTERSECTION, true, SelectionTool.sub_tool_selection_type == PixelPen.ToolBoxSelection.TOOL_SELECTION_INTERSECTION)
 	_add_separator()
 	_build_button("Inverse Selection", selection_inverse, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
-			PixelPen.ToolBoxSelection.TOOL_SELECTION_INVERSE, false, false, shorcut.tool_inverse_selection,
+			PixelPen.ToolBoxSelection.TOOL_SELECTION_INVERSE, false, false, PixelPen.userconfig.shorcuts.inverse_selection,
 			func (): return true,
 			func (): return canvas.selection_tool_hint.texture == null
 			)
 	_build_button("Remove Selection", selection_remove, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
-			PixelPen.ToolBoxSelection.TOOL_SELECTION_REMOVE, false, false, shorcut.tool_remove_selection,
+			PixelPen.ToolBoxSelection.TOOL_SELECTION_REMOVE, false, false, PixelPen.userconfig.shorcuts.remove_selection,
 			func (): return true,
 			func (): return canvas.selection_tool_hint.texture == null
 			)
 	_build_button("Delete Selected Area", delete_in_selection, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
-			PixelPen.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false, false, shorcut.tool_delete_selected,
+			PixelPen.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false, false, PixelPen.userconfig.shorcuts.delete_selected,
 			func (): return true,
 			func (): return canvas.selection_tool_hint.texture == null
 			)
@@ -330,7 +332,7 @@ func _on_selection_tool():
 			func():
 				return SelectionTool.has_point_selection_polygon)
 	_build_button("Close Polygon", commit, PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
-			PixelPen.ToolBoxSelection.TOOL_SELECTION_CLOSE_POLYGON, false, false, shorcut.confirm,
+			PixelPen.ToolBoxSelection.TOOL_SELECTION_CLOSE_POLYGON, false, false, PixelPen.userconfig.shorcuts.confirm,
 			func():
 				return SelectionTool.can_commit_selection_polygon)
 	_add_separator()

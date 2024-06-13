@@ -8,8 +8,13 @@ func load_texture(file : String):
 	var image = Image.load_from_file(file)
 	title = file.get_file().get_basename()
 	texture.texture = ImageTexture.create_from_image(image)
-	size.x = 520
-	size.y = 520 * image.get_size().y / image.get_size().x
+	var img_size : Vector2i = image.get_size()
+	if img_size.x > img_size.y:
+		size.x = 520
+		size.y = maxi(520, 520 * img_size.y / img_size.x)
+	else:
+		size.y = 520
+		size.x = maxi(520, 520 * img_size.x / img_size.y)
 
 
 func _on_close_requested():

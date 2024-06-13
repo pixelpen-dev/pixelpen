@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size/edit_canvas_size.gd" id="1_skqr0"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size/anchor_view.gd" id="2_8mnh6"]
 
-[node name="EditCanvasSize" type="ConfirmationDialog" node_paths=PackedStringArray("width_node", "height_node", "checker_size_node")]
+[node name="EditCanvasSize" type="ConfirmationDialog" node_paths=PackedStringArray("width_node", "height_node")]
 title = "Canvas Size"
 initial_position = 1
 size = Vector2i(520, 240)
@@ -13,7 +13,6 @@ theme = ExtResource("1_be7me")
 script = ExtResource("1_skqr0")
 width_node = NodePath("Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/LineEditW")
 height_node = NodePath("Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditH")
-checker_size_node = NodePath("Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/LineEditChecker")
 anchor = 1
 
 [node name="Control" type="Control" parent="."]
@@ -79,25 +78,6 @@ alignment = 2
 virtual_keyboard_type = 2
 
 [node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "px"
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(70, 0)
-layout_mode = 2
-text = "Checker"
-
-[node name="LineEditChecker" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "1"
-alignment = 2
-virtual_keyboard_type = 2
-
-[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 text = "px"
 

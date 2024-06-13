@@ -11,9 +11,6 @@ const COMPATIBILITY_NUMBER : int = 3
 @export var file_path : String
 @export var last_export_file_path : String
 @export var canvas_size : Vector2i
-@export var checker_size : int:
-	get:
-		return max(checker_size, 1)
 
 @export var palette : IndexedPalette
 
@@ -83,14 +80,13 @@ enum BackgroundColor{
 }
 
 
-func initialized(p_size : Vector2i, p_name : String = "Untitled", \
-		p_checker_size : int = 16, p_file_path : String = "", one_layer : bool = true):
+func initialized(p_size : Vector2i, p_name : String = "Untitled", p_file_path : String = "", one_layer : bool = true):
 	compatibility_version = COMPATIBILITY_NUMBER
 	layer_index_counter = 0
 	project_name = p_name
 	canvas_size = p_size
+	animation_fps = PixelPen.userconfig.default_animation_fps
 	symetric_guid = canvas_size * 0.5
-	checker_size = p_checker_size
 	palette = IndexedPalette.new()
 	palette.set_color_index_preset()
 	sync_gui_palette()

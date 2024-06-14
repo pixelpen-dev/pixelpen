@@ -10,7 +10,7 @@ var stamp_texture : ImageTexture
 
 
 func _init():
-	tool_type =  PixelPen.ToolBox.TOOL_STAMP
+	tool_type =  PixelPenEnum.ToolBox.TOOL_STAMP
 	update_stamp()
 
 

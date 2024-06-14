@@ -10,8 +10,8 @@ var shift_mode : bool = false
 
 
 func _init():
-	tool_type =  PixelPen.ToolBox.TOOL_ZOOM
-	active_sub_tool_type = PixelPen.ToolBoxZoom.TOOL_ZOOM_IN
+	tool_type =  PixelPenEnum.ToolBox.TOOL_ZOOM
+	active_sub_tool_type = PixelPenEnum.ToolBoxZoom.TOOL_ZOOM_IN
 	has_shift_mode = true
 
 
@@ -22,9 +22,9 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		prev_mouse_offset = mouse_position
 		prev_screen_offset = node.viewport_position(mouse_position)
 	var zoom_scale : float = 0.0
-	if active_sub_tool_type == PixelPen.ToolBoxZoom.TOOL_ZOOM_IN:
+	if active_sub_tool_type == PixelPenEnum.ToolBoxZoom.TOOL_ZOOM_IN:
 		zoom_scale = -0.2 if shift_mode else 0.2
-	elif active_sub_tool_type == PixelPen.ToolBoxZoom.TOOL_ZOOM_OUT:
+	elif active_sub_tool_type == PixelPenEnum.ToolBoxZoom.TOOL_ZOOM_OUT:
 		zoom_scale = 0.2 if shift_mode else -0.2
 		
 	node.camera.zoom += node.camera.zoom * zoom_scale
@@ -58,7 +58,7 @@ func _on_shift_pressed(pressed : bool):
 func _on_draw_cursor(mouse_position : Vector2):
 	draw_plus_cursor(mouse_position)
 	var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
-	if active_sub_tool_type == PixelPen.ToolBoxZoom.TOOL_ZOOM_IN:
+	if active_sub_tool_type == PixelPenEnum.ToolBoxZoom.TOOL_ZOOM_IN:
 		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, zoom_out_texture if shift_mode else zoom_in_texture)
-	elif active_sub_tool_type == PixelPen.ToolBoxZoom.TOOL_ZOOM_OUT:
+	elif active_sub_tool_type == PixelPenEnum.ToolBoxZoom.TOOL_ZOOM_OUT:
 		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, zoom_in_texture if shift_mode else zoom_out_texture)

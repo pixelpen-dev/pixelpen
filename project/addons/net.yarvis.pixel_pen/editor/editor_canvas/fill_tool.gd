@@ -10,14 +10,14 @@ var shift_mode : bool = false
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_FILL
+	tool_type = PixelPenEnum.ToolBox.TOOL_FILL
 	has_shift_mode = true
 
 
 func _on_sub_tool_changed(type : int):
-	if type == PixelPen.ToolBoxFill.TOOL_FILL_OPTION_ONLY_AXIS_YES:
+	if type == PixelPenEnum.ToolBoxFill.TOOL_FILL_OPTION_ONLY_AXIS_YES:
 		fill_grow_only_axis = true
-	elif type == PixelPen.ToolBoxFill.TOOL_FILL_OPTION_ONLY_AXIS_NO:
+	elif type == PixelPenEnum.ToolBoxFill.TOOL_FILL_OPTION_ONLY_AXIS_NO:
 		fill_grow_only_axis = false
 	else:
 		super._on_sub_tool_changed(type)

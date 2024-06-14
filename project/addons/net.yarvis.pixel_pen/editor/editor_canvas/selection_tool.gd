@@ -8,11 +8,11 @@ const selection_intersection = preload("../../resources/icon/vector-intersection
 
 static var sub_tool_selection_type : int:
 	get:
-		var yes := sub_tool_selection_type == PixelPen.ToolBoxSelection.TOOL_SELECTION_UNION
-		yes = yes or sub_tool_selection_type == PixelPen.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE
-		yes = yes or sub_tool_selection_type == PixelPen.ToolBoxSelection.TOOL_SELECTION_INTERSECTION
+		var yes := sub_tool_selection_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_UNION
+		yes = yes or sub_tool_selection_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE
+		yes = yes or sub_tool_selection_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION
 		if not yes:
-			sub_tool_selection_type = PixelPen.ToolBoxSelection.TOOL_SELECTION_UNION
+			sub_tool_selection_type = PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_UNION
 		return sub_tool_selection_type
 static var can_commit_selection_polygon : bool = false
 static var has_point_selection_polygon : bool = false
@@ -22,7 +22,7 @@ var _selection_image : Image
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_SELECTION
+	tool_type = PixelPenEnum.ToolBox.TOOL_SELECTION
 	active_sub_tool_type = sub_tool_selection_type
 	has_shift_mode = false
 	is_pressed = false
@@ -35,9 +35,9 @@ func _on_request_switch_tool(tool_box_type : int) -> bool:
 
 
 func _on_sub_tool_changed(type: int):
-	if type == PixelPen.ToolBoxSelection.TOOL_SELECTION_INVERSE:
+	if type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INVERSE:
 		super._on_sub_tool_changed(type)
-	elif type == PixelPen.ToolBoxSelection.TOOL_SELECTION_REMOVE:
+	elif type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_REMOVE:
 		create_selection_undo()
 
 		_selection_image = null
@@ -45,14 +45,14 @@ func _on_sub_tool_changed(type: int):
 
 		create_selection_redo()
 
-	elif type == PixelPen.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED:
+	elif type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED:
 		delete_on_selected()
 	
-	elif can_commit_selection_polygon and type == PixelPen.ToolBoxSelection.TOOL_SELECTION_CLOSE_POLYGON:
+	elif can_commit_selection_polygon and type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_CLOSE_POLYGON:
 		pre_selection_polygon.push_back(pre_selection_polygon[0])
 		_create_selection()
 	
-	elif has_point_selection_polygon and type == PixelPen.ToolBoxSelection.TOOL_SELECTION_CANCEL_POLYGON:
+	elif has_point_selection_polygon and type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_CANCEL_POLYGON:
 		pre_selection_polygon.clear()
 		can_commit_selection_polygon = false
 		has_point_selection_polygon = false
@@ -60,9 +60,9 @@ func _on_sub_tool_changed(type: int):
 	else:
 		super._on_sub_tool_changed(type)
 	
-	var yes := active_sub_tool_type == PixelPen.ToolBoxSelection.TOOL_SELECTION_UNION
-	yes = yes or active_sub_tool_type == PixelPen.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE
-	yes = yes or active_sub_tool_type == PixelPen.ToolBoxSelection.TOOL_SELECTION_INTERSECTION
+	var yes := active_sub_tool_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_UNION
+	yes = yes or active_sub_tool_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE
+	yes = yes or active_sub_tool_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION
 	if yes:
 		sub_tool_selection_type = active_sub_tool_type
 
@@ -124,11 +124,11 @@ func _on_draw_cursor(mouse_position : Vector2):
 	var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
 	var texture : Texture2D
 	match sub_tool_selection_type:
-		PixelPen.ToolBoxSelection.TOOL_SELECTION_UNION:
+		PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_UNION:
 			texture = selection_union
-		PixelPen.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE:
+		PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE:
 			texture = selection_difference
-		PixelPen.ToolBoxSelection.TOOL_SELECTION_INTERSECTION:
+		PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION:
 			texture = selection_intersection
 	if texture != null:
 		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, texture)
@@ -162,16 +162,16 @@ func _draw_rect_selection(mouse_position : Vector2):
 
 
 func _create_selection():
-	if active_sub_tool_type == PixelPen.ToolBoxSelection.TOOL_SELECTION_UNION:
+	if active_sub_tool_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_UNION:
 		if _selection_image == null:
 			_selection_image = MaskSelection.create_image(pre_selection_polygon, node.canvas_size)
 		else:
 			_selection_image = MaskSelection.union_polygon(_selection_image, pre_selection_polygon, node.canvas_size)
 		
-	elif active_sub_tool_type == PixelPen.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE:
+	elif active_sub_tool_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE:
 		if _selection_image != null:
 			_selection_image = MaskSelection.difference_polygon(_selection_image, pre_selection_polygon, node.canvas_size)
-	elif active_sub_tool_type == PixelPen.ToolBoxSelection.TOOL_SELECTION_INTERSECTION:
+	elif active_sub_tool_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION:
 		if _selection_image != null:
 			_selection_image = MaskSelection.intersection_polygon(_selection_image, pre_selection_polygon, node.canvas_size)
 	pre_selection_polygon.clear()

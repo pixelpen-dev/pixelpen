@@ -36,7 +36,7 @@ var _cache_undo_redo : UndoRedoManager
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_MOVE
+	tool_type = PixelPenEnum.ToolBox.TOOL_MOVE
 	if is_instance_valid(node):
 		if node.selection_tool_hint.texture == null:
 			default_selection_texture = null
@@ -86,49 +86,49 @@ func _on_request_switch_tool(tool_box_type : int) -> bool:
 
 func _on_sub_tool_changed(type : int):
 	super._on_sub_tool_changed(type)
-	if type == PixelPen.ToolBoxMove.TOOL_MOVE_CUT:
+	if type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT:
 		mode = Mode.CUT
 		_show_guid = true
 		_init_transform()
-	elif type == PixelPen.ToolBoxMove.TOOL_MOVE_COPY:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY:
 		mode = Mode.COPY
 		_show_guid = true
 		_init_transform()
-	elif type == PixelPen.ToolBoxMove.TOOL_MOVE_ROTATE_LEFT:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_ROTATE_LEFT:
 		_transform(type)
 		## TODO: implement undo redo
 		(PixelPen.current_project as PixelPenProject).undo_redo.clear_history()
-	elif type == PixelPen.ToolBoxMove.TOOL_MOVE_ROTATE_RIGHT:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_ROTATE_RIGHT:
 		_transform(type)
 		## TODO: implement undo redo
 		(PixelPen.current_project as PixelPenProject).undo_redo.clear_history()
-	elif type == PixelPen.ToolBoxMove.TOOL_MOVE_FLIP_HORIZONTAL:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_HORIZONTAL:
 		_transform(type)
 		## TODO: implement undo redo
 		(PixelPen.current_project as PixelPenProject).undo_redo.clear_history()
-	elif type == PixelPen.ToolBoxMove.TOOL_MOVE_FLIP_VERTICAL:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_VERTICAL:
 		_transform(type)
 		## TODO: implement undo redo
 		(PixelPen.current_project as PixelPenProject).undo_redo.clear_history()
-	elif type == PixelPen.ToolBoxMove.TOOL_SCALE_LEFT:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_LEFT:
 		_transform(type)
 		## TODO: implement undo redo
 		(PixelPen.current_project as PixelPenProject).undo_redo.clear_history()
-	elif type == PixelPen.ToolBoxMove.TOOL_SCALE_UP:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_UP:
 		_transform(type)
 		## TODO: implement undo redo
 		(PixelPen.current_project as PixelPenProject).undo_redo.clear_history()
-	elif type == PixelPen.ToolBoxMove.TOOL_SCALE_RIGHT:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_RIGHT:
 		_transform(type)
 		## TODO: implement undo redo
 		(PixelPen.current_project as PixelPenProject).undo_redo.clear_history()
-	elif type == PixelPen.ToolBoxMove.TOOL_SCALE_DOWN:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_DOWN:
 		_transform(type)
 		## TODO: implement undo redo
 		(PixelPen.current_project as PixelPenProject).undo_redo.clear_history()
-	elif type == PixelPen.ToolBoxMove.TOOL_MOVE_CANCEL:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_CANCEL:
 		_on_move_cancel()
-	elif type == PixelPen.ToolBoxMove.TOOL_MOVE_COMMIT:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_COMMIT:
 		_on_move_commit()
 
 
@@ -312,7 +312,7 @@ func _init_transform():
 	if move_cache_image_map == null:
 		if PixelPen.current_project != null and PixelPen.current_project.active_layer_is_valid():
 			index_image = PixelPen.current_project.active_layer
-			_transform(PixelPen.ToolBoxMove.TOOL_MOVE_UNKNOWN)
+			_transform(PixelPenEnum.ToolBoxMove.TOOL_MOVE_UNKNOWN)
 		else:
 			index_image = null
 
@@ -355,7 +355,7 @@ func _transform(type : int):
 	move_image_center_pos -= _rotate_anchor_offset
 	move_image_center_pos.x = snappedf(move_image_center_pos.x, 0.5)
 	move_image_center_pos.y = snappedf(move_image_center_pos.y, 0.5)
-	if type == PixelPen.ToolBoxMove.TOOL_MOVE_ROTATE_LEFT:
+	if type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_ROTATE_LEFT:
 		angle = PI * -0.5
 		cw = COUNTERCLOCKWISE
 		var vector_tl_pos = Vector2(move_image.get_width() * -0.5, move_image.get_height() * -0.5)
@@ -364,7 +364,7 @@ func _transform(type : int):
 		move_image_center_pos = move_image_center_pos.rotated(angle) - move_image_center_pos
 		origin_offset = vector_rotated_tl_pos - vector_tl_pos - move_image_center_pos
 
-	elif type == PixelPen.ToolBoxMove.TOOL_MOVE_ROTATE_RIGHT:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_ROTATE_RIGHT:
 		angle = PI * 0.5
 		cw = CLOCKWISE
 		var vector_tl_pos = Vector2(move_image.get_width() * -0.5, move_image.get_height() * -0.5)
@@ -373,7 +373,7 @@ func _transform(type : int):
 		move_image_center_pos = move_image_center_pos.rotated(angle) - move_image_center_pos
 		origin_offset = vector_rotated_tl_pos - vector_tl_pos - move_image_center_pos
 		
-	elif type == PixelPen.ToolBoxMove.TOOL_MOVE_FLIP_HORIZONTAL:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_HORIZONTAL:
 		move_image.flip_x()
 		move_cache_image_map.flip_x()
 		
@@ -384,7 +384,7 @@ func _transform(type : int):
 		
 		_rotate_anchor_offset.x *= -1
 		
-	elif type == PixelPen.ToolBoxMove.TOOL_MOVE_FLIP_VERTICAL:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_VERTICAL:
 		move_image.flip_y()
 		move_cache_image_map.flip_y()
 		
@@ -395,19 +395,19 @@ func _transform(type : int):
 		
 		_rotate_anchor_offset.y *= -1
 	
-	elif type == PixelPen.ToolBoxMove.TOOL_SCALE_LEFT:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_LEFT:
 		PixelPen.utils.move_shift(Vector2i(-1, 0), move_image)
 		PixelPen.utils.move_shift(Vector2i(-1, 0), move_cache_image_map)
 	
-	elif type == PixelPen.ToolBoxMove.TOOL_SCALE_UP:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_UP:
 		PixelPen.utils.move_shift(Vector2i(0, -1), move_image)
 		PixelPen.utils.move_shift(Vector2i(0, -1), move_cache_image_map)
 	
-	elif type == PixelPen.ToolBoxMove.TOOL_SCALE_RIGHT:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_RIGHT:
 		PixelPen.utils.move_shift(Vector2i(1, 0), move_image)
 		PixelPen.utils.move_shift(Vector2i(1, 0), move_cache_image_map)
 		
-	elif type == PixelPen.ToolBoxMove.TOOL_SCALE_DOWN:
+	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_DOWN:
 		PixelPen.utils.move_shift(Vector2i(0, 1), move_image)
 		PixelPen.utils.move_shift(Vector2i(0, 1), move_cache_image_map)
 	
@@ -460,29 +460,29 @@ func _transform(type : int):
 		var mask_img = node.selection_tool_hint.texture.get_image()
 		if cw != -1:
 			mask_img.rotate_90(cw)
-		elif type == PixelPen.ToolBoxMove.TOOL_MOVE_FLIP_HORIZONTAL:
+		elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_HORIZONTAL:
 			mask_img.flip_x()
-		elif type == PixelPen.ToolBoxMove.TOOL_MOVE_FLIP_VERTICAL:
+		elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_VERTICAL:
 			mask_img.flip_y()
-		elif type == PixelPen.ToolBoxMove.TOOL_SCALE_LEFT:
+		elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_LEFT:
 			PixelPen.utils.move_shift(Vector2i(-1, 0), mask_img)
 			mask_img = MaskSelection.get_image_no_margin(mask_img)
 			var img = MaskSelection.create_empty(mask_img.get_size())
 			img.blend_rect(mask_img, Rect2i(Vector2i(), mask_img.get_size()), Vector2i.ONE)
 			mask_img = img
-		elif type == PixelPen.ToolBoxMove.TOOL_SCALE_UP:
+		elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_UP:
 			PixelPen.utils.move_shift(Vector2i(0, -1), mask_img)
 			mask_img = MaskSelection.get_image_no_margin(mask_img)
 			var img = MaskSelection.create_empty(mask_img.get_size())
 			img.blend_rect(mask_img, Rect2i(Vector2i(), mask_img.get_size()), Vector2i.ONE)
 			mask_img = img
-		elif type == PixelPen.ToolBoxMove.TOOL_SCALE_RIGHT:
+		elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_RIGHT:
 			PixelPen.utils.move_shift(Vector2i(1, 0), mask_img)
 			mask_img = MaskSelection.get_image_no_margin(mask_img)
 			var img = MaskSelection.create_empty(mask_img.get_size())
 			img.blend_rect(mask_img, Rect2i(Vector2i(), mask_img.get_size()), Vector2i.ONE)
 			mask_img = img
-		elif type == PixelPen.ToolBoxMove.TOOL_SCALE_DOWN:
+		elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_DOWN:
 			PixelPen.utils.move_shift(Vector2i(0, 1), mask_img)
 			mask_img = MaskSelection.get_image_no_margin(mask_img)
 			var img = MaskSelection.create_empty(mask_img.get_size())

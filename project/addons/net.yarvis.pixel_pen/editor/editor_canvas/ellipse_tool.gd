@@ -12,7 +12,7 @@ var end_press : Vector2
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_ELLIPSE
+	tool_type = PixelPenEnum.ToolBox.TOOL_ELLIPSE
 	has_shift_mode = true
 	is_pressed = false
 	if is_instance_valid(node):
@@ -33,9 +33,9 @@ func _on_request_switch_tool(tool_box_type : int) -> bool:
 
 func _on_sub_tool_changed(type : int):
 	super._on_sub_tool_changed(type)
-	if type == PixelPen.ToolBoxEllipse.TOOL_ELLIPSE_FILL_YES:
+	if type == PixelPenEnum.ToolBoxEllipse.TOOL_ELLIPSE_FILL_YES:
 		filled = true
-	elif type == PixelPen.ToolBoxEllipse.TOOL_ELLIPSE_FILL_NO:
+	elif type == PixelPenEnum.ToolBoxEllipse.TOOL_ELLIPSE_FILL_NO:
 		filled = false
 
 

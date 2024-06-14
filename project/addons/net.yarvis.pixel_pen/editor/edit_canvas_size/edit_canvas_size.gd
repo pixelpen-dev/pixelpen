@@ -4,7 +4,7 @@ extends ConfirmationDialog
 
 @export var width_node : LineEdit
 @export var height_node : LineEdit
-@export var anchor : PixelPen.ResizeAnchor
+@export var anchor : PixelPenEnum.ResizeAnchor
 
 var canvas_width : float:
 	set(v):

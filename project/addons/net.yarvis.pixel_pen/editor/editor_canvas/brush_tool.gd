@@ -9,7 +9,7 @@ var brush_mask : ImageTexture
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_BRUSH
+	tool_type = PixelPenEnum.ToolBox.TOOL_BRUSH
 	has_shift_mode = true
 	is_pressed = false
 	update_brush()
@@ -48,7 +48,7 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		if index_image.coor_inside_canvas(coord.x, coord.y, mask_selection):
 			is_pressed = true
 			is_pressed_outside = false
-			var action_name : String = "Pen tool" if tool_type == PixelPen.ToolBox.TOOL_PEN else "Brush tool"
+			var action_name : String = "Pen tool" if tool_type == PixelPenEnum.ToolBox.TOOL_PEN else "Brush tool"
 			var layer_uid : Vector3i = index_image.layer_uid
 			(PixelPen.current_project as PixelPenProject).create_undo_layer(action_name, index_image.layer_uid, func ():
 					PixelPen.layer_image_changed.emit(layer_uid)

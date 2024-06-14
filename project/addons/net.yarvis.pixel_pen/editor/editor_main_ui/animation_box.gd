@@ -126,13 +126,13 @@ func _refresh_frame():
 func _on_tool_changed(grup : int, type: int, _grab_active : bool):
 	if PixelPen.current_project == null:
 		return
-	if grup == PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION:
+	if grup == PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION:
 		match type:
-			PixelPen.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE:
+			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE:
 				if PixelPen.current_project.animation_timeline.size() > 0:
 					play_pause()
 				
-			PixelPen.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT:
+			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT:
 				if PixelPen.current_project.animation_frame_index != -1:
 					PixelPen.current_project.animation_frame_index = 0
 					var cell := PixelPen.current_project.animation_timeline[PixelPen.current_project.animation_frame_index]
@@ -141,7 +141,7 @@ func _on_tool_changed(grup : int, type: int, _grab_active : bool):
 					PixelPen.layer_items_changed.emit()
 					PixelPen.project_saved.emit(false)
 				
-			PixelPen.ToolAnimation.TOOL_ANIMATION_STEP_BACKWARD:
+			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_BACKWARD:
 				if PixelPen.current_project.animation_frame_index != -1:
 					PixelPen.current_project.animation_frame_index -= 1
 					if PixelPen.current_project.animation_frame_index < 0:
@@ -152,7 +152,7 @@ func _on_tool_changed(grup : int, type: int, _grab_active : bool):
 					PixelPen.layer_items_changed.emit()
 					PixelPen.project_saved.emit(false)
 				
-			PixelPen.ToolAnimation.TOOL_ANIMATION_STEP_FORWARD:
+			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_FORWARD:
 				if PixelPen.current_project.animation_frame_index != -1:
 					PixelPen.current_project.animation_frame_index += 1
 					if PixelPen.current_project.animation_frame_index >= PixelPen.current_project.animation_timeline.size():
@@ -163,7 +163,7 @@ func _on_tool_changed(grup : int, type: int, _grab_active : bool):
 					PixelPen.layer_items_changed.emit()
 					PixelPen.project_saved.emit(false)
 				
-			PixelPen.ToolAnimation.TOOL_ANIMATION_SKIP_TO_END:
+			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_END:
 				if PixelPen.current_project.animation_frame_index != -1:
 					PixelPen.current_project.animation_frame_index = PixelPen.current_project.animation_timeline.size() -1
 					var cell := PixelPen.current_project.animation_timeline[PixelPen.current_project.animation_frame_index]
@@ -177,21 +177,21 @@ func create_animation_menu():
 	_clean_up()
 	_build_button("Skip to front",
 			skip_to_front,
-			PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION,
-			PixelPen.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT,
+			PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION,
+			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT,
 			false)
 	_build_button("Step backward",
 			step_backward,
-			PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION,
-			PixelPen.ToolAnimation.TOOL_ANIMATION_STEP_BACKWARD,
+			PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION,
+			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_BACKWARD,
 			false)
 	_build_toggle_button(
 			"Play",
 			"Pause",
 			play,
 			pause,
-			PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION,
-			PixelPen.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE,
+			PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION,
+			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE,
 			false,
 			false,
 			null,
@@ -201,13 +201,13 @@ func create_animation_menu():
 				return PixelPen.current_project.animation_is_play)
 	_build_button("Step forward",
 			step_forward,
-			PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION,
-			PixelPen.ToolAnimation.TOOL_ANIMATION_STEP_FORWARD,
+			PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION,
+			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_FORWARD,
 			false)
 	_build_button("Skip to end",
 			skip_to_end,
-			PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION,
-			PixelPen.ToolAnimation.TOOL_ANIMATION_SKIP_TO_END,
+			PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION,
+			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_END,
 			false)
 
 

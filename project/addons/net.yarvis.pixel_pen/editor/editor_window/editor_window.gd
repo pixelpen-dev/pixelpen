@@ -14,17 +14,17 @@ func is_window_running():
 func _ready():
 	if is_window_running():
 		if Engine.is_editor_hint():
-			PixelPen.disconnect_all_signal()
+			PixelPen.singleton.disconnect_all_signal()
 		add_child(EditorMainUI.instantiate())
 
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		get_window().window_running = false
-		PixelPen.current_project = null
+		PixelPen.singleton.current_project = null
 		get_window().queue_free()
 		if Engine.is_editor_hint():
-			PixelPen.disconnect_all_signal()
+			PixelPen.singleton.disconnect_all_signal()
 
 
 func scan():

@@ -30,7 +30,7 @@ func _on_request_switch_tool(tool_box_type : int) -> bool:
 
 func _on_sub_tool_changed(type : int):
 	if type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INVERSE:
-		if node.selection_tool_hint.texture != null and PixelPen.current_project != null:
+		if node.selection_tool_hint.texture != null and PixelPen.singleton.current_project != null:
 			if tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and node.canvas_paint.tool.mode != node.canvas_paint.tool.Mode.UNKNOWN:
 				node.canvas_paint.tool._on_force_cancel()
 			create_selection_undo()
@@ -39,7 +39,7 @@ func _on_sub_tool_changed(type : int):
 			create_selection_redo()
 	
 	elif type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_REMOVE:
-		if node.selection_tool_hint.texture != null and PixelPen.current_project != null:
+		if node.selection_tool_hint.texture != null and PixelPen.singleton.current_project != null:
 			if tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and node.canvas_paint.tool.mode != node.canvas_paint.tool.Mode.UNKNOWN:
 				node.canvas_paint.tool._on_force_cancel()
 			create_selection_undo()
@@ -83,7 +83,7 @@ func _on_draw_hint(mouse_position : Vector2):
 
 
 func pick_color_from_canvas(mouse_position : Vector2, emit_color_picked : bool = true) -> int:
-	var index_image = (PixelPen.current_project as PixelPenProject).active_frame.layers
+	var index_image = (PixelPen.singleton.current_project as PixelPenProject).active_frame.layers
 	var coord : Vector2 = floor(mouse_position)
 		
 	var size = index_image.size()
@@ -93,12 +93,12 @@ func pick_color_from_canvas(mouse_position : Vector2, emit_color_picked : bool =
 		
 	var palette_idx : int = 0
 	for i in range(size - 1, -1, -1):
-		if index_image[i].visible and PixelPen.current_project.palette.color_index[index_image[i].colormap.get_pixel(coord.x, coord.y).r8].a > 0:
+		if index_image[i].visible and PixelPen.singleton.current_project.palette.color_index[index_image[i].colormap.get_pixel(coord.x, coord.y).r8].a > 0:
 			palette_idx = index_image[i].colormap.get_pixel(coord.x, coord.y).r8
 			break
 	if palette_idx != 0 and emit_color_picked:
-		PixelPen.color_picked.emit(palette_idx)
-		PixelPen.palette_changed.emit() # rebuild grid palette
+		PixelPen.singleton.color_picked.emit(palette_idx)
+		PixelPen.singleton.palette_changed.emit() # rebuild grid palette
 	return palette_idx
 
 
@@ -115,7 +115,7 @@ func paint_line(from : Vector2, to : Vector2, color_index : int, no_double : boo
 func paint_rect(rect : Rect2i, color_index : int, mask : Image = null, filled : bool = true):
 	if not _can_draw:
 		return false
-	var index_image : IndexedColorImage = (PixelPen.current_project as PixelPenProject).active_layer
+	var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).active_layer
 	if index_image != null:
 		if not filled or index_image.rect_inside_canvas(rect):
 			index_image.set_index_rect_on_color_map(rect, color_index, mask, filled)
@@ -126,7 +126,7 @@ func paint_rect(rect : Rect2i, color_index : int, mask : Image = null, filled : 
 func paint_pixel(pos : Vector2, color_index : int, no_double : bool = false, use_brush : bool = false):
 	if not _can_draw:
 		return false
-	var index_image : IndexedColorImage = (PixelPen.current_project as PixelPenProject).active_layer
+	var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).active_layer
 	if index_image != null:
 		var coord = floor(pos)
 		var ignore_like_prev_coor = (no_double and coord != floor(_prev_paint_coord))
@@ -156,22 +156,22 @@ func paint_pixel(pos : Vector2, color_index : int, no_double : bool = false, use
 
 
 func delete_on_selected():
-	if node.selection_tool_hint.texture != null and PixelPen.current_project != null:
-		var index_image : IndexedColorImage = (PixelPen.current_project as PixelPenProject).active_layer
+	if node.selection_tool_hint.texture != null and PixelPen.singleton.current_project != null:
+		var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).active_layer
 		if index_image != null:
 			var mask = MaskSelection.get_image_no_margin(node.selection_tool_hint.texture.get_image())
 			var layer_uid : Vector3i = index_image.layer_uid
-			(PixelPen.current_project as PixelPenProject).create_undo_layers("Paint", func ():
-					PixelPen.layer_image_changed.emit(layer_uid)
-					PixelPen.project_saved.emit(false)
+			(PixelPen.singleton.current_project as PixelPenProject).create_undo_layers("Paint", func ():
+					PixelPen.singleton.layer_image_changed.emit(layer_uid)
+					PixelPen.singleton.project_saved.emit(false)
 					)
 			index_image.empty_index_on_color_map(mask)
-			(PixelPen.current_project as PixelPenProject).create_redo_layers(func ():
-				PixelPen.layer_image_changed.emit(layer_uid)
-				PixelPen.project_saved.emit(false)
+			(PixelPen.singleton.current_project as PixelPenProject).create_redo_layers(func ():
+				PixelPen.singleton.layer_image_changed.emit(layer_uid)
+				PixelPen.singleton.project_saved.emit(false)
 				)
-			PixelPen.layer_image_changed.emit(layer_uid)
-			PixelPen.project_saved.emit(false)
+			PixelPen.singleton.layer_image_changed.emit(layer_uid)
+			PixelPen.singleton.project_saved.emit(false)
 
 
 func get_mirror_image(line : Vector2i, src_image : Image):
@@ -231,9 +231,9 @@ func get_mirror_image(line : Vector2i, src_image : Image):
 
 
 func get_ink_color() -> Color:
-	if PixelPen.current_project == null:
+	if PixelPen.singleton.current_project == null:
 		return Color.BLACK
-	return PixelPen.current_project.palette.color_index[_index_color]
+	return PixelPen.singleton.current_project.palette.color_index[_index_color]
 
 
 func get_viewport_scale(size : float):
@@ -410,7 +410,7 @@ func create_selection_undo():
 		selection_texture =  node.selection_tool_hint.texture.duplicate(true)
 	else :
 		selection_texture = null
-	(PixelPen.current_project as PixelPenProject).create_undo_property(
+	(PixelPen.singleton.current_project as PixelPenProject).create_undo_property(
 			"Selection",
 			node.selection_tool_hint,
 			"texture",
@@ -426,7 +426,7 @@ func create_selection_redo():
 		selection_texture =  node.selection_tool_hint.texture.duplicate(true)
 	else :
 		selection_texture = null
-	(PixelPen.current_project as PixelPenProject).create_redo_property(
+	(PixelPen.singleton.current_project as PixelPenProject).create_redo_property(
 			node.selection_tool_hint,
 			"texture",
 			selection_texture,

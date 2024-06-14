@@ -77,7 +77,7 @@ var shorcuts_tree_structure : Dictionary = {
 }
 
 func _ready():
-	PixelPen.userconfig.shorcuts = PixelPen.userconfig.shorcuts.duplicate(true)
+	PixelPen.singleton.userconfig.shorcuts = PixelPen.singleton.userconfig.shorcuts.duplicate(true)
 	edit_button.disabled = true
 	reset_button.disabled = true
 	clear_button.disabled = true
@@ -87,7 +87,7 @@ func _ready():
 func get_shortcut(property : String) -> String:
 	if property == "":
 		return ""
-	var shorcut = PixelPen.userconfig.shorcuts.get(property)
+	var shorcut = PixelPen.singleton.userconfig.shorcuts.get(property)
 	if shorcut != null:
 		return (shorcut as Shortcut).get_as_text()
 	return "_"
@@ -159,10 +159,10 @@ func _on_edit_pressed():
 	wrapper.add_child(line_edit)
 	window.confirmed.connect(func ():
 			if line_edit.record_shorcut.has_valid_event():
-				PixelPen.userconfig.shorcuts.set(shorcuts_tree.get_selected().get_metadata(1), line_edit.record_shorcut)
-				PixelPen.userconfig.save()
+				PixelPen.singleton.userconfig.shorcuts.set(shorcuts_tree.get_selected().get_metadata(1), line_edit.record_shorcut)
+				PixelPen.singleton.userconfig.save()
 				shorcuts_tree.get_selected().set_text(1, line_edit.record_shorcut.get_as_text())
-				PixelPen.shorcut_changed.emit()
+				PixelPen.singleton.shorcut_changed.emit()
 			window.hide()
 			window.queue_free()
 			)
@@ -179,10 +179,10 @@ func _on_reset_pressed():
 	if has_meta:
 		var shorcut : Shortcut = default_shorcut.get(tree_item.get_metadata(1))
 		if shorcut != null:
-			PixelPen.userconfig.shorcuts.set(tree_item.get_metadata(1), shorcut.duplicate())
-			PixelPen.userconfig.save()
+			PixelPen.singleton.userconfig.shorcuts.set(tree_item.get_metadata(1), shorcut.duplicate())
+			PixelPen.singleton.userconfig.save()
 			shorcuts_tree.get_selected().set_text(1, shorcut.get_as_text())
-			PixelPen.shorcut_changed.emit()
+			PixelPen.singleton.shorcut_changed.emit()
 
 
 func _on_clear_pressed():
@@ -191,14 +191,14 @@ func _on_clear_pressed():
 	if has_meta:
 		var shorcut : Shortcut = Shortcut.new()
 		if shorcut != null:
-			PixelPen.userconfig.shorcuts.set(tree_item.get_metadata(1), shorcut)
-			PixelPen.userconfig.save()
+			PixelPen.singleton.userconfig.shorcuts.set(tree_item.get_metadata(1), shorcut)
+			PixelPen.singleton.userconfig.save()
 			shorcuts_tree.get_selected().set_text(1, shorcut.get_as_text())
-			PixelPen.shorcut_changed.emit()
+			PixelPen.singleton.shorcut_changed.emit()
 
 
 func _on_reset_all_pressed():
-	PixelPen.userconfig.shorcuts = preload("../../resources/editor_shorcut.tres").duplicate(true)
-	PixelPen.userconfig.save()
-	PixelPen.shorcut_changed.emit()
+	PixelPen.singleton.userconfig.shorcuts = preload("../../resources/editor_shorcut.tres").duplicate(true)
+	PixelPen.singleton.userconfig.save()
+	PixelPen.singleton.shorcut_changed.emit()
 	shorcuts_tree_node()

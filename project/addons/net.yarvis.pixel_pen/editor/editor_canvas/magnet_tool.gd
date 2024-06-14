@@ -30,7 +30,7 @@ func _init():
 	moved_pixel.clear()
 	layer = null
 	is_pressed = false
-	if PixelPen.current_project == null:
+	if PixelPen.singleton.current_project == null:
 		return
 
 
@@ -49,8 +49,8 @@ func _on_sub_tool_changed(type : int):
 func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 	if is_pressed:
 		return
-	if layer == null and PixelPen.current_project != null:
-		layer = PixelPen.current_project.active_layer
+	if layer == null and PixelPen.singleton.current_project != null:
+		layer = PixelPen.singleton.current_project.active_layer
 		default_colormap = layer.colormap.duplicate()
 	if layer == null:
 		return
@@ -73,27 +73,27 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 			
 			mode = Mode.SELECT_PIXEL
 			var layer_uid : Vector3i = layer.layer_uid
-			(PixelPen.current_project as PixelPenProject).create_undo_property(
+			(PixelPen.singleton.current_project as PixelPenProject).create_undo_property(
 				"Magnet",
 				layer,
 				"colormap",
 				prev_state_colormap,
 				func ():
-					PixelPen.layer_image_changed.emit(layer_uid)
-					PixelPen.project_saved.emit(false),
+					PixelPen.singleton.layer_image_changed.emit(layer_uid)
+					PixelPen.singleton.project_saved.emit(false),
 				true)
 			
-			(PixelPen.current_project as PixelPenProject).create_redo_layer(layer.layer_uid, func ():
-					PixelPen.layer_image_changed.emit(layer_uid)
-					PixelPen.project_saved.emit(false)
+			(PixelPen.singleton.current_project as PixelPenProject).create_redo_layer(layer.layer_uid, func ():
+					PixelPen.singleton.layer_image_changed.emit(layer_uid)
+					PixelPen.singleton.project_saved.emit(false)
 					)
 			
 			is_pressed = false
 			layer = null
 			moved_pixel.clear()
 			node.overlay_hint.position = Vector2.ZERO
-			PixelPen.layer_image_changed.emit(layer_uid)
-			PixelPen.project_saved.emit(false)
+			PixelPen.singleton.layer_image_changed.emit(layer_uid)
+			PixelPen.singleton.project_saved.emit(false)
 		
 		elif shift_mode: # Force to collect pixel
 			mode = Mode.SELECT_PIXEL
@@ -118,14 +118,14 @@ func _on_mouse_motion(mouse_position : Vector2, event_relative : Vector2, callba
 
 
 func _on_shift_pressed(pressed : bool):
-	if PixelPen.current_project == null:
+	if PixelPen.singleton.current_project == null:
 		return
 	var request_release : bool = shift_mode and not (pressed and mode == Mode.SELECT_PIXEL)
 	shift_mode = pressed and mode == Mode.SELECT_PIXEL
 	if request_release and not shift_mode and not is_pressed:
 		start_cut_transform(node.get_local_mouse_position())
 		
-	PixelPen.toolbox_shift_mode.emit(shift_mode)
+	PixelPen.singleton.toolbox_shift_mode.emit(shift_mode)
 
 
 func _on_force_cancel():
@@ -198,7 +198,7 @@ func start_cut_transform(mouse_position : Vector2):
 		mask.set_pixelv(pixel, Color8(255, 0, 0, 0))
 	node.overlay_hint.position = Vector2.ZERO
 	node.overlay_hint.texture = layer.get_mipmap_texture(
-		(PixelPen.current_project as PixelPenProject).palette,
+		(PixelPen.singleton.current_project as PixelPenProject).palette,
 		mask
 	)
 	

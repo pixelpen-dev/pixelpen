@@ -15,30 +15,30 @@ var general_tree_structure : Dictionary = {
 var general_structure: Dictionary = {
 	"/Guide/Grid" : [
 		TreeRow.create_vector2i(
-			"Grid line repeat", "X", "Y", PixelPen.userconfig.default_grid_size,
+			"Grid line repeat", "X", "Y", PixelPen.singleton.userconfig.default_grid_size,
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
 		),
 		TreeRow.create_vector2i(
-			"Checker size", "WIDTH", "HEIGHT", PixelPen.userconfig.checker_size, 
+			"Checker size", "WIDTH", "HEIGHT", PixelPen.singleton.userconfig.checker_size, 
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
 		)] as Array[TreeRow],
 	"/Projects" : [
 		TreeRow.create_file_path(
-			"Default workspace folder", PixelPen.userconfig.default_workspace,
+			"Default workspace folder", PixelPen.singleton.userconfig.default_workspace,
 			FileDialog.FILE_MODE_OPEN_DIR
 		),
 		TreeRow.create_vector2i(
-			"Default canvas size", "WIDTH", "HEIGHT", PixelPen.userconfig.default_canvas_size,
+			"Default canvas size", "WIDTH", "HEIGHT", PixelPen.singleton.userconfig.default_canvas_size,
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
 		)
 	] as Array[TreeRow],
 	"/Cursor" : [TreeRow.create_enum(
-			"Hide in canvas", 1 if PixelPen.userconfig.hide_cursor_in_canvas else 0,
+			"Hide in canvas", 1 if PixelPen.singleton.userconfig.hide_cursor_in_canvas else 0,
 			["FALSE", "TRUE"] as Array[String]
 		)] as Array[TreeRow],
 	"/Animation" : [
 		TreeRow.create_int(
-			"Default fps", PixelPen.userconfig.default_animation_fps, 1, 1000
+			"Default fps", PixelPen.singleton.userconfig.default_animation_fps, 1, 1000
 		)
 	] as Array[TreeRow]
 	}
@@ -91,24 +91,24 @@ func _on_general_properties_value_changed(index, value):
 	match current_active_path:
 		"/Guide/Grid":
 			if index == 0:
-				PixelPen.userconfig.default_grid_size = value as Vector2i
-				PixelPen.userconfig.save()
+				PixelPen.singleton.userconfig.default_grid_size = value as Vector2i
+				PixelPen.singleton.userconfig.save()
 			elif index == 1:
-				PixelPen.userconfig.checker_size = value as Vector2i
-				PixelPen.userconfig.save()
-				PixelPen.layer_items_changed.emit()
+				PixelPen.singleton.userconfig.checker_size = value as Vector2i
+				PixelPen.singleton.userconfig.save()
+				PixelPen.singleton.layer_items_changed.emit()
 		"/Projects":
 			if index == 0:
-				PixelPen.userconfig.default_workspace = value as String
-				PixelPen.userconfig.save()
+				PixelPen.singleton.userconfig.default_workspace = value as String
+				PixelPen.singleton.userconfig.save()
 			elif index == 1:
-				PixelPen.userconfig.default_canvas_size = value as Vector2i
-				PixelPen.userconfig.save()
+				PixelPen.singleton.userconfig.default_canvas_size = value as Vector2i
+				PixelPen.singleton.userconfig.save()
 		"/Cursor":
 			if index == 0:
-				PixelPen.userconfig.hide_cursor_in_canvas = (value as int) == 1
-				PixelPen.userconfig.save()
+				PixelPen.singleton.userconfig.hide_cursor_in_canvas = (value as int) == 1
+				PixelPen.singleton.userconfig.save()
 		"/Animation":
 			if index == 0:
-				PixelPen.userconfig.default_animation_fps = value as int
-				PixelPen.userconfig.save()
+				PixelPen.singleton.userconfig.default_animation_fps = value as int
+				PixelPen.singleton.userconfig.save()

@@ -34,33 +34,33 @@ var current_toolbox : PixelPenEnum.ToolBox
 func create_toolbox():
 	_clean_up()
 	await get_tree().process_frame
-	_build_button("Select", select, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_SELECT, false, PixelPen.userconfig.shorcuts.tool_select)
-	_build_button("Move", move, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, false, PixelPen.userconfig.shorcuts.tool_move)
-	_build_button("Pan", pan, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_PAN, false, PixelPen.userconfig.shorcuts.tool_pan)
-	_build_button("Selection", selection, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_SELECTION, false, PixelPen.userconfig.shorcuts.tool_selection)
-	_build_button("Pen", pen, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_PEN, true, PixelPen.userconfig.shorcuts.tool_pen)
-	_build_button("Brush", brush, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_BRUSH, false, PixelPen.userconfig.shorcuts.tool_brush)
-	_build_button("Stamp", stamp, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_STAMP, false, PixelPen.userconfig.shorcuts.tool_stamp)
-	_build_button("Eraser", eraser, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_ERASER, false, PixelPen.userconfig.shorcuts.tool_eraser)
-	_build_button("Magnet", magnet, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MAGNET, false, PixelPen.userconfig.shorcuts.tool_magnet)
-	_build_button("Line", line, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_LINE, false, PixelPen.userconfig.shorcuts.tool_line)
-	_build_button("Ellipse", oval, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_ELLIPSE, false, PixelPen.userconfig.shorcuts.tool_ellipse)
-	_build_button("Rectangle", rectangle, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_RECTANGLE, false, PixelPen.userconfig.shorcuts.tool_rectangle)
-	_build_button("Fill", fill, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_FILL, false, PixelPen.userconfig.shorcuts.tool_fill)
-	_build_button("Color Picker", color_picker, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_COLOR_PICKER, false, PixelPen.userconfig.shorcuts.tool_color_picker)
-	_build_button("Zoom", zoom, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_ZOOM, false, PixelPen.userconfig.shorcuts.tool_zoom)
+	_build_button("Select", select, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_SELECT, false, PixelPen.singleton.userconfig.shorcuts.tool_select)
+	_build_button("Move", move, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, false, PixelPen.singleton.userconfig.shorcuts.tool_move)
+	_build_button("Pan", pan, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_PAN, false, PixelPen.singleton.userconfig.shorcuts.tool_pan)
+	_build_button("Selection", selection, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_SELECTION, false, PixelPen.singleton.userconfig.shorcuts.tool_selection)
+	_build_button("Pen", pen, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_PEN, true, PixelPen.singleton.userconfig.shorcuts.tool_pen)
+	_build_button("Brush", brush, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_BRUSH, false, PixelPen.singleton.userconfig.shorcuts.tool_brush)
+	_build_button("Stamp", stamp, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_STAMP, false, PixelPen.singleton.userconfig.shorcuts.tool_stamp)
+	_build_button("Eraser", eraser, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_ERASER, false, PixelPen.singleton.userconfig.shorcuts.tool_eraser)
+	_build_button("Magnet", magnet, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MAGNET, false, PixelPen.singleton.userconfig.shorcuts.tool_magnet)
+	_build_button("Line", line, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_LINE, false, PixelPen.singleton.userconfig.shorcuts.tool_line)
+	_build_button("Ellipse", oval, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_ELLIPSE, false, PixelPen.singleton.userconfig.shorcuts.tool_ellipse)
+	_build_button("Rectangle", rectangle, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_RECTANGLE, false, PixelPen.singleton.userconfig.shorcuts.tool_rectangle)
+	_build_button("Fill", fill, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_FILL, false, PixelPen.singleton.userconfig.shorcuts.tool_fill)
+	_build_button("Color Picker", color_picker, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_COLOR_PICKER, false, PixelPen.singleton.userconfig.shorcuts.tool_color_picker)
+	_build_button("Zoom", zoom, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_ZOOM, false, PixelPen.singleton.userconfig.shorcuts.tool_zoom)
 
 
 func _ready():
-	if not PixelPen.need_connection(get_window()):
+	if not PixelPen.singleton.need_connection(get_window()):
 		return
-	PixelPen.shorcut_changed.connect(create_toolbox)
+	PixelPen.singleton.shorcut_changed.connect(create_toolbox)
 	create_toolbox()
-	PixelPen.project_file_changed.connect(func ():
-			if PixelPen.current_project != null:
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_PEN, true)
+	PixelPen.singleton.project_file_changed.connect(func ():
+			if PixelPen.singleton.current_project != null:
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_PEN, true)
 			)
-	PixelPen.toolbox_just_changed.connect(func (type : PixelPenEnum.ToolBox):
+	PixelPen.singleton.toolbox_just_changed.connect(func (type : PixelPenEnum.ToolBox):
 			if type != current_toolbox and type != PixelPenEnum.ToolBox.TOOL_UNKNOWN:
 				_arr_prev_toolbox.push_back(type)
 				_arr_prev_toolbox = _arr_prev_toolbox.slice(-2)
@@ -74,9 +74,9 @@ func _build_button(name : String, texture : Texture2D, grup : int, type: int, de
 	btn.texture_normal = texture
 	btn.custom_minimum_size = Vector2i(40, 40)
 	btn.pressed.connect(func ():
-			if PixelPen.current_project == null:
+			if PixelPen.singleton.current_project == null:
 				return
-			PixelPen.tool_changed.emit(grup, type, true)
+			PixelPen.singleton.tool_changed.emit(grup, type, true)
 			)
 	btn.stretch_mode = TextureButton.STRETCH_KEEP_CENTERED
 	btn.shortcut = shorcut

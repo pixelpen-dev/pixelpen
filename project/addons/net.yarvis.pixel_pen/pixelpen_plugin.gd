@@ -1,8 +1,8 @@
 @tool
 extends EditorPlugin
 
+
 const EditorWindow := preload("editor/editor_window.tscn")
-var main_singleton := preload("pixelpen_singleton.gd")
 
 var editor_window_instance : Window
 
@@ -43,10 +43,8 @@ func _make_visible(visible):
 
 
 func _enter_tree():
-	add_autoload_singleton("PixelPen", main_singleton.resource_path)
 	main_screen_changed.connect(_on_main_screen_changed)
 
 
 func _exit_tree():
-	remove_autoload_singleton("PixelPen")
 	main_screen_changed.disconnect(_on_main_screen_changed)

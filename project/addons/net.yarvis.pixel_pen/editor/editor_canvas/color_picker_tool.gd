@@ -18,25 +18,25 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		return
 	var palette_idx : int = pick_color_from_canvas(mouse_position, false)
 	if palette_idx != -1:
-		(PixelPen.current_project as PixelPenProject).create_undo_palette("Palette", func():
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
+		(PixelPen.singleton.current_project as PixelPenProject).create_undo_palette("Palette", func():
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 				)
 		
-		PixelPen.current_project.palette.color_index[_index_color] = PixelPen.current_project.palette.color_index[palette_idx]
+		PixelPen.singleton.current_project.palette.color_index[_index_color] = PixelPen.singleton.current_project.palette.color_index[palette_idx]
 		
-		(PixelPen.current_project as PixelPenProject).create_redo_palette(func():
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
+		(PixelPen.singleton.current_project as PixelPenProject).create_redo_palette(func():
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 				)
 		
-		PixelPen.palette_changed.emit()
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.palette_changed.emit()
+		PixelPen.singleton.project_saved.emit(false)
 
 
 func _on_shift_pressed(pressed : bool):
 	shift_mode = pressed
-	PixelPen.toolbox_shift_mode.emit(shift_mode)
+	PixelPen.singleton.toolbox_shift_mode.emit(shift_mode)
 
 
 func _on_draw_cursor(mouse_position : Vector2):

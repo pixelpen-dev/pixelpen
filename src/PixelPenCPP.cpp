@@ -9,25 +9,25 @@ using namespace godot;
 
 
 void PixelPenCPP::_bind_methods(){
-    ClassDB::bind_method(D_METHOD("version"), &PixelPenCPP::version);
-    ClassDB::bind_method(D_METHOD("get_image_flood", "started_point", "p_color_map", "mask_margin", "grow_only_along_axis"), &PixelPenCPP::get_image_flood);
-    ClassDB::bind_method(D_METHOD("get_mask_used_rect", "p_mask"), &PixelPenCPP::get_mask_used_rect);
-    ClassDB::bind_method(D_METHOD("coor_inside_canvas", "x", "y", "size", "p_mask"), &PixelPenCPP::coor_inside_canvas);
-    ClassDB::bind_method(D_METHOD("get_color_map_with_mask", "p_mask", "p_color_map"), &PixelPenCPP::get_color_map_with_mask);
-    ClassDB::bind_method(D_METHOD("get_mask_from_polygon", "polygon", "mask_size", "mask_margin"), &PixelPenCPP::get_mask_from_polygon);
-    ClassDB::bind_method(D_METHOD("empty_index_on_color_map", "p_mask", "p_color_map"), &PixelPenCPP::empty_index_on_color_map);
-    ClassDB::bind_method(D_METHOD("blit_color_map", "p_src_map", "p_mask", "offset", "p_color_map"), &PixelPenCPP::blit_color_map);
-    ClassDB::bind_method(D_METHOD("swap_color", "palette_index_a", "palette_index_b", "p_color_map"), &PixelPenCPP::swap_color);
-    ClassDB::bind_method(D_METHOD("replace_color", "palette_index_from", "palette_index_to", "p_color_map"), &PixelPenCPP::replace_color);
-    ClassDB::bind_method(D_METHOD("swap_palette", "old_palette", "new_palette", "p_color_map"), &PixelPenCPP::swap_palette);
-    ClassDB::bind_method(D_METHOD("move_shift", "direction", "p_image"), &PixelPenCPP::move_shift);
-    ClassDB::bind_method(D_METHOD("blend", "p_target_image", "p_src_image", "offset"), &PixelPenCPP::blend);
-    ClassDB::bind_method(D_METHOD("fill_color", "p_mask1_image", "p_target_image", "color", "p_mask2_image"), &PixelPenCPP::fill_color);
-    ClassDB::bind_method(D_METHOD("fill_rect_outline", "rect", "color", "p_target", "p_mask"), &PixelPenCPP::fill_rect_outline);
-    ClassDB::bind_method(D_METHOD("clean_invisible_color", "p_color_map", "palette"), &PixelPenCPP::clean_invisible_color);
-    ClassDB::bind_method(D_METHOD("import_image", "p_layer_image", "p_imported_image", "palette"), &PixelPenCPP::import_image);
-    ClassDB::bind_method(D_METHOD("get_image", "palette_color", "p_color_map", "mipmap"), &PixelPenCPP::get_image);
-    ClassDB::bind_method(D_METHOD("get_image_with_mask", "palette_color", "p_color_map" , "p_mask", "mipmap"), &PixelPenCPP::get_image_with_mask);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("version"), &PixelPenCPP::version);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("get_image_flood", "started_point", "p_color_map", "mask_margin", "grow_only_along_axis"), &PixelPenCPP::get_image_flood);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("get_mask_used_rect", "p_mask"), &PixelPenCPP::get_mask_used_rect);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("coor_inside_canvas", "x", "y", "size", "p_mask"), &PixelPenCPP::coor_inside_canvas);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("get_color_map_with_mask", "p_mask", "p_color_map"), &PixelPenCPP::get_color_map_with_mask);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("get_mask_from_polygon", "polygon", "mask_size", "mask_margin"), &PixelPenCPP::get_mask_from_polygon);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("empty_index_on_color_map", "p_mask", "p_color_map"), &PixelPenCPP::empty_index_on_color_map);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("blit_color_map", "p_src_map", "p_mask", "offset", "p_color_map"), &PixelPenCPP::blit_color_map);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("swap_color", "palette_index_a", "palette_index_b", "p_color_map"), &PixelPenCPP::swap_color);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("replace_color", "palette_index_from", "palette_index_to", "p_color_map"), &PixelPenCPP::replace_color);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("swap_palette", "old_palette", "new_palette", "p_color_map"), &PixelPenCPP::swap_palette);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("move_shift", "direction", "p_image"), &PixelPenCPP::move_shift);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("blend", "p_target_image", "p_src_image", "offset"), &PixelPenCPP::blend);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("fill_color", "p_mask1_image", "p_target_image", "color", "p_mask2_image"), &PixelPenCPP::fill_color);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("fill_rect_outline", "rect", "color", "p_target", "p_mask"), &PixelPenCPP::fill_rect_outline);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("clean_invisible_color", "p_color_map", "palette"), &PixelPenCPP::clean_invisible_color);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("import_image", "p_layer_image", "p_imported_image", "palette"), &PixelPenCPP::import_image);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("get_image", "palette_color", "p_color_map", "mipmap"), &PixelPenCPP::get_image);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("get_image_with_mask", "palette_color", "p_color_map" , "p_mask", "mipmap"), &PixelPenCPP::get_image_with_mask);
 }
 
 

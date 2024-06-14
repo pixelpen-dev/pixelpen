@@ -95,9 +95,9 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 			if filled:
 				var rect_image : Image = Image.create(node.canvas_size.x, node.canvas_size.y, false, Image.FORMAT_R8)
 				rect_image.fill_rect(rect, Color8(_index_color, 0, 0, 0))
-				PixelPen.utils.fill_color(mask_selection, canvas_with_rect, Color8(_index_color, 0, 0, 0), rect_image)
+				PixelPenCPP.fill_color(mask_selection, canvas_with_rect, Color8(_index_color, 0, 0, 0), rect_image)
 			else:
-				PixelPen.utils.fill_rect_outline(rect, Color8(_index_color, 0, 0, 0), canvas_with_rect, mask_selection)
+				PixelPenCPP.fill_rect_outline(rect, Color8(_index_color, 0, 0, 0), canvas_with_rect, mask_selection)
 			index_image.blit_color_map(get_mirror_image(mirror_line, canvas_with_rect), null, Vector2i.ZERO)
 		
 		(PixelPen.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():

@@ -48,7 +48,7 @@ func resize(new_size : Vector2i, anchor : PixelPenEnum.ResizeAnchor):
 		offset.y -= (cache.size.y - size.y)
 	elif anchor == PixelPenEnum.ResizeAnchor.LEFT:
 		offset.y -= (cache.size.y - size.y) / 2
-	PixelPen.utils.blend(colormap, cache.colormap, offset)
+	PixelPenCPP.blend(colormap, cache.colormap, offset)
 
 
 func coor_inside_canvas(x : int, y : int, mask : Image = null)->bool:
@@ -86,46 +86,46 @@ func set_index_rect_on_color_map(rect : Rect2i, index_color : int, mask : Image 
 		else:
 			var rect_mask : Image = Image.create(size.x, size.y, false, Image.FORMAT_R8)
 			rect_mask.fill_rect(rect, Color8(255, 0, 0, 0))
-			PixelPen.utils.fill_color(rect_mask, colormap,  Color8(index_color, 0, 0, 0), mask)
+			PixelPenCPP.fill_color(rect_mask, colormap,  Color8(index_color, 0, 0, 0), mask)
 	else:
 		if mask == null:
-			PixelPen.utils.fill_rect_outline(rect, Color8(index_color, 0, 0, 0), colormap, null)
+			PixelPenCPP.fill_rect_outline(rect, Color8(index_color, 0, 0, 0), colormap, null)
 		else:
-			PixelPen.utils.fill_rect_outline(rect, Color8(index_color, 0, 0, 0), colormap, mask)
+			PixelPenCPP.fill_rect_outline(rect, Color8(index_color, 0, 0, 0), colormap, mask)
 
 
 func fill_index_on_color_map(index_color : int, mask : Image = null):
 	if mask == null:
 		colormap.fill(Color8(index_color, 0, 0))
 	else:
-		PixelPen.utils.fill_color(mask, colormap, Color8(index_color, 0, 0, 0), null)
+		PixelPenCPP.fill_color(mask, colormap, Color8(index_color, 0, 0, 0), null)
 
 
 func empty_index_on_color_map(mask : Image = null):
 	if mask == null:
 		colormap.fill(Color8(0, 0, 0, 0))
 	else:
-		PixelPen.utils.empty_index_on_color_map(mask, colormap)
+		PixelPenCPP.empty_index_on_color_map(mask, colormap)
 
 
 func blit_index_on_color_map(index_color : int, src: Image, mask : Image):
 	if mask == null:
-		PixelPen.utils.fill_color(src, colormap, Color8(index_color, 0, 0, 0), null)
+		PixelPenCPP.fill_color(src, colormap, Color8(index_color, 0, 0, 0), null)
 	else:
-		PixelPen.utils.fill_color(src, colormap, Color8(index_color, 0, 0, 0), mask)
+		PixelPenCPP.fill_color(src, colormap, Color8(index_color, 0, 0, 0), mask)
 
 
 func get_color_map_with_mask(mask : Image = null)-> Image:
 	if mask == null:
 		return colormap.duplicate()
-	return PixelPen.utils.get_color_map_with_mask(mask, colormap)
+	return PixelPenCPP.get_color_map_with_mask(mask, colormap)
 
 
 func blit_color_map(src_map : Image, mask : Image, offset : Vector2i):
 	if mask == null:
-		PixelPen.utils.blit_color_map(src_map, null, offset, colormap)
+		PixelPenCPP.blit_color_map(src_map, null, offset, colormap)
 	else:
-		PixelPen.utils.blit_color_map(src_map, mask, offset, colormap)
+		PixelPenCPP.blit_color_map(src_map, mask, offset, colormap)
 
 
 func get_color_map_texture(is_rebuild = false):
@@ -133,11 +133,11 @@ func get_color_map_texture(is_rebuild = false):
 
 
 func swap_color(palette_index_a : int, palette_index_b : int):
-	PixelPen.utils.swap_color(palette_index_a, palette_index_b, colormap)
+	PixelPenCPP.swap_color(palette_index_a, palette_index_b, colormap)
 
 
 func replace_color(palette_index_from : int, palette_index_to : int):
-	PixelPen.utils.replace_color(palette_index_from, palette_index_to, colormap)
+	PixelPenCPP.replace_color(palette_index_from, palette_index_to, colormap)
 
 
 func get_mipmap_texture(palette : IndexedPalette, mask : Image = null)->ImageTexture:
@@ -146,5 +146,5 @@ func get_mipmap_texture(palette : IndexedPalette, mask : Image = null)->ImageTex
 
 func get_mipmap_image(palette_color : PackedColorArray, mask : Image = null) -> Image:
 	if mask == null:
-		return PixelPen.utils.get_image(palette_color, colormap, true)
-	return PixelPen.utils.get_image_with_mask(palette_color, colormap, mask, true)
+		return PixelPenCPP.get_image(palette_color, colormap, true)
+	return PixelPenCPP.get_image_with_mask(palette_color, colormap, mask, true)

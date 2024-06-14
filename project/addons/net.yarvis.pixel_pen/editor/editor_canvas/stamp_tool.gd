@@ -79,7 +79,7 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 					PixelPen.palette_changed.emit(),
 				false)
 
-	PixelPen.utils.blit_color_map(stamp_colormap, null, offset, index_image.colormap)
+	PixelPenCPP.blit_color_map(stamp_colormap, null, offset, index_image.colormap)
 
 	var mirror_line : Vector2i
 	if PixelPen.current_project.show_symetric_vertical:
@@ -88,12 +88,12 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		mirror_line.y = PixelPen.current_project.symetric_guid.y
 	if mirror_line != Vector2i.ZERO and mask_selection == null:
 		var canvas_stamp : Image = Image.create(index_image.size.x, index_image.size.y, false, Image.FORMAT_R8)
-		PixelPen.utils.blit_color_map(stamp_colormap, null, offset, canvas_stamp)
-		PixelPen.utils.blit_color_map(get_mirror_image(mirror_line, canvas_stamp), null, Vector2i.ZERO, index_image.colormap)
+		PixelPenCPP.blit_color_map(stamp_colormap, null, offset, canvas_stamp)
+		PixelPenCPP.blit_color_map(get_mirror_image(mirror_line, canvas_stamp), null, Vector2i.ZERO, index_image.colormap)
 	elif mirror_line != Vector2i.ZERO:
 		var canvas_stamp : Image = Image.create(index_image.size.x, index_image.size.y, false, Image.FORMAT_R8)
-		PixelPen.utils.blit_color_map(stamp_colormap, null, offset, canvas_stamp)
-		var masked_stamp = PixelPen.utils.get_color_map_with_mask(mask_selection, canvas_stamp)
+		PixelPenCPP.blit_color_map(stamp_colormap, null, offset, canvas_stamp)
+		var masked_stamp = PixelPenCPP.get_color_map_with_mask(mask_selection, canvas_stamp)
 		index_image.blit_color_map(get_mirror_image(mirror_line, masked_stamp), null, Vector2i.ZERO)
 
 	if new_palette:

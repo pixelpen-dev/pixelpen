@@ -21,8 +21,8 @@ var is_hover : bool = false
 		else:
 			parent.material.set_shader_parameter("tint", default_color if not parent.disabled else disable_color)
 
-@export var tool_grup : PixelPen.ToolBoxGrup = PixelPen.ToolBoxGrup.TOOL_GRUP_UNKNOWN
-@export var tool_type : PixelPen.ToolBox = PixelPen.ToolBox.TOOL_UNKNOWN
+@export var tool_grup : PixelPenEnum.ToolBoxGrup = PixelPenEnum.ToolBoxGrup.TOOL_GRUP_UNKNOWN
+@export var tool_type : PixelPenEnum.ToolBox = PixelPenEnum.ToolBox.TOOL_UNKNOWN
 @export var visible_callback : Callable
 @export var disable_callback : Callable
 

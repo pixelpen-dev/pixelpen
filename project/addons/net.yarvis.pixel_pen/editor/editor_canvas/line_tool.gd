@@ -16,7 +16,7 @@ var shift_mode : bool = false
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_LINE
+	tool_type = PixelPenEnum.ToolBox.TOOL_LINE
 	has_shift_mode = true
 	is_pressed = false
 	if is_instance_valid(node):
@@ -31,9 +31,9 @@ func _on_request_switch_tool(tool_box_type : int) -> bool:
 
 func _on_sub_tool_changed(type : int):
 	super._on_sub_tool_changed(type)
-	if type == PixelPen.ToolBoxPen.TOOL_PEN_PIXEL_PERFECT_YES:
+	if type == PixelPenEnum.ToolBoxPen.TOOL_PEN_PIXEL_PERFECT_YES:
 		pixel_perfect = true
-	elif type == PixelPen.ToolBoxPen.TOOL_PEN_PIXEL_PERFECT_NO:
+	elif type == PixelPenEnum.ToolBoxPen.TOOL_PEN_PIXEL_PERFECT_NO:
 		pixel_perfect = false
 
 

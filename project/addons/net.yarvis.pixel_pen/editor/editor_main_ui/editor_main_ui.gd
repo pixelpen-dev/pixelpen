@@ -239,7 +239,7 @@ func _process(_delta):
 	edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.COPY), not can_copy_cut)
 	edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.CUT), not can_copy_cut)
 	
-	var can_paste : bool = canvas.canvas_paint.tool.tool_type == PixelPen.ToolBox.TOOL_MOVE and canvas.canvas_paint.tool.mode != MoveTool.Mode.UNKNOWN
+	var can_paste : bool = canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and canvas.canvas_paint.tool.mode != MoveTool.Mode.UNKNOWN
 	edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.PASTE), not can_paste)
 
 
@@ -822,28 +822,28 @@ func _on_selection_texture_changed():
 
 
 func _on_tool_changed(grup : int, type: int, _grab_active : bool):
-	if grup == PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBAR:
+	if grup == PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBAR:
 		match type:
-			PixelPen.ToolBar.TOOLBAR_UNDO:
+			PixelPenEnum.ToolBar.TOOLBAR_UNDO:
 				_on_edit_popup_pressed(EditID.UNDO)
 				get_viewport().set_input_as_handled()
 
-			PixelPen.ToolBar.TOOLBAR_REDO:
+			PixelPenEnum.ToolBar.TOOLBAR_REDO:
 				_on_edit_popup_pressed(EditID.REDO)
 				get_viewport().set_input_as_handled()
 
-			PixelPen.ToolBar.TOOLBAR_RESET_ZOOM:
+			PixelPenEnum.ToolBar.TOOLBAR_RESET_ZOOM:
 				canvas.update_camera_zoom()
 
-			PixelPen.ToolBar.TOOLBAR_SHOW_GRID:
+			PixelPenEnum.ToolBar.TOOLBAR_SHOW_GRID:
 				_on_view_popup_pressed(ViewID.SHOW_GRID)
 				get_viewport().set_input_as_handled()
 
-			PixelPen.ToolBar.TOOLBAR_TOGGLE_TINT_BLACK_LAYER:
+			PixelPenEnum.ToolBar.TOOLBAR_TOGGLE_TINT_BLACK_LAYER:
 				_on_view_popup_pressed(ViewID.TOGGLE_TINT_SELECTED_LAYER)
 				get_viewport().set_input_as_handled()
 
-			PixelPen.ToolBar.TOOLBAR_SAVE:
+			PixelPenEnum.ToolBar.TOOLBAR_SAVE:
 				_on_file_popup_pressed(FileID.SAVE)
 				get_viewport().set_input_as_handled()
 
@@ -982,35 +982,35 @@ func _on_edit_popup_pressed(id : int):
 
 		EditID.INVERSE_SELECTION:
 			PixelPen.tool_changed.emit(
-					PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-					PixelPen.ToolBoxSelection.TOOL_SELECTION_INVERSE, false)
+					PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
+					PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INVERSE, false)
 	
 		EditID.CLEAR_SELECTION:
 			PixelPen.tool_changed.emit(
-					PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-					PixelPen.ToolBoxSelection.TOOL_SELECTION_REMOVE, false)
+					PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
+					PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_REMOVE, false)
 
 		EditID.DELETE_ON_SELECTION:
 			PixelPen.tool_changed.emit(
-					PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-					PixelPen.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false)
+					PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
+					PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false)
 		
 		EditID.COPY:
-			if canvas.canvas_paint.tool.tool_type == PixelPen.ToolBox.TOOL_MOVE:
+			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE:
 				canvas.canvas_paint.tool._show_guid = true
 			else:
-				PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_MOVE, true)
-			PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPen.ToolBoxMove.TOOL_MOVE_COPY, false)
+				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
+			PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false)
 		
 		EditID.CUT:
-			if canvas.canvas_paint.tool.tool_type == PixelPen.ToolBox.TOOL_MOVE:
+			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE:
 				canvas.canvas_paint.tool._show_guid = true
 			else:
-				PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_MOVE, true)
-			PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPen.ToolBoxMove.TOOL_MOVE_CUT, false)
+				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
+			PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false)
 		
 		EditID.PASTE:
-			if canvas.canvas_paint.tool.tool_type == PixelPen.ToolBox.TOOL_MOVE and canvas.canvas_paint.tool.mode != MoveTool.Mode.UNKNOWN:
+			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and canvas.canvas_paint.tool.mode != MoveTool.Mode.UNKNOWN:
 				canvas.canvas_paint.tool._on_move_commit()
 		
 		EditID.CREATE_BRUSH:
@@ -1019,13 +1019,13 @@ func _on_edit_popup_pressed(id : int):
 			else:
 				var mask = canvas.selection_tool_hint.texture.get_image()
 				PixelPen.userconfig.make_brush_from_project(MaskSelection.get_image_no_margin(mask))
-			if subtool_dock.current_toolbox == PixelPen.ToolBox.TOOL_BRUSH:
-				PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_BRUSH, true)
+			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_BRUSH:
+				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_BRUSH, true)
 		
 		EditID.RESET_BRUSH:
 			PixelPen.current_project.reset_brush_to_default()
-			if subtool_dock.current_toolbox == PixelPen.ToolBox.TOOL_BRUSH:
-				PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_BRUSH, true)
+			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_BRUSH:
+				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_BRUSH, true)
 		
 		EditID.CREATE_STAMP:
 			if canvas.selection_tool_hint.texture == null:
@@ -1033,19 +1033,19 @@ func _on_edit_popup_pressed(id : int):
 			else:
 				var mask = canvas.selection_tool_hint.texture.get_image()
 				PixelPen.userconfig.make_stamp_from_project(MaskSelection.get_image_no_margin(mask))
-			if subtool_dock.current_toolbox == PixelPen.ToolBox.TOOL_STAMP:
-				PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_STAMP, true)
+			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_STAMP:
+				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_STAMP, true)
 		
 		EditID.RESET_STAMP:
 			PixelPen.current_project.reset_stamp_to_default()
-			if subtool_dock.current_toolbox == PixelPen.ToolBox.TOOL_STAMP:
-				PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPen.ToolBox.TOOL_STAMP, true)
+			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_STAMP:
+				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_STAMP, true)
 		
 		EditID.SWITCH_LAST_TOOLBOX:
 			if PixelPen.current_project == null:
 				return
-			if toolbox_dock.prev_toolbox != PixelPen.ToolBox.TOOL_UNKNOWN:
-				PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, toolbox_dock.prev_toolbox, true)
+			if toolbox_dock.prev_toolbox != PixelPenEnum.ToolBox.TOOL_UNKNOWN:
+				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, toolbox_dock.prev_toolbox, true)
 		
 		EditID.CANVAS_SIZE:
 			_open_canvas_size_window()
@@ -1273,19 +1273,19 @@ func _on_palette_popup_pressed(id : int):
 func _on_animation_popup_pressed(id : int):
 	var project : PixelPenProject = PixelPen.current_project as PixelPenProject
 	if id == AnimationID.PLAY_PAUSE:
-		PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPen.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE, false)
+		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE, false)
 	
 	elif id == AnimationID.SKIP_TO_FRONT:
-		PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPen.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT, false)
+		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT, false)
 	
 	elif id == AnimationID.SKIP_TO_END:
-		PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPen.ToolAnimation.TOOL_ANIMATION_SKIP_TO_END, false)
+		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_END, false)
 	
 	elif id == AnimationID.STEP_BACKWARD:
-		PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPen.ToolAnimation.TOOL_ANIMATION_STEP_BACKWARD, false)
+		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_BACKWARD, false)
 	
 	elif id == AnimationID.STEP_FORWARD:
-		PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPen.ToolAnimation.TOOL_ANIMATION_STEP_FORWARD, false)
+		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_FORWARD, false)
 	
 	elif id == AnimationID.TOGGLE_LOOP:
 		PixelPen.current_project.animation_loop = not PixelPen.current_project.animation_loop

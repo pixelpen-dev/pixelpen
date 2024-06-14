@@ -21,64 +21,64 @@ const ZoomTool := preload("zoom_tool.gd")
 var tool : Tool = Tool.new():
 	get:
 		match tool.active_tool_type:
-			PixelPen.ToolBox.TOOL_SELECT:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_SELECT:
+			PixelPenEnum.ToolBox.TOOL_SELECT:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_SELECT:
 					tool = SelectTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_MOVE:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_MOVE:
+			PixelPenEnum.ToolBox.TOOL_MOVE:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_MOVE:
 					tool = MoveTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_PAN:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_PAN:
+			PixelPenEnum.ToolBox.TOOL_PAN:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_PAN:
 					tool = PanTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_PEN:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_PEN:
-					tool = PenTool.new(PixelPen.ToolBox.TOOL_PEN)
+			PixelPenEnum.ToolBox.TOOL_PEN:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_PEN:
+					tool = PenTool.new(PixelPenEnum.ToolBox.TOOL_PEN)
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_BRUSH:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_BRUSH:
+			PixelPenEnum.ToolBox.TOOL_BRUSH:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_BRUSH:
 					tool = BrushTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_STAMP:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_STAMP:
+			PixelPenEnum.ToolBox.TOOL_STAMP:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_STAMP:
 					tool = StampTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_ERASER:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_ERASER:
-					tool = PenTool.new(PixelPen.ToolBox.TOOL_ERASER)
+			PixelPenEnum.ToolBox.TOOL_ERASER:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_ERASER:
+					tool = PenTool.new(PixelPenEnum.ToolBox.TOOL_ERASER)
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_MAGNET:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_MAGNET:
+			PixelPenEnum.ToolBox.TOOL_MAGNET:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_MAGNET:
 					tool = MagnetTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_SELECTION:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_SELECTION:
+			PixelPenEnum.ToolBox.TOOL_SELECTION:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_SELECTION:
 					tool = SelectionTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_LINE:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_LINE:
+			PixelPenEnum.ToolBox.TOOL_LINE:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_LINE:
 					tool = LineTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_ELLIPSE:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_ELLIPSE:
+			PixelPenEnum.ToolBox.TOOL_ELLIPSE:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_ELLIPSE:
 					tool = EllipseTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_RECTANGLE:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_RECTANGLE:
+			PixelPenEnum.ToolBox.TOOL_RECTANGLE:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_RECTANGLE:
 					tool = RectangleTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_FILL:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_FILL:
+			PixelPenEnum.ToolBox.TOOL_FILL:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_FILL:
 					tool = FillTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_COLOR_PICKER:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_COLOR_PICKER:
+			PixelPenEnum.ToolBox.TOOL_COLOR_PICKER:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_COLOR_PICKER:
 					tool = ColorPickerTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
-			PixelPen.ToolBox.TOOL_ZOOM:
-				if tool.tool_type != PixelPen.ToolBox.TOOL_ZOOM:
+			PixelPenEnum.ToolBox.TOOL_ZOOM:
+				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_ZOOM:
 					tool = ZoomTool.new()
 					PixelPen.toolbox_just_changed.emit(tool.active_tool_type)
 			_:
@@ -177,8 +177,8 @@ func on_draw_hint(mouse_position : Vector2):
 
 
 func _can_draw_exeption():
-	var exeption : bool = tool.tool_type == PixelPen.ToolBox.TOOL_PAN
-	exeption = exeption or tool.tool_type == PixelPen.ToolBox.TOOL_SELECTION
-	exeption = exeption or tool.tool_type == PixelPen.ToolBox.TOOL_COLOR_PICKER
-	exeption = exeption or tool.tool_type == PixelPen.ToolBox.TOOL_ZOOM
+	var exeption : bool = tool.tool_type == PixelPenEnum.ToolBox.TOOL_PAN
+	exeption = exeption or tool.tool_type == PixelPenEnum.ToolBox.TOOL_SELECTION
+	exeption = exeption or tool.tool_type == PixelPenEnum.ToolBox.TOOL_COLOR_PICKER
+	exeption = exeption or tool.tool_type == PixelPenEnum.ToolBox.TOOL_ZOOM
 	return exeption

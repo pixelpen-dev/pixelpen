@@ -24,7 +24,7 @@ var shift_mode : bool = false
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_MAGNET
+	tool_type = PixelPenEnum.ToolBox.TOOL_MAGNET
 	has_shift_mode = true
 	mode = Mode.SELECT_PIXEL
 	moved_pixel.clear()
@@ -42,7 +42,7 @@ func _on_request_switch_tool(tool_box_type : int) -> bool:
 
 func _on_sub_tool_changed(type : int):
 	super._on_sub_tool_changed(type)
-	if type == PixelPen.ToolBoxMagnet.TOOL_MAGNET_CANCEL:
+	if type == PixelPenEnum.ToolBoxMagnet.TOOL_MAGNET_CANCEL:
 		_on_force_cancel()
 
 

@@ -24,29 +24,29 @@ func get_duplicate(new_uid : bool = true):
 	return new_me
 
 
-func resize(new_size : Vector2i, anchor : PixelPen.ResizeAnchor):
+func resize(new_size : Vector2i, anchor : PixelPenEnum.ResizeAnchor):
 	var cache : IndexedColorImage = get_duplicate()
 	size = new_size
 	var offset : Vector2i
-	if anchor == PixelPen.ResizeAnchor.CENTER:
+	if anchor == PixelPenEnum.ResizeAnchor.CENTER:
 		offset.x -= (cache.size.x - size.x) / 2
 		offset.y -= (cache.size.y - size.y) / 2
-	elif anchor == PixelPen.ResizeAnchor.TOP:
+	elif anchor == PixelPenEnum.ResizeAnchor.TOP:
 		offset.x -= (cache.size.x - size.x) / 2
-	elif anchor == PixelPen.ResizeAnchor.TOP_RIGHT:
+	elif anchor == PixelPenEnum.ResizeAnchor.TOP_RIGHT:
 		offset.x -= (cache.size.x - size.x)
-	elif anchor == PixelPen.ResizeAnchor.RIGHT:
+	elif anchor == PixelPenEnum.ResizeAnchor.RIGHT:
 		offset.x -= (cache.size.x - size.x)
 		offset.y -= (cache.size.y - size.y) / 2
-	elif anchor == PixelPen.ResizeAnchor.BOTTOM_RIGHT:
+	elif anchor == PixelPenEnum.ResizeAnchor.BOTTOM_RIGHT:
 		offset.x -= (cache.size.x - size.x)
 		offset.y -= (cache.size.y - size.y)
-	elif anchor == PixelPen.ResizeAnchor.BOTTOM:
+	elif anchor == PixelPenEnum.ResizeAnchor.BOTTOM:
 		offset.x -= (cache.size.x - size.x) / 2
 		offset.y -= (cache.size.y - size.y)
-	elif anchor == PixelPen.ResizeAnchor.BOTTOM_LEFT:
+	elif anchor == PixelPenEnum.ResizeAnchor.BOTTOM_LEFT:
 		offset.y -= (cache.size.y - size.y)
-	elif anchor == PixelPen.ResizeAnchor.LEFT:
+	elif anchor == PixelPenEnum.ResizeAnchor.LEFT:
 		offset.y -= (cache.size.y - size.y) / 2
 	PixelPen.utils.blend(colormap, cache.colormap, offset)
 

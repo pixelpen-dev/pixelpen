@@ -162,7 +162,7 @@ func set_mode(mode : ProjectMode, mask : Image = null):
 	PixelPen.edit_mode_changed.emit(mode)
 
 
-func resize_canvas(new_size : Vector2i, anchor : PixelPen.ResizeAnchor):
+func resize_canvas(new_size : Vector2i, anchor : PixelPenEnum.ResizeAnchor):
 	canvas_size = new_size
 	for frame in pool_frames:
 		for layer in frame.layers:

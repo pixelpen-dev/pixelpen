@@ -8,7 +8,7 @@ var shift_mode : bool = false
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_COLOR_PICKER
+	tool_type = PixelPenEnum.ToolBox.TOOL_COLOR_PICKER
 	has_shift_mode = true
 
 

@@ -6,7 +6,7 @@ var pressed_moused_position : Vector2
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_PAN
+	tool_type = PixelPenEnum.ToolBox.TOOL_PAN
 	has_shift_mode = false
 
 

@@ -3,9 +3,9 @@ extends RefCounted
 
 
 static var node : Node2D
-static var active_tool_type : PixelPen.ToolBox = PixelPen.ToolBox.TOOL_UNKNOWN
+static var active_tool_type : PixelPenEnum.ToolBox = PixelPenEnum.ToolBox.TOOL_UNKNOWN
 static var active_sub_tool_type : int = -1
-static var tool_type : int = PixelPen.ToolBox.TOOL_UNKNOWN ## current class
+static var tool_type : int = PixelPenEnum.ToolBox.TOOL_UNKNOWN ## current class
 static var has_shift_mode : bool = false
 static var is_pressed : bool = false
 static var _index_color : int
@@ -20,7 +20,7 @@ const pan_texture := preload("../../resources/icon/pan_24.svg")
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_UNKNOWN
+	tool_type = PixelPenEnum.ToolBox.TOOL_UNKNOWN
 	has_shift_mode = false
 
 
@@ -29,25 +29,25 @@ func _on_request_switch_tool(tool_box_type : int) -> bool:
 
 
 func _on_sub_tool_changed(type : int):
-	if type == PixelPen.ToolBoxSelection.TOOL_SELECTION_INVERSE:
+	if type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INVERSE:
 		if node.selection_tool_hint.texture != null and PixelPen.current_project != null:
-			if tool_type == PixelPen.ToolBox.TOOL_MOVE and node.canvas_paint.tool.mode != node.canvas_paint.tool.Mode.UNKNOWN:
+			if tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and node.canvas_paint.tool.mode != node.canvas_paint.tool.Mode.UNKNOWN:
 				node.canvas_paint.tool._on_force_cancel()
 			create_selection_undo()
 			var new_img : Image = MaskSelection.get_inverse_image(node.selection_tool_hint.texture.get_image())
 			node.selection_tool_hint.texture = ImageTexture.create_from_image(new_img)
 			create_selection_redo()
 	
-	elif type == PixelPen.ToolBoxSelection.TOOL_SELECTION_REMOVE:
+	elif type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_REMOVE:
 		if node.selection_tool_hint.texture != null and PixelPen.current_project != null:
-			if tool_type == PixelPen.ToolBox.TOOL_MOVE and node.canvas_paint.tool.mode != node.canvas_paint.tool.Mode.UNKNOWN:
+			if tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and node.canvas_paint.tool.mode != node.canvas_paint.tool.Mode.UNKNOWN:
 				node.canvas_paint.tool._on_force_cancel()
 			create_selection_undo()
 			node.selection_tool_hint.texture = null
 			create_selection_redo()
 		
-	elif type == PixelPen.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED:
-		if tool_type != PixelPen.ToolBox.TOOL_MOVE or node.canvas_paint.tool.mode == node.canvas_paint.tool.Mode.UNKNOWN:
+	elif type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED:
+		if tool_type != PixelPenEnum.ToolBox.TOOL_MOVE or node.canvas_paint.tool.mode == node.canvas_paint.tool.Mode.UNKNOWN:
 			delete_on_selected()
 	
 	else:

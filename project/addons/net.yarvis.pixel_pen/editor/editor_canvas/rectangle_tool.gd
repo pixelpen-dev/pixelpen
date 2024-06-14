@@ -14,7 +14,7 @@ var shift_mode : bool = false
 
 
 func _init():
-	tool_type = PixelPen.ToolBox.TOOL_RECTANGLE
+	tool_type = PixelPenEnum.ToolBox.TOOL_RECTANGLE
 	has_shift_mode = true
 	is_pressed = false
 
@@ -27,9 +27,9 @@ func _on_request_switch_tool(tool_box_type : int) -> bool:
 
 func _on_sub_tool_changed(type : int):
 	super._on_sub_tool_changed(type)
-	if type == PixelPen.ToolBoxRectangle.TOOL_RECTANGLE_FILL_YES:
+	if type == PixelPenEnum.ToolBoxRectangle.TOOL_RECTANGLE_FILL_YES:
 		filled = true
-	elif type == PixelPen.ToolBoxRectangle.TOOL_RECTANGLE_FILL_NO:
+	elif type == PixelPenEnum.ToolBoxRectangle.TOOL_RECTANGLE_FILL_NO:
 		filled = false
 
 

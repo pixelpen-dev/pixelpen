@@ -13,7 +13,7 @@ var shift_mode : bool = false
 
 func _init(mode : int):
 	tool_type = mode
-	has_shift_mode = tool_type == PixelPen.ToolBox.TOOL_PEN
+	has_shift_mode = tool_type == PixelPenEnum.ToolBox.TOOL_PEN
 
 
 func _on_request_switch_tool(tool_box_type : int) -> bool:
@@ -24,9 +24,9 @@ func _on_request_switch_tool(tool_box_type : int) -> bool:
 
 func _on_sub_tool_changed(type : int):
 	super._on_sub_tool_changed(type)
-	if type == PixelPen.ToolBoxPen.TOOL_PEN_PIXEL_PERFECT_YES:
+	if type == PixelPenEnum.ToolBoxPen.TOOL_PEN_PIXEL_PERFECT_YES:
 		pixel_perfect = true
-	elif type == PixelPen.ToolBoxPen.TOOL_PEN_PIXEL_PERFECT_NO:
+	elif type == PixelPenEnum.ToolBoxPen.TOOL_PEN_PIXEL_PERFECT_NO:
 		pixel_perfect = false
 
 
@@ -46,16 +46,16 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		if index_image.coor_inside_canvas(coord.x, coord.y, mask_selection):
 			is_pressed = true
 			is_pressed_outside = false
-			var action_name : String = "Pen tool" if tool_type == PixelPen.ToolBox.TOOL_PEN else "Brush tool"
+			var action_name : String = "Pen tool" if tool_type == PixelPenEnum.ToolBox.TOOL_PEN else "Brush tool"
 			var layer_uid : Vector3i = index_image.layer_uid
 			(PixelPen.current_project as PixelPenProject).create_undo_layer(action_name, index_image.layer_uid, func ():
 					PixelPen.layer_image_changed.emit(layer_uid)
 					PixelPen.project_saved.emit(false))
-			if tool_type == PixelPen.ToolBox.TOOL_PEN:
+			if tool_type == PixelPenEnum.ToolBox.TOOL_PEN:
 				_prev_paint_coord3.clear()
 				_prev_replaced_color3.clear()
 				paint_pixel(coord, _index_color)
-			elif tool_type == PixelPen.ToolBox.TOOL_ERASER:
+			elif tool_type == PixelPenEnum.ToolBox.TOOL_ERASER:
 				paint_pixel(coord, 0)
 			callback.call()
 		else:
@@ -68,9 +68,9 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 		if not _prev_paint_coord_array.is_empty():
 			var is_mirrored : bool = false
 			var color : int
-			if tool_type == PixelPen.ToolBox.TOOL_PEN:
+			if tool_type == PixelPenEnum.ToolBox.TOOL_PEN:
 				color = _index_color
-			elif tool_type == PixelPen.ToolBox.TOOL_ERASER:
+			elif tool_type == PixelPenEnum.ToolBox.TOOL_ERASER:
 				color = 0
 			for each in _prev_paint_coord_array:
 				if PixelPen.current_project.show_symetric_vertical:
@@ -150,9 +150,9 @@ func _on_mouse_motion(mouse_position : Vector2, event_relative : Vector2, callba
 				_prev_paint_coord3.clear()
 				_prev_replaced_color3.clear()
 				paint_pixel(to, _index_color)
-			if tool_type == PixelPen.ToolBox.TOOL_PEN:
+			if tool_type == PixelPenEnum.ToolBox.TOOL_PEN:
 				paint_line(_prev_paint_coord, to, _index_color, pixel_perfect)
-			elif tool_type == PixelPen.ToolBox.TOOL_ERASER:
+			elif tool_type == PixelPenEnum.ToolBox.TOOL_ERASER:
 				paint_line(_prev_paint_coord, to, 0, false)
 			callback.call()
 			if cheat_inside:
@@ -170,7 +170,7 @@ func _on_force_cancel():
 
 
 func _on_shift_pressed(pressed : bool):
-	shift_mode = pressed and tool_type == PixelPen.ToolBox.TOOL_PEN and not is_pressed
+	shift_mode = pressed and tool_type == PixelPenEnum.ToolBox.TOOL_PEN and not is_pressed
 	PixelPen.toolbox_shift_mode.emit(shift_mode)
 
 
@@ -185,9 +185,9 @@ func _on_draw_cursor(mouse_position : Vector2):
 		draw_cross_cursor(mouse_position)
 		
 	# Draw center cursor
-	if tool_type == PixelPen.ToolBox.TOOL_PEN:
+	if tool_type == PixelPenEnum.ToolBox.TOOL_PEN:
 		draw_circle_cursor(mouse_position)
-	elif tool_type == PixelPen.ToolBox.TOOL_ERASER:
+	elif tool_type == PixelPenEnum.ToolBox.TOOL_ERASER:
 		draw_plus_cursor(mouse_position)
 		var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
 		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, eraser_texture)

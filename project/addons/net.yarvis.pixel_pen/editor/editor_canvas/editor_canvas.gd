@@ -79,7 +79,7 @@ func _ready():
 				var project : PixelPenProject = PixelPen.current_project as PixelPenProject
 				if project != null:
 					if MoveTool.mode != MoveTool.Mode.UNKNOWN and not project.multilayer_selected.is_empty():
-						if not await canvas_paint.tool._on_request_switch_tool(PixelPen.ToolBox.TOOL_MOVE):
+						if not await canvas_paint.tool._on_request_switch_tool(PixelPenEnum.ToolBox.TOOL_MOVE):
 							return
 					project.multilayer_selected.clear()
 				
@@ -110,14 +110,14 @@ func _ready():
 				canvas_paint.tool._can_draw = index_image.visible
 			)
 	PixelPen.tool_changed.connect(func(grup, type, _grab_active):
-			if grup == PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX:
+			if grup == PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX:
 				if canvas_paint.tool.active_tool_type != type:
 					if await canvas_paint.tool._on_request_switch_tool(type):
 						canvas_paint.tool.active_tool_type = type
 					else:
 						# cancel switch
-						PixelPen.tool_changed.emit(PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX, canvas_paint.tool.active_tool_type, true)
-			elif grup == PixelPen.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL:
+						PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, canvas_paint.tool.active_tool_type, true)
+			elif grup == PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL:
 				canvas_paint.tool._on_sub_tool_changed(type)
 			)
 	PixelPen.thumbnail_changed.connect(_create_tiled)

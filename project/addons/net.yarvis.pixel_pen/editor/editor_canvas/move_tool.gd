@@ -396,20 +396,20 @@ func _transform(type : int):
 		_rotate_anchor_offset.y *= -1
 	
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_LEFT:
-		PixelPen.utils.move_shift(Vector2i(-1, 0), move_image)
-		PixelPen.utils.move_shift(Vector2i(-1, 0), move_cache_image_map)
+		PixelPenCPP.move_shift(Vector2i(-1, 0), move_image)
+		PixelPenCPP.move_shift(Vector2i(-1, 0), move_cache_image_map)
 	
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_UP:
-		PixelPen.utils.move_shift(Vector2i(0, -1), move_image)
-		PixelPen.utils.move_shift(Vector2i(0, -1), move_cache_image_map)
+		PixelPenCPP.move_shift(Vector2i(0, -1), move_image)
+		PixelPenCPP.move_shift(Vector2i(0, -1), move_cache_image_map)
 	
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_RIGHT:
-		PixelPen.utils.move_shift(Vector2i(1, 0), move_image)
-		PixelPen.utils.move_shift(Vector2i(1, 0), move_cache_image_map)
+		PixelPenCPP.move_shift(Vector2i(1, 0), move_image)
+		PixelPenCPP.move_shift(Vector2i(1, 0), move_cache_image_map)
 		
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_DOWN:
-		PixelPen.utils.move_shift(Vector2i(0, 1), move_image)
-		PixelPen.utils.move_shift(Vector2i(0, 1), move_cache_image_map)
+		PixelPenCPP.move_shift(Vector2i(0, 1), move_image)
+		PixelPenCPP.move_shift(Vector2i(0, 1), move_cache_image_map)
 	
 	if cw != -1:
 		var anchor : Vector2 = _rotate_anchor_offset.rotated(angle) - _rotate_anchor_offset
@@ -437,19 +437,19 @@ func _transform(type : int):
 					colormap = default_cache_map
 				if mask_selection == null:
 					base_image.blend_rect(
-							PixelPen.utils.get_image(PixelPen.current_project.palette.color_index, colormap, false),
+							PixelPenCPP.get_image(PixelPen.current_project.palette.color_index, colormap, false),
 							rect, Vector2i.ZERO)
 					
 				else:
 					base_image.blend_rect(
-							PixelPen.utils.get_image_with_mask(PixelPen.current_project.palette.color_index, colormap, mask_selection, false),
+							PixelPenCPP.get_image_with_mask(PixelPen.current_project.palette.color_index, colormap, mask_selection, false),
 							rect, Vector2i.ZERO)
 				if layer.layer_uid != index_image.layer_uid and mode == Mode.CUT:
 					layer._cache_colormap = layer.colormap.duplicate()
 					if mask_selection == null:
 						layer.colormap.fill(Color.TRANSPARENT)
 					else:
-						PixelPen.utils.empty_index_on_color_map(mask_selection, layer.colormap)
+						PixelPenCPP.empty_index_on_color_map(mask_selection, layer.colormap)
 					
 		node.overlay_hint.texture = ImageTexture.create_from_image(base_image)
 	
@@ -465,25 +465,25 @@ func _transform(type : int):
 		elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_VERTICAL:
 			mask_img.flip_y()
 		elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_LEFT:
-			PixelPen.utils.move_shift(Vector2i(-1, 0), mask_img)
+			PixelPenCPP.move_shift(Vector2i(-1, 0), mask_img)
 			mask_img = MaskSelection.get_image_no_margin(mask_img)
 			var img = MaskSelection.create_empty(mask_img.get_size())
 			img.blend_rect(mask_img, Rect2i(Vector2i(), mask_img.get_size()), Vector2i.ONE)
 			mask_img = img
 		elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_UP:
-			PixelPen.utils.move_shift(Vector2i(0, -1), mask_img)
+			PixelPenCPP.move_shift(Vector2i(0, -1), mask_img)
 			mask_img = MaskSelection.get_image_no_margin(mask_img)
 			var img = MaskSelection.create_empty(mask_img.get_size())
 			img.blend_rect(mask_img, Rect2i(Vector2i(), mask_img.get_size()), Vector2i.ONE)
 			mask_img = img
 		elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_RIGHT:
-			PixelPen.utils.move_shift(Vector2i(1, 0), mask_img)
+			PixelPenCPP.move_shift(Vector2i(1, 0), mask_img)
 			mask_img = MaskSelection.get_image_no_margin(mask_img)
 			var img = MaskSelection.create_empty(mask_img.get_size())
 			img.blend_rect(mask_img, Rect2i(Vector2i(), mask_img.get_size()), Vector2i.ONE)
 			mask_img = img
 		elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_DOWN:
-			PixelPen.utils.move_shift(Vector2i(0, 1), mask_img)
+			PixelPenCPP.move_shift(Vector2i(0, 1), mask_img)
 			mask_img = MaskSelection.get_image_no_margin(mask_img)
 			var img = MaskSelection.create_empty(mask_img.get_size())
 			img.blend_rect(mask_img, Rect2i(Vector2i(), mask_img.get_size()), Vector2i.ONE)
@@ -718,9 +718,9 @@ static func cmd_move(image : Image, offset : Vector2i, mode : Mode, mask : Image
 		var src_image : Image = image.duplicate()
 		if mode == Mode.CUT:
 			image.fill(Color.TRANSPARENT)
-		PixelPen.utils.blit_color_map(src_image, null, offset, image)
+		PixelPenCPP.blit_color_map(src_image, null, offset, image)
 	else:
-		var cut_image : Image = PixelPen.utils.get_color_map_with_mask(mask, image)
+		var cut_image : Image = PixelPenCPP.get_color_map_with_mask(mask, image)
 		if mode == Mode.CUT:
-			PixelPen.utils.empty_index_on_color_map(mask, image)
-		PixelPen.utils.blit_color_map(cut_image, mask, offset, image)
+			PixelPenCPP.empty_index_on_color_map(mask, image)
+		PixelPenCPP.blit_color_map(cut_image, mask, offset, image)

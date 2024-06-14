@@ -41,7 +41,7 @@ func build_panel(build_mode : Mode):
 		_cache_images.clear()
 		for img in PixelPen.userconfig.brush:
 			var imga : Image = Image.create(img.get_width(), img.get_height(), false, Image.FORMAT_RGBA8)
-			PixelPen.utils.fill_color(img, imga, Color8(255, 255, 255, 255), null)
+			PixelPenCPP.fill_color(img, imga, Color8(255, 255, 255, 255), null)
 			_cache_images.push_back(imga)
 	elif mode == Mode.STAMP:
 		_cache_images = PixelPen.userconfig.stamp

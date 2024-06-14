@@ -192,7 +192,7 @@ func get_mirror_image(line : Vector2i, src_image : Image):
 			blend_offset_x = 0
 		var region : Rect2i = Rect2i(Vector2i(region_x_position, 0), Vector2i(region_x_size, x_flip.get_height()))
 		x_flip = x_flip.get_region(region)
-		PixelPen.utils.blend(base, x_flip, Vector2i(blend_offset_x, 0))
+		PixelPenCPP.blend(base, x_flip, Vector2i(blend_offset_x, 0))
 		if line.y != 0:
 			var y_flip : Image = base.duplicate()
 			y_flip.flip_y()
@@ -209,7 +209,7 @@ func get_mirror_image(line : Vector2i, src_image : Image):
 				blend_offset_y = 0
 			region = Rect2i(Vector2i(0, region_y_position), Vector2i(y_flip.get_width(), region_y_size))
 			y_flip = y_flip.get_region(region)
-			PixelPen.utils.blend(base, y_flip, Vector2i(0, blend_offset_y))
+			PixelPenCPP.blend(base, y_flip, Vector2i(0, blend_offset_y))
 	if line.y != 0:
 		var y_flip : Image = src_image.duplicate()
 		y_flip.flip_y()
@@ -226,7 +226,7 @@ func get_mirror_image(line : Vector2i, src_image : Image):
 			blend_offset_y = 0
 		var region : Rect2i = Rect2i(Vector2i(0, region_y_position), Vector2i(y_flip.get_width(), region_y_size))
 		y_flip = y_flip.get_region(region)
-		PixelPen.utils.blend(base, y_flip, Vector2i(0, blend_offset_y))
+		PixelPenCPP.blend(base, y_flip, Vector2i(0, blend_offset_y))
 	return base
 
 

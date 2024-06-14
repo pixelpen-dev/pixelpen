@@ -20,7 +20,7 @@ func _process(_delta):
 		text = ""
 		return
 	var txt = str("FPS: ", Engine.get_frames_per_second())
-	data_debug["CPPVersion"] = PixelPen.utils.version()
+	data_debug["CPPVersion"] = PixelPenCPP.version()
 	data_debug["Memory"] = str(Performance.get_monitor(Performance.MEMORY_STATIC)/1000000, "/",
 			Performance.get_monitor(Performance.MEMORY_STATIC_MAX)/1000000, " mb")
 	for key in data_debug.keys():

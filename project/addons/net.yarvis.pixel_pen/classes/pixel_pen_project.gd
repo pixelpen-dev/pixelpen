@@ -114,11 +114,11 @@ func sync_gui_palette(ok_save : bool = false):
 				new_palette.push_back(palette.color_index[idx])
 			for frame in pool_frames:
 				for layer in frame.layers:
-					PixelPen.utils.swap_palette(palette.color_index, new_palette, layer.colormap)
+					PixelPenCPP.swap_palette(palette.color_index, new_palette, layer.colormap)
 			if use_sample:
 				for frame in _cache_pool_frames:
 					for layer in frame.layers:
-						PixelPen.utils.swap_palette(palette.color_index, new_palette, layer.colormap)
+						PixelPenCPP.swap_palette(palette.color_index, new_palette, layer.colormap)
 			palette.color_index = new_palette
 			palette.grid_sync_to_palette()
 			if ok_save:
@@ -148,7 +148,7 @@ func set_mode(mode : ProjectMode, mask : Image = null):
 		_cache_pool_frames = pool_frames#get_frames_duplicate(false)
 		_cache_canvas_pool_frame_uid = canvas_pool_frame_uid
 		_cache_undo_redo = undo_redo
-		var region : Rect2i = PixelPen.utils.get_mask_used_rect(mask)
+		var region : Rect2i = PixelPenCPP.get_mask_used_rect(mask)
 		canvas_size = region.size
 		_sample_offset = region.position
 		var new_pool_frames : Array[Frame] = [active_frame.get_duplicate(false)]
@@ -448,7 +448,7 @@ func get_image(frame : Frame = null) -> Image:
 	for index in range(src_frame.layers.size()):
 		if not src_frame.layers[index].visible:
 			continue
-		var image = PixelPen.utils.get_image(palette.color_index, src_frame.layers[index].colormap, false)
+		var image = PixelPenCPP.get_image(palette.color_index, src_frame.layers[index].colormap, false)
 		var rect  = image.get_used_rect()
 		canvas_image.blend_rect(image, rect, rect.position)
 	if frame == null:
@@ -461,14 +461,14 @@ func get_region_project_image(mask : Image = null) -> Image:
 	for index in range(active_frame.layers.size()):
 		if not active_frame.layers[index].visible:
 			continue
-		var image = PixelPen.utils.get_image(palette.color_index, active_frame.layers[index].colormap, false)
+		var image = PixelPenCPP.get_image(palette.color_index, active_frame.layers[index].colormap, false)
 		var rect  = image.get_used_rect()
 		canvas_image.blend_rect(image, rect, rect.position)
 	
 	if mask == null:
 		return canvas_image
 	else:
-		var rect : Rect2i = PixelPen.utils.get_mask_used_rect(mask)
+		var rect : Rect2i = PixelPenCPP.get_mask_used_rect(mask)
 		return canvas_image.get_region(rect)
 
 
@@ -478,13 +478,13 @@ func get_region_project_colormap(mask : Image = null) -> Image:
 		if not active_frame.layers[index].visible:
 			continue
 		if mask == null:
-			PixelPen.utils.fill_color(active_frame.layers[index].colormap, canvas_image, Color8(255, 0, 0), null)
+			PixelPenCPP.fill_color(active_frame.layers[index].colormap, canvas_image, Color8(255, 0, 0), null)
 		else:
-			PixelPen.utils.fill_color(active_frame.layers[index].colormap, canvas_image, Color8(255, 0, 0), mask)
+			PixelPenCPP.fill_color(active_frame.layers[index].colormap, canvas_image, Color8(255, 0, 0), mask)
 	if mask == null:
 		return canvas_image
 	else:
-		var rect : Rect2i = PixelPen.utils.get_mask_used_rect(canvas_image)
+		var rect : Rect2i = PixelPenCPP.get_mask_used_rect(canvas_image)
 		return canvas_image.get_region(rect)
 
 
@@ -494,7 +494,7 @@ func import_file(path : String) -> Vector3i:
 	var image_size : Vector2i = image.get_size()
 	var layer_uid = add_layer(path.get_file().get_basename(), active_layer_uid)
 	var index_image : IndexedColorImage = get_index_image(layer_uid)
-	palette.color_index = PixelPen.utils.import_image(index_image.colormap, image, palette.color_index)
+	palette.color_index = PixelPenCPP.import_image(index_image.colormap, image, palette.color_index)
 	return layer_uid
 
 
@@ -503,7 +503,7 @@ func import_image(image : Image, path : String) -> Vector3i:
 	var image_size : Vector2i = image.get_size()
 	var layer_uid : Vector3i = add_layer(path.get_file().get_basename(), active_layer_uid)
 	var index_image : IndexedColorImage = get_index_image(layer_uid)
-	palette.color_index = PixelPen.utils.import_image(index_image.colormap, image, palette.color_index)
+	palette.color_index = PixelPenCPP.import_image(index_image.colormap, image, palette.color_index)
 	return layer_uid
 
 
@@ -656,11 +656,11 @@ func resolve_missing_visible_frame() -> bool:
 func clean_invisible_color():
 	for frame in pool_frames:
 		for layer in frame.layers:
-			PixelPen.utils.clean_invisible_color(layer.colormap, palette.color_index)
+			PixelPenCPP.clean_invisible_color(layer.colormap, palette.color_index)
 	if use_sample:
 		for frame in _cache_pool_frames:
 			for layer in frame.layers:
-				PixelPen.utils.clean_invisible_color(layer.colormap, palette.color_index)
+				PixelPenCPP.clean_invisible_color(layer.colormap, palette.color_index)
 	for i in palette.color_index.size():
 		if palette.color_index[i].a == 0:
 			palette.color_index[i] = Color.TRANSPARENT
@@ -676,10 +676,10 @@ func reset_brush_to_default():
 		var image : Image = Image.create(rect.size.x + 1, rect.size.y + 1, false, Image.FORMAT_R8)
 		var center_mass : Vector2 = Tool.get_midpoint_ellipse(start, end, Color8(255, 0, 0), image)
 		if center_mass != Vector2(-1, -1):
-			var image_f = PixelPen.utils.get_image_flood(center_mass, image, Vector2i.ZERO, true)
+			var image_f = PixelPenCPP.get_image_flood(center_mass, image, Vector2i.ZERO, true)
 			if image_f != null:
-				PixelPen.utils.fill_color(image_f, image, Color8(255, 0, 0), null)
-		image = image.get_region(PixelPen.utils.get_mask_used_rect(image))
+				PixelPenCPP.fill_color(image_f, image, Color8(255, 0, 0), null)
+		image = image.get_region(PixelPenCPP.get_mask_used_rect(image))
 		PixelPen.userconfig.brush.push_back(image)
 		PixelPen.userconfig.save()
 

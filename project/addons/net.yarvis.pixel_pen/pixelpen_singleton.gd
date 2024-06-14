@@ -48,8 +48,6 @@ var current_project : PixelPenProject:
 		if v != null and v.file_path != "":
 			save_cache_project_config()
 
-var utils : PixelPenCPP = PixelPenCPP.new()
-
 var userconfig : UserConfig:
 	get:
 		if userconfig == null:

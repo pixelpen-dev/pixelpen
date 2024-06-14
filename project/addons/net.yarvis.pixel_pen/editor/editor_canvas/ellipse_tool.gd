@@ -134,7 +134,7 @@ func show_hint(scale : float, force_outline : bool = false):
 	var center_mass : Vector2 = get_midpoint_ellipse(rect_abs.position, rect_abs.end, color, image)
 	
 	if valid_fill:
-		var mask : Image = PixelPen.utils.get_image_flood(
+		var mask : Image = PixelPenCPP.get_image_flood(
 					center_mass as Vector2i,
 					image,
 					Vector2i.ZERO,
@@ -144,7 +144,7 @@ func show_hint(scale : float, force_outline : bool = false):
 		var texture_image : Image = Image.create(node.canvas_size.x, node.canvas_size.y, false, Image.FORMAT_RGBAF)
 		
 		if mask != null and not mask.is_empty():
-			PixelPen.utils.fill_color(mask, texture_image, get_ink_color(), null)
+			PixelPenCPP.fill_color(mask, texture_image, get_ink_color(), null)
 		
 		get_midpoint_ellipse(rect_abs.position, rect_abs.end, color, texture_image)
 		if node.overlay_hint.texture != null and (node.overlay_hint.texture.get_size() as Vector2i) == texture_image.get_size():

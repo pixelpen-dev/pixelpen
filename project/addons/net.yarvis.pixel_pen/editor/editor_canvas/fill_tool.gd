@@ -38,7 +38,7 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		else:
 			var coord : Vector2i = floor(mouse_position)
 			if index_image.coor_inside_canvas(coord.x, coord.y):
-				var mask : Image = PixelPen.utils.get_image_flood(
+				var mask : Image = PixelPenCPP.get_image_flood(
 					coord,
 					index_image.colormap,
 					Vector2i.ZERO,

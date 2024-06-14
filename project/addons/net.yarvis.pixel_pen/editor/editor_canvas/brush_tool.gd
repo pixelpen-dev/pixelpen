@@ -34,25 +34,25 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		pick_color_from_canvas(mouse_position)
 		return
 	_prev_paint_coord_array.clear()
-	var index_image : IndexedColorImage = (PixelPen.current_project as PixelPenProject).active_layer
+	var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).active_layer
 	if index_image != null:
-		PixelPen.current_project.paint.set_image(index_image.colormap)
-		PixelPen.current_project.brush_index = 0
+		PixelPen.singleton.current_project.paint.set_image(index_image.colormap)
+		PixelPen.singleton.current_project.brush_index = 0
 		var coord = floor(mouse_position)
 		var mask_selection : Image
 		if node.selection_tool_hint.texture != null:
 			mask_selection = MaskSelection.get_image_no_margin(node.selection_tool_hint.texture.get_image())
-			PixelPen.current_project.paint.set_mask(mask_selection)
+			PixelPen.singleton.current_project.paint.set_mask(mask_selection)
 		else:
-			PixelPen.current_project.paint.set_mask(null)
+			PixelPen.singleton.current_project.paint.set_mask(null)
 		if index_image.coor_inside_canvas(coord.x, coord.y, mask_selection):
 			is_pressed = true
 			is_pressed_outside = false
 			var action_name : String = "Pen tool" if tool_type == PixelPenEnum.ToolBox.TOOL_PEN else "Brush tool"
 			var layer_uid : Vector3i = index_image.layer_uid
-			(PixelPen.current_project as PixelPenProject).create_undo_layer(action_name, index_image.layer_uid, func ():
-					PixelPen.layer_image_changed.emit(layer_uid)
-					PixelPen.project_saved.emit(false))
+			(PixelPen.singleton.current_project as PixelPenProject).create_undo_layer(action_name, index_image.layer_uid, func ():
+					PixelPen.singleton.layer_image_changed.emit(layer_uid)
+					PixelPen.singleton.project_saved.emit(false))
 			paint_pixel(coord, _index_color, false, true)
 			
 			callback.call()
@@ -67,33 +67,33 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 			var is_mirrored : bool = false
 			var color : int = _index_color
 			for each in _prev_paint_coord_array:
-				if PixelPen.current_project.show_symetric_vertical:
+				if PixelPen.singleton.current_project.show_symetric_vertical:
 					var mirror : Vector2 = each
-					mirror.x = PixelPen.current_project.symetric_guid.x + PixelPen.current_project.symetric_guid.x - mirror.x - 1
+					mirror.x = PixelPen.singleton.current_project.symetric_guid.x + PixelPen.singleton.current_project.symetric_guid.x - mirror.x - 1
 					paint_pixel(mirror, color, false, true)
-					if PixelPen.current_project.show_symetric_horizontal:
-						mirror.y = PixelPen.current_project.symetric_guid.y + PixelPen.current_project.symetric_guid.y - mirror.y - 1
+					if PixelPen.singleton.current_project.show_symetric_horizontal:
+						mirror.y = PixelPen.singleton.current_project.symetric_guid.y + PixelPen.singleton.current_project.symetric_guid.y - mirror.y - 1
 						paint_pixel(mirror, color, false, true)
 					is_mirrored = true
-				if PixelPen.current_project.show_symetric_horizontal:
+				if PixelPen.singleton.current_project.show_symetric_horizontal:
 					var mirror : Vector2 = each
-					mirror.y = PixelPen.current_project.symetric_guid.y + PixelPen.current_project.symetric_guid.y - mirror.y - 1
+					mirror.y = PixelPen.singleton.current_project.symetric_guid.y + PixelPen.singleton.current_project.symetric_guid.y - mirror.y - 1
 					paint_pixel(mirror, color, false, true)
 					is_mirrored = true
 			_prev_paint_coord_array.clear()
 			if is_mirrored:
 				callback.call()
 		
-		var index_image : IndexedColorImage = PixelPen.current_project.active_layer
+		var index_image : IndexedColorImage = PixelPen.singleton.current_project.active_layer
 		var layer_uid : Vector3i = index_image.layer_uid
-		(PixelPen.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
-				PixelPen.layer_image_changed.emit(layer_uid)
-				PixelPen.project_saved.emit(false)
+		(PixelPen.singleton.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
+				PixelPen.singleton.layer_image_changed.emit(layer_uid)
+				PixelPen.singleton.project_saved.emit(false)
 				)
 		is_pressed = false
 		is_pressed_outside = false
-		PixelPen.layer_image_changed.emit(layer_uid)
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.layer_image_changed.emit(layer_uid)
+		PixelPen.singleton.project_saved.emit(false)
 	is_pressed = false
 	is_pressed_outside = false
 
@@ -102,7 +102,7 @@ func _on_mouse_motion(mouse_position : Vector2, event_relative : Vector2, callba
 	if shift_mode:
 		return
 	if is_pressed or is_pressed_outside:
-		var index_image : IndexedColorImage = (PixelPen.current_project as PixelPenProject).active_layer
+		var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).active_layer
 		if index_image == null:
 			return
 		var mask_selection : Image
@@ -136,9 +136,9 @@ func _on_mouse_motion(mouse_position : Vector2, event_relative : Vector2, callba
 				is_pressed = true
 				is_pressed_outside = false
 				var layer_uid : Vector3i = index_image.layer_uid
-				(PixelPen.current_project as PixelPenProject).create_undo_layer("Pen tool", index_image.layer_uid, func ():
-						PixelPen.layer_image_changed.emit(layer_uid)
-						PixelPen.project_saved.emit(false)
+				(PixelPen.singleton.current_project as PixelPenProject).create_undo_layer("Pen tool", index_image.layer_uid, func ():
+						PixelPen.singleton.layer_image_changed.emit(layer_uid)
+						PixelPen.singleton.project_saved.emit(false)
 						)
 				paint_pixel(to, _index_color, false, true)
 			paint_line(_prev_paint_coord, to, _index_color, false, true)
@@ -159,7 +159,7 @@ func _on_force_cancel():
 
 func _on_shift_pressed(pressed : bool):
 	shift_mode = pressed and not is_pressed
-	PixelPen.toolbox_shift_mode.emit(shift_mode)
+	PixelPen.singleton.toolbox_shift_mode.emit(shift_mode)
 
 
 func _on_draw_cursor(mouse_position : Vector2):
@@ -181,12 +181,12 @@ func _on_draw_cursor(mouse_position : Vector2):
 
 
 func update_brush():
-	if PixelPen.current_project == null:
+	if PixelPen.singleton.current_project == null:
 		return
-	PixelPen.current_project.paint.clear_brush()
-	if PixelPen.userconfig.brush.size() > brush_index and brush_index >= 0:
-		var brush = PixelPen.userconfig.brush[brush_index]
-		PixelPen.current_project.paint.add_brush(brush)
+	PixelPen.singleton.current_project.paint.clear_brush()
+	if PixelPen.singleton.userconfig.brush.size() > brush_index and brush_index >= 0:
+		var brush = PixelPen.singleton.userconfig.brush[brush_index]
+		PixelPen.singleton.current_project.paint.add_brush(brush)
 		var size = brush.get_size()
 		var mask = Image.create(size.x + 2, size.y + 2, false, Image.FORMAT_RGBA8)
 		for x in range(size.x):

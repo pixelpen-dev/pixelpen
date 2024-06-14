@@ -54,11 +54,11 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 		rect = rect.intersection(Rect2i(0, 0, node.canvas_size.x, node.canvas_size.y))
 	
 	if _draw_rect_hint and rect.size != Vector2i.ZERO:
-		var index_image : IndexedColorImage = PixelPen.current_project.active_layer
+		var index_image : IndexedColorImage = PixelPen.singleton.current_project.active_layer
 		var layer_uid : Vector3i = index_image.layer_uid
-		(PixelPen.current_project as PixelPenProject).create_undo_layer("Rectangle tool", index_image.layer_uid, func ():
-				PixelPen.layer_image_changed.emit(layer_uid)
-				PixelPen.project_saved.emit(false)
+		(PixelPen.singleton.current_project as PixelPenProject).create_undo_layer("Rectangle tool", index_image.layer_uid, func ():
+				PixelPen.singleton.layer_image_changed.emit(layer_uid)
+				PixelPen.singleton.project_saved.emit(false)
 				)
 		var mask_selection : Image
 		if node.selection_tool_hint.texture != null:
@@ -66,26 +66,26 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 		paint_rect(rect, _index_color, mask_selection, filled)
 		
 		var mirror_line : Vector2i
-		if PixelPen.current_project.show_symetric_vertical:
-			mirror_line.x = PixelPen.current_project.symetric_guid.x
-		if PixelPen.current_project.show_symetric_horizontal:
-			mirror_line.y = PixelPen.current_project.symetric_guid.y
+		if PixelPen.singleton.current_project.show_symetric_vertical:
+			mirror_line.x = PixelPen.singleton.current_project.symetric_guid.x
+		if PixelPen.singleton.current_project.show_symetric_horizontal:
+			mirror_line.y = PixelPen.singleton.current_project.symetric_guid.y
 		
 		if mirror_line != Vector2i.ZERO and mask_selection == null:
-			if PixelPen.current_project.show_symetric_vertical:
-				var offset_x = PixelPen.current_project.symetric_guid.x + PixelPen.current_project.symetric_guid.x - rect.end.x
+			if PixelPen.singleton.current_project.show_symetric_vertical:
+				var offset_x = PixelPen.singleton.current_project.symetric_guid.x + PixelPen.singleton.current_project.symetric_guid.x - rect.end.x
 				var v_rect = Rect2i(Vector2i(offset_x, rect.position.y), rect.size)
 				if filled:
 					v_rect = v_rect.intersection(Rect2i(0, 0, node.canvas_size.x, node.canvas_size.y))
 				paint_rect(v_rect, _index_color, mask_selection, filled)
-				if PixelPen.current_project.show_symetric_horizontal:
-					var offset_y = PixelPen.current_project.symetric_guid.y + PixelPen.current_project.symetric_guid.y - v_rect.end.y
+				if PixelPen.singleton.current_project.show_symetric_horizontal:
+					var offset_y = PixelPen.singleton.current_project.symetric_guid.y + PixelPen.singleton.current_project.symetric_guid.y - v_rect.end.y
 					var h_rect = Rect2i(Vector2i(v_rect.position.x, offset_y), v_rect.size)
 					if filled:
 						h_rect = h_rect.intersection(Rect2i(0, 0, node.canvas_size.x, node.canvas_size.y))
 					paint_rect(h_rect, _index_color, mask_selection, filled)
-			if PixelPen.current_project.show_symetric_horizontal:
-				var offset_y = PixelPen.current_project.symetric_guid.y + PixelPen.current_project.symetric_guid.y - rect.end.y
+			if PixelPen.singleton.current_project.show_symetric_horizontal:
+				var offset_y = PixelPen.singleton.current_project.symetric_guid.y + PixelPen.singleton.current_project.symetric_guid.y - rect.end.y
 				var h_rect = Rect2i(Vector2i(rect.position.x, offset_y), rect.size)
 				if filled:
 					h_rect = h_rect.intersection(Rect2i(0, 0, node.canvas_size.x, node.canvas_size.y))
@@ -100,14 +100,14 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 				PixelPenCPP.fill_rect_outline(rect, Color8(_index_color, 0, 0, 0), canvas_with_rect, mask_selection)
 			index_image.blit_color_map(get_mirror_image(mirror_line, canvas_with_rect), null, Vector2i.ZERO)
 		
-		(PixelPen.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
-				PixelPen.layer_image_changed.emit(layer_uid)
-				PixelPen.project_saved.emit(false)
+		(PixelPen.singleton.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
+				PixelPen.singleton.layer_image_changed.emit(layer_uid)
+				PixelPen.singleton.project_saved.emit(false)
 				)
 		is_pressed = false
 		_draw_rect_hint = false
-		PixelPen.layer_image_changed.emit(layer_uid)
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.layer_image_changed.emit(layer_uid)
+		PixelPen.singleton.project_saved.emit(false)
 	
 	is_pressed = false
 	_draw_rect_hint = false
@@ -129,7 +129,7 @@ func _on_force_cancel():
 
 func _on_shift_pressed(pressed : bool):
 	shift_mode = pressed and not is_pressed
-	PixelPen.toolbox_shift_mode.emit(shift_mode)
+	PixelPen.singleton.toolbox_shift_mode.emit(shift_mode)
 
 
 func _on_draw_cursor(mouse_position : Vector2):

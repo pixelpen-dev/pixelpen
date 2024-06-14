@@ -1,5 +1,5 @@
 @tool
-#class_name PixelPen
+class_name PixelPenState
 extends Node
 
 
@@ -37,9 +37,9 @@ const MIN_COMPATIBILITY = 3
 const EDITOR_TITTLE = "Pixel Pen"
 
 # load gif exporter module
-const GIFExporter = preload("thirdparty/gdgifexporter/exporter.gd")
+const GIFExporter = preload("../thirdparty/gdgifexporter/exporter.gd")
 # load quantization module that you want to use
-const MedianCutQuantization = preload("thirdparty/gdgifexporter/quantization/median_cut.gd")
+const MedianCutQuantization = preload("../thirdparty/gdgifexporter/quantization/median_cut.gd")
 
 
 var current_project : PixelPenProject:

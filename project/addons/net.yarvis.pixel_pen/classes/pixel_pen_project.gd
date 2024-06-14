@@ -85,7 +85,7 @@ func initialized(p_size : Vector2i, p_name : String = "Untitled", p_file_path : 
 	layer_index_counter = 0
 	project_name = p_name
 	canvas_size = p_size
-	animation_fps = PixelPen.userconfig.default_animation_fps
+	animation_fps = PixelPen.singleton.userconfig.default_animation_fps
 	symetric_guid = canvas_size * 0.5
 	palette = IndexedPalette.new()
 	palette.set_color_index_preset()
@@ -159,7 +159,7 @@ func set_mode(mode : ProjectMode, mask : Image = null):
 			new_pool_frames[0].layers[layer_i] = new_layer
 		pool_frames = new_pool_frames
 		undo_redo = UndoRedoManager.new()
-	PixelPen.edit_mode_changed.emit(mode)
+	PixelPen.singleton.edit_mode_changed.emit(mode)
 
 
 func resize_canvas(new_size : Vector2i, anchor : PixelPenEnum.ResizeAnchor):
@@ -529,12 +529,12 @@ func export_webp_image(path : String) -> Error:
 
 func export_animation_gif(path : String):
 	# initialize exporter object with width and height of gif canvas
-	var exporter = PixelPen.GIFExporter.new(canvas_size.x, canvas_size.y)
+	var exporter = PixelPen.singleton.GIFExporter.new(canvas_size.x, canvas_size.y)
 	# write image using median cut quantization method and with one second animation delay
 	for cell in animation_timeline:
 		var img : Image = get_image(cell.frame)
 		img.convert(Image.FORMAT_RGBA8)
-		exporter.add_frame(img, 1.0 / animation_fps, PixelPen.MedianCutQuantization)
+		exporter.add_frame(img, 1.0 / animation_fps, PixelPen.singleton.MedianCutQuantization)
 
 	# when you have exported all frames of animation you, then you can save data into file
 	# open new file with write privlige
@@ -668,7 +668,7 @@ func clean_invisible_color():
 
 func reset_brush_to_default():
 	var Tool := preload("../editor/editor_canvas/tool.gd")
-	PixelPen.userconfig.brush.clear()
+	PixelPen.singleton.userconfig.brush.clear()
 	for i in range(1, 16):
 		var start : Vector2 = Vector2(0.5, 0.5)
 		var end : Vector2 = Vector2(i, i) + Vector2(0.5, 0.5)
@@ -680,10 +680,10 @@ func reset_brush_to_default():
 			if image_f != null:
 				PixelPenCPP.fill_color(image_f, image, Color8(255, 0, 0), null)
 		image = image.get_region(PixelPenCPP.get_mask_used_rect(image))
-		PixelPen.userconfig.brush.push_back(image)
-		PixelPen.userconfig.save()
+		PixelPen.singleton.userconfig.brush.push_back(image)
+		PixelPen.singleton.userconfig.save()
 
 
 func reset_stamp_to_default():
-	PixelPen.userconfig.stamp.clear()
-	PixelPen.userconfig.save()
+	PixelPen.singleton.userconfig.stamp.clear()
+	PixelPen.singleton.userconfig.save()

@@ -40,42 +40,36 @@ func _exit_tree():
 func _ready():
 	active_rect.self_modulate = default_color
 	
-	if not PixelPen.need_connection(get_window()):
+	if not PixelPen.singleton.need_connection(get_window()):
 		return
 		
-	PixelPen.layer_active_changed.connect(func(uid):
+	PixelPen.singleton.layer_active_changed.connect(func(uid):
 			active(layer_uid == uid)
 			)
-	PixelPen.layer_image_changed.connect(func(layer_change_uid : Vector3i):
+	PixelPen.singleton.layer_image_changed.connect(func(layer_change_uid : Vector3i):
 			if layer_change_uid == layer_uid:
-				if thread.is_started():
-					thread.wait_to_finish()
-				thread.start(update_preview_texture)
+				update_preview_texture()
 			)
-	PixelPen.layer_items_changed.connect(func():
-			if PixelPen.current_project == null or PixelPen.current_project.animation_is_play:
+	PixelPen.singleton.layer_items_changed.connect(func():
+			if PixelPen.singleton.current_project == null or PixelPen.singleton.current_project.animation_is_play:
 				return
-			if (PixelPen.current_project as PixelPenProject).active_layer_uid == layer_uid:
-				if thread.is_started():
-					thread.wait_to_finish()
-				thread.start(update_preview_texture)
+			if (PixelPen.singleton.current_project as PixelPenProject).active_layer_uid == layer_uid:
+				update_preview_texture()
 			)
-	if thread.is_started():
-		thread.wait_to_finish()
-	thread.start(update_preview_texture)
+	update_preview_texture()
 
 
 func update_preview_texture():
-	if PixelPen.current_project == null:
+	if PixelPen.singleton.current_project == null:
 		return
-	var image : IndexedColorImage = (PixelPen.current_project as PixelPenProject).get_index_image(layer_uid)
+	var image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).get_index_image(layer_uid)
 	if image != null:
 		if preview.texture == null:
 			preview.call_deferred("set_texture", image.get_mipmap_texture(
-				(PixelPen.current_project as PixelPenProject).palette
+				(PixelPen.singleton.current_project as PixelPenProject).palette
 			))
 		else:
-			var img : Image = image.get_mipmap_image((PixelPen.current_project as PixelPenProject).palette.color_index)
+			var img : Image = image.get_mipmap_image((PixelPen.singleton.current_project as PixelPenProject).palette.color_index)
 			if img.get_size() == (preview.texture.get_size() as Vector2i):
 				preview.texture.call_deferred("update", img)
 			else:
@@ -86,9 +80,9 @@ func update_preview_texture():
 
 func active(yes : bool):
 	if yes:
-		(PixelPen.current_project as PixelPenProject).active_layer_uid = layer_uid
+		(PixelPen.singleton.current_project as PixelPenProject).active_layer_uid = layer_uid
 		active_rect.self_modulate = active_color
-	elif PixelPen.current_project.multilayer_selected.has(layer_uid):
+	elif PixelPen.singleton.current_project.multilayer_selected.has(layer_uid):
 		active_rect.self_modulate = secondary_active_color
 	else:
 		active_rect.self_modulate = default_color
@@ -98,32 +92,32 @@ func _on_visible_gui_input(event):
 	if event and event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.is_pressed():
-				var index_image : IndexedColorImage = (PixelPen.current_project as PixelPenProject).get_index_image(layer_uid)
+				var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).get_index_image(layer_uid)
 				if index_image != null:
 					layer_visible = !layer_visible
 					index_image.visible = layer_visible
-					PixelPen.layer_visibility_changed.emit(layer_uid, layer_visible)
-					PixelPen.project_saved.emit(false)
+					PixelPen.singleton.layer_visibility_changed.emit(layer_uid, layer_visible)
+					PixelPen.singleton.project_saved.emit(false)
 
 
 func _on_button_pressed():
-	if MoveTool.mode != MoveTool.Mode.UNKNOWN and (not PixelPen.current_project.multilayer_selected.is_empty() or Input.is_key_pressed(KEY_SHIFT)):
+	if MoveTool.mode != MoveTool.Mode.UNKNOWN and (not PixelPen.singleton.current_project.multilayer_selected.is_empty() or Input.is_key_pressed(KEY_SHIFT)):
 		return
-	if (PixelPen.current_project as PixelPenProject).active_layer_uid != layer_uid:
+	if (PixelPen.singleton.current_project as PixelPenProject).active_layer_uid != layer_uid:
 		if Input.is_key_pressed(KEY_SHIFT):
-			if not PixelPen.current_project.multilayer_selected.has((PixelPen.current_project as PixelPenProject).active_layer_uid):
-				PixelPen.current_project.multilayer_selected.push_back((PixelPen.current_project as PixelPenProject).active_layer_uid)
-			if not PixelPen.current_project.multilayer_selected.has(layer_uid):
-				PixelPen.current_project.multilayer_selected.push_back(layer_uid)
+			if not PixelPen.singleton.current_project.multilayer_selected.has((PixelPen.singleton.current_project as PixelPenProject).active_layer_uid):
+				PixelPen.singleton.current_project.multilayer_selected.push_back((PixelPen.singleton.current_project as PixelPenProject).active_layer_uid)
+			if not PixelPen.singleton.current_project.multilayer_selected.has(layer_uid):
+				PixelPen.singleton.current_project.multilayer_selected.push_back(layer_uid)
 		else:
-			PixelPen.current_project.multilayer_selected.clear()
-		PixelPen.layer_active_changed.emit(layer_uid)
-	elif not Input.is_key_pressed(KEY_SHIFT) and not PixelPen.current_project.multilayer_selected.is_empty():
-		PixelPen.current_project.multilayer_selected.clear()
-		PixelPen.layer_active_changed.emit(layer_uid)
+			PixelPen.singleton.current_project.multilayer_selected.clear()
+		PixelPen.singleton.layer_active_changed.emit(layer_uid)
+	elif not Input.is_key_pressed(KEY_SHIFT) and not PixelPen.singleton.current_project.multilayer_selected.is_empty():
+		PixelPen.singleton.current_project.multilayer_selected.clear()
+		PixelPen.singleton.layer_active_changed.emit(layer_uid)
 		
 	if Time.get_unix_time_from_system() - _double_click_timer < 0.5:
-		PixelPen.request_layer_properties.emit(layer_uid)
+		PixelPen.singleton.request_layer_properties.emit(layer_uid)
 		pickable.on_hold = false
 		pickable.is_pressed = false
 	_double_click_timer = Time.get_unix_time_from_system()

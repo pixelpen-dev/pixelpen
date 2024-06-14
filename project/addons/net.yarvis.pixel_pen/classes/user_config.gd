@@ -62,9 +62,9 @@ func save():
 
 
 func make_brush_from_project(mask : Image) -> bool:
-	if PixelPen.current_project == null:
+	if PixelPen.singleton.current_project == null:
 		return false
-	brush.push_back((PixelPen.current_project as PixelPenProject).get_region_project_colormap(mask))
+	brush.push_back((PixelPen.singleton.current_project as PixelPenProject).get_region_project_colormap(mask))
 	save()
 	return true
 
@@ -76,9 +76,9 @@ func delete_brush(index : int):
 
 
 func make_stamp_from_project(mask : Image) -> bool:
-	if PixelPen.current_project == null:
+	if PixelPen.singleton.current_project == null:
 		return false
-	stamp.push_back((PixelPen.current_project as PixelPenProject).get_region_project_image(mask))
+	stamp.push_back((PixelPen.singleton.current_project as PixelPenProject).get_region_project_image(mask))
 	save()
 	return true
 

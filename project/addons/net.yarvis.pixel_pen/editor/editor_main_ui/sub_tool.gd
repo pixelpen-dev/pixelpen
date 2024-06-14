@@ -62,22 +62,22 @@ var current_toolbox : int
 
 
 func _ready():
-	if not PixelPen.need_connection(get_window()):
+	if not PixelPen.singleton.need_connection(get_window()):
 		return
-	PixelPen.project_file_changed.connect(func ():
-			if PixelPen.current_project == null:
+	PixelPen.singleton.project_file_changed.connect(func ():
+			if PixelPen.singleton.current_project == null:
 				_clean_up()
 			)
-	PixelPen.toolbox_just_changed.connect(func(type):
+	PixelPen.singleton.toolbox_just_changed.connect(func(type):
 			shift_label.visible = canvas.canvas_paint.tool.has_shift_mode
 			shift_separator.visible = canvas.canvas_paint.tool.has_shift_mode
 			current_toolbox = type
 			_on_tool_changed(type)
 			)
-	PixelPen.toolbox_shift_mode.connect(func(active):
-			shift_label.label_settings.font_color = PixelPen.userconfig.accent_color if active else PixelPen.userconfig.label_color
+	PixelPen.singleton.toolbox_shift_mode.connect(func(active):
+			shift_label.label_settings.font_color = PixelPen.singleton.userconfig.accent_color if active else PixelPen.singleton.userconfig.label_color
 			)
-	PixelPen.shorcut_changed.connect(func():
+	PixelPen.singleton.shorcut_changed.connect(func():
 			_build_toolbar()
 			_on_tool_changed(current_toolbox)
 			)
@@ -85,7 +85,7 @@ func _ready():
 
 
 func _process(_delta):
-	if not PixelPen.need_connection(get_window()):
+	if not PixelPen.singleton.need_connection(get_window()):
 		return
 	var enable : bool = canvas.get_viewport_rect().has_point(canvas.get_viewport().get_mouse_position())
 	shift_label.modulate.a = 1.0 if enable else 0.5
@@ -130,77 +130,77 @@ func _build_toolbar():
 		if not child.is_queued_for_deletion():
 			child.queue_free()
 	_add_separator(func():
-			return PixelPen.current_project != null,
+			return PixelPen.singleton.current_project != null,
 			toolbar_list,
 			)
 	_build_button("Undo", undo, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
-			PixelPenEnum.ToolBar.TOOLBAR_UNDO, false, false, PixelPen.userconfig.shorcuts.undo,
+			PixelPenEnum.ToolBar.TOOLBAR_UNDO, false, false, PixelPen.singleton.userconfig.shorcuts.undo,
 			func ():
-				if PixelPen.current_project == null:
+				if PixelPen.singleton.current_project == null:
 					return false
 				return true,
 			func ():
-				if PixelPen.current_project == null:
+				if PixelPen.singleton.current_project == null:
 					return true
-				return not PixelPen.current_project.undo_redo.has_undo(),
+				return not PixelPen.singleton.current_project.undo_redo.has_undo(),
 			toolbar_list,
 			)
 	_build_button("Redo", redo, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
-			PixelPenEnum.ToolBar.TOOLBAR_REDO, false, false, PixelPen.userconfig.shorcuts.redo,
+			PixelPenEnum.ToolBar.TOOLBAR_REDO, false, false, PixelPen.singleton.userconfig.shorcuts.redo,
 			func ():
-				if PixelPen.current_project == null:
+				if PixelPen.singleton.current_project == null:
 					return false
 				return true,
 			func ():
-				if PixelPen.current_project == null:
+				if PixelPen.singleton.current_project == null:
 					return true
-				if not PixelPen.current_project.undo_redo.has_redo():
+				if not PixelPen.singleton.current_project.undo_redo.has_redo():
 					return true
-				return not PixelPen.current_project.undo_redo.is_commited,
+				return not PixelPen.singleton.current_project.undo_redo.is_commited,
 			toolbar_list,
 			)
 	_build_button("Reset zoom", fit_screen, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
-			PixelPenEnum.ToolBar.TOOLBAR_RESET_ZOOM, false, false, PixelPen.userconfig.shorcuts.reset_zoom,
+			PixelPenEnum.ToolBar.TOOLBAR_RESET_ZOOM, false, false, PixelPen.singleton.userconfig.shorcuts.reset_zoom,
 			func ():
-				if PixelPen.current_project == null:
+				if PixelPen.singleton.current_project == null:
 					return false
 				return true,
 			func ():
-				return PixelPen.current_project == null,
+				return PixelPen.singleton.current_project == null,
 			toolbar_list,
 			)
 	_build_toggle_button("Grid", "Grid", grid, grid, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
 			PixelPenEnum.ToolBar.TOOLBAR_SHOW_GRID, true, 
-			false, PixelPen.userconfig.shorcuts.view_show_grid,
+			false, PixelPen.singleton.userconfig.shorcuts.view_show_grid,
 			func ():
-				if PixelPen.current_project == null:
+				if PixelPen.singleton.current_project == null:
 					return false
-				return PixelPen.current_project.show_grid,
+				return PixelPen.singleton.current_project.show_grid,
 			func ():
-				if PixelPen.current_project == null:
+				if PixelPen.singleton.current_project == null:
 					return true
 				return false,
 			)
 	_build_toggle_button("Tint black", "Tint black", tint_black, tint_black, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
 			PixelPenEnum.ToolBar.TOOLBAR_TOGGLE_TINT_BLACK_LAYER, true,
-			false, PixelPen.userconfig.shorcuts.toggle_tint_layer,
+			false, PixelPen.singleton.userconfig.shorcuts.toggle_tint_layer,
 			func ():
-				if PixelPen.current_project == null:
+				if PixelPen.singleton.current_project == null:
 					return false
 				return canvas.silhouette,
 			func ():
-				if PixelPen.current_project == null:
+				if PixelPen.singleton.current_project == null:
 					return true
 				return false,
 			)
 	_build_toggle_button("Save", "Save", save, save_alert, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
-			PixelPenEnum.ToolBar.TOOLBAR_SAVE, false, false, PixelPen.userconfig.shorcuts.save,
+			PixelPenEnum.ToolBar.TOOLBAR_SAVE, false, false, PixelPen.singleton.userconfig.shorcuts.save,
 			func ():
-				if PixelPen.current_project == null:
+				if PixelPen.singleton.current_project == null:
 					return true
-				return not PixelPen.current_project.is_saved,
+				return not PixelPen.singleton.current_project.is_saved,
 			func ():
-				return PixelPen.current_project == null or PixelPen.current_project.is_saved,
+				return PixelPen.singleton.current_project == null or PixelPen.singleton.current_project.is_saved,
 			)
 
 
@@ -216,7 +216,7 @@ func _on_select_tool():
 			"Grow only in axis",
 			func(toggle_on):
 				var state = PixelPenEnum.ToolBoxSelect.TOOL_SELECTION_COLOR_OPTION_ONLY_AXIS_YES if toggle_on else PixelPenEnum.ToolBoxSelect.TOOL_SELECTION_COLOR_OPTION_ONLY_AXIS_NO
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
 				SelectTool.selection_color_grow_only_axis,
 			func():
 				return SelectTool.active_sub_tool_type == PixelPenEnum.ToolBoxSelect.TOOL_SELECT_COLOR)
@@ -227,11 +227,11 @@ func _on_move_tool():
 	_clean_up()
 	
 	_build_button("Cut", cut, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false, false, PixelPen.userconfig.shorcuts.cut, func():
+			PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false, false, PixelPen.singleton.userconfig.shorcuts.cut, func():
 					return MoveTool.mode == MoveTool.Mode.UNKNOWN
 					)
 	_build_button("Copy", copy, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false, false, PixelPen.userconfig.shorcuts.copy, func():
+			PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false, false, PixelPen.singleton.userconfig.shorcuts.copy, func():
 					return MoveTool.mode == MoveTool.Mode.UNKNOWN
 					)
 	
@@ -240,25 +240,25 @@ func _on_move_tool():
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.current_project.multilayer_selected.is_empty())
+					return not PixelPen.singleton.current_project.multilayer_selected.is_empty())
 	_build_button("Rotate Right", rotate_right, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_ROTATE_RIGHT, false, false, null,
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.current_project.multilayer_selected.is_empty())
+					return not PixelPen.singleton.current_project.multilayer_selected.is_empty())
 	_build_button("Flip Horizontal", flip_horizontal, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_HORIZONTAL, false, false, null,
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.current_project.multilayer_selected.is_empty())
+					return not PixelPen.singleton.current_project.multilayer_selected.is_empty())
 	_build_button("Flip Vertical", flip_vertical, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_VERTICAL, false, false, null,
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.current_project.multilayer_selected.is_empty())
+					return not PixelPen.singleton.current_project.multilayer_selected.is_empty())
 	
 	_add_separator(func():
 			return MoveTool.mode != MoveTool.Mode.UNKNOWN)
@@ -268,25 +268,25 @@ func _on_move_tool():
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.current_project.multilayer_selected.is_empty())
+					return not PixelPen.singleton.current_project.multilayer_selected.is_empty())
 	_build_button("Scale Shifted Top", scale_up, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_SCALE_UP, false, false, null,
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.current_project.multilayer_selected.is_empty())
+					return not PixelPen.singleton.current_project.multilayer_selected.is_empty())
 	_build_button("Scale Shifted Right", scale_right, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_SCALE_RIGHT, false, false, null,
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.current_project.multilayer_selected.is_empty())
+					return not PixelPen.singleton.current_project.multilayer_selected.is_empty())
 	_build_button("Scale Shifted Down", scale_down, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_SCALE_DOWN, false, false, null,
 			func():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.current_project.multilayer_selected.is_empty())
+					return not PixelPen.singleton.current_project.multilayer_selected.is_empty())
 	
 	_add_separator(func():
 			return MoveTool.mode != MoveTool.Mode.UNKNOWN)
@@ -295,7 +295,7 @@ func _on_move_tool():
 			func():
 				return MoveTool.mode != MoveTool.Mode.UNKNOWN)
 	_build_button("Commit Transform", commit, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPenEnum.ToolBoxMove.TOOL_MOVE_COMMIT, false, false, PixelPen.userconfig.shorcuts.confirm,
+			PixelPenEnum.ToolBoxMove.TOOL_MOVE_COMMIT, false, false, PixelPen.singleton.userconfig.shorcuts.confirm,
 			func():
 				return MoveTool.transformed and  MoveTool.mode != MoveTool.Mode.UNKNOWN)
 	_add_separator()
@@ -311,17 +311,17 @@ func _on_selection_tool():
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION, true, SelectionTool.sub_tool_selection_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION)
 	_add_separator()
 	_build_button("Inverse Selection", selection_inverse, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
-			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INVERSE, false, false, PixelPen.userconfig.shorcuts.inverse_selection,
+			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INVERSE, false, false, PixelPen.singleton.userconfig.shorcuts.inverse_selection,
 			func (): return true,
 			func (): return canvas.selection_tool_hint.texture == null
 			)
 	_build_button("Remove Selection", selection_remove, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
-			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_REMOVE, false, false, PixelPen.userconfig.shorcuts.remove_selection,
+			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_REMOVE, false, false, PixelPen.singleton.userconfig.shorcuts.remove_selection,
 			func (): return true,
 			func (): return canvas.selection_tool_hint.texture == null
 			)
 	_build_button("Delete Selected Area", delete_in_selection, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
-			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false, false, PixelPen.userconfig.shorcuts.delete_selected,
+			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false, false, PixelPen.singleton.userconfig.shorcuts.delete_selected,
 			func (): return true,
 			func (): return canvas.selection_tool_hint.texture == null
 			)
@@ -332,7 +332,7 @@ func _on_selection_tool():
 			func():
 				return SelectionTool.has_point_selection_polygon)
 	_build_button("Close Polygon", commit, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
-			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_CLOSE_POLYGON, false, false, PixelPen.userconfig.shorcuts.confirm,
+			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_CLOSE_POLYGON, false, false, PixelPen.singleton.userconfig.shorcuts.confirm,
 			func():
 				return SelectionTool.can_commit_selection_polygon)
 	_add_separator()
@@ -344,7 +344,7 @@ func _on_pen_tool():
 			"Pixel perfect",
 			func(toggle_on):
 				var state = PixelPenEnum.ToolBoxPen.TOOL_PEN_PIXEL_PERFECT_YES if toggle_on else PixelPenEnum.ToolBoxPen.TOOL_PEN_PIXEL_PERFECT_NO
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
 			PenTool.pixel_perfect)
 	_add_separator()
 
@@ -377,7 +377,7 @@ func _on_line_tool():
 			"Pixel perfect",
 			func(toggle_on):
 				var state = PixelPenEnum.ToolBoxLine.TOOL_LINE_PIXEL_PERFECT_YES if toggle_on else PixelPenEnum.ToolBoxLine.TOOL_LINE_PIXEL_PERFECT_NO
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
 			LineTool.pixel_perfect)
 	_add_separator()
 
@@ -388,7 +388,7 @@ func _on_ellipse_tool():
 			"Filled",
 			func(toggle_on):
 				var state = PixelPenEnum.ToolBoxEllipse.TOOL_ELLIPSE_FILL_YES if toggle_on else PixelPenEnum.ToolBoxEllipse.TOOL_ELLIPSE_FILL_NO
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
 			EllipseTool.filled)
 	_add_separator()
 
@@ -399,7 +399,7 @@ func _on_rectangle_tool():
 			"Filled",
 			func(toggle_on):
 				var state = PixelPenEnum.ToolBoxRectangle.TOOL_RECTANGLE_FILL_YES if toggle_on else PixelPenEnum.ToolBoxRectangle.TOOL_RECTANGLE_FILL_NO
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
 			RectangleTool.filled)
 	_add_separator()
 
@@ -410,7 +410,7 @@ func _on_fill_tool():
 			"Grow only in axis",
 			func(toggle_on):
 				var state = PixelPenEnum.ToolBoxFill.TOOL_FILL_OPTION_ONLY_AXIS_YES if toggle_on else PixelPenEnum.ToolBoxFill.TOOL_FILL_OPTION_ONLY_AXIS_NO
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, state, false),
 				FillTool.fill_grow_only_axis)
 	_add_separator()
 
@@ -456,7 +456,7 @@ func _build_button(
 	btn.texture_normal = texture
 	btn.custom_minimum_size = Vector2(target.size.y, target.size.y)
 	btn.pressed.connect(func ():
-			PixelPen.tool_changed.emit(grup, type, can_active)
+			PixelPen.singleton.tool_changed.emit(grup, type, can_active)
 			)
 	btn.stretch_mode = TextureButton.STRETCH_KEEP_CENTERED
 	btn.shortcut = shorcut
@@ -501,7 +501,7 @@ func _build_toggle_button(
 	btn.button_pressed = toggle_callback.call()
 	btn.custom_minimum_size = Vector2(toolbar_list.size.y, toolbar_list.size.y)
 	btn.pressed.connect(func ():
-			PixelPen.tool_changed.emit(grup, type, can_active)
+			PixelPen.singleton.tool_changed.emit(grup, type, can_active)
 			)
 	btn.stretch_mode = TextureButton.STRETCH_KEEP_CENTERED
 	btn.shortcut = shorcut
@@ -518,7 +518,7 @@ func _build_toggle_button(
 	hover.visible_callback = func():
 			btn.button_pressed = toggle_callback.call()
 			btn.tooltip_text = pressed_tooltip if toggle_callback.call() else normal_tooltip
-			return PixelPen.current_project != null
+			return PixelPen.singleton.current_project != null
 	hover.disable_callback = disable_callback
 	btn.add_child(hover)
 	
@@ -551,42 +551,42 @@ func _build_check_box(label : String, toggle_callback : Callable, default_toggle
 func _build_brush_preview(label : String):
 	var btn = preview_btn.instantiate()
 	btn.vbox.tooltip_text = "(LMB) Select brush \n(RMB) Delete brush"
-	if PixelPen.userconfig.brush.size() > 0:
-		BrushTool.brush_index = clampi(BrushTool.brush_index, 0, PixelPen.userconfig.brush.size() - 1)
+	if PixelPen.singleton.userconfig.brush.size() > 0:
+		BrushTool.brush_index = clampi(BrushTool.brush_index, 0, PixelPen.singleton.userconfig.brush.size() - 1)
 		if current_toolbox == PixelPenEnum.ToolBox.TOOL_BRUSH:
-			PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, BrushTool.brush_index, false)
+			PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, BrushTool.brush_index, false)
 	btn.build_panel(btn.Mode.BRUSH)
 	button_list.add_child(btn)
 	btn.owner = button_list.owner
 	btn.selected.connect(func(index):
-		BrushTool.brush_index = clampi(index, 0, PixelPen.userconfig.brush.size() - 1)
-		if PixelPen.userconfig.brush.size() > BrushTool.brush_index:
+		BrushTool.brush_index = clampi(index, 0, PixelPen.singleton.userconfig.brush.size() - 1)
+		if PixelPen.singleton.userconfig.brush.size() > BrushTool.brush_index:
 			btn.select(BrushTool.brush_index)
 		else:
 			btn.preview.texture = null
-		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, BrushTool.brush_index, false)
+		PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, BrushTool.brush_index, false)
 		)
-	if PixelPen.userconfig.brush.size() > BrushTool.brush_index:
+	if PixelPen.singleton.userconfig.brush.size() > BrushTool.brush_index:
 		btn.select(BrushTool.brush_index)
 
 
 func _build_stamp_preview(label : String):
 	var btn = preview_btn.instantiate()
 	btn.vbox.tooltip_text = "(LMB) Select stamp \n(RMB) Delete stamp"
-	if PixelPen.userconfig.stamp.size() > 0:
-		StampTool.stamp_index = clampi(StampTool.stamp_index, 0, PixelPen.userconfig.stamp.size() - 1)
+	if PixelPen.singleton.userconfig.stamp.size() > 0:
+		StampTool.stamp_index = clampi(StampTool.stamp_index, 0, PixelPen.singleton.userconfig.stamp.size() - 1)
 		if current_toolbox == PixelPenEnum.ToolBox.TOOL_STAMP:
-			PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, StampTool.stamp_index, false)
+			PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, StampTool.stamp_index, false)
 	btn.build_panel(btn.Mode.STAMP)
 	button_list.add_child(btn)
 	btn.owner = button_list.owner
 	btn.selected.connect(func(index):
-		StampTool.stamp_index = clampi(index, 0, PixelPen.userconfig.stamp.size() - 1)
-		if PixelPen.userconfig.stamp.size() > StampTool.stamp_index:
+		StampTool.stamp_index = clampi(index, 0, PixelPen.singleton.userconfig.stamp.size() - 1)
+		if PixelPen.singleton.userconfig.stamp.size() > StampTool.stamp_index:
 			btn.select(StampTool.stamp_index)
 		else:
 			btn.preview.texture = null
-		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, StampTool.stamp_index, false)
+		PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, StampTool.stamp_index, false)
 		)
-	if PixelPen.userconfig.stamp.size() > StampTool.stamp_index:
+	if PixelPen.singleton.userconfig.stamp.size() > StampTool.stamp_index:
 		btn.select(StampTool.stamp_index)

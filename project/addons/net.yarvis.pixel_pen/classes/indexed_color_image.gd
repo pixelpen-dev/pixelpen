@@ -19,7 +19,7 @@ var _cache_colormap : Image
 func get_duplicate(new_uid : bool = true):
 	var new_me : IndexedColorImage = (self as IndexedColorImage).duplicate()
 	if new_uid:
-		new_me.layer_uid = PixelPen.current_project.get_uid()
+		new_me.layer_uid = PixelPen.singleton.current_project.get_uid()
 	new_me.colormap = colormap.duplicate() if colormap != null else null
 	return new_me
 
@@ -70,8 +70,8 @@ func set_index_on_color_map(x : int, y : int, index_color : int):
 
 
 func paint_brush(x : int, y : int, index_color : int):
-	PixelPen.current_project.paint.set_image(colormap)
-	PixelPen.current_project.paint.set_pixel(x, y, Color8(index_color, 0, 0), PixelPen.current_project.brush_index)
+	PixelPen.singleton.current_project.paint.set_image(colormap)
+	PixelPen.singleton.current_project.paint.set_pixel(x, y, Color8(index_color, 0, 0), PixelPen.singleton.current_project.brush_index)
 
 
 func get_index_on_color_map(x : int, y) -> int:

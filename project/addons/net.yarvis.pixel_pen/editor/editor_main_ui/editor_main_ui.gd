@@ -192,13 +192,13 @@ func _on_size_changed():
 
 
 func _ready():
-	if not PixelPen.need_connection(get_window()):
+	if not PixelPen.singleton.need_connection(get_window()):
 		if layout_node.branches == null:
 			layout_node.branches = theme_config.get_default_layout(layout_node)
 			layout_node.update_layout()
 		return
 	
-	PixelPen.userconfig.resolve_null()
+	PixelPen.singleton.userconfig.resolve_null()
 	layout_node.branches = theme_config.get_default_layout(layout_node)
 	layout_node.update_layout()
 	_is_prev_landscape = get_viewport().get_visible_rect().size.x > get_viewport().get_visible_rect().size.y
@@ -219,18 +219,18 @@ func _ready():
 
 
 func _process(_delta):
-	if not PixelPen.need_connection(get_window()):
+	if not PixelPen.singleton.need_connection(get_window()):
 		return
 	
 	var edit_popup := edit_menu.get_popup()
-	if PixelPen.current_project == null:
+	if PixelPen.singleton.current_project == null:
 		edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.UNDO), true)
 		edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.REDO), true)
 		return
 	
-	if PixelPen.current_project.undo_redo != null:
-		var undo : bool = PixelPen.current_project.undo_redo.has_undo()
-		var redo : bool = PixelPen.current_project.undo_redo.has_redo()
+	if PixelPen.singleton.current_project.undo_redo != null:
+		var undo : bool = PixelPen.singleton.current_project.undo_redo.has_undo()
+		var redo : bool = PixelPen.singleton.current_project.undo_redo.has_redo()
 		
 		edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.UNDO), not undo)
 		edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.REDO), not redo)
@@ -249,57 +249,57 @@ func _on_project_file_changed():
 	var pixelpen_popup = pixel_pen_menu.get_popup()
 	pixelpen_popup.set_item_disabled(pixelpen_popup.get_item_index(PixelPenID.ABOUT), true)
 	
-	var disable : bool = PixelPen.current_project == null
+	var disable : bool = PixelPen.singleton.current_project == null
 
 	animation_menu.disabled = disable
 
 	var quick_export_path_empty : bool = false
-	if PixelPen.current_project != null:
-		if PixelPen.current_project.animation_timeline.is_empty():
-			PixelPen.current_project.animation_frame_index = -1
-		if PixelPen.userconfig.brush.is_empty():
-			PixelPen.current_project.reset_brush_to_default()
-		quick_export_path_empty = PixelPen.current_project.last_export_file_path == ""
+	if PixelPen.singleton.current_project != null:
+		if PixelPen.singleton.current_project.animation_timeline.is_empty():
+			PixelPen.singleton.current_project.animation_frame_index = -1
+		if PixelPen.singleton.userconfig.brush.is_empty():
+			PixelPen.singleton.current_project.reset_brush_to_default()
+		quick_export_path_empty = PixelPen.singleton.current_project.last_export_file_path == ""
 		
-		canvas_dock.color = canvas_color_sample if PixelPen.current_project.use_sample else canvas_color_base
+		canvas_dock.color = canvas_color_sample if PixelPen.singleton.current_project.use_sample else canvas_color_base
 
-		edit_menu.get_popup().set_item_disabled(edit_menu.get_popup().get_item_index(EditID.CANVAS_SIZE), PixelPen.current_project.use_sample)
+		edit_menu.get_popup().set_item_disabled(edit_menu.get_popup().get_item_index(EditID.CANVAS_SIZE), PixelPen.singleton.current_project.use_sample)
 		
-		palette_menu.disabled = PixelPen.current_project.use_sample
+		palette_menu.disabled = PixelPen.singleton.current_project.use_sample
 		
-		animation_panel.visible = PixelPen.current_project.show_timeline
+		animation_panel.visible = PixelPen.singleton.current_project.show_timeline
 		
-		animation_menu.disabled = PixelPen.current_project.use_sample or not PixelPen.current_project.show_timeline
+		animation_menu.disabled = PixelPen.singleton.current_project.use_sample or not PixelPen.singleton.current_project.show_timeline
 		
 		var animation_popup = animation_menu.get_popup()
-		animation_popup.set_item_checked(animation_popup.get_item_index(AnimationID.TOGGLE_LOOP), PixelPen.current_project.animation_loop)
-		animation_popup.set_item_checked(animation_popup.get_item_index(AnimationID.TOGGLE_ONION_SKINNING), PixelPen.current_project.onion_skinning)
+		animation_popup.set_item_checked(animation_popup.get_item_index(AnimationID.TOGGLE_LOOP), PixelPen.singleton.current_project.animation_loop)
+		animation_popup.set_item_checked(animation_popup.get_item_index(AnimationID.TOGGLE_ONION_SKINNING), PixelPen.singleton.current_project.onion_skinning)
 
 		var view_popup := view_menu.get_popup()
-		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_GRID), PixelPen.current_project.show_grid)
-		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_VERTICAL_MIRROR_GUIDE), PixelPen.current_project.show_symetric_vertical)
-		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE), PixelPen.current_project.show_symetric_horizontal)
-		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_TILE), PixelPen.current_project.show_tile)
-		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_PREVIEW), PixelPen.current_project.show_preview)
+		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_GRID), PixelPen.singleton.current_project.show_grid)
+		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_VERTICAL_MIRROR_GUIDE), PixelPen.singleton.current_project.show_symetric_vertical)
+		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE), PixelPen.singleton.current_project.show_symetric_horizontal)
+		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_TILE), PixelPen.singleton.current_project.show_tile)
+		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_PREVIEW), PixelPen.singleton.current_project.show_preview)
 		
-		preview_node.visible = PixelPen.current_project.show_preview
+		preview_node.visible = PixelPen.singleton.current_project.show_preview
 
-		view_popup.set_item_checked(view_popup.get_item_index(ViewID.EDIT_SELECTION_ONLY), PixelPen.current_project.use_sample)
-		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_ANIMATION_TIMELINE), PixelPen.current_project.show_timeline)
+		view_popup.set_item_checked(view_popup.get_item_index(ViewID.EDIT_SELECTION_ONLY), PixelPen.singleton.current_project.use_sample)
+		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_ANIMATION_TIMELINE), PixelPen.singleton.current_project.show_timeline)
 		
 		var need_update_layout : bool = false
 		var has_anim_dock : bool = layout_node.has_dock(animation_panel)
-		if PixelPen.current_project.show_timeline and not has_anim_dock:
+		if PixelPen.singleton.current_project.show_timeline and not has_anim_dock:
 			layout_node.dock(animation_panel, canvas_dock, false, 0.8, true)
 			need_update_layout = true
-		elif has_anim_dock and not PixelPen.current_project.show_timeline:
+		elif has_anim_dock and not PixelPen.singleton.current_project.show_timeline:
 			layout_node.undock(animation_panel)
 			need_update_layout = true
 		var has_preview_dock : bool = layout_node.has_dock(preview_node)
-		if has_preview_dock and not PixelPen.current_project.show_preview:
+		if has_preview_dock and not PixelPen.singleton.current_project.show_preview:
 			layout_node.undock(preview_node)
 			need_update_layout = true
-		elif not has_preview_dock and PixelPen.current_project.show_preview:
+		elif not has_preview_dock and PixelPen.singleton.current_project.show_preview:
 			layout_node.dock(preview_node, layer_dock, true, 0.35, true)
 			need_update_layout = true
 		if need_update_layout:
@@ -336,12 +336,12 @@ func _on_project_file_changed():
 		is_window_running = get_window().is_window_running()
 	
 	if disable and (not Engine.is_editor_hint() or is_window_running):
-		var ok = PixelPen.load_cache_project()
+		var ok = PixelPen.singleton.load_cache_project()
 		if not ok:
 			_on_request_startup_window()
 	
-	if PixelPen.current_project != null:
-		PixelPen.current_project.undo_redo = UndoRedoManager.new()
+	if PixelPen.singleton.current_project != null:
+		PixelPen.singleton.current_project.undo_redo = UndoRedoManager.new()
 		
 	_update_title()
 	_update_recent_submenu()
@@ -357,35 +357,35 @@ func _on_request_startup_window():
 
 func _update_title():
 	if is_inside_tree():
-		if PixelPen.current_project == null:
-			get_window().title = "Empty - " + PixelPen.EDITOR_TITTLE
+		if PixelPen.singleton.current_project == null:
+			get_window().title = "Empty - " + PixelPen.singleton.EDITOR_TITTLE
 			return
 		
-		var is_saved : bool = (PixelPen.current_project as PixelPenProject).is_saved
+		var is_saved : bool = (PixelPen.singleton.current_project as PixelPenProject).is_saved
 		
-		var canvas_size = str("(", PixelPen.current_project.canvas_size.x, "x", PixelPen.current_project.canvas_size.y , "px)")
-		if PixelPen.current_project.use_sample:
+		var canvas_size = str("(", PixelPen.singleton.current_project.canvas_size.x, "x", PixelPen.singleton.current_project.canvas_size.y , "px)")
+		if PixelPen.singleton.current_project.use_sample:
 			canvas_size = str("(region ", 
-					PixelPen.current_project.canvas_size.x, "x", PixelPen.current_project.canvas_size.y , "px of ", 
-					PixelPen.current_project._cache_canvs_size.x, "x", PixelPen.current_project._cache_canvs_size.y , "px)")
-		get_window().title = PixelPen.current_project.project_name + " " + canvas_size + " - " + PixelPen.EDITOR_TITTLE
-		if PixelPen.current_project.file_path == "" or not is_saved:
+					PixelPen.singleton.current_project.canvas_size.x, "x", PixelPen.singleton.current_project.canvas_size.y , "px of ", 
+					PixelPen.singleton.current_project._cache_canvs_size.x, "x", PixelPen.singleton.current_project._cache_canvs_size.y , "px)")
+		get_window().title = PixelPen.singleton.current_project.project_name + " " + canvas_size + " - " + PixelPen.singleton.EDITOR_TITTLE
+		if PixelPen.singleton.current_project.file_path == "" or not is_saved:
 			get_window().title = "(*)" + get_window().title
 
 
 func _update_recent_submenu():
 	recent_submenu.clear(true)
-	if PixelPen.userconfig.recent_projects != null and PixelPen.userconfig.recent_projects.size() > 0:
-		for i in range(PixelPen.userconfig.recent_projects.size()):
-			recent_submenu.add_item(PixelPen.userconfig.recent_projects[i], i)
+	if PixelPen.singleton.userconfig.recent_projects != null and PixelPen.singleton.userconfig.recent_projects.size() > 0:
+		for i in range(PixelPen.singleton.userconfig.recent_projects.size()):
+			recent_submenu.add_item(PixelPen.singleton.userconfig.recent_projects[i], i)
 	else:
 		recent_submenu.add_item("_", 0)
 
 
 func _update_background_color_submenu():
 	background_color_submenu.clear(true)
-	if PixelPen.current_project != null :
-		var project : PixelPenProject = PixelPen.current_project as PixelPenProject
+	if PixelPen.singleton.current_project != null :
+		var project : PixelPenProject = PixelPen.singleton.current_project as PixelPenProject
 		background_color_submenu.add_radio_check_item("Transparent", project.BackgroundColor.TRANSPARENT)
 		background_color_submenu.add_radio_check_item("White", project.BackgroundColor.WHITE)
 		background_color_submenu.add_radio_check_item("Grey", project.BackgroundColor.GREY)
@@ -429,8 +429,8 @@ func _init_popup_menu():
 	recent_submenu.set_name("recent_submenu")
 	_update_recent_submenu()
 	recent_submenu.id_pressed.connect(func (id : int):
-			if PixelPen.userconfig.recent_projects != null and PixelPen.userconfig.recent_projects.size() > id:
-				PixelPen.load_project(PixelPen.userconfig.recent_projects[id])
+			if PixelPen.singleton.userconfig.recent_projects != null and PixelPen.singleton.userconfig.recent_projects.size() > id:
+				PixelPen.singleton.load_project(PixelPen.singleton.userconfig.recent_projects[id])
 				_update_recent_submenu()
 			)
 	file_popup.add_child(recent_submenu)
@@ -574,9 +574,9 @@ func _init_popup_menu():
 	background_color_submenu.set_name("background_color_submenu")
 	_update_background_color_submenu()
 	background_color_submenu.id_pressed.connect(func(id):
-			PixelPen.current_project.background_color = id
+			PixelPen.singleton.current_project.background_color = id
 			_update_background_color_submenu()
-			PixelPen.project_saved.emit(false)
+			PixelPen.singleton.project_saved.emit(false)
 			)
 	view_popup.add_child(background_color_submenu)
 	view_popup.set_item_submenu(view_popup.get_item_index(ViewID.BACKGROUND_COLOR), "background_color_submenu")
@@ -589,95 +589,95 @@ func _init_popup_menu():
 
 func _set_shorcut():
 	var pixelpen_popup := pixel_pen_menu.get_popup()
-	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.ABOUT), PixelPen.userconfig.shorcuts.about)
-	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.PREFERENCE), PixelPen.userconfig.shorcuts.preferences)
-	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.QUIT), PixelPen.userconfig.shorcuts.quit_editor)
+	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.ABOUT), PixelPen.singleton.userconfig.shorcuts.about)
+	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.PREFERENCE), PixelPen.singleton.userconfig.shorcuts.preferences)
+	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.QUIT), PixelPen.singleton.userconfig.shorcuts.quit_editor)
 	
 	var file_popup := file_menu.get_popup()
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.NEW), PixelPen.userconfig.shorcuts.new_project)
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.OPEN), PixelPen.userconfig.shorcuts.open_project)
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.SAVE), PixelPen.userconfig.shorcuts.save)
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.SAVE_AS), PixelPen.userconfig.shorcuts.save_as)
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.IMPORT), PixelPen.userconfig.shorcuts.import)
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.QUICK_EXPORT), PixelPen.userconfig.shorcuts.quick_export)
-	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.CLOSE), PixelPen.userconfig.shorcuts.close_project)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.NEW), PixelPen.singleton.userconfig.shorcuts.new_project)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.OPEN), PixelPen.singleton.userconfig.shorcuts.open_project)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.SAVE), PixelPen.singleton.userconfig.shorcuts.save)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.SAVE_AS), PixelPen.singleton.userconfig.shorcuts.save_as)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.IMPORT), PixelPen.singleton.userconfig.shorcuts.import)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.QUICK_EXPORT), PixelPen.singleton.userconfig.shorcuts.quick_export)
+	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.CLOSE), PixelPen.singleton.userconfig.shorcuts.close_project)
 	
 
 	var edit_popup := edit_menu.get_popup()
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.UNDO), PixelPen.userconfig.shorcuts.undo)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.REDO), PixelPen.userconfig.shorcuts.redo)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.COPY), PixelPen.userconfig.shorcuts.copy)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CUT), PixelPen.userconfig.shorcuts.cut)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.PASTE), PixelPen.userconfig.shorcuts.paste)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.INVERSE_SELECTION), PixelPen.userconfig.shorcuts.inverse_selection)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CLEAR_SELECTION), PixelPen.userconfig.shorcuts.remove_selection)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.DELETE_ON_SELECTION), PixelPen.userconfig.shorcuts.delete_selected)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CREATE_BRUSH), PixelPen.userconfig.shorcuts.create_brush)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.RESET_BRUSH), PixelPen.userconfig.shorcuts.reset_brush)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CREATE_STAMP), PixelPen.userconfig.shorcuts.create_stamp)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.RESET_STAMP), PixelPen.userconfig.shorcuts.reset_stamp)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.SWITCH_LAST_TOOLBOX), PixelPen.userconfig.shorcuts.prev_toolbox)
-	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CANVAS_SIZE), PixelPen.userconfig.shorcuts.canvas_size)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.UNDO), PixelPen.singleton.userconfig.shorcuts.undo)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.REDO), PixelPen.singleton.userconfig.shorcuts.redo)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.COPY), PixelPen.singleton.userconfig.shorcuts.copy)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CUT), PixelPen.singleton.userconfig.shorcuts.cut)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.PASTE), PixelPen.singleton.userconfig.shorcuts.paste)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.INVERSE_SELECTION), PixelPen.singleton.userconfig.shorcuts.inverse_selection)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CLEAR_SELECTION), PixelPen.singleton.userconfig.shorcuts.remove_selection)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.DELETE_ON_SELECTION), PixelPen.singleton.userconfig.shorcuts.delete_selected)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CREATE_BRUSH), PixelPen.singleton.userconfig.shorcuts.create_brush)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.RESET_BRUSH), PixelPen.singleton.userconfig.shorcuts.reset_brush)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CREATE_STAMP), PixelPen.singleton.userconfig.shorcuts.create_stamp)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.RESET_STAMP), PixelPen.singleton.userconfig.shorcuts.reset_stamp)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.SWITCH_LAST_TOOLBOX), PixelPen.singleton.userconfig.shorcuts.prev_toolbox)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CANVAS_SIZE), PixelPen.singleton.userconfig.shorcuts.canvas_size)
 	
 	var layer_popup := layer_menu.get_popup()
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.ADD_LAYER), PixelPen.userconfig.shorcuts.add_layer)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.DELETE_LAYER), PixelPen.userconfig.shorcuts.delete_layer)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.DUPLICATE_LAYER), PixelPen.userconfig.shorcuts.duplicate_layer)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.DUPLICATE_SELECTION), PixelPen.userconfig.shorcuts.duplicate_selection)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.COPY_LAYER), PixelPen.userconfig.shorcuts.copy_layer)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.CUT_LAYER), PixelPen.userconfig.shorcuts.cut_layer)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.PASTE), PixelPen.userconfig.shorcuts.paste_layer)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.RENAME_LAYER), PixelPen.userconfig.shorcuts.rename_layer)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.MERGE_DOWN), PixelPen.userconfig.shorcuts.merge_down)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.MERGE_VISIBLE), PixelPen.userconfig.shorcuts.merge_visible)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.MERGE_ALL), PixelPen.userconfig.shorcuts.merge_all)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.SHOW_ALL_LAYER), PixelPen.userconfig.shorcuts.show_all)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.HIDE_ALL_LAYER), PixelPen.userconfig.shorcuts.hide_all)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.LAYER_ACTIVE_GO_UP), PixelPen.userconfig.shorcuts.active_go_up)
-	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.LAYER_ACTIVE_GO_DOWN), PixelPen.userconfig.shorcuts.active_go_down)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.ADD_LAYER), PixelPen.singleton.userconfig.shorcuts.add_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.DELETE_LAYER), PixelPen.singleton.userconfig.shorcuts.delete_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.DUPLICATE_LAYER), PixelPen.singleton.userconfig.shorcuts.duplicate_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.DUPLICATE_SELECTION), PixelPen.singleton.userconfig.shorcuts.duplicate_selection)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.COPY_LAYER), PixelPen.singleton.userconfig.shorcuts.copy_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.CUT_LAYER), PixelPen.singleton.userconfig.shorcuts.cut_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.PASTE), PixelPen.singleton.userconfig.shorcuts.paste_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.RENAME_LAYER), PixelPen.singleton.userconfig.shorcuts.rename_layer)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.MERGE_DOWN), PixelPen.singleton.userconfig.shorcuts.merge_down)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.MERGE_VISIBLE), PixelPen.singleton.userconfig.shorcuts.merge_visible)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.MERGE_ALL), PixelPen.singleton.userconfig.shorcuts.merge_all)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.SHOW_ALL_LAYER), PixelPen.singleton.userconfig.shorcuts.show_all)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.HIDE_ALL_LAYER), PixelPen.singleton.userconfig.shorcuts.hide_all)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.LAYER_ACTIVE_GO_UP), PixelPen.singleton.userconfig.shorcuts.active_go_up)
+	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.LAYER_ACTIVE_GO_DOWN), PixelPen.singleton.userconfig.shorcuts.active_go_down)
 
 	var animation_popup := animation_menu.get_popup()
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.PLAY_PAUSE), PixelPen.userconfig.shorcuts.animation_play_pause)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.SKIP_TO_FRONT), PixelPen.userconfig.shorcuts.animation_skip_to_front)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.STEP_FORWARD), PixelPen.userconfig.shorcuts.animation_step_forward)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.STEP_BACKWARD), PixelPen.userconfig.shorcuts.animation_step_backward)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.SKIP_TO_END), PixelPen.userconfig.shorcuts.animation_skip_to_end)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.TOGGLE_LOOP), PixelPen.userconfig.shorcuts.loop_playback)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.TOGGLE_ONION_SKINNING), PixelPen.userconfig.shorcuts.animation_onion_skinning)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.INSERT_FRAME_RIGHT), PixelPen.userconfig.shorcuts.frame_insert_right)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.INSERT_FRAME_LEFT), PixelPen.userconfig.shorcuts.frame_insert_left)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.DUPLICATE_FRAME), PixelPen.userconfig.shorcuts.duplicate_frame)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.DUPLICATE_FRAME_LINKED), PixelPen.userconfig.shorcuts.duplicate_frame_linked)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.CONVERT_FRAME_LINKED_TO_UNIQUE), PixelPen.userconfig.shorcuts.convert_frame_linked_to_unique)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_LEFT), PixelPen.userconfig.shorcuts.animation_shift_frame_left)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_RIGHT), PixelPen.userconfig.shorcuts.animation_shift_frame_right)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_TIMELINE), PixelPen.userconfig.shorcuts.animation_move_frame_to_timeline)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_DRAFT), PixelPen.userconfig.shorcuts.animation_move_frame_to_draft)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.CREATE_DRAFT_FRAME), PixelPen.userconfig.shorcuts.create_draft_frame)
-	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.DELETE_DRAFT_FRAME), PixelPen.userconfig.shorcuts.delete_draft_frame)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.PLAY_PAUSE), PixelPen.singleton.userconfig.shorcuts.animation_play_pause)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.SKIP_TO_FRONT), PixelPen.singleton.userconfig.shorcuts.animation_skip_to_front)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.STEP_FORWARD), PixelPen.singleton.userconfig.shorcuts.animation_step_forward)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.STEP_BACKWARD), PixelPen.singleton.userconfig.shorcuts.animation_step_backward)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.SKIP_TO_END), PixelPen.singleton.userconfig.shorcuts.animation_skip_to_end)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.TOGGLE_LOOP), PixelPen.singleton.userconfig.shorcuts.loop_playback)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.TOGGLE_ONION_SKINNING), PixelPen.singleton.userconfig.shorcuts.animation_onion_skinning)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.INSERT_FRAME_RIGHT), PixelPen.singleton.userconfig.shorcuts.frame_insert_right)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.INSERT_FRAME_LEFT), PixelPen.singleton.userconfig.shorcuts.frame_insert_left)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.DUPLICATE_FRAME), PixelPen.singleton.userconfig.shorcuts.duplicate_frame)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.DUPLICATE_FRAME_LINKED), PixelPen.singleton.userconfig.shorcuts.duplicate_frame_linked)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.CONVERT_FRAME_LINKED_TO_UNIQUE), PixelPen.singleton.userconfig.shorcuts.convert_frame_linked_to_unique)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_LEFT), PixelPen.singleton.userconfig.shorcuts.animation_shift_frame_left)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_RIGHT), PixelPen.singleton.userconfig.shorcuts.animation_shift_frame_right)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_TIMELINE), PixelPen.singleton.userconfig.shorcuts.animation_move_frame_to_timeline)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.MOVE_FRAME_TO_DRAFT), PixelPen.singleton.userconfig.shorcuts.animation_move_frame_to_draft)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.CREATE_DRAFT_FRAME), PixelPen.singleton.userconfig.shorcuts.create_draft_frame)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.DELETE_DRAFT_FRAME), PixelPen.singleton.userconfig.shorcuts.delete_draft_frame)
 
 	var view_popup := view_menu.get_popup()
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_GRID), PixelPen.userconfig.shorcuts.view_show_grid)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_TILE), PixelPen.userconfig.shorcuts.view_show_tile)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.ROTATE_CANVAS_90), PixelPen.userconfig.shorcuts.rotate_canvas_90)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.ROTATE_CANVAS_MIN_90), PixelPen.userconfig.shorcuts.rotate_canvas_min90)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FLIP_CANVAS_HORIZONTAL), PixelPen.userconfig.shorcuts.flip_canvas_horizontal)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FLIP_CANVAS_VERTICAL), PixelPen.userconfig.shorcuts.flip_canvas_vertical)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.RESET_CANVAS_TRANSFORM), PixelPen.userconfig.shorcuts.reset_canvas_transform)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.RESET_ZOOM), PixelPen.userconfig.shorcuts.reset_zoom)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_VIRTUAL_MOUSE), PixelPen.userconfig.shorcuts.virtual_mouse)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_VERTICAL_MIRROR_GUIDE), PixelPen.userconfig.shorcuts.vertical_mirror)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE), PixelPen.userconfig.shorcuts.horizontal_mirror)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_PREVIEW), PixelPen.userconfig.shorcuts.show_preview)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_ANIMATION_TIMELINE), PixelPen.userconfig.shorcuts.show_animation_timeline)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.TOGGLE_TINT_SELECTED_LAYER), PixelPen.userconfig.shorcuts.toggle_tint_layer)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FILTER_GRAYSCALE), PixelPen.userconfig.shorcuts.filter_greyscale)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.EDIT_SELECTION_ONLY), PixelPen.userconfig.shorcuts.toggle_edit_selection_only)
-	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_INFO), PixelPen.userconfig.shorcuts.show_info)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_GRID), PixelPen.singleton.userconfig.shorcuts.view_show_grid)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_TILE), PixelPen.singleton.userconfig.shorcuts.view_show_tile)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.ROTATE_CANVAS_90), PixelPen.singleton.userconfig.shorcuts.rotate_canvas_90)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.ROTATE_CANVAS_MIN_90), PixelPen.singleton.userconfig.shorcuts.rotate_canvas_min90)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FLIP_CANVAS_HORIZONTAL), PixelPen.singleton.userconfig.shorcuts.flip_canvas_horizontal)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FLIP_CANVAS_VERTICAL), PixelPen.singleton.userconfig.shorcuts.flip_canvas_vertical)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.RESET_CANVAS_TRANSFORM), PixelPen.singleton.userconfig.shorcuts.reset_canvas_transform)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.RESET_ZOOM), PixelPen.singleton.userconfig.shorcuts.reset_zoom)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_VIRTUAL_MOUSE), PixelPen.singleton.userconfig.shorcuts.virtual_mouse)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_VERTICAL_MIRROR_GUIDE), PixelPen.singleton.userconfig.shorcuts.vertical_mirror)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE), PixelPen.singleton.userconfig.shorcuts.horizontal_mirror)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_PREVIEW), PixelPen.singleton.userconfig.shorcuts.show_preview)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_ANIMATION_TIMELINE), PixelPen.singleton.userconfig.shorcuts.show_animation_timeline)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.TOGGLE_TINT_SELECTED_LAYER), PixelPen.singleton.userconfig.shorcuts.toggle_tint_layer)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.FILTER_GRAYSCALE), PixelPen.singleton.userconfig.shorcuts.filter_greyscale)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.EDIT_SELECTION_ONLY), PixelPen.singleton.userconfig.shorcuts.toggle_edit_selection_only)
+	view_popup.set_item_shortcut(view_popup.get_item_index(ViewID.SHOW_INFO), PixelPen.singleton.userconfig.shorcuts.show_info)
 
 
 func connect_signal():
-	PixelPen.shorcut_changed.connect(_set_shorcut)
+	PixelPen.singleton.shorcut_changed.connect(_set_shorcut)
 	pixel_pen_menu.get_popup().id_pressed.connect(_on_pixelpen_popup_pressed)
 	file_menu.get_popup().id_pressed.connect(_on_file_popup_pressed)
 	file_menu.get_popup().about_to_popup.connect(_on_file_menu_about_to_pop)
@@ -687,33 +687,33 @@ func connect_signal():
 	palette_menu.get_popup().id_pressed.connect(_on_palette_popup_pressed)
 	animation_menu.get_popup().id_pressed.connect(_on_animation_popup_pressed)
 	view_menu.get_popup().id_pressed.connect(_on_view_popup_pressed)
-	PixelPen.tool_changed.connect(_on_tool_changed)
-	PixelPen.request_new_project.connect(_new)
-	PixelPen.request_open_project.connect(_open)
-	PixelPen.request_import_image.connect(func ():
+	PixelPen.singleton.tool_changed.connect(_on_tool_changed)
+	PixelPen.singleton.request_new_project.connect(_new)
+	PixelPen.singleton.request_open_project.connect(_open)
+	PixelPen.singleton.request_import_image.connect(func ():
 			_on_file_popup_pressed(FileID.IMPORT)
 			)
-	PixelPen.request_save_project.connect(_save)
-	PixelPen.request_save_as_project.connect(_save_as)
-	PixelPen.project_file_changed.connect(_on_project_file_changed)
-	PixelPen.project_saved.connect(_on_project_saved)
+	PixelPen.singleton.request_save_project.connect(_save)
+	PixelPen.singleton.request_save_as_project.connect(_save_as)
+	PixelPen.singleton.project_file_changed.connect(_on_project_file_changed)
+	PixelPen.singleton.project_saved.connect(_on_project_saved)
 	canvas.selection_tool_hint.texture_changed.connect(_on_selection_texture_changed)
 
 
 func _on_project_saved(is_saved : bool):
-	if PixelPen.current_project != null:
-		PixelPen.current_project.is_saved = is_saved
+	if PixelPen.singleton.current_project != null:
+		PixelPen.singleton.current_project.is_saved = is_saved
 	_update_title()
 
 
 func _new():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_new_project_dialog = new_project_dialog.instantiate()
-	_new_project_dialog.width_node.text = str(PixelPen.userconfig.default_canvas_size.x)
-	_new_project_dialog.height_node.text = str(PixelPen.userconfig.default_canvas_size.y)
+	_new_project_dialog.width_node.text = str(PixelPen.singleton.userconfig.default_canvas_size.x)
+	_new_project_dialog.height_node.text = str(PixelPen.singleton.userconfig.default_canvas_size.y)
 	_new_project_dialog.confirmed.connect(func():
 			_new_project_dialog.hide()
-			PixelPen.project_file_changed.emit()
+			PixelPen.singleton.project_file_changed.emit()
 			_new_project_dialog.queue_free()
 			)
 	_new_project_dialog.canceled.connect(func():
@@ -731,10 +731,10 @@ func _open():
 	_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	_file_dialog.filters = ["*.res"]
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	_file_dialog.current_dir = PixelPen.get_directory()
+	_file_dialog.current_dir = PixelPen.singleton.get_directory()
 	_file_dialog.file_selected.connect(func(file):
 			_file_dialog.hide()
-			PixelPen.load_project(file)
+			PixelPen.singleton.load_project(file)
 			_file_dialog.queue_free()
 			)
 	_file_dialog.canceled.connect(func():
@@ -746,20 +746,20 @@ func _open():
 
 
 func _save():
-	if PixelPen.current_project == null:
+	if PixelPen.singleton.current_project == null:
 		return
-	if (PixelPen.current_project as PixelPenProject).file_path == "":
+	if (PixelPen.singleton.current_project as PixelPenProject).file_path == "":
 		_show_save_as_dialog(
 				func (file_path):
 					if file_path != "":
 						_save_project(file_path)
 		)
 	else:
-		_save_project(PixelPen.current_project.file_path)
+		_save_project(PixelPen.singleton.current_project.file_path)
 
 
 func _save_as():
-	if PixelPen.current_project == null:
+	if PixelPen.singleton.current_project == null:
 		return
 	_show_save_as_dialog(func (file_path):
 			if file_path != "":
@@ -768,30 +768,30 @@ func _save_as():
 
 
 func _save_project(file_path : String):
-	var prev_path = PixelPen.current_project.file_path
-	var prev_name = PixelPen.current_project.project_name
-	PixelPen.current_project.file_path = file_path
-	PixelPen.current_project.project_name = file_path.get_file().get_basename()
-	var err = ResourceSaver.save(PixelPen.current_project, file_path)
+	var prev_path = PixelPen.singleton.current_project.file_path
+	var prev_name = PixelPen.singleton.current_project.project_name
+	PixelPen.singleton.current_project.file_path = file_path
+	PixelPen.singleton.current_project.project_name = file_path.get_file().get_basename()
+	var err = ResourceSaver.save(PixelPen.singleton.current_project, file_path)
 	if err == OK:
-		PixelPen.userconfig.insert_recent_projects(PixelPen.current_project.file_path)
+		PixelPen.singleton.userconfig.insert_recent_projects(PixelPen.singleton.current_project.file_path)
 		_update_recent_submenu()
-		PixelPen.current_project.is_saved = true
-		PixelPen.project_saved.emit(true)
+		PixelPen.singleton.current_project.is_saved = true
+		PixelPen.singleton.project_saved.emit(true)
 	else:
-		PixelPen.current_project.file_path = prev_path
-		PixelPen.current_project.project_name = prev_name
+		PixelPen.singleton.current_project.file_path = prev_path
+		PixelPen.singleton.current_project.project_name = prev_name
 
 
 func _show_save_as_dialog(callback : Callable = Callable()):
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var _file_dialog = FileDialog.new()
-	_file_dialog.current_file = str((PixelPen.current_project as PixelPenProject).project_name , ".res")
+	_file_dialog.current_file = str((PixelPen.singleton.current_project as PixelPenProject).project_name , ".res")
 	_file_dialog.use_native_dialog = true
 	_file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	_file_dialog.filters = ["*.res"]
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	_file_dialog.current_dir = PixelPen.get_directory()
+	_file_dialog.current_dir = PixelPen.singleton.get_directory()
 	_file_dialog.file_selected.connect(func(file):
 			_file_dialog.hide()
 			callback.call(file)
@@ -807,9 +807,9 @@ func _show_save_as_dialog(callback : Callable = Callable()):
 
 
 func _close_project():
-	PixelPen.current_project = null
-	PixelPen.save_cache_project_config()
-	PixelPen.project_file_changed.emit()
+	PixelPen.singleton.current_project = null
+	PixelPen.singleton.save_cache_project_config()
+	PixelPen.singleton.project_file_changed.emit()
 
 
 func _on_selection_texture_changed():
@@ -895,12 +895,12 @@ func _on_file_popup_pressed(id : int):
 						current_project.initialized(
 								image.get_size(), "Untitled", "", false
 								)
-						PixelPen.current_project = current_project
-						var layer_uid : Vector3i = PixelPen.current_project.import_image(image, file)
-						PixelPen.current_project.project_name = PixelPen.current_project.get_index_image(layer_uid).label
+						PixelPen.singleton.current_project = current_project
+						var layer_uid : Vector3i = PixelPen.singleton.current_project.import_image(image, file)
+						PixelPen.singleton.current_project.project_name = PixelPen.singleton.current_project.get_index_image(layer_uid).label
 						window.closed.emit()
 						window.queue_free()
-						PixelPen.project_file_changed.emit()
+						PixelPen.singleton.project_file_changed.emit()
 						)
 				window.canceled.connect(func():
 						window.closed.emit()
@@ -911,16 +911,16 @@ func _on_file_popup_pressed(id : int):
 				await window.closed
 		var callback = func(files : PackedStringArray):
 			if not files.is_empty():
-				(PixelPen.current_project as PixelPenProject).create_undo_layer_and_palette("Add layer", func ():
-						PixelPen.layer_items_changed.emit()
-						PixelPen.project_saved.emit(false)
-						PixelPen.palette_changed.emit()
+				(PixelPen.singleton.current_project as PixelPenProject).create_undo_layer_and_palette("Add layer", func ():
+						PixelPen.singleton.layer_items_changed.emit()
+						PixelPen.singleton.project_saved.emit(false)
+						PixelPen.singleton.palette_changed.emit()
 						)
 				for i in range(files.size()):
 					var window : ConfirmationDialog = import_window.instantiate()
 					add_child(window)
 					window.confirmed.connect(func():
-							(PixelPen.current_project as PixelPenProject).import_image(window.get_image() , files[i])
+							(PixelPen.singleton.current_project as PixelPenProject).import_image(window.get_image() , files[i])
 							window.closed.emit()
 							window.queue_free()
 							)
@@ -931,29 +931,29 @@ func _on_file_popup_pressed(id : int):
 					window.show_file(files[i])
 					window.popup_centered()
 					await window.closed
-				(PixelPen.current_project as PixelPenProject).create_redo_layer_and_palette(func ():
-						PixelPen.layer_items_changed.emit()
-						PixelPen.project_saved.emit(false)
-						PixelPen.palette_changed.emit()
+				(PixelPen.singleton.current_project as PixelPenProject).create_redo_layer_and_palette(func ():
+						PixelPen.singleton.layer_items_changed.emit()
+						PixelPen.singleton.project_saved.emit(false)
+						PixelPen.singleton.palette_changed.emit()
 						)
-				PixelPen.layer_items_changed.emit()
-				PixelPen.project_saved.emit(false)
-				PixelPen.palette_changed.emit()
-		if PixelPen.current_project == null:
+				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.singleton.palette_changed.emit()
+		if PixelPen.singleton.current_project == null:
 			get_image_file(callback_no_project, FileDialog.FILE_MODE_OPEN_FILE)
 		else:
 			get_image_file(callback, FileDialog.FILE_MODE_OPEN_FILES)
 	
 	elif id == FileID.QUICK_EXPORT:
-		var file : String = PixelPen.current_project.last_export_file_path
+		var file : String = PixelPen.singleton.current_project.last_export_file_path
 		var ext : String = file.get_extension().to_lower()
 		if ext == "jpg" or ext == "jpeg":
-			(PixelPen.current_project as PixelPenProject).export_jpg_image(file)
+			(PixelPen.singleton.current_project as PixelPenProject).export_jpg_image(file)
 		elif ext == "png":
-			(PixelPen.current_project as PixelPenProject).export_png_image(file)
+			(PixelPen.singleton.current_project as PixelPenProject).export_png_image(file)
 		elif ext == "webp":
-			(PixelPen.current_project as PixelPenProject).export_webp_image(file)
-		PixelPen.project_saved.emit(false)
+			(PixelPen.singleton.current_project as PixelPenProject).export_webp_image(file)
+		PixelPen.singleton.project_saved.emit(false)
 		
 		##TODO: remove below on export debug
 		if get_window().has_method("scan"):
@@ -967,31 +967,31 @@ func _on_file_menu_about_to_pop():
 	var popup := file_menu.get_popup()
 	popup.set_item_disabled(
 			popup.get_item_index(FileID.EXPORT_ANIMATION),
-			PixelPen.current_project == null or 
-			not PixelPen.current_project.show_timeline or
-			PixelPen.current_project.animation_timeline.is_empty())
+			PixelPen.singleton.current_project == null or 
+			not PixelPen.singleton.current_project.show_timeline or
+			PixelPen.singleton.current_project.animation_timeline.is_empty())
 
 
 func _on_edit_popup_pressed(id : int):
 	match id:
 		EditID.UNDO:
-			PixelPen.current_project.undo()
+			PixelPen.singleton.current_project.undo()
 		
 		EditID.REDO:
-			PixelPen.current_project.redo()
+			PixelPen.singleton.current_project.redo()
 
 		EditID.INVERSE_SELECTION:
-			PixelPen.tool_changed.emit(
+			PixelPen.singleton.tool_changed.emit(
 					PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 					PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INVERSE, false)
 	
 		EditID.CLEAR_SELECTION:
-			PixelPen.tool_changed.emit(
+			PixelPen.singleton.tool_changed.emit(
 					PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 					PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_REMOVE, false)
 
 		EditID.DELETE_ON_SELECTION:
-			PixelPen.tool_changed.emit(
+			PixelPen.singleton.tool_changed.emit(
 					PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 					PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false)
 		
@@ -999,15 +999,15 @@ func _on_edit_popup_pressed(id : int):
 			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE:
 				canvas.canvas_paint.tool._show_guid = true
 			else:
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
-			PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false)
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
+			PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false)
 		
 		EditID.CUT:
 			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE:
 				canvas.canvas_paint.tool._show_guid = true
 			else:
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
-			PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false)
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
+			PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false)
 		
 		EditID.PASTE:
 			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and canvas.canvas_paint.tool.mode != MoveTool.Mode.UNKNOWN:
@@ -1015,37 +1015,37 @@ func _on_edit_popup_pressed(id : int):
 		
 		EditID.CREATE_BRUSH:
 			if canvas.selection_tool_hint.texture == null:
-				PixelPen.userconfig.make_brush_from_project(null)
+				PixelPen.singleton.userconfig.make_brush_from_project(null)
 			else:
 				var mask = canvas.selection_tool_hint.texture.get_image()
-				PixelPen.userconfig.make_brush_from_project(MaskSelection.get_image_no_margin(mask))
+				PixelPen.singleton.userconfig.make_brush_from_project(MaskSelection.get_image_no_margin(mask))
 			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_BRUSH:
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_BRUSH, true)
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_BRUSH, true)
 		
 		EditID.RESET_BRUSH:
-			PixelPen.current_project.reset_brush_to_default()
+			PixelPen.singleton.current_project.reset_brush_to_default()
 			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_BRUSH:
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_BRUSH, true)
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_BRUSH, true)
 		
 		EditID.CREATE_STAMP:
 			if canvas.selection_tool_hint.texture == null:
-				PixelPen.userconfig.make_stamp_from_project(null)
+				PixelPen.singleton.userconfig.make_stamp_from_project(null)
 			else:
 				var mask = canvas.selection_tool_hint.texture.get_image()
-				PixelPen.userconfig.make_stamp_from_project(MaskSelection.get_image_no_margin(mask))
+				PixelPen.singleton.userconfig.make_stamp_from_project(MaskSelection.get_image_no_margin(mask))
 			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_STAMP:
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_STAMP, true)
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_STAMP, true)
 		
 		EditID.RESET_STAMP:
-			PixelPen.current_project.reset_stamp_to_default()
+			PixelPen.singleton.current_project.reset_stamp_to_default()
 			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_STAMP:
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_STAMP, true)
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_STAMP, true)
 		
 		EditID.SWITCH_LAST_TOOLBOX:
-			if PixelPen.current_project == null:
+			if PixelPen.singleton.current_project == null:
 				return
 			if toolbox_dock.prev_toolbox != PixelPenEnum.ToolBox.TOOL_UNKNOWN:
-				PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, toolbox_dock.prev_toolbox, true)
+				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, toolbox_dock.prev_toolbox, true)
 		
 		EditID.CANVAS_SIZE:
 			_open_canvas_size_window()
@@ -1075,7 +1075,7 @@ func _on_layer_popup_pressed(id : int):
 			layers_tool._on_paste()
 		
 		LayerID.RENAME_LAYER:
-			var uid = (PixelPen.current_project as PixelPenProject).active_layer
+			var uid = (PixelPen.singleton.current_project as PixelPenProject).active_layer
 			if uid != null:
 				layers_tool._on_layer_properties(uid.layer_uid)
 		
@@ -1095,36 +1095,36 @@ func _on_layer_popup_pressed(id : int):
 			layers_tool._on_hide_all()
 		
 		LayerID.LAYER_ACTIVE_GO_UP:
-			if MoveTool.mode == MoveTool.Mode.UNKNOWN or PixelPen.current_project.multilayer_selected.is_empty():
-				if not PixelPen.current_project.active_layer_is_valid():
-					if PixelPen.current_project.active_frame.layers.size() > 0:
-						PixelPen.current_project.active_layer_uid = PixelPen.current_project.active_frame.layers[0].layer_uid
-				var index := (PixelPen.current_project as PixelPenProject).get_image_index(PixelPen.current_project.active_layer_uid)
+			if MoveTool.mode == MoveTool.Mode.UNKNOWN or PixelPen.singleton.current_project.multilayer_selected.is_empty():
+				if not PixelPen.singleton.current_project.active_layer_is_valid():
+					if PixelPen.singleton.current_project.active_frame.layers.size() > 0:
+						PixelPen.singleton.current_project.active_layer_uid = PixelPen.singleton.current_project.active_frame.layers[0].layer_uid
+				var index := (PixelPen.singleton.current_project as PixelPenProject).get_image_index(PixelPen.singleton.current_project.active_layer_uid)
 				if index != -1:
 					index += 1
-					if PixelPen.current_project.active_frame.layers.size() <= index:
+					if PixelPen.singleton.current_project.active_frame.layers.size() <= index:
 						index = 0
-					PixelPen.current_project.multilayer_selected.clear()
-					PixelPen.current_project.active_layer_uid = PixelPen.current_project.active_frame.layers[index].layer_uid
-					PixelPen.layer_active_changed.emit(PixelPen.current_project.active_layer_uid)
+					PixelPen.singleton.current_project.multilayer_selected.clear()
+					PixelPen.singleton.current_project.active_layer_uid = PixelPen.singleton.current_project.active_frame.layers[index].layer_uid
+					PixelPen.singleton.layer_active_changed.emit(PixelPen.singleton.current_project.active_layer_uid)
 			
 		LayerID.LAYER_ACTIVE_GO_DOWN:
-			if MoveTool.mode == MoveTool.Mode.UNKNOWN or PixelPen.current_project.multilayer_selected.is_empty():
-				if not PixelPen.current_project.active_layer_is_valid():
-					if PixelPen.current_project.active_frame.layers.size() > 0:
-						PixelPen.current_project.active_layer_uid = PixelPen.current_project.active_frame.layers[0].layer_uid
-				var index := (PixelPen.current_project as PixelPenProject).get_image_index(PixelPen.current_project.active_layer_uid)
+			if MoveTool.mode == MoveTool.Mode.UNKNOWN or PixelPen.singleton.current_project.multilayer_selected.is_empty():
+				if not PixelPen.singleton.current_project.active_layer_is_valid():
+					if PixelPen.singleton.current_project.active_frame.layers.size() > 0:
+						PixelPen.singleton.current_project.active_layer_uid = PixelPen.singleton.current_project.active_frame.layers[0].layer_uid
+				var index := (PixelPen.singleton.current_project as PixelPenProject).get_image_index(PixelPen.singleton.current_project.active_layer_uid)
 				if index != -1:
-					PixelPen.current_project.multilayer_selected.clear()
-					PixelPen.current_project.active_layer_uid = PixelPen.current_project.active_frame.layers[index - 1].layer_uid
-					PixelPen.layer_active_changed.emit(PixelPen.current_project.active_layer_uid)
+					PixelPen.singleton.current_project.multilayer_selected.clear()
+					PixelPen.singleton.current_project.active_layer_uid = PixelPen.singleton.current_project.active_frame.layers[index - 1].layer_uid
+					PixelPen.singleton.layer_active_changed.emit(PixelPen.singleton.current_project.active_layer_uid)
 
 
 func _on_layer_about_to_popup():
-	var disable = (PixelPen.current_project as PixelPenProject).active_layer == null
+	var disable = (PixelPen.singleton.current_project as PixelPenProject).active_layer == null
 	var selection = canvas.selection_tool_hint.texture == null
-	var edit_mode_sample : bool = PixelPen.current_project.use_sample
-	var multiselect : bool = not PixelPen.current_project.multilayer_selected.is_empty()
+	var edit_mode_sample : bool = PixelPen.singleton.current_project.use_sample
+	var multiselect : bool = not PixelPen.singleton.current_project.multilayer_selected.is_empty()
 	var popup := layer_menu.get_popup()
 	popup.set_item_disabled(popup.get_item_index(LayerID.ADD_LAYER), edit_mode_sample)
 	
@@ -1136,7 +1136,7 @@ func _on_layer_about_to_popup():
 	
 	popup.set_item_disabled(popup.get_item_index(LayerID.DUPLICATE_SELECTION), disable or selection or edit_mode_sample or multiselect)
 	
-	popup.set_item_disabled(popup.get_item_index(LayerID.PASTE), (PixelPen.current_project as PixelPenProject).cache_copied_colormap == null or edit_mode_sample or multiselect)
+	popup.set_item_disabled(popup.get_item_index(LayerID.PASTE), (PixelPen.singleton.current_project as PixelPenProject).cache_copied_colormap == null or edit_mode_sample or multiselect)
 	
 	popup.set_item_disabled(popup.get_item_index(LayerID.RENAME_LAYER), disable or multiselect)
 	
@@ -1147,162 +1147,162 @@ func _on_layer_about_to_popup():
 
 func _on_palette_popup_pressed(id : int):
 	if id == PaletteID.RESET:
-		(PixelPen.current_project as PixelPenProject).create_undo_palette_all("Palette", func():
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
-				PixelPen.current_project.unbreak_history()
+		(PixelPen.singleton.current_project as PixelPenProject).create_undo_palette_all("Palette", func():
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.singleton.current_project.unbreak_history()
 				)
 		
-		(PixelPen.current_project as PixelPenProject).palette.set_color_index_preset()
-		(PixelPen.current_project as PixelPenProject).palette.grid_sync_to_palette()
+		(PixelPen.singleton.current_project as PixelPenProject).palette.set_color_index_preset()
+		(PixelPen.singleton.current_project as PixelPenProject).palette.grid_sync_to_palette()
 		
-		(PixelPen.current_project as PixelPenProject).create_redo_palette_all(func():
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
-				PixelPen.current_project.break_history()
+		(PixelPen.singleton.current_project as PixelPenProject).create_redo_palette_all(func():
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.singleton.current_project.break_history()
 				)
-		PixelPen.palette_changed.emit()
-		PixelPen.project_saved.emit(false)
-		PixelPen.current_project.break_history()
+		PixelPen.singleton.palette_changed.emit()
+		PixelPen.singleton.project_saved.emit(false)
+		PixelPen.singleton.current_project.break_history()
 		
 	elif id == PaletteID.SORT_COLOR:
-		var new_grid_palette : PackedInt32Array = (PixelPen.current_project as PixelPenProject).sort_palette()
+		var new_grid_palette : PackedInt32Array = (PixelPen.singleton.current_project as PixelPenProject).sort_palette()
 		if new_grid_palette.size() > 0:
-			(PixelPen.current_project as PixelPenProject).create_undo_palette_gui("Palette", func():
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
+			(PixelPen.singleton.current_project as PixelPenProject).create_undo_palette_gui("Palette", func():
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 				)
 				
-			(PixelPen.current_project as PixelPenProject).palette.grid_color_index = new_grid_palette
+			(PixelPen.singleton.current_project as PixelPenProject).palette.grid_color_index = new_grid_palette
 			
-			(PixelPen.current_project as PixelPenProject).create_redo_palette_gui(func():
-					PixelPen.palette_changed.emit()
-					PixelPen.project_saved.emit(false)
+			(PixelPen.singleton.current_project as PixelPenProject).create_redo_palette_gui(func():
+					PixelPen.singleton.palette_changed.emit()
+					PixelPen.singleton.project_saved.emit(false)
 					)
-			PixelPen.palette_changed.emit()
-			PixelPen.project_saved.emit(false)
+			PixelPen.singleton.palette_changed.emit()
+			PixelPen.singleton.project_saved.emit(false)
 		
 	elif id == PaletteID.DELETE_UNUSED:
-		(PixelPen.current_project as PixelPenProject).create_undo_palette("Palette", func():
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
+		(PixelPen.singleton.current_project as PixelPenProject).create_undo_palette("Palette", func():
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 				)
-		(PixelPen.current_project as PixelPenProject).delete_unused_color_palette()
-		(PixelPen.current_project as PixelPenProject).create_redo_palette(func():
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
+		(PixelPen.singleton.current_project as PixelPenProject).delete_unused_color_palette()
+		(PixelPen.singleton.current_project as PixelPenProject).create_redo_palette(func():
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 				)
-		PixelPen.palette_changed.emit()
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.palette_changed.emit()
+		PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == PaletteID.DELETE_SELECTED_COLOR:
-		(PixelPen.current_project as PixelPenProject).create_undo_palette_all("Palette", func():
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
-				PixelPen.current_project.unbreak_history()
+		(PixelPen.singleton.current_project as PixelPenProject).create_undo_palette_all("Palette", func():
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.singleton.current_project.unbreak_history()
 				)
-		(PixelPen.current_project as PixelPenProject).delete_color(Tool._index_color)
-		(PixelPen.current_project as PixelPenProject).create_redo_palette_all(func():
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
-				PixelPen.current_project.break_history()
+		(PixelPen.singleton.current_project as PixelPenProject).delete_color(Tool._index_color)
+		(PixelPen.singleton.current_project as PixelPenProject).create_redo_palette_all(func():
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.singleton.current_project.break_history()
 				)
-		PixelPen.palette_changed.emit()
-		PixelPen.project_saved.emit(false)
-		PixelPen.current_project.break_history()
+		PixelPen.singleton.palette_changed.emit()
+		PixelPen.singleton.project_saved.emit(false)
+		PixelPen.singleton.current_project.break_history()
 	
 	elif id == PaletteID.CLEAN_INVISIBLE_COLOR:
-		PixelPen.current_project.clean_invisible_color()
-		PixelPen.palette_changed.emit()
-		PixelPen.project_saved.emit(false)
-		PixelPen.current_project.undo_redo.clear_history()
+		PixelPen.singleton.current_project.clean_invisible_color()
+		PixelPen.singleton.palette_changed.emit()
+		PixelPen.singleton.project_saved.emit(false)
+		PixelPen.singleton.current_project.undo_redo.clear_history()
 	
 	elif id == PaletteID.LOAD_AND_REPLACE:
 		var callback = func(file):
 			if file != "":
-				(PixelPen.current_project as PixelPenProject).create_undo_palette_all("Load palette", func():
-						PixelPen.palette_changed.emit()
-						PixelPen.project_saved.emit(false)
-						PixelPen.current_project.unbreak_history()
+				(PixelPen.singleton.current_project as PixelPenProject).create_undo_palette_all("Load palette", func():
+						PixelPen.singleton.palette_changed.emit()
+						PixelPen.singleton.project_saved.emit(false)
+						PixelPen.singleton.current_project.unbreak_history()
 						)
 				
-				(PixelPen.current_project as PixelPenProject).palette.load_image(file)
-				(PixelPen.current_project as PixelPenProject).palette.grid_sync_to_palette()
+				(PixelPen.singleton.current_project as PixelPenProject).palette.load_image(file)
+				(PixelPen.singleton.current_project as PixelPenProject).palette.grid_sync_to_palette()
 				
-				(PixelPen.current_project as PixelPenProject).create_redo_palette_all(func():
-						PixelPen.palette_changed.emit()
-						PixelPen.project_saved.emit(false)
-						PixelPen.current_project.break_history()
+				(PixelPen.singleton.current_project as PixelPenProject).create_redo_palette_all(func():
+						PixelPen.singleton.palette_changed.emit()
+						PixelPen.singleton.project_saved.emit(false)
+						PixelPen.singleton.current_project.break_history()
 						)
 				
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
-				PixelPen.current_project.break_history()
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.singleton.current_project.break_history()
 		get_image_file(callback, FileDialog.FILE_MODE_OPEN_FILE)
 		
 	elif id == PaletteID.LOAD_AND_MERGE:
 		var callback = func(file):
 			if file != "":
-				(PixelPen.current_project as PixelPenProject).create_undo_palette_all("Load palette", func():
-						PixelPen.palette_changed.emit()
-						PixelPen.project_saved.emit(false)
-						PixelPen.current_project.unbreak_history()
+				(PixelPen.singleton.current_project as PixelPenProject).create_undo_palette_all("Load palette", func():
+						PixelPen.singleton.palette_changed.emit()
+						PixelPen.singleton.project_saved.emit(false)
+						PixelPen.singleton.current_project.unbreak_history()
 						)
 				
-				(PixelPen.current_project as PixelPenProject).palette.load_image(file, true)
-				(PixelPen.current_project as PixelPenProject).palette.grid_sync_to_palette()
+				(PixelPen.singleton.current_project as PixelPenProject).palette.load_image(file, true)
+				(PixelPen.singleton.current_project as PixelPenProject).palette.grid_sync_to_palette()
 				
-				(PixelPen.current_project as PixelPenProject).create_redo_palette_all(func():
-						PixelPen.palette_changed.emit()
-						PixelPen.project_saved.emit(false)
-						PixelPen.current_project.break_history()
+				(PixelPen.singleton.current_project as PixelPenProject).create_redo_palette_all(func():
+						PixelPen.singleton.palette_changed.emit()
+						PixelPen.singleton.project_saved.emit(false)
+						PixelPen.singleton.current_project.break_history()
 						)
 				
-				PixelPen.palette_changed.emit()
-				PixelPen.project_saved.emit(false)
-				PixelPen.current_project.break_history()
+				PixelPen.singleton.palette_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.singleton.current_project.break_history()
 		get_image_file(callback, FileDialog.FILE_MODE_OPEN_FILE)
 		
 	elif id == PaletteID.SAVE:
 		var callback = func(file):
 			if file != "":
-				(PixelPen.current_project as PixelPenProject).palette.save_image(file)
+				(PixelPen.singleton.current_project as PixelPenProject).palette.save_image(file)
 		get_image_file(callback, FileDialog.FILE_MODE_SAVE_FILE)
 
 
 func _on_animation_popup_pressed(id : int):
-	var project : PixelPenProject = PixelPen.current_project as PixelPenProject
+	var project : PixelPenProject = PixelPen.singleton.current_project as PixelPenProject
 	if id == AnimationID.PLAY_PAUSE:
-		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE, false)
+		PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE, false)
 	
 	elif id == AnimationID.SKIP_TO_FRONT:
-		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT, false)
+		PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT, false)
 	
 	elif id == AnimationID.SKIP_TO_END:
-		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_END, false)
+		PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_END, false)
 	
 	elif id == AnimationID.STEP_BACKWARD:
-		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_BACKWARD, false)
+		PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_BACKWARD, false)
 	
 	elif id == AnimationID.STEP_FORWARD:
-		PixelPen.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_FORWARD, false)
+		PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_FORWARD, false)
 	
 	elif id == AnimationID.TOGGLE_LOOP:
-		PixelPen.current_project.animation_loop = not PixelPen.current_project.animation_loop
+		PixelPen.singleton.current_project.animation_loop = not PixelPen.singleton.current_project.animation_loop
 		var popup := animation_menu.get_popup()
 		var index = popup.get_item_index(id)
-		popup.set_item_checked(index, PixelPen.current_project.animation_loop)
+		popup.set_item_checked(index, PixelPen.singleton.current_project.animation_loop)
 	
 	elif id == AnimationID.TOGGLE_ONION_SKINNING:
-		PixelPen.current_project.onion_skinning = not PixelPen.current_project.onion_skinning
+		PixelPen.singleton.current_project.onion_skinning = not PixelPen.singleton.current_project.onion_skinning
 		var popup := animation_menu.get_popup()
 		var index = popup.get_item_index(id)
-		popup.set_item_checked(index, PixelPen.current_project.onion_skinning)
-		PixelPen.layer_items_changed.emit()
+		popup.set_item_checked(index, PixelPen.singleton.current_project.onion_skinning)
+		PixelPen.singleton.layer_items_changed.emit()
 	
 	elif id == AnimationID.INSERT_FRAME_LEFT:
-		var cell : AnimationCell = AnimationCell.create(PixelPen.current_project.get_uid())
-		var frame = Frame.create(PixelPen.current_project.get_uid())
+		var cell : AnimationCell = AnimationCell.create(PixelPen.singleton.current_project.get_uid())
+		var frame = Frame.create(PixelPen.singleton.current_project.get_uid())
 		project.pool_frames.push_back(frame)
 		cell.frame = frame
 		var cell_index : int = maxi(0, project.animation_frame_index)
@@ -1310,12 +1310,12 @@ func _on_animation_popup_pressed(id : int):
 		project.animation_frame_index = cell_index
 		project.canvas_pool_frame_uid = project.animation_timeline[cell_index].frame.frame_uid
 		project.add_layer()
-		PixelPen.layer_items_changed.emit()
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.layer_items_changed.emit()
+		PixelPen.singleton.project_saved.emit(false)
 		
 	elif id == AnimationID.INSERT_FRAME_RIGHT:
-		var cell : AnimationCell = AnimationCell.create(PixelPen.current_project.get_uid())
-		var frame = Frame.create(PixelPen.current_project.get_uid())
+		var cell : AnimationCell = AnimationCell.create(PixelPen.singleton.current_project.get_uid())
+		var frame = Frame.create(PixelPen.singleton.current_project.get_uid())
 		project.pool_frames.push_back(frame)
 		cell.frame = frame
 		var cell_index : int = maxi(0, project.animation_frame_index)
@@ -1325,36 +1325,36 @@ func _on_animation_popup_pressed(id : int):
 		project.animation_frame_index = cell_index
 		project.canvas_pool_frame_uid = project.animation_timeline[cell_index].frame.frame_uid
 		project.add_layer()
-		PixelPen.layer_items_changed.emit()
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.layer_items_changed.emit()
+		PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == AnimationID.DUPLICATE_FRAME:
 		if project.animation_frame_index != -1:
 			var cell_index : int = project.animation_frame_index
 			if cell_index != -1:
 				var src_cell = project.animation_timeline[cell_index]
-				var cell : AnimationCell = AnimationCell.create(PixelPen.current_project.get_uid())
-				var frame : Frame = Frame.create(PixelPen.current_project.get_uid())
+				var cell : AnimationCell = AnimationCell.create(PixelPen.singleton.current_project.get_uid())
+				var frame : Frame = Frame.create(PixelPen.singleton.current_project.get_uid())
 				frame.layers = src_cell.frame.get_layer_duplicate()
 				cell.frame = frame
 				project.pool_frames.push_back(cell.frame)
 				project.animation_timeline.insert(cell_index + 1, cell)
 				project.animation_frame_index = cell_index + 1
 				project.canvas_pool_frame_uid = project.animation_timeline[cell_index + 1].frame.frame_uid
-				PixelPen.layer_items_changed.emit()
-				PixelPen.project_saved.emit(false)
+				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == AnimationID.DUPLICATE_FRAME_LINKED:
 		if project.animation_frame_index != -1:
 			var cell_index : int = project.animation_frame_index
 			if cell_index != -1:
 				var cell : AnimationCell = project.animation_timeline[cell_index].duplicate()
-				cell.cell_uid = PixelPen.current_project.get_uid()
+				cell.cell_uid = PixelPen.singleton.current_project.get_uid()
 				project.animation_timeline.insert(cell_index + 1, cell)
 				project.animation_frame_index = cell_index + 1
 				project.canvas_pool_frame_uid = project.animation_timeline[cell_index + 1].frame.frame_uid
-				PixelPen.layer_items_changed.emit()
-				PixelPen.project_saved.emit(false)
+				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == AnimationID.CONVERT_FRAME_LINKED_TO_UNIQUE:
 		if project.animation_frame_index != -1:
@@ -1365,8 +1365,8 @@ func _on_animation_popup_pressed(id : int):
 				project.pool_frames.push_back(new_frame)
 				cell.frame = new_frame
 				project.canvas_pool_frame_uid = cell.frame.frame_uid
-				PixelPen.layer_items_changed.emit()
-				PixelPen.project_saved.emit(false)
+				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == AnimationID.MOVE_FRAME_TO_LEFT:
 		if project.animation_frame_index != -1:
@@ -1378,8 +1378,8 @@ func _on_animation_popup_pressed(id : int):
 				project.animation_timeline.insert(new_index, cell)
 				project.animation_frame_index = new_index
 				project.canvas_pool_frame_uid = project.animation_timeline[new_index].frame.frame_uid
-				PixelPen.layer_items_changed.emit()
-				PixelPen.project_saved.emit(false)
+				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == AnimationID.MOVE_FRAME_TO_RIGHT:
 		if project.animation_frame_index != -1:
@@ -1391,19 +1391,19 @@ func _on_animation_popup_pressed(id : int):
 				project.animation_timeline.insert(new_index, cell)
 				project.animation_frame_index = new_index
 				project.canvas_pool_frame_uid = project.animation_timeline[new_index].frame.frame_uid
-				PixelPen.layer_items_changed.emit()
-				PixelPen.project_saved.emit(false)
+				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 		
 	elif id == AnimationID.MOVE_FRAME_TO_TIMELINE:
 		if project.animation_frame_index == -1:
-			var cell : AnimationCell = AnimationCell.create(PixelPen.current_project.get_uid()) 
+			var cell : AnimationCell = AnimationCell.create(PixelPen.singleton.current_project.get_uid()) 
 			cell.frame = project.active_frame
 			var cell_index : int = project.animation_timeline.size()
 			project.animation_timeline.insert(cell_index, cell)
 			project.animation_frame_index = cell_index
 			project.canvas_pool_frame_uid = project.animation_timeline[cell_index].frame.frame_uid
-			PixelPen.layer_items_changed.emit()
-			PixelPen.project_saved.emit(false)
+			PixelPen.singleton.layer_items_changed.emit()
+			PixelPen.singleton.project_saved.emit(false)
 		
 	elif id == AnimationID.MOVE_FRAME_TO_DRAFT:
 		if project.animation_frame_index != -1:
@@ -1415,25 +1415,25 @@ func _on_animation_popup_pressed(id : int):
 					project.canvas_pool_frame_uid = project.pool_frames[project.get_animation_draft_pool_index()[0]].frame_uid
 				else:
 					project.canvas_pool_frame_uid = project.animation_timeline[project.animation_frame_index].frame.frame_uid
-				PixelPen.layer_items_changed.emit()
-				PixelPen.project_saved.emit(false)
+				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == AnimationID.CREATE_DRAFT_FRAME:
-		var frame = Frame.create(PixelPen.current_project.get_uid())
+		var frame = Frame.create(PixelPen.singleton.current_project.get_uid())
 		project.pool_frames.push_back(frame)
 		project.animation_frame_index = -1
 		project.canvas_pool_frame_uid = project.pool_frames[project.pool_frames.size()-1].frame_uid
 		project.add_layer()
-		PixelPen.layer_items_changed.emit()
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.layer_items_changed.emit()
+		PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == AnimationID.DELETE_DRAFT_FRAME:
 		if project.animation_frame_index == -1:
 			if project.pool_frames.size() > 1 and project.active_frame != null:
 				project.pool_frames.erase(project.active_frame)
-				PixelPen.current_project.resolve_missing_visible_frame()
-				PixelPen.layer_items_changed.emit()
-				PixelPen.project_saved.emit(false)
+				PixelPen.singleton.current_project.resolve_missing_visible_frame()
+				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 
 
 func _on_view_popup_pressed(id : int):
@@ -1442,24 +1442,24 @@ func _on_view_popup_pressed(id : int):
 	
 	if id == ViewID.SHOW_GRID:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
-		PixelPen.current_project.show_grid = popup.is_item_checked(index)
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.current_project.show_grid = popup.is_item_checked(index)
+		PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == ViewID.SHOW_VIRTUAL_MOUSE:
 		canvas.center_virtual_mouse()
 		canvas.virtual_mouse = not canvas.virtual_mouse
 		popup.set_item_checked(index, canvas.virtual_mouse)
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == ViewID.SHOW_VERTICAL_MIRROR_GUIDE:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
-		PixelPen.current_project.show_symetric_vertical = popup.is_item_checked(index)
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.current_project.show_symetric_vertical = popup.is_item_checked(index)
+		PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
-		PixelPen.current_project.show_symetric_horizontal = popup.is_item_checked(index)
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.current_project.show_symetric_horizontal = popup.is_item_checked(index)
+		PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == ViewID.ROTATE_CANVAS_90:
 		canvas.camera.force_update_scroll()
@@ -1522,64 +1522,64 @@ func _on_view_popup_pressed(id : int):
 				)
 	
 	elif id == ViewID.EDIT_SELECTION_ONLY:
-		if (PixelPen.current_project as PixelPenProject).use_sample:
-			(PixelPen.current_project as PixelPenProject).set_mode(0)
+		if (PixelPen.singleton.current_project as PixelPenProject).use_sample:
+			(PixelPen.singleton.current_project as PixelPenProject).set_mode(0)
 		elif canvas.selection_tool_hint.texture != null:
 			var mask : Image = MaskSelection.get_image_no_margin(canvas.selection_tool_hint.texture.get_image())
-			(PixelPen.current_project as PixelPenProject).set_mode(1, mask)
-		popup.set_item_checked(index, (PixelPen.current_project as PixelPenProject).use_sample)
-		PixelPen.project_file_changed.emit()
+			(PixelPen.singleton.current_project as PixelPenProject).set_mode(1, mask)
+		popup.set_item_checked(index, (PixelPen.singleton.current_project as PixelPenProject).use_sample)
+		PixelPen.singleton.project_file_changed.emit()
 	
 	elif id == ViewID.SHOW_TILE:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
-		PixelPen.current_project.show_tile = popup.is_item_checked(index)
-		(PixelPen.current_project as PixelPenProject).get_image() # Force to create first cache image for tile
-		PixelPen.thumbnail_changed.emit()
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.current_project.show_tile = popup.is_item_checked(index)
+		(PixelPen.singleton.current_project as PixelPenProject).get_image() # Force to create first cache image for tile
+		PixelPen.singleton.thumbnail_changed.emit()
+		PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == ViewID.SHOW_PREVIEW:
-		PixelPen.current_project.show_preview = not PixelPen.current_project.show_preview
-		popup.set_item_checked(index, PixelPen.current_project.show_preview)
-		preview_node.visible = PixelPen.current_project.show_preview 
+		PixelPen.singleton.current_project.show_preview = not PixelPen.singleton.current_project.show_preview
+		popup.set_item_checked(index, PixelPen.singleton.current_project.show_preview)
+		preview_node.visible = PixelPen.singleton.current_project.show_preview 
 		
 		var has_dock : bool = layout_node.has_dock(preview_node)
-		if has_dock and not PixelPen.current_project.show_preview:
+		if has_dock and not PixelPen.singleton.current_project.show_preview:
 			layout_node.undock(preview_node)
 			layout_node.update_layout()
-		elif not has_dock and PixelPen.current_project.show_preview:
+		elif not has_dock and PixelPen.singleton.current_project.show_preview:
 			layout_node.dock(preview_node, layer_dock, true, 0.35, true)
 			layout_node.update_layout()
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.project_saved.emit(false)
 	
 	elif id == ViewID.SHOW_ANIMATION_TIMELINE:
-		PixelPen.current_project.show_timeline = not PixelPen.current_project.show_timeline
-		popup.set_item_checked(index, PixelPen.current_project.show_timeline)
-		animation_panel.visible = PixelPen.current_project.show_timeline
-		animation_menu.disabled = not PixelPen.current_project.show_timeline or PixelPen.current_project.use_sample
+		PixelPen.singleton.current_project.show_timeline = not PixelPen.singleton.current_project.show_timeline
+		popup.set_item_checked(index, PixelPen.singleton.current_project.show_timeline)
+		animation_panel.visible = PixelPen.singleton.current_project.show_timeline
+		animation_menu.disabled = not PixelPen.singleton.current_project.show_timeline or PixelPen.singleton.current_project.use_sample
 		
 		var has_anim_dock : bool = layout_node.has_dock(animation_panel)
-		if has_anim_dock and not PixelPen.current_project.show_timeline:
+		if has_anim_dock and not PixelPen.singleton.current_project.show_timeline:
 			layout_node.undock(animation_panel)
 			layout_node.update_layout()
-		elif not has_anim_dock and PixelPen.current_project.show_timeline:
+		elif not has_anim_dock and PixelPen.singleton.current_project.show_timeline:
 			layout_node.dock(animation_panel, canvas_dock, false, 0.8, true)
 			layout_node.update_layout()
 		
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.project_saved.emit(false)
 		file_menu.get_popup().set_item_disabled(
 			file_menu.get_popup().get_item_index(FileID.EXPORT_ANIMATION)
-			, not PixelPen.current_project.show_timeline)
+			, not PixelPen.singleton.current_project.show_timeline)
 	
 	elif id == ViewID.TOGGLE_TINT_SELECTED_LAYER:
-		var active_layer_uid : Vector3i = (PixelPen.current_project as PixelPenProject).active_layer_uid
+		var active_layer_uid : Vector3i = (PixelPen.singleton.current_project as PixelPenProject).active_layer_uid
 		canvas.silhouette = false
-		for frame in (PixelPen.current_project as PixelPenProject).pool_frames:
+		for frame in (PixelPen.singleton.current_project as PixelPenProject).pool_frames:
 			for layer in frame.layers:
-		#for layer in (PixelPen.current_project as PixelPenProject).active_frame.layers:
+		#for layer in (PixelPen.singleton.current_project as PixelPenProject).active_frame.layers:
 				layer.silhouette = not layer.silhouette and layer.layer_uid == active_layer_uid
 				canvas.silhouette = canvas.silhouette or layer.silhouette
-		PixelPen.layer_items_changed.emit()
-		PixelPen.project_saved.emit(false)
+		PixelPen.singleton.layer_items_changed.emit()
+		PixelPen.singleton.project_saved.emit(false)
 		popup.set_item_checked(index, canvas.silhouette)
 	
 	elif id == ViewID.FILTER_GRAYSCALE:
@@ -1597,7 +1597,7 @@ func get_image_file(callback : Callable, mode : FileDialog.FileMode = FileDialog
 	_file_dialog.file_mode = mode
 	_file_dialog.filters = ["*.png, *.jpg, *.jpeg ; Supported Images"]
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	_file_dialog.current_dir = PixelPen.get_directory()
+	_file_dialog.current_dir = PixelPen.singleton.get_directory()
 	_file_dialog.file_selected.connect(func(file):
 			_file_dialog.hide()
 			callback.call(file)
@@ -1622,23 +1622,23 @@ func get_image_file(callback : Callable, mode : FileDialog.FileMode = FileDialog
 
 func _open_canvas_size_window():
 	var edit_canvas_window = edit_canvas_size.instantiate()
-	edit_canvas_window.canvas_width = PixelPen.current_project.canvas_size.x 
-	edit_canvas_window.canvas_height = PixelPen.current_project.canvas_size.y
+	edit_canvas_window.canvas_width = PixelPen.singleton.current_project.canvas_size.x 
+	edit_canvas_window.canvas_height = PixelPen.singleton.current_project.canvas_size.y
 	edit_canvas_window.custom_action.connect(func(action):
 			if action == "on_reset":
-				edit_canvas_window.canvas_width = PixelPen.current_project.canvas_size.x 
-				edit_canvas_window.canvas_height = PixelPen.current_project.canvas_size.y
+				edit_canvas_window.canvas_width = PixelPen.singleton.current_project.canvas_size.x 
+				edit_canvas_window.canvas_height = PixelPen.singleton.current_project.canvas_size.y
 			)
 	edit_canvas_window.confirmed.connect(func():
-			var changed : bool = edit_canvas_window.canvas_width != PixelPen.current_project.canvas_size.x 
-			changed = changed or edit_canvas_window.canvas_height != PixelPen.current_project.canvas_size.y
+			var changed : bool = edit_canvas_window.canvas_width != PixelPen.singleton.current_project.canvas_size.x 
+			changed = changed or edit_canvas_window.canvas_height != PixelPen.singleton.current_project.canvas_size.y
 			if changed:
-				(PixelPen.current_project as PixelPenProject).resize_canvas(
+				(PixelPen.singleton.current_project as PixelPenProject).resize_canvas(
 					Vector2i(edit_canvas_window.canvas_width, edit_canvas_window.canvas_height),
 					edit_canvas_window.anchor
 				)
-				PixelPen.project_file_changed.emit()
-				PixelPen.project_saved.emit(false)
+				PixelPen.singleton.project_file_changed.emit()
+				PixelPen.singleton.project_saved.emit(false)
 			edit_canvas_window.queue_free()
 			)
 	edit_canvas_window.canceled.connect(func():
@@ -1653,11 +1653,11 @@ func _on_export(id : int):
 	var _file_dialog = FileDialog.new()
 	
 	if id == ExportAsID.JPG:
-		_file_dialog.current_file = str((PixelPen.current_project as PixelPenProject).project_name , ".jpg")
+		_file_dialog.current_file = str((PixelPen.singleton.current_project as PixelPenProject).project_name , ".jpg")
 	elif id == ExportAsID.PNG:
-		_file_dialog.current_file = str((PixelPen.current_project as PixelPenProject).project_name , ".png")
+		_file_dialog.current_file = str((PixelPen.singleton.current_project as PixelPenProject).project_name , ".png")
 	elif id == ExportAsID.WEBP:
-		_file_dialog.current_file = str((PixelPen.current_project as PixelPenProject).project_name , ".webp")
+		_file_dialog.current_file = str((PixelPen.singleton.current_project as PixelPenProject).project_name , ".webp")
 	
 	_file_dialog.use_native_dialog = true
 	_file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
@@ -1670,15 +1670,15 @@ func _on_export(id : int):
 		_file_dialog.filters = ["*.webp"]
 		
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	_file_dialog.current_dir = PixelPen.get_directory()
+	_file_dialog.current_dir = PixelPen.singleton.get_directory()
 	_file_dialog.file_selected.connect(func(file):
 			_file_dialog.hide()
 			if id == ExportAsID.JPG:
-				(PixelPen.current_project as PixelPenProject).export_jpg_image(file)
+				(PixelPen.singleton.current_project as PixelPenProject).export_jpg_image(file)
 			elif id == ExportAsID.PNG:
-				(PixelPen.current_project as PixelPenProject).export_png_image(file)
+				(PixelPen.singleton.current_project as PixelPenProject).export_png_image(file)
 			elif id == ExportAsID.WEBP:
-				(PixelPen.current_project as PixelPenProject).export_webp_image(file)
+				(PixelPen.singleton.current_project as PixelPenProject).export_webp_image(file)
 			
 			_file_dialog.queue_free()
 			)
@@ -1712,10 +1712,10 @@ func _on_export_animation_frames():
 	_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
 	
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	_file_dialog.current_dir = PixelPen.get_directory()
+	_file_dialog.current_dir = PixelPen.singleton.get_directory()
 	_file_dialog.dir_selected.connect(func(dir : String):
 			_file_dialog.hide()
-			(PixelPen.current_project as PixelPenProject).export_animation_frame(dir)
+			(PixelPen.singleton.current_project as PixelPenProject).export_animation_frame(dir)
 			_file_dialog.queue_free()
 			)
 	_file_dialog.canceled.connect(func():
@@ -1730,7 +1730,7 @@ func _on_export_animation_gif():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var _file_dialog = FileDialog.new()
 	
-	_file_dialog.current_file = str((PixelPen.current_project as PixelPenProject).project_name , ".gif")
+	_file_dialog.current_file = str((PixelPen.singleton.current_project as PixelPenProject).project_name , ".gif")
 	
 	_file_dialog.use_native_dialog = true
 	_file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
@@ -1738,10 +1738,10 @@ func _on_export_animation_gif():
 	_file_dialog.filters = ["*.gif"]
 		
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	_file_dialog.current_dir = PixelPen.get_directory()
+	_file_dialog.current_dir = PixelPen.singleton.get_directory()
 	_file_dialog.file_selected.connect(func(file):
 			_file_dialog.hide()
-			(PixelPen.current_project as PixelPenProject).export_animation_gif(file)
+			(PixelPen.singleton.current_project as PixelPenProject).export_animation_gif(file)
 			_file_dialog.queue_free()
 			)
 	_file_dialog.canceled.connect(func():

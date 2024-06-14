@@ -29,7 +29,7 @@ func find_layer(layer_uid : Vector3i) -> IndexedColorImage:
 func get_duplicate(new_uid : bool = true) -> Frame:
 	var frame : Frame = (self as Frame).duplicate()
 	if new_uid:
-		frame.frame_uid = PixelPen.current_project.get_uid()
+		frame.frame_uid = PixelPen.singleton.current_project.get_uid()
 	var new_layers : Array[IndexedColorImage] = frame.layers.duplicate()
 	for i in range(new_layers.size()):
 		new_layers[i] = new_layers[i].get_duplicate(new_uid)

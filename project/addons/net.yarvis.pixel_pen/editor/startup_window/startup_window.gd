@@ -9,19 +9,19 @@ func _init():
 func _on_new_pressed():
 	hide()
 	queue_free()
-	PixelPen.request_new_project.emit()
+	PixelPen.singleton.request_new_project.emit()
 
 
 func _on_open_pressed():
 	hide()
 	queue_free()
-	PixelPen.request_open_project.emit()
+	PixelPen.singleton.request_open_project.emit()
 
 
 func _on_import_pressed():
 	hide()
 	queue_free()
-	PixelPen.request_import_image.emit()
+	PixelPen.singleton.request_import_image.emit()
 
 
 func _on_close_requested():

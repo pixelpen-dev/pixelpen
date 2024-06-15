@@ -16,7 +16,7 @@ func _init():
 
 
 func _ready():
-	if not PixelPen.singleton.need_connection(get_window()):
+	if not PixelPen.singleton.need_connection(get_parent().get_window()):
 		return
 	if layer_uid != Vector3i.ZERO:
 		var index_image = (PixelPen.singleton.current_project as PixelPenProject).get_index_image(layer_uid)

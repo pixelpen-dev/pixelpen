@@ -28,7 +28,7 @@ static func get_image_no_margin(image : Image, margin : Vector2i = Vector2i.ONE)
 static func get_inverse_image(image : Image, margin : Vector2i = Vector2i.ONE) -> Image:
 	var size : Vector2i = image.get_size()
 	var inverse_mask = Image.create(size.x, size.y, false, Image.FORMAT_R8)
-	inverse_mask.fill(Color8(255, 0, 0))
+	inverse_mask.fill_rect(Rect2i(margin, size - margin * 2) ,Color8(255, 0, 0))
 	PixelPenCPP.empty_index_on_color_map(image, inverse_mask)
 	return inverse_mask
 

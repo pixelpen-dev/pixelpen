@@ -81,6 +81,7 @@ func update_preview_texture():
 func active(yes : bool):
 	if yes:
 		(PixelPen.singleton.current_project as PixelPenProject).active_layer_uid = layer_uid
+		(PixelPen.singleton.current_project as PixelPenProject).active_frame.layer_active_uid = layer_uid
 		active_rect.self_modulate = active_color
 	elif PixelPen.singleton.current_project.multilayer_selected.has(layer_uid):
 		active_rect.self_modulate = secondary_active_color

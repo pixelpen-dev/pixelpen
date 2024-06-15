@@ -41,7 +41,8 @@ func _on_project_file_changed():
 	custom_minimum_size = Vector2i(0, layers.size() * 40)
 	
 	if not PixelPen.singleton.current_project.active_layer_is_valid():
-		if PixelPen.singleton.current_project.active_frame.layers.size() > 0:
+		PixelPen.singleton.current_project.active_layer_uid = PixelPen.singleton.current_project.active_frame.layer_active_uid
+		if not PixelPen.singleton.current_project.active_layer_is_valid() and PixelPen.singleton.current_project.active_frame.layers.size() > 0:
 			PixelPen.singleton.current_project.active_layer_uid = PixelPen.singleton.current_project.active_frame.layers[0].layer_uid
 	PixelPen.singleton.layer_active_changed.emit(PixelPen.singleton.current_project.active_layer_uid)
 

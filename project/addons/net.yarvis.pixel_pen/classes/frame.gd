@@ -5,6 +5,7 @@ class_name Frame
 
 @export var frame_uid : Vector3i
 @export var layers : Array[IndexedColorImage]
+@export var layer_active_uid : Vector3i
 
 var frame_color : Color:
 	get:

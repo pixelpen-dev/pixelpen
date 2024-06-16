@@ -11,7 +11,8 @@ enum FieldMode{
 	VECTOR2,
 	VECTOR2I,
 	ENUM,
-	FILE_PATH
+	FILE_PATH,
+	COLOR
 }
 
 @export var label : String = ""
@@ -63,6 +64,10 @@ enum FieldMode{
 @export var file_mode : FileDialog.FileMode = FileDialog.FILE_MODE_SAVE_FILE
 @export var file_dialog_filters : PackedStringArray = ["*.png, *.jpg, *.jpeg ; Supported Images"]
 
+@export_subgroup("Color")
+@export var color_value : Color = Color.WHITE
+@export var color_alpha : bool = true
+
 
 static func create_int(
 		d_label : String,
@@ -74,9 +79,9 @@ static func create_int(
 	var row = TreeRow.new()
 	row.field = FieldMode.INT
 	row.label = d_label
-	row.int_value = d_value
 	row.int_min = d_min
 	row.int_max = d_max
+	row.int_value = d_value
 	row.int_step = d_step
 	return row
 
@@ -91,9 +96,9 @@ static func create_float(
 	var row = TreeRow.new()
 	row.field = FieldMode.FLOAT
 	row.label = d_label
-	row.float_value = d_value
 	row.float_min = d_min
 	row.float_max = d_max
+	row.float_value = d_value
 	row.float_step = d_step
 	return row
 
@@ -108,9 +113,9 @@ static func create_range(
 	var row = TreeRow.new()
 	row.field = FieldMode.RANGE
 	row.label = d_label
-	row.range_value = d_value
 	row.range_min = d_min
 	row.range_max = d_max
+	row.range_value = d_value
 	row.range_step = d_step
 	return row
 
@@ -140,9 +145,9 @@ static func create_vector2(
 	row.field = FieldMode.VECTOR2
 	row.vector2_label_x = d_label_a
 	row.vector2_label_y = d_label_b
-	row.vector2_value = d_value
 	row.vector2_min = d_min
 	row.vector2_max = d_max
+	row.vector2_value = d_value
 	row.vector2_step = d_step
 	return row
 
@@ -161,9 +166,9 @@ static func create_vector2i(
 	row.field = FieldMode.VECTOR2I
 	row.vector2i_label_x = d_label_a
 	row.vector2i_label_y = d_label_b
-	row.vector2i_value = d_value
 	row.vector2i_min = d_min
 	row.vector2i_max = d_max
+	row.vector2i_value = d_value
 	row.vector2i_step = d_step
 	return row
 
@@ -194,3 +199,17 @@ static func create_file_path(
 	row.file_mode = d_file_mode
 	row.file_dialog_filters = d_file_dialog_filters
 	return row
+
+
+static func create_color(
+		d_label : String,
+		d_value : Color,
+		d_alpha : bool
+		) -> TreeRow:
+	var row = TreeRow.new()
+	row.field = FieldMode.COLOR
+	row.label = d_label
+	row.color_value = d_value
+	row.color_alpha = d_alpha
+	return row
+	

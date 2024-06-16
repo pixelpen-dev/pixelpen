@@ -48,7 +48,9 @@ func build():
 					add_child(_enum_field(row))
 			TreeRow.FieldMode.FILE_PATH:
 				add_child(_file_field(row))
-	
+			TreeRow.FieldMode.COLOR:
+				add_child(_color_field(row))
+
 	if get_child_count() > 0:
 		var update_anchor = func():
 			var last_y_position: float = 0
@@ -94,8 +96,8 @@ func _step_field(tree_row : TreeRow) -> Control:
 		TreeRow.FieldMode.INT:
 			spinner.min_value = tree_row.int_min
 			spinner.max_value = tree_row.int_max
-			spinner.value = tree_row.int_value
 			spinner.step = tree_row.int_step
+			spinner.value = tree_row.int_value
 			spinner.value_changed.connect(func(new_value : float):
 					tree_row.int_value = new_value as int
 					_on_value_changed(tree_row, tree_row.int_value)
@@ -103,8 +105,8 @@ func _step_field(tree_row : TreeRow) -> Control:
 		TreeRow.FieldMode.FLOAT:
 			spinner.min_value = tree_row.float_min
 			spinner.max_value = tree_row.float_max
-			spinner.value = tree_row.float_value
 			spinner.step = tree_row.float_step
+			spinner.value = tree_row.float_value
 			spinner.value_changed.connect(func(new_value : float):
 					tree_row.float_value = new_value
 					_on_value_changed(tree_row, tree_row.float_value)
@@ -165,8 +167,8 @@ func _range_field(tree_row : TreeRow) -> Control:
 	
 	slider.min_value = tree_row.range_min
 	slider.max_value = tree_row.range_max
-	slider.value = tree_row.range_value
 	slider.step = tree_row.range_step
+	slider.value = tree_row.range_value
 	slider.anchor_left = column_ratio + 0.01
 	slider.anchor_top = 0.65
 	slider.anchor_right = 0.99
@@ -277,8 +279,8 @@ func _vector2_field(tree_row : TreeRow) -> Control:
 	
 	spinner_x.min_value = tree_row.vector2_min.x
 	spinner_x.max_value = tree_row.vector2_max.x
-	spinner_x.value = tree_row.vector2_value.x
 	spinner_x.step = tree_row.vector2_step.x
+	spinner_x.value = tree_row.vector2_value.x
 	spinner_x.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	spinner_x.set_anchors_preset(Control.PRESET_FULL_RECT)
 	
@@ -293,8 +295,8 @@ func _vector2_field(tree_row : TreeRow) -> Control:
 	
 	spinner_y.min_value = tree_row.vector2_min.y
 	spinner_y.max_value = tree_row.vector2_max.y
-	spinner_y.value = tree_row.vector2_value.y
 	spinner_y.step = tree_row.vector2_step.y
+	spinner_y.value = tree_row.vector2_value.y
 	spinner_y.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	spinner_y.set_anchors_preset(Control.PRESET_FULL_RECT)
 	
@@ -385,8 +387,8 @@ func _vector2i_field(tree_row : TreeRow) -> Control:
 	
 	spinner_x.min_value = tree_row.vector2i_min.x
 	spinner_x.max_value = tree_row.vector2i_max.x
-	spinner_x.value = tree_row.vector2i_value.x
 	spinner_x.step = tree_row.vector2i_step.x
+	spinner_x.value = tree_row.vector2i_value.x
 	spinner_x.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	spinner_x.set_anchors_preset(Control.PRESET_FULL_RECT)
 	
@@ -401,8 +403,8 @@ func _vector2i_field(tree_row : TreeRow) -> Control:
 	
 	spinner_y.min_value = tree_row.vector2i_min.y
 	spinner_y.max_value = tree_row.vector2i_max.y
-	spinner_y.value = tree_row.vector2i_value.y
 	spinner_y.step = tree_row.vector2i_step.y
+	spinner_y.value = tree_row.vector2i_value.y
 	spinner_y.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	spinner_y.set_anchors_preset(Control.PRESET_FULL_RECT)
 	
@@ -584,6 +586,42 @@ func _file_field(tree_row : TreeRow):
 	file_button.add_child(hover)
 	
 	wrapper.custom_minimum_size.y = 30
+	return wrapper
+
+
+func _color_field(tree_row : TreeRow):
+	var wrapper : Control = Control.new()
+	var label : Label = Label.new()
+	var color_picker_btn : ColorPickerButton = ColorPickerButton.new()
+	
+	wrapper.anchor_left = 0
+	wrapper.anchor_right = 1
+
+	label.text = tree_row.label
+	label.anchor_left = 0
+	label.anchor_top = 0
+	label.anchor_right = column_ratio
+	label.anchor_bottom = 1
+	label.offset_right = -list_margin
+	label.horizontal_alignment = _aligment
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	wrapper.add_child(label)
+	
+	color_picker_btn.edit_alpha = tree_row.color_alpha
+	color_picker_btn.color = tree_row.color_value
+	color_picker_btn.anchor_left = column_ratio
+	color_picker_btn.anchor_top = 0
+	color_picker_btn.anchor_right = 1.0
+	color_picker_btn.anchor_bottom = 1
+	wrapper.add_child(color_picker_btn)
+	wrapper.custom_minimum_size.y = 30
+	
+	color_picker_btn.popup_closed.connect(func():
+			tree_row.color_value = color_picker_btn.color
+			_on_value_changed(tree_row, tree_row.color_value)
+			color_picker_btn.release_focus()
+			)
+	
 	return wrapper
 
 

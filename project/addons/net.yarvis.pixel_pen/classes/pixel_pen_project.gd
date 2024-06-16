@@ -47,9 +47,9 @@ var paint : PixelPenImage = PixelPenImage.new()
 var brush_index : int = -1
 
 var animation_is_play : bool = false
-var skinning_frame_index : int = -1
-var animation_left_skinning_image : Image
-var animation_right_skinning_image : Image
+var skinning_frame_index : int = -1 # Record reference frame
+var animation_prev_skinning_image : Array[Image] = []
+var animation_next_skinning_image : Array[Image] = []
 
 var active_frame : Frame:
 	get:
@@ -586,35 +586,39 @@ func get_animation_draft_pool_index() -> Array[int]:
 	return unused
 
 
-func update_skinning_image():	
+func update_onion_skin_images():
 	if animation_frame_index == -1:
-		animation_left_skinning_image = null
-		animation_right_skinning_image = null
+		animation_prev_skinning_image.clear()
+		animation_next_skinning_image.clear()
 		return
-	
-	if skinning_frame_index == animation_frame_index:
+
+	if skinning_frame_index == animation_frame_index: # Do nothing active frame not change
 		return
-	
-	animation_left_skinning_image = null
-	animation_right_skinning_image = null
-		
+
+	animation_prev_skinning_image.clear()
+	animation_next_skinning_image.clear()
+
 	skinning_frame_index = animation_frame_index
-	
-	if animation_frame_index > 0:
-		var left_idx : int = animation_frame_index - 1
-		while left_idx > 0 and animation_timeline[left_idx].frame.frame_uid == animation_timeline[animation_frame_index].frame.frame_uid:
-			left_idx -= 1
-		if left_idx >= 0 and animation_timeline[left_idx].frame.frame_uid != animation_timeline[animation_frame_index].frame.frame_uid:
-			animation_left_skinning_image = get_image(animation_timeline[left_idx].frame)
-	
-	if animation_frame_index + 1 < animation_timeline.size():
-		var right_idx : int = animation_frame_index + 1
-		while right_idx < animation_timeline.size() and \
-				animation_timeline[right_idx].frame.frame_uid == animation_timeline[animation_frame_index].frame.frame_uid:
-			right_idx += 1
-		if right_idx < animation_timeline.size() and \
-				animation_timeline[right_idx].frame.frame_uid != animation_timeline[animation_frame_index].frame.frame_uid:
-			animation_right_skinning_image = get_image(animation_timeline[right_idx].frame)
+	var last_uid : Vector3i = animation_timeline[animation_frame_index].frame.frame_uid # to ignore linked frame
+	var prev_idx : int = animation_frame_index
+	for i in PixelPen.singleton.userconfig.onion_skin_total:
+		prev_idx -= 1
+		while prev_idx > 0 and animation_timeline[prev_idx].frame.frame_uid == last_uid:
+			prev_idx -= 1
+		if prev_idx >= 0 and animation_timeline[prev_idx].frame.frame_uid != animation_timeline[animation_frame_index].frame.frame_uid:
+			animation_prev_skinning_image.push_back(get_image(animation_timeline[prev_idx].frame))
+			last_uid = animation_timeline[prev_idx].frame.frame_uid
+
+	last_uid = animation_timeline[animation_frame_index].frame.frame_uid
+	var next_idx : int = animation_frame_index
+	var timeline_total = animation_timeline.size()
+	for i in PixelPen.singleton.userconfig.onion_skin_total:
+		next_idx += 1
+		while next_idx < timeline_total and animation_timeline[next_idx].frame.frame_uid == last_uid:
+			next_idx += 1
+		if next_idx < timeline_total and animation_timeline[next_idx].frame.frame_uid != animation_timeline[animation_frame_index].frame.frame_uid:
+			animation_next_skinning_image.push_back(get_image(animation_timeline[next_idx].frame))
+			last_uid = animation_timeline[next_idx].frame.frame_uid
 
 
 func resolve_missing_visible_frame() -> bool:

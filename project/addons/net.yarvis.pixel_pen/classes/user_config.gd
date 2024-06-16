@@ -34,6 +34,10 @@ const PATH := "user://pixelpen_user_config.res"
 @export var default_canvas_size : Vector2i = Vector2i(128, 128)
 @export var hide_cursor_in_canvas : bool = true
 @export var default_animation_fps : int = 24
+@export var onion_skin_total : int = 3
+@export var onion_skin_tint_previous : Color = Color.BLUE
+@export var onion_skin_tint_next : Color = Color.GREEN
+@export var onion_skin_tint_alpha : float = 0.5
 
 @export_subgroup("Shorcuts")
 @export var shorcuts : EditorShorcut = preload("../resources/editor_shorcut.tres")

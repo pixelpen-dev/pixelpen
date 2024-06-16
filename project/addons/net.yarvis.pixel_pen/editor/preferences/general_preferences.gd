@@ -9,7 +9,7 @@ var general_tree_structure : Dictionary = {
 	"Guide" : ["Grid"],
 	"Projects" : [],
 	"Cursor" : [],
-	"Animation" : []
+	"Animation" : ["Frame", "Onion Skinning"]
 }
 
 var general_structure: Dictionary = {
@@ -36,10 +36,18 @@ var general_structure: Dictionary = {
 			"Hide in canvas", 1 if PixelPen.singleton.userconfig.hide_cursor_in_canvas else 0,
 			["FALSE", "TRUE"] as Array[String]
 		)] as Array[TreeRow],
-	"/Animation" : [
+	"/Animation/Frame" : [
 		TreeRow.create_int(
 			"Default fps", PixelPen.singleton.userconfig.default_animation_fps, 1, 1000
 		)
+	] as Array[TreeRow],
+	"/Animation/Onion Skinning" : [
+		TreeRow.create_int(
+			"Onion skin total", PixelPen.singleton.userconfig.onion_skin_total, 1, 10
+		),
+		TreeRow.create_color("Previous frame tint color", PixelPen.singleton.userconfig.onion_skin_tint_previous, false),
+		TreeRow.create_color("Next frame tint color", PixelPen.singleton.userconfig.onion_skin_tint_next, false),
+		TreeRow.create_range("Alpha", PixelPen.singleton.userconfig.onion_skin_tint_alpha, 0.1, 1.0, 0.01)
 	] as Array[TreeRow]
 	}
 
@@ -108,7 +116,24 @@ func _on_general_properties_value_changed(index, value):
 			if index == 0:
 				PixelPen.singleton.userconfig.hide_cursor_in_canvas = (value as int) == 1
 				PixelPen.singleton.userconfig.save()
-		"/Animation":
+		"/Animation/Frame":
 			if index == 0:
 				PixelPen.singleton.userconfig.default_animation_fps = value as int
 				PixelPen.singleton.userconfig.save()
+		"/Animation/Onion Skinning":
+			if index == 0:
+				PixelPen.singleton.userconfig.onion_skin_total = value as int
+				PixelPen.singleton.userconfig.save()
+				PixelPen.singleton.layer_items_changed.emit()
+			elif index == 1:
+				PixelPen.singleton.userconfig.onion_skin_tint_previous = value as Color
+				PixelPen.singleton.userconfig.save()
+				PixelPen.singleton.layer_items_changed.emit()
+			elif index == 2:
+				PixelPen.singleton.userconfig.onion_skin_tint_next = value as Color
+				PixelPen.singleton.userconfig.save()
+				PixelPen.singleton.layer_items_changed.emit()
+			elif index == 3:
+				PixelPen.singleton.userconfig.onion_skin_tint_alpha = value as float
+				PixelPen.singleton.userconfig.save()
+				PixelPen.singleton.layer_items_changed.emit()

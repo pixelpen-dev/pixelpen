@@ -4,13 +4,13 @@ extends Node2D
 const VIRTUAL_MOUSE_SCALE = 12
 
 const ShaderIndex := preload("../../resources/indexed_layer.gdshader")
+const TintShader := preload("../../resources/skinning_tint.gdshader")
 const CanvasPaint := preload("canvas_paint.gd")
 const MoveTool := preload("move_tool.gd")
 
 @export var tile_node : Node2D
 @export var background_canvas : Node2D
-@export var skinning_prev : Sprite2D
-@export var skinning_next: Sprite2D
+@export var onion_skinning : Node2D
 @export var layers : Node2D
 @export var camera : Camera2D
 @export var overlay_hint : Sprite2D
@@ -64,10 +64,10 @@ func _ready():
 			selection_tool_hint.offset = -Vector2.ONE
 			if PixelPen.singleton.current_project == null:
 				canvas_paint.tool = canvas_paint.Tool.new()
-				skinning_prev.texture = null
-				skinning_next.texture = null
+				for child in onion_skinning.get_children():
+					child.queue_free()
 			else:
-				_update_skinning()
+				_update_onion_skinning()
 				(PixelPen.singleton.current_project as PixelPenProject).get_image() # Force to create first cache image for tile
 			_create_tiled()
 			
@@ -87,8 +87,8 @@ func _ready():
 					project.get_image()
 					PixelPen.singleton.thumbnail_changed.emit()
 				
-				_update_skinning()
-					
+				_update_onion_skinning()
+				
 				_create_layers())
 	PixelPen.singleton.color_picked.connect(func(color_index):
 			canvas_paint.tool._index_color = color_index
@@ -141,6 +141,8 @@ func _physics_process(_delta):
 
 
 func update_filter_size():
+	if not PixelPen.singleton.need_connection(get_window()):
+		return
 	filter.scale = Vector2(1.0, 1.0)
 	var new_texture = PlaceholderTexture2D.new()
 	var viewport_zero : Vector2 = get_global_transform().affine_inverse() * get_canvas_transform().affine_inverse() * -Vector2.ZERO
@@ -497,27 +499,35 @@ func _create_tiled():
 			tile_node.add_child(sprite)
 
 
-func _update_skinning():
+func _update_onion_skinning():
+	for child in onion_skinning.get_children():
+		child.queue_free()
 	var project : PixelPenProject = PixelPen.singleton.current_project as PixelPenProject
 	if project.animation_is_play or not project.onion_skinning:
-		skinning_prev.texture = null
-		skinning_next.texture = null
 		return
-	project.update_skinning_image()
-	if project.animation_left_skinning_image != null:
-		var img : Image = project.animation_left_skinning_image
-		if skinning_prev.texture == null or img.get_size() != (skinning_prev.texture.get_size() as Vector2i):
-			skinning_prev.texture = ImageTexture.create_from_image(img)
-		else:
-			skinning_prev.texture.update(img)
-	else:
-		skinning_prev.texture = null
-					
-	if project.animation_right_skinning_image != null:
-		var img : Image = project.animation_right_skinning_image 
-		if skinning_next.texture == null or img.get_size() != (skinning_next.texture.get_size() as Vector2i):
-			skinning_next.texture = ImageTexture.create_from_image(img)
-		else:
-			skinning_next.texture.update(img)
-	else:
-		skinning_next.texture = null
+	project.update_onion_skin_images()
+	var prev_color : Color = PixelPen.singleton.userconfig.onion_skin_tint_previous
+	prev_color.a = PixelPen.singleton.userconfig.onion_skin_tint_alpha
+	var next_color : Color = PixelPen.singleton.userconfig.onion_skin_tint_next
+	next_color.a = PixelPen.singleton.userconfig.onion_skin_tint_alpha
+	var color_alpha_step : float = PixelPen.singleton.userconfig.onion_skin_tint_alpha / PixelPen.singleton.userconfig.onion_skin_total
+	for prev_image in project.animation_prev_skinning_image:
+		var sprite : Sprite2D = Sprite2D.new()
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		sprite.centered = false
+		sprite.texture = ImageTexture.create_from_image(prev_image)
+		sprite.material = ShaderMaterial.new()
+		sprite.material.shader = TintShader
+		sprite.material.set_shader_parameter("tint", prev_color)
+		onion_skinning.add_child(sprite)
+		prev_color.a -= color_alpha_step
+	for next_image in project.animation_next_skinning_image:
+		var sprite : Sprite2D = Sprite2D.new()
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		sprite.centered = false
+		sprite.texture = ImageTexture.create_from_image(next_image)
+		sprite.material = ShaderMaterial.new()
+		sprite.material.shader = TintShader
+		sprite.material.set_shader_parameter("tint", next_color)
+		onion_skinning.add_child(sprite)
+		next_color.a -= color_alpha_step

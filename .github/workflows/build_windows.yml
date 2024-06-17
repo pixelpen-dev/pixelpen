@@ -34,7 +34,6 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          Get-ChildItem -Path project/addons/net.yarvis.pixel_pen/bin/
           Copy-Item -Path "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/project/addons/net.yarvis.pixel_pen/"
           Copy-Item -Path "${{ github.workspace }}/LICENSE.txt" -Destination "${{ github.workspace }}/project/addons/net.yarvis.pixel_pen/"
 

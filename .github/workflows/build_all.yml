@@ -20,13 +20,13 @@ jobs:
             
           - identifier: windows
             platform: windows
-            name: 🪟 Windows
+            name: 🪟 Windows64
             runner: windows-latest
             arch: x86_64
           
           - identifier: windows32
             platform: windows
-            name: 🪟 Windows
+            name: 🪟 Windows32
             runner: windows-latest
             arch: x86_32
 
@@ -73,7 +73,6 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          Get-ChildItem -Path project/addons/net.yarvis.pixel_pen/bin/
           Copy-Item -Path "${{ github.workspace }}/README.md" -Destination "${{ github.workspace }}/project/addons/net.yarvis.pixel_pen/"
           Copy-Item -Path "${{ github.workspace }}/LICENSE.txt" -Destination "${{ github.workspace }}/project/addons/net.yarvis.pixel_pen/"
 
@@ -81,7 +80,6 @@ jobs:
         if: runner.os != 'Windows'
         shell: sh
         run: |
-          ls -l project/addons/net.yarvis.pixel_pen/bin/
           cp '${{ github.workspace }}/README.md' '${{ github.workspace }}/LICENSE.txt' ${{ github.workspace }}/project/addons/net.yarvis.pixel_pen/
 
       - name: Upload Package

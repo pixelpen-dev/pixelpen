@@ -33,7 +33,6 @@ jobs:
       - name: Include Files
         shell: sh
         run: |
-          ls -l project/addons/net.yarvis.pixel_pen/bin/
           cp '${{ github.workspace }}/README.md' '${{ github.workspace }}/LICENSE.txt' ${{ github.workspace }}/project/addons/net.yarvis.pixel_pen/
 
       - name: Upload Package

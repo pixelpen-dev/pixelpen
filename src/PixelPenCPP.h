@@ -20,7 +20,6 @@ namespace godot{
         public:
             PixelPenCPP();
             ~PixelPenCPP();
-            static String version();
             static Ref<Image> get_image_flood(Vector2i started_point, const Ref<Image> &p_src_image, Vector2i mask_margin, const bool grow_only_along_axis);
             static Rect2i get_mask_used_rect(const Ref<Image> &p_mask);
             static bool coor_inside_canvas(int x, int y, Vector2i size, const Ref<Image> &p_mask);

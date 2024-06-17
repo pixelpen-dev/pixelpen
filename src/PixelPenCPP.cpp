@@ -9,7 +9,6 @@ using namespace godot;
 
 
 void PixelPenCPP::_bind_methods(){
-    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("version"), &PixelPenCPP::version);
     ClassDB::bind_static_method("PixelPenCPP", D_METHOD("get_image_flood", "started_point", "p_color_map", "mask_margin", "grow_only_along_axis"), &PixelPenCPP::get_image_flood);
     ClassDB::bind_static_method("PixelPenCPP", D_METHOD("get_mask_used_rect", "p_mask"), &PixelPenCPP::get_mask_used_rect);
     ClassDB::bind_static_method("PixelPenCPP", D_METHOD("coor_inside_canvas", "x", "y", "size", "p_mask"), &PixelPenCPP::coor_inside_canvas);
@@ -35,11 +34,6 @@ PixelPenCPP::PixelPenCPP(){
 }
 
 PixelPenCPP::~PixelPenCPP(){
-}
-
-
-String PixelPenCPP::version(){
-    return "v0.2.2";
 }
 
 

@@ -59,6 +59,7 @@ func _ready():
 	PixelPen.singleton.project_file_changed.connect(func ():
 			if PixelPen.singleton.current_project != null:
 				PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_PEN, true)
+				PixelPen.singleton.toolbox_just_changed.emit(PixelPenEnum.ToolBox.TOOL_PEN)
 			)
 	PixelPen.singleton.toolbox_just_changed.connect(func (type : PixelPenEnum.ToolBox):
 			if type != current_toolbox and type != PixelPenEnum.ToolBox.TOOL_UNKNOWN:

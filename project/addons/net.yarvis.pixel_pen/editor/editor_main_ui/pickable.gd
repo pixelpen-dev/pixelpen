@@ -12,7 +12,7 @@ var on_hold : bool = false
 
 
 func _ready():
-	if not PixelPen.singleton.need_connection(get_window()):
+	if not PixelPen.state.need_connection(get_window()):
 		return
 	
 	var parent : Button = get_parent()
@@ -51,7 +51,7 @@ func _on_released():
 
 
 func _process(delta):
-	if not PixelPen.singleton.need_connection(get_window()):
+	if not PixelPen.state.need_connection(get_window()):
 		return
 	if on_hold:
 		timer = min(timer + delta, 0.3) 

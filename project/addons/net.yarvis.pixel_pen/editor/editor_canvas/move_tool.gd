@@ -56,7 +56,7 @@ func _init():
 func _on_request_switch_tool(tool_box_type : int) -> bool:
 	if move_cache_image_map != null:
 		var confirm_dialog : Window = ConfirmationDialog.new()
-		confirm_dialog.title = PixelPen.singleton.EDITOR_TITTLE
+		confirm_dialog.title = PixelPen.state.EDITOR_TITTLE
 		confirm_dialog.canceled.connect(func():
 				_on_move_cancel()
 				confirm_dialog_closed.emit()
@@ -97,35 +97,35 @@ func _on_sub_tool_changed(type : int):
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_ROTATE_LEFT:
 		_transform(type)
 		## TODO: implement undo redo
-		(PixelPen.singleton.current_project as PixelPenProject).undo_redo.clear_history()
+		(PixelPen.state.current_project as PixelPenProject).undo_redo.clear_history()
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_ROTATE_RIGHT:
 		_transform(type)
 		## TODO: implement undo redo
-		(PixelPen.singleton.current_project as PixelPenProject).undo_redo.clear_history()
+		(PixelPen.state.current_project as PixelPenProject).undo_redo.clear_history()
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_HORIZONTAL:
 		_transform(type)
 		## TODO: implement undo redo
-		(PixelPen.singleton.current_project as PixelPenProject).undo_redo.clear_history()
+		(PixelPen.state.current_project as PixelPenProject).undo_redo.clear_history()
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_VERTICAL:
 		_transform(type)
 		## TODO: implement undo redo
-		(PixelPen.singleton.current_project as PixelPenProject).undo_redo.clear_history()
+		(PixelPen.state.current_project as PixelPenProject).undo_redo.clear_history()
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_LEFT:
 		_transform(type)
 		## TODO: implement undo redo
-		(PixelPen.singleton.current_project as PixelPenProject).undo_redo.clear_history()
+		(PixelPen.state.current_project as PixelPenProject).undo_redo.clear_history()
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_UP:
 		_transform(type)
 		## TODO: implement undo redo
-		(PixelPen.singleton.current_project as PixelPenProject).undo_redo.clear_history()
+		(PixelPen.state.current_project as PixelPenProject).undo_redo.clear_history()
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_RIGHT:
 		_transform(type)
 		## TODO: implement undo redo
-		(PixelPen.singleton.current_project as PixelPenProject).undo_redo.clear_history()
+		(PixelPen.state.current_project as PixelPenProject).undo_redo.clear_history()
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_SCALE_DOWN:
 		_transform(type)
 		## TODO: implement undo redo
-		(PixelPen.singleton.current_project as PixelPenProject).undo_redo.clear_history()
+		(PixelPen.state.current_project as PixelPenProject).undo_redo.clear_history()
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_CANCEL:
 		_on_move_cancel()
 	elif type == PixelPenEnum.ToolBoxMove.TOOL_MOVE_COMMIT:
@@ -157,9 +157,9 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 	_prev_offset = Vector2i( floor(node.overlay_hint.position.x), floor( node.overlay_hint.position.y))
 	
 	var layer_uid : Vector3i = index_image.layer_uid
-	(PixelPen.singleton.current_project as PixelPenProject).create_undo_layer("Move", index_image.layer_uid, func ():
-			PixelPen.singleton.layer_image_changed.emit(layer_uid)
-			PixelPen.singleton.project_saved.emit(false)
+	(PixelPen.state.current_project as PixelPenProject).create_undo_layer("Move", index_image.layer_uid, func ():
+			PixelPen.state.layer_image_changed.emit(layer_uid)
+			PixelPen.state.project_saved.emit(false)
 			)
 	create_undo_overlay_position(node)
 	
@@ -198,14 +198,14 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 	create_redo_overlay_position(node)
 	
 	var layer_uid : Vector3i = index_image.layer_uid
-	(PixelPen.singleton.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
-			PixelPen.singleton.layer_image_changed.emit(layer_uid)
-			PixelPen.singleton.project_saved.emit(false)
+	(PixelPen.state.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
+			PixelPen.state.layer_image_changed.emit(layer_uid)
+			PixelPen.state.project_saved.emit(false)
 			)
 	is_pressed = false
 	transformed = true
-	PixelPen.singleton.layer_image_changed.emit(layer_uid)
-	PixelPen.singleton.project_saved.emit(false)
+	PixelPen.state.layer_image_changed.emit(layer_uid)
+	PixelPen.state.project_saved.emit(false)
 	callback.call()
 
 
@@ -245,12 +245,12 @@ func _on_draw_hint(mouse_position : Vector2):
 
 
 func on_about_to_start_transform():
-	_cache_undo_redo = PixelPen.singleton.current_project.undo_redo
-	PixelPen.singleton.current_project.undo_redo = UndoRedoManager.new()
+	_cache_undo_redo = PixelPen.state.current_project.undo_redo
+	PixelPen.state.current_project.undo_redo = UndoRedoManager.new()
 
 
 func on_end_transform():
-	PixelPen.singleton.current_project.undo_redo = _cache_undo_redo
+	PixelPen.state.current_project.undo_redo = _cache_undo_redo
 
 
 func _draw_hint(mouse_position : Vector2, draw_on_canvas : bool = false):
@@ -310,8 +310,8 @@ func _draw_hint(mouse_position : Vector2, draw_on_canvas : bool = false):
 
 func _init_transform():
 	if move_cache_image_map == null:
-		if PixelPen.singleton.current_project != null and PixelPen.singleton.current_project.active_layer_is_valid():
-			index_image = PixelPen.singleton.current_project.active_layer
+		if PixelPen.state.current_project != null and PixelPen.state.current_project.active_layer_is_valid():
+			index_image = PixelPen.state.current_project.active_layer
 			_transform(PixelPenEnum.ToolBoxMove.TOOL_MOVE_UNKNOWN)
 		else:
 			index_image = null
@@ -334,7 +334,7 @@ func _transform(type : int):
 	
 	if node.overlay_hint.texture == null:
 		node.overlay_hint.texture = index_image.get_mipmap_texture(
-			(PixelPen.singleton.current_project as PixelPenProject).palette,
+			(PixelPen.state.current_project as PixelPenProject).palette,
 			mask_selection
 		)
 	
@@ -425,24 +425,24 @@ func _transform(type : int):
 		move_image.rotate_90(cw)
 		move_cache_image_map.rotate_90(cw)
 	
-	if PixelPen.singleton.current_project.multilayer_selected.is_empty():
+	if PixelPen.state.current_project.multilayer_selected.is_empty():
 		node.overlay_hint.texture = ImageTexture.create_from_image(move_image)
 	else:
 		var base_image : Image = Image.create(node.canvas_size.x, node.canvas_size.y, false, Image.FORMAT_RGBAF)
 		var rect : Rect2i = Rect2i(Vector2i.ZERO, node.canvas_size)
-		for layer in PixelPen.singleton.current_project.active_frame.layers:
-			if PixelPen.singleton.current_project.multilayer_selected.has(layer.layer_uid) or layer.layer_uid == index_image.layer_uid:
+		for layer in PixelPen.state.current_project.active_frame.layers:
+			if PixelPen.state.current_project.multilayer_selected.has(layer.layer_uid) or layer.layer_uid == index_image.layer_uid:
 				var colormap : Image = layer.colormap
 				if layer.layer_uid == index_image.layer_uid:
 					colormap = default_cache_map
 				if mask_selection == null:
 					base_image.blend_rect(
-							PixelPenCPP.get_image(PixelPen.singleton.current_project.palette.color_index, colormap, false),
+							PixelPenCPP.get_image(PixelPen.state.current_project.palette.color_index, colormap, false),
 							rect, Vector2i.ZERO)
 					
 				else:
 					base_image.blend_rect(
-							PixelPenCPP.get_image_with_mask(PixelPen.singleton.current_project.palette.color_index, colormap, mask_selection, false),
+							PixelPenCPP.get_image_with_mask(PixelPen.state.current_project.palette.color_index, colormap, mask_selection, false),
 							rect, Vector2i.ZERO)
 				if layer.layer_uid != index_image.layer_uid and mode == Mode.CUT:
 					layer._cache_colormap = layer.colormap.duplicate()
@@ -511,18 +511,18 @@ func _on_move_cancel():
 		mode = Mode.UNKNOWN
 		return
 	var layer_uid : Vector3i = index_image.layer_uid
-	(PixelPen.singleton.current_project as PixelPenProject).create_undo_layer("Move", index_image.layer_uid, func ():
-			PixelPen.singleton.layer_image_changed.emit(layer_uid)
-			PixelPen.singleton.project_saved.emit(false)
+	(PixelPen.state.current_project as PixelPenProject).create_undo_layer("Move", index_image.layer_uid, func ():
+			PixelPen.state.layer_image_changed.emit(layer_uid)
+			PixelPen.state.project_saved.emit(false)
 			)
 	index_image.colormap = default_cache_map.duplicate()
-	if not PixelPen.singleton.current_project.multilayer_selected.is_empty() and mode == Mode.CUT:
-		for multilayer_selected_layer_uid in PixelPen.singleton.current_project.multilayer_selected:
+	if not PixelPen.state.current_project.multilayer_selected.is_empty() and mode == Mode.CUT:
+		for multilayer_selected_layer_uid in PixelPen.state.current_project.multilayer_selected:
 				if multilayer_selected_layer_uid != index_image.layer_uid:
-					var multilayer_selected : IndexedColorImage = PixelPen.singleton.current_project.find_index_image(multilayer_selected_layer_uid)
+					var multilayer_selected : IndexedColorImage = PixelPen.state.current_project.find_index_image(multilayer_selected_layer_uid)
 					if multilayer_selected != null:
 						multilayer_selected.colormap = multilayer_selected._cache_colormap.duplicate() 
-						PixelPen.singleton.layer_image_changed.emit(multilayer_selected_layer_uid)
+						PixelPen.state.layer_image_changed.emit(multilayer_selected_layer_uid)
 	
 	if mask_selection != null:
 		create_undo_selection_position(node)
@@ -531,18 +531,18 @@ func _on_move_cancel():
 	create_undo_overlay_position(node)
 	node.overlay_hint.position = Vector2.ZERO
 	create_redo_overlay_position(node)
-	(PixelPen.singleton.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
-			PixelPen.singleton.layer_image_changed.emit(layer_uid)
-			PixelPen.singleton.project_saved.emit(false)
+	(PixelPen.state.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
+			PixelPen.state.layer_image_changed.emit(layer_uid)
+			PixelPen.state.project_saved.emit(false)
 			)
-	PixelPen.singleton.layer_image_changed.emit(layer_uid)
-	PixelPen.singleton.project_saved.emit(false)
+	PixelPen.state.layer_image_changed.emit(layer_uid)
+	PixelPen.state.project_saved.emit(false)
 	move_cache_image_map = null
 	node.selection_tool_hint.offset = -Vector2.ONE
 	if default_selection_texture != null:
 		node.selection_tool_hint.texture = ImageTexture.create_from_image(default_selection_texture)
-	if index_image != PixelPen.singleton.current_project.active_layer:
-		index_image = PixelPen.singleton.current_project.active_layer
+	if index_image != PixelPen.state.current_project.active_layer:
+		index_image = PixelPen.state.current_project.active_layer
 	reset()
 	_draw_hint(node.get_local_mouse_position())
 	mode = Mode.UNKNOWN
@@ -559,24 +559,24 @@ func _on_move_commit():
 	var layer_uid : Vector3i = index_image.layer_uid
 	_cache_undo_redo.create_action("Move")
 	_cache_undo_redo.add_undo_property(index_image, "colormap", default_cache_map.duplicate())
-	if index_image != PixelPen.singleton.current_project.active_layer and PixelPen.singleton.current_project.multilayer_selected.is_empty():
+	if index_image != PixelPen.state.current_project.active_layer and PixelPen.state.current_project.multilayer_selected.is_empty():
 		# UNDO
-		var active_layer : IndexedColorImage = PixelPen.singleton.current_project.active_layer
+		var active_layer : IndexedColorImage = PixelPen.state.current_project.active_layer
 		_cache_undo_redo.add_undo_property(active_layer, "colormap", active_layer.colormap.duplicate())
 		if mask_selection != null and node.selection_tool_hint.texture != null:
 			_cache_undo_redo.add_undo_property(node.selection_tool_hint, "texture", ImageTexture.create_from_image(default_selection_texture))
 		
 		var layer_active_uid : Vector3i = active_layer.layer_uid
 		_cache_undo_redo.add_undo_method(func ():
-				PixelPen.singleton.layer_image_changed.emit(layer_uid)
-				PixelPen.singleton.layer_image_changed.emit(layer_active_uid)
-				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.state.layer_image_changed.emit(layer_uid)
+				PixelPen.state.layer_image_changed.emit(layer_active_uid)
+				PixelPen.state.project_saved.emit(false)
 				)
 		
 		index_image.colormap = cut_cache_image_map.duplicate()
 		
 		var offset = node.overlay_hint.position
-		PixelPen.singleton.current_project.active_layer.blit_color_map(move_cache_image_map, mask_selection, Vector2i(floor(offset.x), floor(offset.y)))
+		PixelPen.state.current_project.active_layer.blit_color_map(move_cache_image_map, mask_selection, Vector2i(floor(offset.x), floor(offset.y)))
 		
 		# REDO
 		_cache_undo_redo.add_do_property(index_image, "colormap", index_image.colormap.duplicate())
@@ -586,38 +586,38 @@ func _on_move_commit():
 					MaskSelection.offset_image(node.selection_tool_hint.texture.get_image(), offset, node.canvas_size))
 			_cache_undo_redo.add_do_property(node.selection_tool_hint, "texture", node.selection_tool_hint.texture)
 		_cache_undo_redo.add_do_method(func():
-				PixelPen.singleton.layer_image_changed.emit(layer_uid)
-				PixelPen.singleton.layer_image_changed.emit(layer_active_uid)
-				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.state.layer_image_changed.emit(layer_uid)
+				PixelPen.state.layer_image_changed.emit(layer_active_uid)
+				PixelPen.state.project_saved.emit(false)
 				)
 		
 	else:
 		var offset_ov : Vector2i = Vector2i(floor(node.overlay_hint.position.x), floor(node.overlay_hint.position.y))
-		if not PixelPen.singleton.current_project.multilayer_selected.is_empty():
-			for multilayer_selected_layer_uid in PixelPen.singleton.current_project.multilayer_selected:
+		if not PixelPen.state.current_project.multilayer_selected.is_empty():
+			for multilayer_selected_layer_uid in PixelPen.state.current_project.multilayer_selected:
 				if multilayer_selected_layer_uid != index_image.layer_uid:
-					var multilayer_selected : IndexedColorImage = PixelPen.singleton.current_project.find_index_image(multilayer_selected_layer_uid)
+					var multilayer_selected : IndexedColorImage = PixelPen.state.current_project.find_index_image(multilayer_selected_layer_uid)
 					if multilayer_selected != null:
 						if mode == Mode.CUT:
 							multilayer_selected.colormap = multilayer_selected._cache_colormap.duplicate()
 						_cache_undo_redo.add_undo_property(multilayer_selected, "colormap", multilayer_selected.colormap.duplicate())
 						_cache_undo_redo.add_undo_method(func():
-								PixelPen.singleton.layer_image_changed.emit(multilayer_selected_layer_uid))
+								PixelPen.state.layer_image_changed.emit(multilayer_selected_layer_uid))
 						
 						cmd_move(multilayer_selected.colormap, offset_ov, mode, mask_selection)
 						
 						_cache_undo_redo.add_do_property(multilayer_selected, "colormap", multilayer_selected.colormap.duplicate())
 						_cache_undo_redo.add_do_method(func():
-								PixelPen.singleton.layer_image_changed.emit(multilayer_selected_layer_uid))
+								PixelPen.state.layer_image_changed.emit(multilayer_selected_layer_uid))
 						
-						PixelPen.singleton.layer_image_changed.emit(multilayer_selected.layer_uid)
+						PixelPen.state.layer_image_changed.emit(multilayer_selected.layer_uid)
 		
 		# UNDO
 		if mask_selection != null and node.selection_tool_hint.texture != null:
 			_cache_undo_redo.add_undo_property(node.selection_tool_hint, "texture", ImageTexture.create_from_image(default_selection_texture))
 		_cache_undo_redo.add_undo_method(func ():
-				PixelPen.singleton.layer_image_changed.emit(layer_uid)
-				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.state.layer_image_changed.emit(layer_uid)
+				PixelPen.state.project_saved.emit(false)
 				)
 		
 		# REDO
@@ -630,20 +630,20 @@ func _on_move_commit():
 			
 			_cache_undo_redo.add_do_property(node.selection_tool_hint, "texture", node.selection_tool_hint.texture)
 		_cache_undo_redo.add_do_method(func():
-				PixelPen.singleton.layer_image_changed.emit(layer_uid)
-				PixelPen.singleton.project_saved.emit(false)
+				PixelPen.state.layer_image_changed.emit(layer_uid)
+				PixelPen.state.project_saved.emit(false)
 				)
 	
 	_cache_undo_redo.commit_action()
 	on_end_transform()
-	PixelPen.singleton.layer_image_changed.emit(layer_uid)
-	if index_image != PixelPen.singleton.current_project.active_layer:
-		index_image = PixelPen.singleton.current_project.active_layer
+	PixelPen.state.layer_image_changed.emit(layer_uid)
+	if index_image != PixelPen.state.current_project.active_layer:
+		index_image = PixelPen.state.current_project.active_layer
 		
-		var layer_active_uid : Vector3i = PixelPen.singleton.current_project.active_layer.layer_uid
-		PixelPen.singleton.layer_image_changed.emit(layer_active_uid)
+		var layer_active_uid : Vector3i = PixelPen.state.current_project.active_layer.layer_uid
+		PixelPen.state.layer_image_changed.emit(layer_active_uid)
 	
-	PixelPen.singleton.project_saved.emit(false)
+	PixelPen.state.project_saved.emit(false)
 	
 	move_cache_image_map = null
 	node.selection_tool_hint.position = Vector2.ZERO
@@ -658,7 +658,7 @@ func _on_move_commit():
 
 
 func create_undo_selection_position(node : Node2D):
-	(PixelPen.singleton.current_project as PixelPenProject).create_undo_property(
+	(PixelPen.state.current_project as PixelPenProject).create_undo_property(
 			"Selection",
 			node.selection_tool_hint,
 			"position",
@@ -668,7 +668,7 @@ func create_undo_selection_position(node : Node2D):
 
 
 func create_redo_selection_position(node : Node2D):
-	(PixelPen.singleton.current_project as PixelPenProject).create_redo_property(
+	(PixelPen.state.current_project as PixelPenProject).create_redo_property(
 			node.selection_tool_hint,
 			"position",
 			node.selection_tool_hint.position,
@@ -677,7 +677,7 @@ func create_redo_selection_position(node : Node2D):
 
 
 func create_undo_overlay_position(node : Node2D):
-	(PixelPen.singleton.current_project as PixelPenProject).create_undo_property(
+	(PixelPen.state.current_project as PixelPenProject).create_undo_property(
 			"Overlay",
 			node.overlay_hint,
 			"position",
@@ -687,7 +687,7 @@ func create_undo_overlay_position(node : Node2D):
 
 
 func create_redo_overlay_position(node : Node2D):
-	(PixelPen.singleton.current_project as PixelPenProject).create_redo_property(
+	(PixelPen.state.current_project as PixelPenProject).create_redo_property(
 			node.overlay_hint,
 			"position",
 			node.overlay_hint.position,

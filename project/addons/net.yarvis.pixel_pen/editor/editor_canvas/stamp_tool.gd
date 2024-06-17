@@ -31,14 +31,14 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		return
 	is_pressed = true
 	
-	var index_image : IndexedColorImage = PixelPen.singleton.current_project.active_layer
+	var index_image : IndexedColorImage = PixelPen.state.current_project.active_layer
 	if index_image == null:
 		return
 	
-	if PixelPen.singleton.userconfig.stamp.size() <= stamp_index or stamp_index < 0:
+	if PixelPen.state.userconfig.stamp.size() <= stamp_index or stamp_index < 0:
 		return
-	var old_palette = PixelPen.singleton.current_project.palette.color_index.duplicate()
-	var stamp : Image = PixelPen.singleton.userconfig.stamp[stamp_index]
+	var old_palette = PixelPen.state.current_project.palette.color_index.duplicate()
+	var stamp : Image = PixelPen.state.userconfig.stamp[stamp_index]
 	
 	var mask_selection : Image
 	var mask_rect : Rect2i
@@ -55,37 +55,37 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 			if mask_selection != null and mask_rect.has_point(placement) and mask_selection.get_pixelv(placement).r8 == 0:
 				continue
 			var color : Color = stamp.get_pixel(x, y)
-			var palette_index : int = PixelPen.singleton.current_project.palette.color_index.find(color)
+			var palette_index : int = PixelPen.state.current_project.palette.color_index.find(color)
 			if color.a == 0:
 				palette_index = 0
 			if palette_index == -1:
-				palette_index = PixelPen.singleton.current_project.palette.find_slot()
+				palette_index = PixelPen.state.current_project.palette.find_slot()
 				if palette_index == -1:
 					return
-				PixelPen.singleton.current_project.palette.color_index[palette_index] = color
+				PixelPen.state.current_project.palette.color_index[palette_index] = color
 				new_palette = true
 			stamp_colormap.set_pixel(x, y, Color8(palette_index, 0, 0))
 	
 	var layer_uid : Vector3i = index_image.layer_uid
-	(PixelPen.singleton.current_project as PixelPenProject).create_undo_layer("Stamp", index_image.layer_uid, func ():
-			PixelPen.singleton.layer_image_changed.emit(layer_uid)
-			PixelPen.singleton.project_saved.emit(false))
+	(PixelPen.state.current_project as PixelPenProject).create_undo_layer("Stamp", index_image.layer_uid, func ():
+			PixelPen.state.layer_image_changed.emit(layer_uid)
+			PixelPen.state.project_saved.emit(false))
 	if new_palette:
-		(PixelPen.singleton.current_project as PixelPenProject).create_undo_property(
-				"palette", PixelPen.singleton.current_project.palette,
+		(PixelPen.state.current_project as PixelPenProject).create_undo_property(
+				"palette", PixelPen.state.current_project.palette,
 				"color_index",
 				old_palette,
 				func():
-					PixelPen.singleton.palette_changed.emit(),
+					PixelPen.state.palette_changed.emit(),
 				false)
 
 	PixelPenCPP.blit_color_map(stamp_colormap, null, offset, index_image.colormap)
 
 	var mirror_line : Vector2i
-	if PixelPen.singleton.current_project.show_symetric_vertical:
-		mirror_line.x = PixelPen.singleton.current_project.symetric_guid.x
-	if PixelPen.singleton.current_project.show_symetric_horizontal:
-		mirror_line.y = PixelPen.singleton.current_project.symetric_guid.y
+	if PixelPen.state.current_project.show_symetric_vertical:
+		mirror_line.x = PixelPen.state.current_project.symetric_guid.x
+	if PixelPen.state.current_project.show_symetric_horizontal:
+		mirror_line.y = PixelPen.state.current_project.symetric_guid.y
 	if mirror_line != Vector2i.ZERO and mask_selection == null:
 		var canvas_stamp : Image = Image.create(index_image.size.x, index_image.size.y, false, Image.FORMAT_R8)
 		PixelPenCPP.blit_color_map(stamp_colormap, null, offset, canvas_stamp)
@@ -97,22 +97,22 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		index_image.blit_color_map(get_mirror_image(mirror_line, masked_stamp), null, Vector2i.ZERO)
 
 	if new_palette:
-		(PixelPen.singleton.current_project as PixelPenProject).create_redo_property(
-				PixelPen.singleton.current_project.palette,
+		(PixelPen.state.current_project as PixelPenProject).create_redo_property(
+				PixelPen.state.current_project.palette,
 				"color_index",
-				PixelPen.singleton.current_project.palette.color_index.duplicate(),
+				PixelPen.state.current_project.palette.color_index.duplicate(),
 				func():
-					PixelPen.singleton.palette_changed.emit(),
+					PixelPen.state.palette_changed.emit(),
 				false)
 	
-	(PixelPen.singleton.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
-			PixelPen.singleton.layer_image_changed.emit(layer_uid)
-			PixelPen.singleton.project_saved.emit(false)
+	(PixelPen.state.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
+			PixelPen.state.layer_image_changed.emit(layer_uid)
+			PixelPen.state.project_saved.emit(false)
 			)
 	if new_palette:
-		PixelPen.singleton.palette_changed.emit()
-	PixelPen.singleton.layer_image_changed.emit(index_image.layer_uid)
-	PixelPen.singleton.project_saved.emit(false)
+		PixelPen.state.palette_changed.emit()
+	PixelPen.state.layer_image_changed.emit(index_image.layer_uid)
+	PixelPen.state.project_saved.emit(false)
 
 
 func _on_mouse_released(mouse_position : Vector2, callback : Callable):
@@ -135,11 +135,11 @@ func _on_draw_cursor(mouse_position : Vector2):
 
 
 func update_stamp():
-	if PixelPen.singleton.current_project == null:
+	if PixelPen.state.current_project == null:
 		stamp_texture = null
 		return
-	if PixelPen.singleton.userconfig.stamp.size() > stamp_index and stamp_index >= 0:
-		var stamp = PixelPen.singleton.userconfig.stamp[stamp_index]
+	if PixelPen.state.userconfig.stamp.size() > stamp_index and stamp_index >= 0:
+		var stamp = PixelPen.state.userconfig.stamp[stamp_index]
 		var size = stamp.get_size()
 		var mask = Image.create(size.x + 2, size.y + 2, false, Image.FORMAT_RGBAF)
 		var rect : Rect2i = stamp.get_used_rect()

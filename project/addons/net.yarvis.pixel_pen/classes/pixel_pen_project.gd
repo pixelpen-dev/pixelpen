@@ -85,7 +85,7 @@ func initialized(p_size : Vector2i, p_name : String = "Untitled", p_file_path : 
 	layer_index_counter = 0
 	project_name = p_name
 	canvas_size = p_size
-	animation_fps = PixelPen.singleton.userconfig.default_animation_fps
+	animation_fps = PixelPen.state.userconfig.default_animation_fps
 	symetric_guid = canvas_size * 0.5
 	palette = IndexedPalette.new()
 	palette.set_color_index_preset()
@@ -159,7 +159,7 @@ func set_mode(mode : ProjectMode, mask : Image = null):
 			new_pool_frames[0].layers[layer_i] = new_layer
 		pool_frames = new_pool_frames
 		undo_redo = UndoRedoManager.new()
-	PixelPen.singleton.edit_mode_changed.emit(mode)
+	PixelPen.state.edit_mode_changed.emit(mode)
 
 
 func resize_canvas(new_size : Vector2i, anchor : PixelPenEnum.ResizeAnchor):
@@ -529,12 +529,12 @@ func export_webp_image(path : String) -> Error:
 
 func export_animation_gif(path : String):
 	# initialize exporter object with width and height of gif canvas
-	var exporter = PixelPen.singleton.GIFExporter.new(canvas_size.x, canvas_size.y)
+	var exporter = PixelPen.state.GIFExporter.new(canvas_size.x, canvas_size.y)
 	# write image using median cut quantization method and with one second animation delay
 	for cell in animation_timeline:
 		var img : Image = get_image(cell.frame)
 		img.convert(Image.FORMAT_RGBA8)
-		exporter.add_frame(img, 1.0 / animation_fps, PixelPen.singleton.MedianCutQuantization)
+		exporter.add_frame(img, 1.0 / animation_fps, PixelPen.state.MedianCutQuantization)
 
 	# when you have exported all frames of animation you, then you can save data into file
 	# open new file with write privlige
@@ -601,7 +601,7 @@ func update_onion_skin_images():
 	skinning_frame_index = animation_frame_index
 	var last_uid : Vector3i = animation_timeline[animation_frame_index].frame.frame_uid # to ignore linked frame
 	var prev_idx : int = animation_frame_index
-	for i in PixelPen.singleton.userconfig.onion_skin_total:
+	for i in PixelPen.state.userconfig.onion_skin_total:
 		prev_idx -= 1
 		while prev_idx > 0 and animation_timeline[prev_idx].frame.frame_uid == last_uid:
 			prev_idx -= 1
@@ -612,7 +612,7 @@ func update_onion_skin_images():
 	last_uid = animation_timeline[animation_frame_index].frame.frame_uid
 	var next_idx : int = animation_frame_index
 	var timeline_total = animation_timeline.size()
-	for i in PixelPen.singleton.userconfig.onion_skin_total:
+	for i in PixelPen.state.userconfig.onion_skin_total:
 		next_idx += 1
 		while next_idx < timeline_total and animation_timeline[next_idx].frame.frame_uid == last_uid:
 			next_idx += 1
@@ -672,7 +672,7 @@ func clean_invisible_color():
 
 func reset_brush_to_default():
 	var Tool := preload("../editor/editor_canvas/tool.gd")
-	PixelPen.singleton.userconfig.brush.clear()
+	PixelPen.state.userconfig.brush.clear()
 	for i in range(1, 16):
 		var start : Vector2 = Vector2(0.5, 0.5)
 		var end : Vector2 = Vector2(i, i) + Vector2(0.5, 0.5)
@@ -684,10 +684,10 @@ func reset_brush_to_default():
 			if image_f != null:
 				PixelPenCPP.fill_color(image_f, image, Color8(255, 0, 0), null)
 		image = image.get_region(PixelPenCPP.get_mask_used_rect(image))
-		PixelPen.singleton.userconfig.brush.push_back(image)
-		PixelPen.singleton.userconfig.save()
+		PixelPen.state.userconfig.brush.push_back(image)
+		PixelPen.state.userconfig.save()
 
 
 func reset_stamp_to_default():
-	PixelPen.singleton.userconfig.stamp.clear()
-	PixelPen.singleton.userconfig.save()
+	PixelPen.state.userconfig.stamp.clear()
+	PixelPen.state.userconfig.save()

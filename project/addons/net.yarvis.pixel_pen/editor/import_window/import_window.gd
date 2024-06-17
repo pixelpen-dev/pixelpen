@@ -20,7 +20,7 @@ func _init():
 
 
 func _ready():
-	grid_button.shortcut = PixelPen.singleton.userconfig.shorcuts.view_show_grid
+	grid_button.shortcut = PixelPen.state.userconfig.shorcuts.view_show_grid
 
 
 func _process(_delta):

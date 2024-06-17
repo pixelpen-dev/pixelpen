@@ -27,7 +27,7 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 	if shift_mode:
 		pick_color_from_canvas(mouse_position)
 		return
-	var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).active_layer
+	var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_layer
 	if index_image != null:
 		var mask_selection : Image
 		if node.selection_tool_hint.texture != null:
@@ -47,32 +47,32 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 				if mask != null and not mask.is_empty():
 					mask_selection = mask
 		var layer_uid : Vector3i = index_image.layer_uid
-		(PixelPen.singleton.current_project as PixelPenProject).create_undo_layer("Fill tool", index_image.layer_uid, func ():
-			PixelPen.singleton.layer_image_changed.emit(layer_uid)
-			PixelPen.singleton.project_saved.emit(false)
+		(PixelPen.state.current_project as PixelPenProject).create_undo_layer("Fill tool", index_image.layer_uid, func ():
+			PixelPen.state.layer_image_changed.emit(layer_uid)
+			PixelPen.state.project_saved.emit(false)
 			)
 		
 		index_image.fill_index_on_color_map(_index_color, mask_selection)
 		if node.selection_tool_hint.texture != null:
 			var mirror_line : Vector2i
-			if PixelPen.singleton.current_project.show_symetric_vertical:
-				mirror_line.x = PixelPen.singleton.current_project.symetric_guid.x
-			if PixelPen.singleton.current_project.show_symetric_horizontal:
-				mirror_line.y = PixelPen.singleton.current_project.symetric_guid.y
+			if PixelPen.state.current_project.show_symetric_vertical:
+				mirror_line.x = PixelPen.state.current_project.symetric_guid.x
+			if PixelPen.state.current_project.show_symetric_horizontal:
+				mirror_line.y = PixelPen.state.current_project.symetric_guid.y
 			if mirror_line != Vector2i.ZERO:
 				index_image.fill_index_on_color_map(_index_color, get_mirror_image(mirror_line, mask_selection))
-		(PixelPen.singleton.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
-			PixelPen.singleton.layer_image_changed.emit(layer_uid)
-			PixelPen.singleton.project_saved.emit(false)
+		(PixelPen.state.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
+			PixelPen.state.layer_image_changed.emit(layer_uid)
+			PixelPen.state.project_saved.emit(false)
 			)
-		PixelPen.singleton.layer_image_changed.emit(layer_uid)
-		PixelPen.singleton.project_saved.emit(false)
+		PixelPen.state.layer_image_changed.emit(layer_uid)
+		PixelPen.state.project_saved.emit(false)
 		callback.call()
 
 
 func _on_shift_pressed(pressed : bool):
 	shift_mode = pressed
-	PixelPen.singleton.toolbox_shift_mode.emit(shift_mode)
+	PixelPen.state.toolbox_shift_mode.emit(shift_mode)
 
 
 func _on_draw_cursor(mouse_position : Vector2):

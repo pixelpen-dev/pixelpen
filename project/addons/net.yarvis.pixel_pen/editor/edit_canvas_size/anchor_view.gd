@@ -8,7 +8,7 @@ extends Control
 func _draw():
 	var anchor = parent_window.anchor
 	var color = Color.BLACK
-	var color_active = PixelPen.singleton.userconfig.accent_color
+	var color_active = PixelPen.state.userconfig.accent_color
 	var grid_size : Vector2 = size / 5
 	
 	draw_line(Vector2(grid_size.x, grid_size.y * 0.5), Vector2(grid_size.x * 2, grid_size.y * 0.5), color)

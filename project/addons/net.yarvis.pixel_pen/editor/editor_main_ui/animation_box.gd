@@ -28,20 +28,20 @@ var _record_fps : Array[float] = []
 
 func _ready():
 	animation_fps.get_line_edit().theme_type_variation = "LineEditClean"
-	if not PixelPen.singleton.need_connection(get_window()):
+	if not PixelPen.state.need_connection(get_window()):
 		return
 	
-	PixelPen.singleton.tool_changed.connect(_on_tool_changed)
-	PixelPen.singleton.project_file_changed.connect(func():
-			if PixelPen.singleton.current_project != null:
-				animation_fps.value = PixelPen.singleton.current_project.animation_fps
+	PixelPen.state.tool_changed.connect(_on_tool_changed)
+	PixelPen.state.project_file_changed.connect(func():
+			if PixelPen.state.current_project != null:
+				animation_fps.value = PixelPen.state.current_project.animation_fps
 			create_frame_list()
 			)
-	PixelPen.singleton.layer_items_changed.connect(create_frame_list)
+	PixelPen.state.layer_items_changed.connect(create_frame_list)
 	playback_timer.timeout.connect(_on_timer_timeout)
 	animation_fps.value_changed.connect(func(value):
-			if PixelPen.singleton.current_project != null:
-				PixelPen.singleton.current_project.animation_fps = value
+			if PixelPen.state.current_project != null:
+				PixelPen.state.current_project.animation_fps = value
 			)
 	create_animation_menu()
 
@@ -52,41 +52,41 @@ func _exit_tree():
 
 
 func _process(_delta):
-	if PixelPen.singleton.current_project != null and PixelPen.singleton.current_project.animation_is_play:
+	if PixelPen.state.current_project != null and PixelPen.state.current_project.animation_is_play:
 		var children := animation_frame_list.get_children()
 		for i in range(children.size()):
 			var path = children[i].get_meta("label_path")
 			if path != null:
 				var label : Label = children[i].get_node(path) as Label
 				var label_style : StyleBoxFlat= label.get_theme_stylebox("normal") as StyleBoxFlat
-				if i == PixelPen.singleton.current_project.animation_frame_index:
-					label_style.bg_color = PixelPen.singleton.userconfig.accent_color
+				if i == PixelPen.state.current_project.animation_frame_index:
+					label_style.bg_color = PixelPen.state.userconfig.accent_color
 					label.label_settings.font_color = Color.BLACK
 				else:
-					label_style.bg_color = PixelPen.singleton.userconfig.layer_body_color
+					label_style.bg_color = PixelPen.state.userconfig.layer_body_color
 					label.label_settings.font_color = Color.WHITE
 
 
 func play_pause():
-	PixelPen.singleton.current_project.animation_is_play = not PixelPen.singleton.current_project.animation_is_play
-	if PixelPen.singleton.current_project.animation_is_play and playback_timer.is_stopped():
-		PixelPen.singleton.animation_about_to_play.emit()
-		if PixelPen.singleton.current_project.animation_frame_index == -1:
-			PixelPen.singleton.current_project.animation_frame_index = 0
+	PixelPen.state.current_project.animation_is_play = not PixelPen.state.current_project.animation_is_play
+	if PixelPen.state.current_project.animation_is_play and playback_timer.is_stopped():
+		PixelPen.state.animation_about_to_play.emit()
+		if PixelPen.state.current_project.animation_frame_index == -1:
+			PixelPen.state.current_project.animation_frame_index = 0
 		_refresh_frame()
-		var frame_time = 1.0 / PixelPen.singleton.current_project.animation_fps
+		var frame_time = 1.0 / PixelPen.state.current_project.animation_fps
 		_record_prev_time = Time.get_unix_time_from_system()
 		_record_fps.clear()
 		playback_timer.start(frame_time)
-	elif not PixelPen.singleton.current_project.animation_is_play:
+	elif not PixelPen.state.current_project.animation_is_play:
 		playback_timer.stop()
 		actual_fps.text = ""
-		PixelPen.singleton.layer_items_changed.emit()
-		PixelPen.singleton.project_saved.emit(false)
+		PixelPen.state.layer_items_changed.emit()
+		PixelPen.state.project_saved.emit(false)
 
 
 func _on_timer_timeout():
-	if PixelPen.singleton.current_project == null:
+	if PixelPen.state.current_project == null:
 		playback_timer.stop()
 		return
 	# calculate actual fps
@@ -99,78 +99,78 @@ func _on_timer_timeout():
 	fps /= (_record_fps.size() as float)
 	fps = roundf(fps)# * 100) / 100.0
 	actual_fps.text = str("~", fps, " fps")
-	if abs(PixelPen.singleton.current_project.animation_fps - fps) < 3:
+	if abs(PixelPen.state.current_project.animation_fps - fps) < 3:
 		actual_fps.text = ""
-	elif abs(PixelPen.singleton.current_project.animation_fps - fps) < 5:
+	elif abs(PixelPen.state.current_project.animation_fps - fps) < 5:
 		actual_fps.label_settings.font_color = Color.GREEN
 	else:
 		actual_fps.label_settings.font_color = Color.RED
 	_record_prev_time = Time.get_unix_time_from_system()
 	
-	PixelPen.singleton.current_project.animation_frame_index += 1
-	if PixelPen.singleton.current_project.animation_timeline.size() == PixelPen.singleton.current_project.animation_frame_index:
-		PixelPen.singleton.current_project.animation_frame_index = 0
-		if not PixelPen.singleton.current_project.animation_loop:
+	PixelPen.state.current_project.animation_frame_index += 1
+	if PixelPen.state.current_project.animation_timeline.size() == PixelPen.state.current_project.animation_frame_index:
+		PixelPen.state.current_project.animation_frame_index = 0
+		if not PixelPen.state.current_project.animation_loop:
 			play_pause()
 			return
 	_refresh_frame()
 
 
 func _refresh_frame():
-	var cell = PixelPen.singleton.current_project.animation_timeline[PixelPen.singleton.current_project.animation_frame_index]
-	var pool_index = PixelPen.singleton.current_project.get_pool_index(cell.frame.frame_uid)
-	PixelPen.singleton.current_project.canvas_pool_frame_uid = PixelPen.singleton.current_project.pool_frames[pool_index].frame_uid
-	PixelPen.singleton.layer_items_changed.emit()
+	var cell = PixelPen.state.current_project.animation_timeline[PixelPen.state.current_project.animation_frame_index]
+	var pool_index = PixelPen.state.current_project.get_pool_index(cell.frame.frame_uid)
+	PixelPen.state.current_project.canvas_pool_frame_uid = PixelPen.state.current_project.pool_frames[pool_index].frame_uid
+	PixelPen.state.layer_items_changed.emit()
 
 
 func _on_tool_changed(grup : int, type: int, _grab_active : bool):
-	if PixelPen.singleton.current_project == null:
+	if PixelPen.state.current_project == null:
 		return
 	if grup == PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION:
 		match type:
 			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE:
-				if PixelPen.singleton.current_project.animation_timeline.size() > 0:
+				if PixelPen.state.current_project.animation_timeline.size() > 0:
 					play_pause()
 				
 			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT:
-				if PixelPen.singleton.current_project.animation_frame_index != -1:
-					PixelPen.singleton.current_project.animation_frame_index = 0
-					var cell = PixelPen.singleton.current_project.animation_timeline[PixelPen.singleton.current_project.animation_frame_index]
-					var pool_index = PixelPen.singleton.current_project.get_pool_index(cell.frame.frame_uid)
-					PixelPen.singleton.current_project.canvas_pool_frame_uid = PixelPen.singleton.current_project.pool_frames[pool_index].frame_uid
-					PixelPen.singleton.layer_items_changed.emit()
-					PixelPen.singleton.project_saved.emit(false)
+				if PixelPen.state.current_project.animation_frame_index != -1:
+					PixelPen.state.current_project.animation_frame_index = 0
+					var cell = PixelPen.state.current_project.animation_timeline[PixelPen.state.current_project.animation_frame_index]
+					var pool_index = PixelPen.state.current_project.get_pool_index(cell.frame.frame_uid)
+					PixelPen.state.current_project.canvas_pool_frame_uid = PixelPen.state.current_project.pool_frames[pool_index].frame_uid
+					PixelPen.state.layer_items_changed.emit()
+					PixelPen.state.project_saved.emit(false)
 				
 			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_BACKWARD:
-				if PixelPen.singleton.current_project.animation_frame_index != -1:
-					PixelPen.singleton.current_project.animation_frame_index -= 1
-					if PixelPen.singleton.current_project.animation_frame_index < 0:
-						PixelPen.singleton.current_project.animation_frame_index = PixelPen.singleton.current_project.animation_timeline.size() -1
-					var cell = PixelPen.singleton.current_project.animation_timeline[PixelPen.singleton.current_project.animation_frame_index]
-					var pool_index = PixelPen.singleton.current_project.get_pool_index(cell.frame.frame_uid)
-					PixelPen.singleton.current_project.canvas_pool_frame_uid = PixelPen.singleton.current_project.pool_frames[pool_index].frame_uid
-					PixelPen.singleton.layer_items_changed.emit()
-					PixelPen.singleton.project_saved.emit(false)
+				if PixelPen.state.current_project.animation_frame_index != -1:
+					PixelPen.state.current_project.animation_frame_index -= 1
+					if PixelPen.state.current_project.animation_frame_index < 0:
+						PixelPen.state.current_project.animation_frame_index = PixelPen.state.current_project.animation_timeline.size() -1
+					var cell = PixelPen.state.current_project.animation_timeline[PixelPen.state.current_project.animation_frame_index]
+					var pool_index = PixelPen.state.current_project.get_pool_index(cell.frame.frame_uid)
+					PixelPen.state.current_project.canvas_pool_frame_uid = PixelPen.state.current_project.pool_frames[pool_index].frame_uid
+					PixelPen.state.layer_items_changed.emit()
+					PixelPen.state.project_saved.emit(false)
 				
 			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_FORWARD:
-				if PixelPen.singleton.current_project.animation_frame_index != -1:
-					PixelPen.singleton.current_project.animation_frame_index += 1
-					if PixelPen.singleton.current_project.animation_frame_index >= PixelPen.singleton.current_project.animation_timeline.size():
-						PixelPen.singleton.current_project.animation_frame_index = 0
-					var cell = PixelPen.singleton.current_project.animation_timeline[PixelPen.singleton.current_project.animation_frame_index]
-					var pool_index = PixelPen.singleton.current_project.get_pool_index(cell.frame.frame_uid)
-					PixelPen.singleton.current_project.canvas_pool_frame_uid = PixelPen.singleton.current_project.pool_frames[pool_index].frame_uid
-					PixelPen.singleton.layer_items_changed.emit()
-					PixelPen.singleton.project_saved.emit(false)
+				if PixelPen.state.current_project.animation_frame_index != -1:
+					PixelPen.state.current_project.animation_frame_index += 1
+					if PixelPen.state.current_project.animation_frame_index >= PixelPen.state.current_project.animation_timeline.size():
+						PixelPen.state.current_project.animation_frame_index = 0
+					var cell = PixelPen.state.current_project.animation_timeline[PixelPen.state.current_project.animation_frame_index]
+					var pool_index = PixelPen.state.current_project.get_pool_index(cell.frame.frame_uid)
+					PixelPen.state.current_project.canvas_pool_frame_uid = PixelPen.state.current_project.pool_frames[pool_index].frame_uid
+					PixelPen.state.layer_items_changed.emit()
+					PixelPen.state.project_saved.emit(false)
 				
 			PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_END:
-				if PixelPen.singleton.current_project.animation_frame_index != -1:
-					PixelPen.singleton.current_project.animation_frame_index = PixelPen.singleton.current_project.animation_timeline.size() -1
-					var cell = PixelPen.singleton.current_project.animation_timeline[PixelPen.singleton.current_project.animation_frame_index]
-					var pool_index = PixelPen.singleton.current_project.get_pool_index(cell.frame.frame_uid)
-					PixelPen.singleton.current_project.canvas_pool_frame_uid = PixelPen.singleton.current_project.pool_frames[pool_index].frame_uid
-					PixelPen.singleton.layer_items_changed.emit()
-					PixelPen.singleton.project_saved.emit(false)
+				if PixelPen.state.current_project.animation_frame_index != -1:
+					PixelPen.state.current_project.animation_frame_index = PixelPen.state.current_project.animation_timeline.size() -1
+					var cell = PixelPen.state.current_project.animation_timeline[PixelPen.state.current_project.animation_frame_index]
+					var pool_index = PixelPen.state.current_project.get_pool_index(cell.frame.frame_uid)
+					PixelPen.state.current_project.canvas_pool_frame_uid = PixelPen.state.current_project.pool_frames[pool_index].frame_uid
+					PixelPen.state.layer_items_changed.emit()
+					PixelPen.state.project_saved.emit(false)
 
 
 func create_animation_menu():
@@ -196,9 +196,9 @@ func create_animation_menu():
 			false,
 			null,
 			func():
-				if PixelPen.singleton.current_project == null:
+				if PixelPen.state.current_project == null:
 					return false
-				return PixelPen.singleton.current_project.animation_is_play)
+				return PixelPen.state.current_project.animation_is_play)
 	_build_button("Step forward",
 			step_forward,
 			PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION,
@@ -212,7 +212,7 @@ func create_animation_menu():
 
 
 func create_frame_list():
-	if PixelPen.singleton.current_project != null and PixelPen.singleton.current_project.animation_is_play:
+	if PixelPen.state.current_project != null and PixelPen.state.current_project.animation_is_play:
 		return
 	var children := animation_frame_list.get_children()
 	for child in children:
@@ -224,7 +224,7 @@ func create_frame_list():
 		if not child.is_queued_for_deletion():
 			child.queue_free()
 	
-	if PixelPen.singleton.current_project == null or PixelPen.singleton.current_project.use_sample:
+	if PixelPen.state.current_project == null or PixelPen.state.current_project.use_sample:
 		return
 	var margin : int = 8
 	var box_size : Vector2 = Vector2(margin, frame_y_size.size.y - margin * 4)
@@ -240,10 +240,10 @@ func create_frame_list():
 					if event is InputEventMouseButton:
 						if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
 							margin_container.grab_focus()
-							PixelPen.singleton.current_project.animation_frame_index = frame_index
-							PixelPen.singleton.current_project.canvas_pool_frame_uid = PixelPen.singleton.current_project.pool_frames[pool_index].frame_uid
-							PixelPen.singleton.layer_items_changed.emit()
-							PixelPen.singleton.project_saved.emit(false)
+							PixelPen.state.current_project.animation_frame_index = frame_index
+							PixelPen.state.current_project.canvas_pool_frame_uid = PixelPen.state.current_project.pool_frames[pool_index].frame_uid
+							PixelPen.state.layer_items_changed.emit()
+							PixelPen.state.project_saved.emit(false)
 							margin_container.release_focus()
 					)
 			
@@ -259,14 +259,14 @@ func create_frame_list():
 			place_holder.custom_minimum_size = Vector2(box_size.y, box_size.y - 2 * margin)
 			
 			var style := StyleBoxFlat.new()
-			style.bg_color = PixelPen.singleton.userconfig.canvas_base_mode_color
+			style.bg_color = PixelPen.state.userconfig.canvas_base_mode_color
 			
-			var cell_frame_uid : Vector3i = PixelPen.singleton.current_project.animation_timeline[frame_index].frame.frame_uid
-			var frame_active : bool = PixelPen.singleton.current_project.active_frame.frame_uid == cell_frame_uid
+			var cell_frame_uid : Vector3i = PixelPen.state.current_project.animation_timeline[frame_index].frame.frame_uid
+			var frame_active : bool = PixelPen.state.current_project.active_frame.frame_uid == cell_frame_uid
 			if frame_active:
-				style.border_color = PixelPen.singleton.userconfig.accent_color
+				style.border_color = PixelPen.state.userconfig.accent_color
 			else:
-				style.border_color = PixelPen.singleton.current_project.animation_timeline[frame_index].frame.frame_color
+				style.border_color = PixelPen.state.current_project.animation_timeline[frame_index].frame.frame_color
 			var border_margin = 2 if frame_active else 1
 			style.expand_margin_left = 0 if linked_l else border_margin
 			style.border_width_left = 0 if linked_l else  border_margin
@@ -287,7 +287,7 @@ func create_frame_list():
 			var preview = frame_preview.instantiate()
 			preview.stretch_shrink = 2
 			if not linked_l:
-				preview.show_frame(PixelPen.singleton.current_project.pool_frames[pool_index])
+				preview.show_frame(PixelPen.state.current_project.pool_frames[pool_index])
 			preview.front_control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND 
 			
 			var asr := AspectRatioContainer.new()
@@ -305,10 +305,10 @@ func create_frame_list():
 			var lable_setting := LabelSettings.new()
 			lable_setting.font_size = 12
 			if is_active:
-				label_style.bg_color = PixelPen.singleton.userconfig.accent_color
+				label_style.bg_color = PixelPen.state.userconfig.accent_color
 				lable_setting.font_color = Color.BLACK
 			else:
-				label_style.bg_color = PixelPen.singleton.userconfig.layer_body_color
+				label_style.bg_color = PixelPen.state.userconfig.layer_body_color
 				lable_setting.font_color = Color.WHITE
 			label_style.corner_radius_bottom_right = 8
 			label.add_theme_stylebox_override("normal", label_style)
@@ -326,11 +326,11 @@ func create_frame_list():
 	
 	var used_frame : Array[int] = []
 	var first := true
-	for cell_i in range(PixelPen.singleton.current_project.animation_timeline.size()):
-		var cell = PixelPen.singleton.current_project.animation_timeline[cell_i]
-		var pool_index = PixelPen.singleton.current_project.get_pool_index(cell.frame.frame_uid)
+	for cell_i in range(PixelPen.state.current_project.animation_timeline.size()):
+		var cell = PixelPen.state.current_project.animation_timeline[cell_i]
+		var pool_index = PixelPen.state.current_project.get_pool_index(cell.frame.frame_uid)
 		used_frame.push_back(pool_index)
-		create_cell.call(pool_index, cell_i, PixelPen.singleton.current_project.animation_frame_index == cell_i, first)
+		create_cell.call(pool_index, cell_i, PixelPen.state.current_project.animation_frame_index == cell_i, first)
 		first = false
 	
 	await get_tree().process_frame
@@ -349,10 +349,10 @@ func create_frame_list():
 					if event is InputEventMouseButton:
 						if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
 							margin_container.grab_focus()
-							PixelPen.singleton.current_project.canvas_pool_frame_uid = PixelPen.singleton.current_project.pool_frames[pool_index].frame_uid
-							PixelPen.singleton.current_project.animation_frame_index = -1
-							PixelPen.singleton.layer_items_changed.emit()
-							PixelPen.singleton.project_saved.emit(false)
+							PixelPen.state.current_project.canvas_pool_frame_uid = PixelPen.state.current_project.pool_frames[pool_index].frame_uid
+							PixelPen.state.current_project.animation_frame_index = -1
+							PixelPen.state.layer_items_changed.emit()
+							PixelPen.state.project_saved.emit(false)
 							margin_container.release_focus()
 					)
 			
@@ -368,10 +368,10 @@ func create_frame_list():
 			place_holder.custom_minimum_size = Vector2(box_size.y, box_size.y - 2 * margin)
 			
 			var style := StyleBoxFlat.new()
-			style.bg_color = PixelPen.singleton.userconfig.canvas_base_mode_color
-			var is_active : bool = PixelPen.singleton.current_project.active_frame == PixelPen.singleton.current_project.pool_frames[pool_index]
+			style.bg_color = PixelPen.state.userconfig.canvas_base_mode_color
+			var is_active : bool = PixelPen.state.current_project.active_frame == PixelPen.state.current_project.pool_frames[pool_index]
 			var border_margin = 2 if is_active else 1
-			style.border_color = PixelPen.singleton.userconfig.accent_color if is_active else PixelPen.singleton.current_project.pool_frames[pool_index].frame_color
+			style.border_color = PixelPen.state.userconfig.accent_color if is_active else PixelPen.state.current_project.pool_frames[pool_index].frame_color
 			style.expand_margin_left = border_margin
 			style.expand_margin_top = border_margin
 			style.expand_margin_right = border_margin
@@ -386,7 +386,7 @@ func create_frame_list():
 			
 			var preview = frame_preview.instantiate()
 			preview.stretch_shrink = 2
-			preview.show_frame(PixelPen.singleton.current_project.pool_frames[pool_index])
+			preview.show_frame(PixelPen.state.current_project.pool_frames[pool_index])
 			preview.front_control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND 
 			place_holder.add_child(preview)
 			
@@ -396,7 +396,7 @@ func create_frame_list():
 	
 	first = true
 	var cell_i : int = 0
-	for pool_i in range(PixelPen.singleton.current_project.pool_frames.size()):
+	for pool_i in range(PixelPen.state.current_project.pool_frames.size()):
 		if used_frame.has(pool_i):
 			continue
 		create_unused_cell.call(pool_i, cell_i, first)
@@ -425,7 +425,7 @@ func _build_button(name : String,
 	btn.texture_normal = texture
 	btn.custom_minimum_size.x = animation_menu_list.size.y
 	btn.pressed.connect(func ():
-			PixelPen.singleton.tool_changed.emit(grup, type, can_active)
+			PixelPen.state.tool_changed.emit(grup, type, can_active)
 			)
 	btn.stretch_mode = TextureButton.STRETCH_KEEP_CENTERED
 	btn.shortcut = shorcut
@@ -466,7 +466,7 @@ func _build_toggle_button(
 	btn.button_pressed = toggle_callback.call()
 	btn.custom_minimum_size.x = animation_menu_list.size.y
 	btn.pressed.connect(func ():
-			PixelPen.singleton.tool_changed.emit(grup, type, can_active)
+			PixelPen.state.tool_changed.emit(grup, type, can_active)
 			)
 	btn.stretch_mode = TextureButton.STRETCH_KEEP_CENTERED
 	btn.shortcut = shorcut
@@ -494,10 +494,10 @@ func _build_toggle_button(
 
 func _is_linked(index_a : int, index_b : int) -> bool:
 	assert(index_a != index_b and index_a < index_b, "ERR, _is_linked")
-	if index_a < 0 or index_b == PixelPen.singleton.current_project.animation_timeline.size():
+	if index_a < 0 or index_b == PixelPen.state.current_project.animation_timeline.size():
 		return false
 	
-	if PixelPen.singleton.current_project.animation_timeline[index_a].frame.frame_uid == PixelPen.singleton.current_project.animation_timeline[index_b].frame.frame_uid:
+	if PixelPen.state.current_project.animation_timeline[index_a].frame.frame_uid == PixelPen.state.current_project.animation_timeline[index_b].frame.frame_uid:
 		return true
 	
 	return false

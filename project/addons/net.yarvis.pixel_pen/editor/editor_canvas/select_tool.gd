@@ -30,7 +30,7 @@ func _on_sub_tool_changed(type : int):
 
 func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 	if active_sub_tool_type == PixelPenEnum.ToolBoxSelect.TOOL_SELECT_COLOR:
-		var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).active_layer
+		var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_layer
 		if index_image != null:
 			var coord : Vector2i = floor(mouse_position)
 			if index_image.coor_inside_canvas(coord.x, coord.y):
@@ -56,14 +56,14 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 					node.selection_tool_hint.offset = -Vector2.ONE
 					node.selection_tool_hint.material.set_shader_parameter("zoom_bias", node.get_viewport().get_camera_2d().zoom)
 	elif active_sub_tool_type == PixelPenEnum.ToolBoxSelect.TOOL_SELECT_LAYER:
-		var index_images : Array[IndexedColorImage] = PixelPen.singleton.current_project.active_frame.layers
+		var index_images : Array[IndexedColorImage] = PixelPen.state.current_project.active_frame.layers
 		var coord : Vector2 = floor(mouse_position)
 		for i in range(index_images.size() - 1, -1, -1):
 			var palette_idx : int = index_images[i].get_index_on_color_map(coord.x, coord.y)
-			var color : Color = (PixelPen.singleton.current_project as PixelPenProject).palette.color_index[palette_idx]
+			var color : Color = (PixelPen.state.current_project as PixelPenProject).palette.color_index[palette_idx]
 			if color.a > 0:
 				var layer_uid = index_images[i].layer_uid
-				PixelPen.singleton.layer_active_changed.emit(layer_uid)
+				PixelPen.state.layer_active_changed.emit(layer_uid)
 				break
 
 

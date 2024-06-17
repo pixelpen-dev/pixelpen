@@ -632,7 +632,7 @@ func _select_file(callback : Callable, filter : PackedStringArray, mode : FileDi
 	_file_dialog.filters = filter
 		
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	_file_dialog.current_dir = PixelPen.singleton.get_directory()
+	_file_dialog.current_dir = PixelPen.state.get_directory()
 	_file_dialog.file_selected.connect(func(file):
 			_file_dialog.hide()
 			callback.call(file)

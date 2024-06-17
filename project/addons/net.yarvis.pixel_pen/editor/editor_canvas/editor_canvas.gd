@@ -51,9 +51,9 @@ var rmb_inject_mode : bool = false
 
 
 func _ready():
-	if not PixelPen.singleton.need_connection(get_window()):
+	if not PixelPen.state.need_connection(get_window()):
 		return
-	PixelPen.singleton.project_file_changed.connect(func ():
+	PixelPen.state.project_file_changed.connect(func ():
 			silhouette = false
 			_queue_update_camera_zoom = true
 			_create_layers()
@@ -62,21 +62,21 @@ func _ready():
 			overlay_hint.position = Vector2.ZERO
 			selection_tool_hint.position = Vector2.ZERO
 			selection_tool_hint.offset = -Vector2.ONE
-			if PixelPen.singleton.current_project == null:
+			if PixelPen.state.current_project == null:
 				canvas_paint.tool = canvas_paint.Tool.new()
 				for child in onion_skinning.get_children():
 					child.queue_free()
 			else:
 				_update_onion_skinning()
-				(PixelPen.singleton.current_project as PixelPenProject).get_image() # Force to create first cache image for tile
+				(PixelPen.state.current_project as PixelPenProject).get_image() # Force to create first cache image for tile
 			_create_tiled()
 			
 			update_filter_size()
 			)
 				
-	PixelPen.singleton.layer_items_changed.connect(
+	PixelPen.state.layer_items_changed.connect(
 			func():
-				var project : PixelPenProject = PixelPen.singleton.current_project as PixelPenProject
+				var project : PixelPenProject = PixelPen.state.current_project as PixelPenProject
 				if project != null:
 					if MoveTool.mode != MoveTool.Mode.UNKNOWN and not project.multilayer_selected.is_empty():
 						if not await canvas_paint.tool._on_request_switch_tool(PixelPenEnum.ToolBox.TOOL_MOVE):
@@ -85,51 +85,51 @@ func _ready():
 				
 				if project.show_tile:
 					project.get_image()
-					PixelPen.singleton.thumbnail_changed.emit()
+					PixelPen.state.thumbnail_changed.emit()
 				
 				_update_onion_skinning()
 				
 				_create_layers())
-	PixelPen.singleton.color_picked.connect(func(color_index):
+	PixelPen.state.color_picked.connect(func(color_index):
 			canvas_paint.tool._index_color = color_index
 			_update_shader_layer()
 			)
-	PixelPen.singleton.layer_image_changed.connect(_update_layer_image)
-	PixelPen.singleton.layer_visibility_changed.connect(func(layer_uid, visibility):
+	PixelPen.state.layer_image_changed.connect(_update_layer_image)
+	PixelPen.state.layer_visibility_changed.connect(func(layer_uid, visibility):
 			var children = layers.get_children()
 			for child in children:
 				if child.get_meta("layer_uid") == layer_uid:
 					child.visible = visibility
-					if (PixelPen.singleton.current_project as PixelPenProject).active_layer_uid == layer_uid:
+					if (PixelPen.state.current_project as PixelPenProject).active_layer_uid == layer_uid:
 						canvas_paint.tool._can_draw = visibility
 					break
 			)
-	PixelPen.singleton.layer_active_changed.connect(func(layer_uid):
-			var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).get_index_image(layer_uid)
+	PixelPen.state.layer_active_changed.connect(func(layer_uid):
+			var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).get_index_image(layer_uid)
 			if index_image != null:
 				canvas_paint.tool._can_draw = index_image.visible
 			)
-	PixelPen.singleton.tool_changed.connect(func(grup, type, _grab_active):
+	PixelPen.state.tool_changed.connect(func(grup, type, _grab_active):
 			if grup == PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX:
 				if canvas_paint.tool.active_tool_type != type:
 					if await canvas_paint.tool._on_request_switch_tool(type):
 						canvas_paint.tool.active_tool_type = type
 					else:
 						# cancel switch
-						PixelPen.singleton.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, canvas_paint.tool.active_tool_type, true)
+						PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, canvas_paint.tool.active_tool_type, true)
 			elif grup == PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL:
 				canvas_paint.tool._on_sub_tool_changed(type)
 			)
-	PixelPen.singleton.thumbnail_changed.connect(_create_tiled)
-	PixelPen.singleton.animation_about_to_play.connect(func():
+	PixelPen.state.thumbnail_changed.connect(_create_tiled)
+	PixelPen.state.animation_about_to_play.connect(func():
 			canvas_paint.on_force_cancel()
 			)
-	background_canvas.visible = PixelPen.singleton.current_project != null
+	background_canvas.visible = PixelPen.state.current_project != null
 	_queue_update_camera_zoom = true
 
 
 func _process(_delta):
-	if not PixelPen.singleton.need_connection(get_window()):
+	if not PixelPen.state.need_connection(get_window()):
 		return
 	if _queue_update_camera_zoom:
 		update_camera_zoom()
@@ -141,7 +141,7 @@ func _physics_process(_delta):
 
 
 func update_filter_size():
-	if not PixelPen.singleton.need_connection(get_window()):
+	if not PixelPen.state.need_connection(get_window()):
 		return
 	filter.scale = Vector2(1.0, 1.0)
 	var new_texture = PlaceholderTexture2D.new()
@@ -155,8 +155,8 @@ func update_filter_size():
 
 func update_camera_zoom():
 	if get_viewport_rect().size != Vector2.ZERO:
-		if PixelPen.singleton.current_project != null:
-			background_canvas.scale = PixelPen.singleton.current_project.canvas_size as Vector2
+		if PixelPen.state.current_project != null:
+			background_canvas.scale = PixelPen.state.current_project.canvas_size as Vector2
 			
 		_queue_update_camera_zoom = false
 		var camera_scale_factor = get_viewport_rect().size / background_canvas.scale
@@ -200,13 +200,13 @@ func pan(offset : Vector2):
 
 
 func update_background_shader_state():
-	background_canvas.material.set_shader_parameter("tile_size", PixelPen.singleton.userconfig.checker_size  )
+	background_canvas.material.set_shader_parameter("tile_size", PixelPen.state.userconfig.checker_size  )
 	background_canvas.visible = true
 
 
 func _input(event: InputEvent):
-	PixelPen.singleton.debug_log.emit("Input", event)
-	if PixelPen.singleton.current_project == null:
+	PixelPen.state.debug_log.emit("Input", event)
+	if PixelPen.state.current_project == null:
 		return
 	
 	if event is InputEventKey:
@@ -216,7 +216,7 @@ func _input(event: InputEvent):
 	if event and get_viewport_rect().has_point(get_viewport().get_mouse_position()):
 		if event is InputEventScreenTouch or event is InputEventScreenDrag:
 			_on_gesture(event)
-		PixelPen.singleton.debug_log.emit("Cursor", floor(get_local_mouse_position()))
+		PixelPen.state.debug_log.emit("Cursor", floor(get_local_mouse_position()))
 		if event is InputEventKey:
 			if event.keycode == KEY_SHIFT:
 				canvas_paint.on_shift_pressed(event.is_pressed())
@@ -225,7 +225,7 @@ func _input(event: InputEvent):
 			zoom(event.factor)
 		elif event and event is InputEventPanGesture:
 			pan(event.delta)
-		elif event and event is InputEventMouseButton and not PixelPen.singleton.current_project.animation_is_play:
+		elif event and event is InputEventMouseButton and not PixelPen.state.current_project.animation_is_play:
 			var is_hovered_symetric = _is_hovered_symetric_guid()
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_LEFT:
 				zoom(0.9)
@@ -259,11 +259,11 @@ func _input(event: InputEvent):
 
 			elif _on_move_symetric_guid:
 				if _on_move_symetric_guid_type == 0:
-					PixelPen.singleton.current_project.symetric_guid.x = round(get_local_mouse_position()).x
-					PixelPen.singleton.current_project.symetric_guid.x = clamp(PixelPen.singleton.current_project.symetric_guid.x, 0, canvas_size.x)
+					PixelPen.state.current_project.symetric_guid.x = round(get_local_mouse_position()).x
+					PixelPen.state.current_project.symetric_guid.x = clamp(PixelPen.state.current_project.symetric_guid.x, 0, canvas_size.x)
 				elif _on_move_symetric_guid_type == 1:
-					PixelPen.singleton.current_project.symetric_guid.y = round(get_local_mouse_position()).y
-					PixelPen.singleton.current_project.symetric_guid.y = clamp(PixelPen.singleton.current_project.symetric_guid.y, 0, canvas_size.y)
+					PixelPen.state.current_project.symetric_guid.y = round(get_local_mouse_position()).y
+					PixelPen.state.current_project.symetric_guid.y = clamp(PixelPen.state.current_project.symetric_guid.y, 0, canvas_size.y)
 			else:
 				canvas_paint.on_mouse_motion(get_local_mouse_position(), event.relative, _update_shader_layer)
 
@@ -295,10 +295,10 @@ func _on_gesture(event : InputEvent):
 
 
 func _draw():
-	if get_window().has_focus() and PixelPen.singleton.current_project != null:
+	if get_window().has_focus() and PixelPen.state.current_project != null:
 		canvas_paint.on_draw_hint(get_local_mouse_position())
 		if get_viewport_rect().has_point(get_viewport().get_mouse_position()):
-			if PixelPen.singleton.current_project.animation_is_play:
+			if PixelPen.state.current_project.animation_is_play:
 				canvas_paint.tool.draw_invalid_cursor(get_local_mouse_position())
 			else:
 				var type_hovered = _is_hovered_symetric_guid()
@@ -318,14 +318,14 @@ func _draw():
 				elif type_hovered == 1:
 					_symetric_guid_color_horizontal.a = 0.75
 					canvas_paint.tool.draw_plus_cursor(get_local_mouse_position(), 15)
-	if PixelPen.singleton.current_project != null and PixelPen.singleton.current_project.show_grid :
+	if PixelPen.state.current_project != null and PixelPen.state.current_project.show_grid :
 		_draw_grid(Vector2i.ONE, 0.07)
-		_draw_grid(PixelPen.singleton.userconfig.default_grid_size, 0.075)
-		_draw_grid(PixelPen.singleton.userconfig.default_grid_size * 2, 0.1)
-		_draw_grid(PixelPen.singleton.userconfig.default_grid_size * 4, 0.125)
-	if PixelPen.singleton.current_project != null:
+		_draw_grid(PixelPen.state.userconfig.default_grid_size, 0.075)
+		_draw_grid(PixelPen.state.userconfig.default_grid_size * 2, 0.1)
+		_draw_grid(PixelPen.state.userconfig.default_grid_size * 4, 0.125)
+	if PixelPen.state.current_project != null:
 		_draw_symetric_guid()
-	if PixelPen.singleton.current_project != null and PixelPen.singleton.current_project.show_tile:
+	if PixelPen.state.current_project != null and PixelPen.state.current_project.show_tile:
 		draw_rect(Rect2i(Vector2.ZERO, canvas_size), Color.MAGENTA, false)
 	
 	if virtual_mouse:
@@ -390,12 +390,12 @@ func _draw_symetric_guid():
 	var viewport_zero : Vector2 = get_global_transform().affine_inverse() * get_canvas_transform().affine_inverse() * Vector2.ZERO
 	var viewport_size : Vector2 = get_global_transform().affine_inverse() * get_canvas_transform().affine_inverse() * get_viewport_rect().size
 	var radius_size : float = (get_viewport_transform().affine_inverse() * 10.0).x.x
-	if PixelPen.singleton.current_project.show_symetric_vertical:
-		var vertical_x_pos = floor(PixelPen.singleton.current_project.symetric_guid.x)
+	if PixelPen.state.current_project.show_symetric_vertical:
+		var vertical_x_pos = floor(PixelPen.state.current_project.symetric_guid.x)
 		draw_line(Vector2(vertical_x_pos, viewport_zero.y + radius_size), Vector2(vertical_x_pos, viewport_size.y), Color(1, 1, 1, ca))
 		draw_circle(Vector2(vertical_x_pos, viewport_zero.y), radius_size, _symetric_guid_color_vertical)
-	if PixelPen.singleton.current_project.show_symetric_horizontal:
-		var horizontal_y_pos = floor(PixelPen.singleton.current_project.symetric_guid.y)
+	if PixelPen.state.current_project.show_symetric_horizontal:
+		var horizontal_y_pos = floor(PixelPen.state.current_project.symetric_guid.y)
 		draw_line(Vector2(viewport_zero.x + radius_size, horizontal_y_pos), Vector2(viewport_size.x, horizontal_y_pos), Color(1, 1, 1, ca))
 		draw_circle(Vector2(viewport_zero.x, horizontal_y_pos), radius_size, _symetric_guid_color_horizontal)
 
@@ -405,8 +405,8 @@ func _is_hovered_symetric_guid() -> int:
 	var viewport_size : Vector2 = get_global_transform().affine_inverse() * get_canvas_transform().affine_inverse() * get_viewport_rect().size
 	var radius_size : float = (get_viewport_transform().affine_inverse() * 10.0).x.x
 	
-	var guid_v_pos = Vector2(floor(PixelPen.singleton.current_project.symetric_guid.x), viewport_zero.y)
-	var guid_h_pos = Vector2(viewport_zero.x, floor(PixelPen.singleton.current_project.symetric_guid.y))
+	var guid_v_pos = Vector2(floor(PixelPen.state.current_project.symetric_guid.x), viewport_zero.y)
+	var guid_h_pos = Vector2(viewport_zero.x, floor(PixelPen.state.current_project.symetric_guid.y))
 	if get_local_mouse_position().distance_to(guid_v_pos) < radius_size * 2:
 		return 0
 	elif get_local_mouse_position().distance_to(guid_h_pos) < radius_size * 2:
@@ -415,7 +415,7 @@ func _is_hovered_symetric_guid() -> int:
 
 
 func _update_shader_layer():
-	var palette : IndexedPalette = (PixelPen.singleton.current_project as PixelPenProject).palette
+	var palette : IndexedPalette = (PixelPen.state.current_project as PixelPenProject).palette
 	var dirty_children = layers.get_children()
 	var children : Array[Node] = []
 	for child in dirty_children:
@@ -423,7 +423,7 @@ func _update_shader_layer():
 			children.push_back(child)
 	for i in children.size():
 		var layer : Sprite2D = children[i]
-		var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).get_index_image(layer.get_meta("layer_uid"))
+		var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).get_index_image(layer.get_meta("layer_uid"))
 		if index_image != null:
 			var mat : ShaderMaterial = layer.material
 			var layer_size : Vector2i = index_image.size
@@ -437,19 +437,19 @@ func _update_shader_layer():
 func _create_layers():
 	for child in layers.get_children():
 		child.queue_free()
-	if PixelPen.singleton.current_project == null or (PixelPen.singleton.current_project as PixelPenProject).active_frame == null:
+	if PixelPen.state.current_project == null or (PixelPen.state.current_project as PixelPenProject).active_frame == null:
 		background_canvas.visible = false
 		return
 	update_background_shader_state()
-	var size = (PixelPen.singleton.current_project as PixelPenProject).active_frame.layers.size()
-	canvas_size = (PixelPen.singleton.current_project as PixelPenProject).canvas_size
+	var size = (PixelPen.state.current_project as PixelPenProject).active_frame.layers.size()
+	canvas_size = (PixelPen.state.current_project as PixelPenProject).canvas_size
 	for i in range(size):
 		_create_layer(i)
 	_update_shader_layer()
 
 
 func _create_layer(index : int):
-	var index_image : IndexedColorImage = (PixelPen.singleton.current_project as PixelPenProject).active_frame.layers[index]
+	var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_frame.layers[index]
 	var sprite = Sprite2D.new()
 	sprite.texture = PlaceholderTexture2D.new()
 	sprite.centered = false
@@ -465,10 +465,10 @@ func _update_layer_image(layer_uid : Vector3i):
 	var children = layers.get_children()
 	for layer in children:
 		if layer.get_meta("layer_uid") == layer_uid:
-			var index_image : IndexedColorImage = PixelPen.singleton.current_project.get_index_image(layer_uid)
+			var index_image : IndexedColorImage = PixelPen.state.current_project.get_index_image(layer_uid)
 			if index_image == null:
 				return
-			var palette : IndexedPalette = (PixelPen.singleton.current_project as PixelPenProject).palette
+			var palette : IndexedPalette = (PixelPen.state.current_project as PixelPenProject).palette
 			var mat : ShaderMaterial = layer.material
 			var layer_size : Vector2i = index_image.size
 			mat.set_shader_parameter("image_size", layer_size)
@@ -479,11 +479,11 @@ func _update_layer_image(layer_uid : Vector3i):
 func _create_tiled():
 	for child in tile_node.get_children():
 		child.queue_free()
-	if PixelPen.singleton.current_project == null:
+	if PixelPen.state.current_project == null:
 		return
-	if not PixelPen.singleton.current_project.show_tile:
+	if not PixelPen.state.current_project.show_tile:
 		return
-	var image : Image = PixelPen.singleton.current_project.cache_thumbnail
+	var image : Image = PixelPen.state.current_project.cache_thumbnail
 	if image == null or image.is_empty():
 		return
 	var texture = ImageTexture.create_from_image(image)
@@ -502,15 +502,15 @@ func _create_tiled():
 func _update_onion_skinning():
 	for child in onion_skinning.get_children():
 		child.queue_free()
-	var project : PixelPenProject = PixelPen.singleton.current_project as PixelPenProject
+	var project : PixelPenProject = PixelPen.state.current_project as PixelPenProject
 	if project.animation_is_play or not project.onion_skinning:
 		return
 	project.update_onion_skin_images()
-	var prev_color : Color = PixelPen.singleton.userconfig.onion_skin_tint_previous
-	prev_color.a = PixelPen.singleton.userconfig.onion_skin_tint_alpha
-	var next_color : Color = PixelPen.singleton.userconfig.onion_skin_tint_next
-	next_color.a = PixelPen.singleton.userconfig.onion_skin_tint_alpha
-	var color_alpha_step : float = PixelPen.singleton.userconfig.onion_skin_tint_alpha / PixelPen.singleton.userconfig.onion_skin_total
+	var prev_color : Color = PixelPen.state.userconfig.onion_skin_tint_previous
+	prev_color.a = PixelPen.state.userconfig.onion_skin_tint_alpha
+	var next_color : Color = PixelPen.state.userconfig.onion_skin_tint_next
+	next_color.a = PixelPen.state.userconfig.onion_skin_tint_alpha
+	var color_alpha_step : float = PixelPen.state.userconfig.onion_skin_tint_alpha / PixelPen.state.userconfig.onion_skin_total
 	for prev_image in project.animation_prev_skinning_image:
 		var sprite : Sprite2D = Sprite2D.new()
 		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST

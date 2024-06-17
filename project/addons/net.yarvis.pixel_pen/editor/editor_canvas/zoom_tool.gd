@@ -52,7 +52,7 @@ func _on_mouse_motion(mouse_position : Vector2, event_relative : Vector2, callba
 
 func _on_shift_pressed(pressed : bool):
 	shift_mode = pressed
-	PixelPen.singleton.toolbox_shift_mode.emit(shift_mode)
+	PixelPen.state.toolbox_shift_mode.emit(shift_mode)
 
 
 func _on_draw_cursor(mouse_position : Vector2):

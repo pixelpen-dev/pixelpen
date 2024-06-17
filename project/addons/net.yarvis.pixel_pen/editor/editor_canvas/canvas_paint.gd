@@ -24,68 +24,68 @@ var tool : Tool = Tool.new():
 			PixelPenEnum.ToolBox.TOOL_SELECT:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_SELECT:
 					tool = SelectTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_MOVE:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_MOVE:
 					tool = MoveTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_PAN:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_PAN:
 					tool = PanTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_PEN:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_PEN:
 					tool = PenTool.new(PixelPenEnum.ToolBox.TOOL_PEN)
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_BRUSH:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_BRUSH:
 					tool = BrushTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_STAMP:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_STAMP:
 					tool = StampTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_ERASER:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_ERASER:
 					tool = PenTool.new(PixelPenEnum.ToolBox.TOOL_ERASER)
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_MAGNET:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_MAGNET:
 					tool = MagnetTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_SELECTION:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_SELECTION:
 					tool = SelectionTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_LINE:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_LINE:
 					tool = LineTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_ELLIPSE:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_ELLIPSE:
 					tool = EllipseTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_RECTANGLE:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_RECTANGLE:
 					tool = RectangleTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_FILL:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_FILL:
 					tool = FillTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_COLOR_PICKER:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_COLOR_PICKER:
 					tool = ColorPickerTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_ZOOM:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_ZOOM:
 					tool = ZoomTool.new()
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			_:
 				if tool.active_tool_type != tool.tool_type:
 					tool = Tool.new()
 					tool.tool_type = tool.active_tool_type
-					PixelPen.singleton.toolbox_just_changed.emit(tool.active_tool_type)
+					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 		return tool
 
 

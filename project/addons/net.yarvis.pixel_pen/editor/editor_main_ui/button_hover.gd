@@ -6,7 +6,7 @@ const disable_color : Color = Color.DIM_GRAY
 const default_color : Color = Color.GRAY
 const hover_color : Color = Color.WHITE
 
-@onready var active_color : Color = PixelPen.singleton.userconfig.accent_color
+@onready var active_color : Color = PixelPen.state.userconfig.accent_color
 
 var is_hover : bool = false
 
@@ -28,7 +28,7 @@ var is_hover : bool = false
 
 
 func _ready():
-	if not PixelPen.singleton.need_connection(get_window()):
+	if not PixelPen.state.need_connection(get_window()):
 		return
 	var parent : TextureButton = get_parent()
 	parent.focus_mode = Control.FOCUS_NONE
@@ -48,7 +48,7 @@ func _ready():
 				is_hover = false
 				parent.material.set_shader_parameter("tint", default_color if not parent.disabled else disable_color)
 			)
-	PixelPen.singleton.tool_changed.connect(func(active_tool_grup, active_tool_type, grab_active):
+	PixelPen.state.tool_changed.connect(func(active_tool_grup, active_tool_type, grab_active):
 			if active_tool_grup == tool_grup and grab_active:
 				is_active = tool_type == active_tool_type
 			)

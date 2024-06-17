@@ -63,4 +63,4 @@ func _on_confirmed():
 			Vector2i(_width as int, 
 			_height as int),name_node.text if name_node.text != "" else "Untitled"
 	)
-	PixelPen.singleton.current_project = current_project
+	PixelPen.state.current_project = current_project

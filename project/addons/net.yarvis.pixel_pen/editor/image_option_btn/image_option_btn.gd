@@ -39,12 +39,12 @@ func build_panel(build_mode : Mode):
 	mode = build_mode
 	if mode == Mode.BRUSH:
 		_cache_images.clear()
-		for img in PixelPen.singleton.userconfig.brush:
+		for img in PixelPen.state.userconfig.brush:
 			var imga : Image = Image.create(img.get_width(), img.get_height(), false, Image.FORMAT_RGBA8)
 			PixelPenCPP.fill_color(img, imga, Color8(255, 255, 255, 255), null)
 			_cache_images.push_back(imga)
 	elif mode == Mode.STAMP:
-		_cache_images = PixelPen.singleton.userconfig.stamp
+		_cache_images = PixelPen.state.userconfig.stamp
 	for child in vbox.get_children():
 		if not child.is_queued_for_deletion():
 			child.queue_free()
@@ -87,9 +87,9 @@ func input(index, event):
 		elif event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT:
 			popup_panel.hide()
 			if mode == Mode.BRUSH:
-				PixelPen.singleton.userconfig.delete_brush(index)
+				PixelPen.state.userconfig.delete_brush(index)
 			elif mode == Mode.STAMP:
-				PixelPen.singleton.userconfig.delete_stamp(index)
+				PixelPen.state.userconfig.delete_stamp(index)
 			build_panel(mode)
 			if brush_index > index:
 				selected.emit(brush_index - 1)

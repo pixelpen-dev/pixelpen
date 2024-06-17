@@ -40,7 +40,7 @@ static func init_screen():
 
 
 func _ready():
-	PixelPen.singleton.theme_changed.connect(_on_theme_changed)
+	PixelPen.state.theme_changed.connect(_on_theme_changed)
 	_on_theme_changed()
 
 
@@ -95,13 +95,13 @@ func use_safe_area(control : Control):
 
 func _on_theme_changed():
 	if type == 0:
-		editor_main_ui.canvas_color_base = PixelPen.singleton.userconfig.canvas_base_mode_color
-		editor_main_ui.canvas_color_sample = PixelPen.singleton.userconfig.canvas_sample_mode_color
+		editor_main_ui.canvas_color_base = PixelPen.state.userconfig.canvas_base_mode_color
+		editor_main_ui.canvas_color_sample = PixelPen.state.userconfig.canvas_sample_mode_color
 	
 	elif type == 1:
-		wrapper_layer_control.default_color = PixelPen.singleton.userconfig.layer_body_color
-		wrapper_layer_control.active_color = PixelPen.singleton.userconfig.layer_active_color
-		wrapper_layer_control.secondary_active_color = PixelPen.singleton.userconfig.layer_secondary_active_color
-		wrapper_layer_control.color = PixelPen.singleton.userconfig.layer_placeholder_color
-		head_layer_control.color = PixelPen.singleton.userconfig.layer_head_color
-		detached_layer_control.color = PixelPen.singleton.userconfig.box_panel_darker_color
+		wrapper_layer_control.default_color = PixelPen.state.userconfig.layer_body_color
+		wrapper_layer_control.active_color = PixelPen.state.userconfig.layer_active_color
+		wrapper_layer_control.secondary_active_color = PixelPen.state.userconfig.layer_secondary_active_color
+		wrapper_layer_control.color = PixelPen.state.userconfig.layer_placeholder_color
+		head_layer_control.color = PixelPen.state.userconfig.layer_head_color
+		detached_layer_control.color = PixelPen.state.userconfig.box_panel_darker_color

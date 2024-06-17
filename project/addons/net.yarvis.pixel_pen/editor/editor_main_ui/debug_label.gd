@@ -8,15 +8,15 @@ var data_debug : Dictionary = {}
 func _ready():
 	visible = false
 	text = ""
-	if not PixelPen.singleton.need_connection(get_window()):
+	if not PixelPen.state.need_connection(get_window()):
 		return
-	PixelPen.singleton.debug_log.connect(func(key, value):
+	PixelPen.state.debug_log.connect(func(key, value):
 			data_debug[key] = value
 			)
 
 
 func _process(_delta):
-	if not PixelPen.singleton.need_connection(get_window()):
+	if not PixelPen.state.need_connection(get_window()):
 		text = ""
 		return
 	var txt = str("FPS: ", Engine.get_frames_per_second())

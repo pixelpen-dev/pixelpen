@@ -15,39 +15,39 @@ var general_tree_structure : Dictionary = {
 var general_structure: Dictionary = {
 	"/Guide/Grid" : [
 		TreeRow.create_vector2i(
-			"Grid line repeat", "X", "Y", PixelPen.singleton.userconfig.default_grid_size,
+			"Grid line repeat", "X", "Y", PixelPen.state.userconfig.default_grid_size,
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
 		),
 		TreeRow.create_vector2i(
-			"Checker size", "WIDTH", "HEIGHT", PixelPen.singleton.userconfig.checker_size, 
+			"Checker size", "WIDTH", "HEIGHT", PixelPen.state.userconfig.checker_size, 
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
 		)] as Array[TreeRow],
 	"/Projects" : [
 		TreeRow.create_file_path(
-			"Default workspace folder", PixelPen.singleton.userconfig.default_workspace,
+			"Default workspace folder", PixelPen.state.userconfig.default_workspace,
 			FileDialog.FILE_MODE_OPEN_DIR
 		),
 		TreeRow.create_vector2i(
-			"Default canvas size", "WIDTH", "HEIGHT", PixelPen.singleton.userconfig.default_canvas_size,
+			"Default canvas size", "WIDTH", "HEIGHT", PixelPen.state.userconfig.default_canvas_size,
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
 		)
 	] as Array[TreeRow],
 	"/Cursor" : [TreeRow.create_enum(
-			"Hide in canvas", 1 if PixelPen.singleton.userconfig.hide_cursor_in_canvas else 0,
+			"Hide in canvas", 1 if PixelPen.state.userconfig.hide_cursor_in_canvas else 0,
 			["FALSE", "TRUE"] as Array[String]
 		)] as Array[TreeRow],
 	"/Animation/Frame" : [
 		TreeRow.create_int(
-			"Default fps", PixelPen.singleton.userconfig.default_animation_fps, 1, 1000
+			"Default fps", PixelPen.state.userconfig.default_animation_fps, 1, 1000
 		)
 	] as Array[TreeRow],
 	"/Animation/Onion Skinning" : [
 		TreeRow.create_int(
-			"Onion skin total", PixelPen.singleton.userconfig.onion_skin_total, 1, 10
+			"Onion skin total", PixelPen.state.userconfig.onion_skin_total, 1, 10
 		),
-		TreeRow.create_color("Previous frame tint color", PixelPen.singleton.userconfig.onion_skin_tint_previous, false),
-		TreeRow.create_color("Next frame tint color", PixelPen.singleton.userconfig.onion_skin_tint_next, false),
-		TreeRow.create_range("Alpha", PixelPen.singleton.userconfig.onion_skin_tint_alpha, 0.1, 1.0, 0.01)
+		TreeRow.create_color("Previous frame tint color", PixelPen.state.userconfig.onion_skin_tint_previous, false),
+		TreeRow.create_color("Next frame tint color", PixelPen.state.userconfig.onion_skin_tint_next, false),
+		TreeRow.create_range("Alpha", PixelPen.state.userconfig.onion_skin_tint_alpha, 0.1, 1.0, 0.01)
 	] as Array[TreeRow]
 	}
 
@@ -99,41 +99,41 @@ func _on_general_properties_value_changed(index, value):
 	match current_active_path:
 		"/Guide/Grid":
 			if index == 0:
-				PixelPen.singleton.userconfig.default_grid_size = value as Vector2i
-				PixelPen.singleton.userconfig.save()
+				PixelPen.state.userconfig.default_grid_size = value as Vector2i
+				PixelPen.state.userconfig.save()
 			elif index == 1:
-				PixelPen.singleton.userconfig.checker_size = value as Vector2i
-				PixelPen.singleton.userconfig.save()
-				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.state.userconfig.checker_size = value as Vector2i
+				PixelPen.state.userconfig.save()
+				PixelPen.state.layer_items_changed.emit()
 		"/Projects":
 			if index == 0:
-				PixelPen.singleton.userconfig.default_workspace = value as String
-				PixelPen.singleton.userconfig.save()
+				PixelPen.state.userconfig.default_workspace = value as String
+				PixelPen.state.userconfig.save()
 			elif index == 1:
-				PixelPen.singleton.userconfig.default_canvas_size = value as Vector2i
-				PixelPen.singleton.userconfig.save()
+				PixelPen.state.userconfig.default_canvas_size = value as Vector2i
+				PixelPen.state.userconfig.save()
 		"/Cursor":
 			if index == 0:
-				PixelPen.singleton.userconfig.hide_cursor_in_canvas = (value as int) == 1
-				PixelPen.singleton.userconfig.save()
+				PixelPen.state.userconfig.hide_cursor_in_canvas = (value as int) == 1
+				PixelPen.state.userconfig.save()
 		"/Animation/Frame":
 			if index == 0:
-				PixelPen.singleton.userconfig.default_animation_fps = value as int
-				PixelPen.singleton.userconfig.save()
+				PixelPen.state.userconfig.default_animation_fps = value as int
+				PixelPen.state.userconfig.save()
 		"/Animation/Onion Skinning":
 			if index == 0:
-				PixelPen.singleton.userconfig.onion_skin_total = value as int
-				PixelPen.singleton.userconfig.save()
-				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.state.userconfig.onion_skin_total = value as int
+				PixelPen.state.userconfig.save()
+				PixelPen.state.layer_items_changed.emit()
 			elif index == 1:
-				PixelPen.singleton.userconfig.onion_skin_tint_previous = value as Color
-				PixelPen.singleton.userconfig.save()
-				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.state.userconfig.onion_skin_tint_previous = value as Color
+				PixelPen.state.userconfig.save()
+				PixelPen.state.layer_items_changed.emit()
 			elif index == 2:
-				PixelPen.singleton.userconfig.onion_skin_tint_next = value as Color
-				PixelPen.singleton.userconfig.save()
-				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.state.userconfig.onion_skin_tint_next = value as Color
+				PixelPen.state.userconfig.save()
+				PixelPen.state.layer_items_changed.emit()
 			elif index == 3:
-				PixelPen.singleton.userconfig.onion_skin_tint_alpha = value as float
-				PixelPen.singleton.userconfig.save()
-				PixelPen.singleton.layer_items_changed.emit()
+				PixelPen.state.userconfig.onion_skin_tint_alpha = value as float
+				PixelPen.state.userconfig.save()
+				PixelPen.state.layer_items_changed.emit()

@@ -4,9 +4,11 @@ extends Control
 
 signal selected(index)
 
+const shader_checker := preload("../../resources/editor_canvas.gdshader")
 
 enum Mode{
 	BRUSH,
+	ERASER,
 	STAMP,
 }
 
@@ -20,6 +22,7 @@ var brush_index : int
 
 var _panel_size : Vector2
 var _cache_images : Array[Image]
+var is_pop : bool = false
 
 
 func _ready():
@@ -29,6 +32,11 @@ func _ready():
 func select(index : int):
 	if index < _cache_images.size() and index >= 0:
 		preview.texture = ImageTexture.create_from_image(_cache_images[index])
+		if mode == Mode.ERASER:
+			preview.material = ShaderMaterial.new()
+			preview.material.shader = shader_checker
+			preview.material.set_shader_parameter("lock_to_global", 0.0)
+			preview.material.set_shader_parameter("tile_size", Vector2i(4, 4))
 		brush_index = index
 		vbox.queue_redraw()
 	else:
@@ -38,6 +46,12 @@ func select(index : int):
 func build_panel(build_mode : Mode):
 	mode = build_mode
 	if mode == Mode.BRUSH:
+		_cache_images.clear()
+		for img in PixelPen.state.userconfig.brush:
+			var imga : Image = Image.create(img.get_width(), img.get_height(), false, Image.FORMAT_RGBA8)
+			PixelPenCPP.fill_color(img, imga, Color8(255, 255, 255, 255), null)
+			_cache_images.push_back(imga)
+	elif mode == Mode.ERASER:
 		_cache_images.clear()
 		for img in PixelPen.state.userconfig.brush:
 			var imga : Image = Image.create(img.get_width(), img.get_height(), false, Image.FORMAT_RGBA8)
@@ -66,6 +80,23 @@ func build_panel(build_mode : Mode):
 		texture_rect.gui_input.connect(func(event):
 				input(vbox.get_children().find(margin), event)
 				)
+		if mode == Mode.ERASER:
+			texture_rect.material = ShaderMaterial.new()
+			texture_rect.material.shader = shader_checker
+			texture_rect.material.set_shader_parameter("lock_to_global", 0.0)
+			var siz : Vector2i = (Vector2i(64, 64) - Vector2i(16, 16)) / _cache_images[i].get_size()
+			texture_rect.material.set_shader_parameter("tile_size", siz)
+		
+		if mode == Mode.BRUSH:
+			var label := Label.new()
+			label.set_anchors_and_offsets_preset(Control.PRESET_HCENTER_WIDE)
+			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			label.add_theme_color_override("font_color", Color.DIM_GRAY if mode == Mode.BRUSH else Color.BLACK)
+			label.mouse_filter = Control.MOUSE_FILTER_PASS
+			var img_size := _cache_images[i].get_size()
+			label.text = str(img_size.x, "x", img_size.y)
+			texture_rect.add_child(label)
 		
 		margin.add_child(texture_rect)
 		vbox.add_child(margin)
@@ -76,7 +107,12 @@ func build_panel(build_mode : Mode):
 
 
 func _on_button_pressed():
-	popup_panel.popup(Rect2i(global_position + Vector2(size.x, size.x), _panel_size))
+	if is_pop:
+		popup_panel.hide()
+		is_pop = false
+	else:
+		popup_panel.popup(Rect2i(global_position + Vector2(0, size.y + 4), _panel_size))
+		is_pop = true
 
 
 func input(index, event):
@@ -84,9 +120,10 @@ func input(index, event):
 		if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
 			popup_panel.hide()
 			selected.emit(index)
+			is_pop = false
 		elif event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT:
 			popup_panel.hide()
-			if mode == Mode.BRUSH:
+			if mode == Mode.BRUSH or mode == Mode.ERASER:
 				PixelPen.state.userconfig.delete_brush(index)
 			elif mode == Mode.STAMP:
 				PixelPen.state.userconfig.delete_stamp(index)
@@ -95,3 +132,4 @@ func input(index, event):
 				selected.emit(brush_index - 1)
 			else:
 				selected.emit(brush_index)
+			is_pop = false

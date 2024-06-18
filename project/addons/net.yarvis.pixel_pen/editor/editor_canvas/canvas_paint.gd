@@ -35,11 +35,11 @@ var tool : Tool = Tool.new():
 					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_PEN:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_PEN:
-					tool = PenTool.new(PixelPenEnum.ToolBox.TOOL_PEN)
+					tool = PenTool.new()
 					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_BRUSH:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_BRUSH:
-					tool = BrushTool.new()
+					tool = BrushTool.new(PixelPenEnum.ToolBox.TOOL_BRUSH)
 					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_STAMP:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_STAMP:
@@ -47,7 +47,7 @@ var tool : Tool = Tool.new():
 					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_ERASER:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_ERASER:
-					tool = PenTool.new(PixelPenEnum.ToolBox.TOOL_ERASER)
+					tool = BrushTool.new(PixelPenEnum.ToolBox.TOOL_ERASER)
 					PixelPen.state.toolbox_just_changed.emit(tool.active_tool_type)
 			PixelPenEnum.ToolBox.TOOL_MAGNET:
 				if tool.tool_type != PixelPenEnum.ToolBox.TOOL_MAGNET:

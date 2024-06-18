@@ -107,6 +107,8 @@ func _on_tool_changed(type :int):
 			_on_pen_tool()
 		PixelPenEnum.ToolBox.TOOL_BRUSH:
 			_on_brush_tool()
+		PixelPenEnum.ToolBox.TOOL_ERASER:
+			_on_eraser_tool()
 		PixelPenEnum.ToolBox.TOOL_STAMP:
 			_on_stamp_tool()
 		PixelPenEnum.ToolBox.TOOL_MAGNET:
@@ -355,6 +357,12 @@ func _on_brush_tool():
 	_add_separator()
 
 
+func _on_eraser_tool():
+	_clean_up()
+	_build_brush_preview("Brush pattern", true)
+	_add_separator()
+
+
 func _on_stamp_tool():
 	_clean_up()
 	_build_stamp_preview("Stamp pattern")
@@ -548,14 +556,22 @@ func _build_check_box(label : String, toggle_callback : Callable, default_toggle
 	check_box.owner = button_list.owner
 
 
-func _build_brush_preview(label : String):
+func _build_brush_preview(label : String, eraser : bool = false):
 	var btn = preview_btn.instantiate()
 	btn.vbox.tooltip_text = "(LMB) Select brush \n(RMB) Delete brush"
+	if PixelPen.state.userconfig.brush.size() == 0:
+		var image : Image = Image.create(1, 1, false, Image.FORMAT_R8)
+		image.set_pixel(0, 0, Color8(255, 0, 0))
+		PixelPen.state.userconfig.brush.push_back(image)
+		PixelPen.state.userconfig.save()
 	if PixelPen.state.userconfig.brush.size() > 0:
 		BrushTool.brush_index = clampi(BrushTool.brush_index, 0, PixelPen.state.userconfig.brush.size() - 1)
 		if current_toolbox == PixelPenEnum.ToolBox.TOOL_BRUSH:
 			PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, BrushTool.brush_index, false)
-	btn.build_panel(btn.Mode.BRUSH)
+	if eraser:
+		btn.build_panel(btn.Mode.ERASER)
+	else:
+		btn.build_panel(btn.Mode.BRUSH)
 	button_list.add_child(btn)
 	btn.owner = button_list.owner
 	btn.selected.connect(func(index):

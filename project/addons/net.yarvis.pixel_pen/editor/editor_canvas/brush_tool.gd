@@ -7,12 +7,18 @@ var is_pressed_outside : bool = false
 var shift_mode : bool = false
 var brush_mask : ImageTexture
 
+var brush_color_index : int
 
-func _init():
-	tool_type = PixelPenEnum.ToolBox.TOOL_BRUSH
-	has_shift_mode = true
+
+func _init(mode : int):
+	tool_type = mode
+	has_shift_mode = tool_type == PixelPenEnum.ToolBox.TOOL_BRUSH
 	is_pressed = false
 	update_brush()
+	if tool_type == PixelPenEnum.ToolBox.TOOL_BRUSH:
+		brush_color_index = _index_color
+	elif tool_type == PixelPenEnum.ToolBox.TOOL_ERASER:
+		brush_color_index = 0
 
 
 func _on_request_switch_tool(tool_box_type : int) -> bool:
@@ -53,7 +59,7 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 			(PixelPen.state.current_project as PixelPenProject).create_undo_layer(action_name, index_image.layer_uid, func ():
 					PixelPen.state.layer_image_changed.emit(layer_uid)
 					PixelPen.state.project_saved.emit(false))
-			paint_pixel(coord, _index_color, false, true)
+			paint_pixel(coord, brush_color_index, false, true)
 			
 			callback.call()
 		else:
@@ -65,20 +71,31 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 	if is_pressed:
 		if not _prev_paint_coord_array.is_empty():
 			var is_mirrored : bool = false
-			var color : int = _index_color
+			if node.selection_tool_hint.texture != null:
+				var mirror_line : Vector2i
+				if PixelPen.state.current_project.show_symetric_vertical:
+					mirror_line.x = PixelPen.state.current_project.symetric_guid.x
+				if PixelPen.state.current_project.show_symetric_horizontal:
+					mirror_line.y = PixelPen.state.current_project.symetric_guid.y
+				if mirror_line != Vector2i.ZERO:
+					var mask_selection : Image = MaskSelection.get_image_no_margin(node.selection_tool_hint.texture.get_image())
+					mask_selection = get_mirror_image(mirror_line, mask_selection)
+					PixelPen.state.current_project.paint.set_mask(mask_selection)
+				else:
+					PixelPen.state.current_project.paint.set_mask(null)
 			for each in _prev_paint_coord_array:
 				if PixelPen.state.current_project.show_symetric_vertical:
 					var mirror : Vector2 = each
 					mirror.x = PixelPen.state.current_project.symetric_guid.x + PixelPen.state.current_project.symetric_guid.x - mirror.x - 1
-					paint_pixel(mirror, color, false, true)
+					paint_pixel(mirror, brush_color_index, false, true)
 					if PixelPen.state.current_project.show_symetric_horizontal:
 						mirror.y = PixelPen.state.current_project.symetric_guid.y + PixelPen.state.current_project.symetric_guid.y - mirror.y - 1
-						paint_pixel(mirror, color, false, true)
+						paint_pixel(mirror, brush_color_index, false, true)
 					is_mirrored = true
 				if PixelPen.state.current_project.show_symetric_horizontal:
 					var mirror : Vector2 = each
 					mirror.y = PixelPen.state.current_project.symetric_guid.y + PixelPen.state.current_project.symetric_guid.y - mirror.y - 1
-					paint_pixel(mirror, color, false, true)
+					paint_pixel(mirror, brush_color_index, false, true)
 					is_mirrored = true
 			_prev_paint_coord_array.clear()
 			if is_mirrored:
@@ -140,8 +157,8 @@ func _on_mouse_motion(mouse_position : Vector2, event_relative : Vector2, callba
 						PixelPen.state.layer_image_changed.emit(layer_uid)
 						PixelPen.state.project_saved.emit(false)
 						)
-				paint_pixel(to, _index_color, false, true)
-			paint_line(_prev_paint_coord, to, _index_color, false, true)
+				paint_pixel(to, brush_color_index, false, true)
+			paint_line(_prev_paint_coord, to, brush_color_index, false, true)
 			callback.call()
 			if cheat_inside:
 				_prev_paint_coord = floor(mouse_position) + Vector2(0.5, 0.5)
@@ -158,7 +175,7 @@ func _on_force_cancel():
 
 
 func _on_shift_pressed(pressed : bool):
-	shift_mode = pressed and not is_pressed
+	shift_mode = pressed and not is_pressed and tool_type == PixelPenEnum.ToolBox.TOOL_BRUSH
 	PixelPen.state.toolbox_shift_mode.emit(shift_mode)
 
 

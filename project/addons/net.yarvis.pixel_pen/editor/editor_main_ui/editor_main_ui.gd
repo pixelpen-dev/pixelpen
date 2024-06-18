@@ -1030,7 +1030,9 @@ func _on_edit_popup_pressed(id : int):
 		EditID.RESET_BRUSH:
 			PixelPen.state.current_project.reset_brush_to_default()
 			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_BRUSH:
-				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_BRUSH, true)
+				subtool_dock._on_tool_changed(PixelPenEnum.ToolBox.TOOL_BRUSH)
+			elif subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_ERASER:
+				subtool_dock._on_tool_changed(PixelPenEnum.ToolBox.TOOL_ERASER)
 		
 		EditID.CREATE_STAMP:
 			if canvas.selection_tool_hint.texture == null:

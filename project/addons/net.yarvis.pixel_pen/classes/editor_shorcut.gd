@@ -54,6 +54,7 @@ extends Resource
 
 @export_subgroup("Animation")
 @export var animation_play_pause : Shortcut
+@export var animation_preview_play_pause : Shortcut
 @export var animation_skip_to_front : Shortcut
 @export var animation_step_forward : Shortcut
 @export var animation_step_backward : Shortcut

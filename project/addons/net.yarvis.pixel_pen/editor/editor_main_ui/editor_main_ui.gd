@@ -94,6 +94,7 @@ enum PaletteID{
 
 enum AnimationID{
 	PLAY_PAUSE,
+	PREVIEW_PLAY_PAUSE,
 	SKIP_TO_FRONT,
 	STEP_BACKWARD,
 	STEP_FORWARD,
@@ -149,6 +150,7 @@ enum ViewID{
 @export var canvas_color_sample : Color
 @export var debug_label : Label
 @export var preview_node : Control
+@export var preview_play_timer : Timer
 @export var animation_panel : Control
 @export var layer_dock : Control
 @export var layers_tool : Control
@@ -517,6 +519,7 @@ func _init_popup_menu():
 	var animation_popup : PopupMenu = animation_menu.get_popup()
 	animation_popup.add_to_group("pixelpen_popup")
 	animation_popup.add_item("Play/Pause", AnimationID.PLAY_PAUSE)
+	animation_popup.add_item("Preview Play/Pause", AnimationID.PREVIEW_PLAY_PAUSE)
 	animation_popup.add_item("Skip to front", AnimationID.SKIP_TO_FRONT)
 	animation_popup.add_item("Step backward", AnimationID.STEP_BACKWARD)
 	animation_popup.add_item("Step forward", AnimationID.STEP_FORWARD)
@@ -638,6 +641,7 @@ func _set_shorcut():
 
 	var animation_popup := animation_menu.get_popup()
 	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.PLAY_PAUSE), PixelPen.state.userconfig.shorcuts.animation_play_pause)
+	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.PREVIEW_PLAY_PAUSE), PixelPen.state.userconfig.shorcuts.animation_preview_play_pause)
 	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.SKIP_TO_FRONT), PixelPen.state.userconfig.shorcuts.animation_skip_to_front)
 	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.STEP_FORWARD), PixelPen.state.userconfig.shorcuts.animation_step_forward)
 	animation_popup.set_item_shortcut(animation_popup.get_item_index(AnimationID.STEP_BACKWARD), PixelPen.state.userconfig.shorcuts.animation_step_backward)
@@ -686,6 +690,7 @@ func connect_signal():
 	layer_menu.get_popup().about_to_popup.connect(_on_layer_about_to_popup)
 	palette_menu.get_popup().id_pressed.connect(_on_palette_popup_pressed)
 	animation_menu.get_popup().id_pressed.connect(_on_animation_popup_pressed)
+	animation_menu.get_popup().about_to_popup.connect(_on_animation_about_to_popup)
 	view_menu.get_popup().id_pressed.connect(_on_view_popup_pressed)
 	PixelPen.state.tool_changed.connect(_on_tool_changed)
 	PixelPen.state.request_new_project.connect(_new)
@@ -1275,6 +1280,11 @@ func _on_animation_popup_pressed(id : int):
 	if id == AnimationID.PLAY_PAUSE:
 		PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE, false)
 	
+	elif id == AnimationID.PREVIEW_PLAY_PAUSE:
+		if not PixelPen.state.current_project.show_preview:
+			return
+		preview_play_timer.anim_play(not preview_play_timer.is_playing)
+	
 	elif id == AnimationID.SKIP_TO_FRONT:
 		PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT, false)
 	
@@ -1436,6 +1446,12 @@ func _on_animation_popup_pressed(id : int):
 				PixelPen.state.project_saved.emit(false)
 
 
+func _on_animation_about_to_popup():
+	var popup := animation_menu.get_popup()
+	var disable = not PixelPen.state.current_project.show_preview
+	popup.set_item_disabled(popup.get_item_index(AnimationID.PREVIEW_PLAY_PAUSE), disable)
+
+
 func _on_view_popup_pressed(id : int):
 	var popup : PopupMenu = view_menu.get_popup()
 	var index = popup.get_item_index(id)
@@ -1522,6 +1538,7 @@ func _on_view_popup_pressed(id : int):
 				)
 	
 	elif id == ViewID.EDIT_SELECTION_ONLY:
+		preview_play_timer.anim_play(false)
 		if (PixelPen.state.current_project as PixelPenProject).use_sample:
 			(PixelPen.state.current_project as PixelPenProject).set_mode(0)
 		elif canvas.selection_tool_hint.texture != null:

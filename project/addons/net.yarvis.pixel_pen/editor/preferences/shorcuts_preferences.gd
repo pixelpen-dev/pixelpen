@@ -33,9 +33,9 @@ var shorcuts_tree_structure : Dictionary = {
 			"Active Go down.active_go_down"
 		],
 		"Animation" : [
-			"Play/Pause.animation_play_pause", "Skip to front.animation_skip_to_front",
-			"Step backward.animation_step_backward", "Step forward.animation_step_forward",
-			"Skip to end.animation_skip_to_end",
+			"Play/Pause.animation_play_pause", "Preview Play/Pause.animation_preview_play_pause", 
+			"Skip to front.animation_skip_to_front", "Step backward.animation_step_backward",
+			"Step forward.animation_step_forward", "Skip to end.animation_skip_to_end",
 			"Loop animation playback.loop_playback", "Show onion skinning.animation_onion_skinning",
 			"Insert frame to right.frame_insert_right", "Insert frame to left.frame_insert_left",
 			"Duplicate frame.duplicate_frame", "Duplicate frame linked.duplicate_frame_linked",
@@ -46,7 +46,7 @@ var shorcuts_tree_structure : Dictionary = {
 			"Delete draft frame.delete_draft_frame"
 		],
 		"View" : [
-			"Rotate canvas 90.rotate_canvas_90", "Rotate canvas -90.rotate_canvas_min90",
+			"Rotate canvas -90.rotate_canvas_min90", "Rotate canvas 90.rotate_canvas_90",
 			"Flip canvas horizontal.flip_canvas_horizontal", "Flip canvas vertical.flip_canvas_vertical",
 			"Reset canvas transform.reset_canvas_transform", "Reset zoom.reset_zoom", 
 			"Edit selection only.toggle_edit_selection_only", "Show virtual mouse.virtual_mouse",

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EditorShorcut" load_steps=96 format=3 uid="uid://djvoltr03l1k0"]
+[gd_resource type="Resource" script_class="EditorShorcut" load_steps=98 format=3 uid="uid://djvoltr03l1k0"]
 
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/classes/editor_shorcut.gd" id="1_bhf3x"]
 
@@ -43,6 +43,15 @@ keycode = 82
 
 [sub_resource type="Shortcut" id="Shortcut_x5in4"]
 events = [SubResource("InputEventKey_u1w3d")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_jwcvn"]
+device = -1
+command_or_control_autoremap = true
+shift_pressed = true
+keycode = 82
+
+[sub_resource type="Shortcut" id="Shortcut_bdjph"]
+events = [SubResource("InputEventKey_jwcvn")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_8xvmu"]
 device = -1
@@ -400,6 +409,7 @@ prev_toolbox = SubResource("Shortcut_mq2g4")
 active_go_up = SubResource("Shortcut_26apn")
 active_go_down = SubResource("Shortcut_tlyc7")
 animation_play_pause = SubResource("Shortcut_x5in4")
+animation_preview_play_pause = SubResource("Shortcut_bdjph")
 animation_step_forward = SubResource("Shortcut_bjdp1")
 animation_step_backward = SubResource("Shortcut_ck1l2")
 frame_insert_right = SubResource("Shortcut_jfiek")

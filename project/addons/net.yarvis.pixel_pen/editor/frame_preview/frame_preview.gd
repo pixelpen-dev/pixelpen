@@ -34,6 +34,13 @@ func show_frame(frame : Frame):
 	_frame = frame
 
 
+func clear_layer():
+	for child in layers.get_children():
+		child.queue_free()
+	for child in sample_layers.get_children():
+		child.queue_free()
+
+
 func _ready():
 	if not PixelPen.state.need_connection(get_window()):
 		return

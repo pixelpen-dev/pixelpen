@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://cwymkqj20edan"]
+[gd_scene load_steps=45 format=3 uid="uid://cwymkqj20edan"]
 
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_lcbg8"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/editor_main_ui.gd" id="2_7n4p1"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/branch.gd" id="6_uhkao"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/data_branch.gd" id="7_on08i"]
 [ext_resource type="Texture2D" uid="uid://deog0bonjsm4p" path="res://addons/net.yarvis.pixel_pen/resources/icon/information-outline.svg" id="10_i6fsj"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/preview_play_pause.gd" id="17_pncom"]
 [ext_resource type="FontFile" uid="uid://b0re2f6plrnns" path="res://addons/net.yarvis.pixel_pen/resources/fonts/inter/static/Inter-Bold.ttf" id="18_uhe2p"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/grid_pallete.gd" id="19_eprkn"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/sub_tool.gd" id="20_sif0e"]
@@ -161,7 +162,7 @@ content_margin_top = 8.0
 font_size = 11
 font_color = Color(0.564706, 0.564706, 0.564706, 1)
 
-[node name="EditorMainUI" type="Control" node_paths=PackedStringArray("pixel_pen_menu", "file_menu", "edit_menu", "layer_menu", "palette_menu", "animation_menu", "view_menu", "toolbox_dock", "canvas", "canvas_dock", "debug_label", "preview_node", "animation_panel", "layer_dock", "layers_tool", "theme_config", "layout_node", "subtool_dock")]
+[node name="EditorMainUI" type="Control" node_paths=PackedStringArray("pixel_pen_menu", "file_menu", "edit_menu", "layer_menu", "palette_menu", "animation_menu", "view_menu", "toolbox_dock", "canvas", "canvas_dock", "debug_label", "preview_node", "preview_play_timer", "animation_panel", "layer_dock", "layers_tool", "theme_config", "layout_node", "subtool_dock")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -184,6 +185,7 @@ canvas_color_base = Color(0.38, 0.38, 0.38, 1)
 canvas_color_sample = Color(0.18, 0.18, 0.3, 1)
 debug_label = NodePath("Background/VBoxContainer/MarginContainer/Layout/Canvas/DebugLabel")
 preview_node = NodePath("Background/VBoxContainer/MarginContainer/Layout/Preview")
+preview_play_timer = NodePath("Background/VBoxContainer/MarginContainer/Layout/Preview/VBoxContainer/Background/FramePlayTimer")
 animation_panel = NodePath("Background/VBoxContainer/MarginContainer/Layout/Animation")
 layer_dock = NodePath("Background/VBoxContainer/MarginContainer/Layout/LayerPanel")
 layers_tool = NodePath("Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools")
@@ -563,6 +565,11 @@ size_flags_vertical = 3
 use_canvas_frame = true
 show_cache_frame = true
 stretch_shrink = 2
+
+[node name="FramePlayTimer" type="Timer" parent="Background/VBoxContainer/MarginContainer/Layout/Preview/VBoxContainer/Background" node_paths=PackedStringArray("parent", "frame_preview")]
+script = ExtResource("17_pncom")
+parent = NodePath("../../..")
+frame_preview = NodePath("../FramePreview")
 
 [node name="LayerPanel" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout"]
 layout_mode = 0

@@ -1,6 +1,5 @@
 @tool
-class_name PixelPen
-extends RefCounted
+extends Node
 
 
-static var state = PixelPenState.new()
+var state = PixelPenState.new()

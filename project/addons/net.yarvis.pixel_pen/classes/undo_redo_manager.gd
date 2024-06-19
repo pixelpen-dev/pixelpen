@@ -1,6 +1,6 @@
 @tool
 class_name UndoRedoManager
-extends RefCounted
+extends Resource
 
 
 signal history_breaked
@@ -8,6 +8,8 @@ signal history_breaked
 
 const MAX_CACHE : int = 10
 const MAX_STEP : int = 50
+
+var _index_counter = 0
 
 var _cache : Array[CUndoRedo] = []
 var _current_index : int = 0
@@ -18,6 +20,13 @@ var is_commited : bool = true
 
 func _init():
 	clear_history()
+
+
+func new_undo_redo() -> CUndoRedo:
+	var ur = CUndoRedo.new()
+	_index_counter += 1
+	ur.index = _index_counter
+	return ur
 
 
 func break_history():
@@ -44,7 +53,7 @@ func get_index(current_index) -> int:
 
 func clear_history():
 	_cache.clear()
-	_cache.push_back(CUndoRedo.new())
+	_cache.push_back(new_undo_redo())
 	_current_index = _cache[0].index
 
 
@@ -105,7 +114,7 @@ func create_action(name : String):
 	if index < _cache.size() + 1:
 		_cache = _cache.slice(0, index + 1)
 	if cache.get_history_count() >= MAX_STEP or has_redo:
-		_cache.push_back(CUndoRedo.new())
+		_cache.push_back(new_undo_redo())
 		if _cache.size() > MAX_CACHE:
 			_cache.pop_front()
 		_current_index = _cache[_cache.size() - 1].index
@@ -138,12 +147,6 @@ func add_do_property(object : Object, property : String, value):
 class CUndoRedo extends UndoRedo:
 	var index : int = 0
 	var clamp_redo_action : int = -1
-	static var _index_counter = 0
-
-
-	func _init():
-		_index_counter += 1
-		index = _index_counter
 
 
 	func has_redo():

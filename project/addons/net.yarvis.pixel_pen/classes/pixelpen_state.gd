@@ -1,6 +1,6 @@
 @tool
 class_name PixelPenState
-extends Node
+extends Resource
 
 
 signal theme_changed

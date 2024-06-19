@@ -43,8 +43,10 @@ func _make_visible(visible):
 
 
 func _enter_tree():
+	add_autoload_singleton("PixelPen", "classes/pixelpen.gd")
 	main_screen_changed.connect(_on_main_screen_changed)
 
 
 func _exit_tree():
+	remove_autoload_singleton("PixelPen")
 	main_screen_changed.disconnect(_on_main_screen_changed)

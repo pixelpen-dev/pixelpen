@@ -17,6 +17,8 @@ func _on_tool_pressed():
 	editor_window_instance.grab_focus()
 	editor_window_instance.tree_exited.connect(func():
 			get_window().grab_focus()
+			PixelPen.state.free()
+			PixelPen.state = PixelPenState.new()
 			)
 
 
@@ -43,6 +45,9 @@ func _make_visible(visible):
 
 
 func _enter_tree():
+	EditorInterface.get_base_control().get_window().about_to_popup.connect(func():
+			PixelPen.state.free()
+			)
 	main_screen_changed.connect(_on_main_screen_changed)
 
 

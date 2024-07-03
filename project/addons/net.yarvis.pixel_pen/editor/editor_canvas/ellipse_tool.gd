@@ -2,7 +2,7 @@
 extends "tool.gd"
 
 
-const texture := preload("../../resources/icon/circle-outline.svg")
+var texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/circle-outline.svg")
 
 static var filled : bool = false
 

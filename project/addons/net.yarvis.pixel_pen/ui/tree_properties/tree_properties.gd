@@ -9,7 +9,7 @@ enum FloatAligment{
 	FLOAT_RIGHT = 2
 }
 
-const folder_icon := preload("../../resources/icon/folder_24.svg")
+var folder_icon := load("res://addons/net.yarvis.pixel_pen/resources/icon/folder_24.svg")
 
 @export var structure : Array[TreeRow]
 @export var list_margin : float = 8
@@ -530,7 +530,7 @@ func _file_field(tree_row : TreeRow):
 	var file_button : TextureButton = TextureButton.new()
 	var hover = Node.new()
 	var mat = ShaderMaterial.new()
-	mat.shader = preload("../../resources/tint_color.gdshader")
+	mat.shader = load("res://addons/net.yarvis.pixel_pen/resources/tint_color.gdshader")
 	
 	wrapper.anchor_left = 0
 	wrapper.anchor_right = 1
@@ -580,7 +580,7 @@ func _file_field(tree_row : TreeRow):
 	
 	wrapper.add_child(file_button)
 
-	hover.set_script(preload("../../editor/editor_main_ui/button_hover.gd"))
+	hover.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/button_hover.gd"))
 	hover.can_active = false
 	mat.set_shader_parameter("tint", hover.default_color)
 	file_button.add_child(hover)

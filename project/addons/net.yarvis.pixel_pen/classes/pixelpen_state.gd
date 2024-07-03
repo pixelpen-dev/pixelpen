@@ -37,9 +37,9 @@ const MIN_COMPATIBILITY = 3
 const EDITOR_TITTLE = "Pixel Pen"
 
 # load gif exporter module
-const GIFExporter = preload("../thirdparty/gdgifexporter/exporter.gd")
+var GIFExporter = load("res://addons/net.yarvis.pixel_pen/thirdparty/gdgifexporter/exporter.gd")
 # load quantization module that you want to use
-const MedianCutQuantization = preload("../thirdparty/gdgifexporter/quantization/median_cut.gd")
+var MedianCutQuantization = load("res://addons/net.yarvis.pixel_pen/thirdparty/gdgifexporter/quantization/median_cut.gd")
 
 
 var current_project : PixelPenProject:

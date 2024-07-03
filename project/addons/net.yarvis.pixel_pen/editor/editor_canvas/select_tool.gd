@@ -2,13 +2,13 @@
 extends "tool.gd"
 
 
-const SelectionTool = preload("selection_tool.gd")
+var SelectionTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/selection_tool.gd")
 
-const selection_union = preload("../../resources/icon/vector-union.svg")
-const selection_difference = preload("../../resources/icon/vector-difference-ba.svg")
-const selection_intersection = preload("../../resources/icon/vector-intersection.svg")
+var selection_union = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/icon/vector-union.svg")
+var selection_difference = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/icon/vector-difference-ba.svg")
+var selection_intersection = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/icon/vector-intersection.svg")
 
-const select_layer_texture = preload("../../resources/icon/layers-search-outline.svg")
+var select_layer_texture = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/icon/layers-search-outline.svg")
 
 static var selection_color_grow_only_axis : bool = true
 

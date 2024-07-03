@@ -2,16 +2,16 @@
 extends Control
 
 
-const new_project_dialog := preload("../new_project_dialog.tscn")
-const preferences_dialog := preload("../preferences.tscn")
-const edit_canvas_size := preload("../edit_canvas_size.tscn")
-const startup_window := preload("../startup_window.tscn")
-const image_reference_window := preload("../window_reference.tscn")
-const import_window := preload("../import_window.tscn")
-const export_manager := preload("../export_manager.tscn")
+var new_project_dialog := load("res://addons/net.yarvis.pixel_pen/editor/new_project_dialog.tscn")
+var preferences_dialog := load("res://addons/net.yarvis.pixel_pen/editor/preferences.tscn")
+var edit_canvas_size := load("res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size.tscn")
+var startup_window := load("res://addons/net.yarvis.pixel_pen/editor/startup_window.tscn")
+var image_reference_window := load("res://addons/net.yarvis.pixel_pen/editor/window_reference.tscn")
+var import_window := load("res://addons/net.yarvis.pixel_pen/editor/import_window.tscn")
+var export_manager := load("res://addons/net.yarvis.pixel_pen/editor/export_manager.tscn")
 
-const Tool := preload("../editor_canvas/tool.gd")
-const MoveTool := preload("../editor_canvas/move_tool.gd")
+var Tool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/tool.gd")
+var MoveTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/move_tool.gd")
 
 enum PixelPenID{
 	ABOUT = 0,
@@ -855,7 +855,7 @@ func _on_tool_changed(grup : int, type: int, _grab_active : bool):
 
 func _on_pixelpen_popup_pressed(id : int):
 	if id == PixelPenID.PREFERENCE:
-		var window := preferences_dialog.instantiate()
+		var window = preferences_dialog.instantiate()
 		window.visible = false
 		add_child(window)
 		window.confirmed.connect(func():
@@ -1715,7 +1715,7 @@ func _on_export_animation(id : int):
 	elif id == ExportAnimationID.GIF:
 		_on_export_animation_gif()
 	elif id == ExportAnimationID.SHEETS:
-		var window := export_manager.instantiate()
+		var window = export_manager.instantiate()
 		window.canceled.connect(func():
 			window.hide()
 			window.queue_free()

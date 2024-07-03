@@ -2,7 +2,7 @@
 extends "tool.gd"
 
 
-const stamp := preload("../../resources/icon/stamp.svg")
+var stamp = load("res://addons/net.yarvis.pixel_pen/resources/icon/stamp.svg")
 
 static var stamp_index : int = 0
 

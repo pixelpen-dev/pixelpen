@@ -2,23 +2,23 @@
 extends RefCounted
 
 
-const Tool := preload("tool.gd")
-const SelectTool := preload("select_tool.gd")
-const MoveTool := preload("move_tool.gd")
-const PanTool := preload("pan_tool.gd")
-const PenTool := preload("pen_tool.gd")
-const BrushTool := preload("brush_tool.gd")
-const StampTool := preload("stamp_tool.gd")
-const SelectionTool := preload("selection_tool.gd")
-const EllipseTool := preload("ellipse_tool.gd")
-const RectangleTool := preload("rectangle_tool.gd")
-const MagnetTool := preload("magnet_tool.gd")
-const LineTool := preload("line_tool.gd")
-const FillTool := preload("fill_tool.gd")
-const ColorPickerTool := preload("color_picker_tool.gd")
-const ZoomTool := preload("zoom_tool.gd")
+var Tool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/tool.gd")
+var SelectTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/select_tool.gd")
+var MoveTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/move_tool.gd")
+var PanTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/pan_tool.gd")
+var PenTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/pen_tool.gd")
+var BrushTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/brush_tool.gd")
+var StampTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/stamp_tool.gd")
+var SelectionTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/selection_tool.gd")
+var EllipseTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/ellipse_tool.gd")
+var RectangleTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/rectangle_tool.gd")
+var MagnetTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/magnet_tool.gd")
+var LineTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/line_tool.gd")
+var FillTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/fill_tool.gd")
+var ColorPickerTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/color_picker_tool.gd")
+var ZoomTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/zoom_tool.gd")
 
-var tool : Tool = Tool.new():
+var tool = Tool.new():
 	get:
 		match tool.active_tool_type:
 			PixelPenEnum.ToolBox.TOOL_SELECT:

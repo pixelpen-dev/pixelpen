@@ -2,7 +2,7 @@
 extends "tool.gd"
 
 
-const texture := preload("../../resources/icon/ink_24.svg")
+var texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/ink_24.svg")
 
 static var fill_grow_only_axis : bool = true
 

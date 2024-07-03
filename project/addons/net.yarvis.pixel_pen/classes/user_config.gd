@@ -40,7 +40,7 @@ const PATH := "user://pixelpen_user_config.res"
 @export var onion_skin_tint_alpha : float = 0.5
 
 @export_subgroup("Shorcuts")
-@export var shorcuts : EditorShorcut = preload("../resources/editor_shorcut.tres")
+@export var shorcuts : EditorShorcut = load("res://addons/net.yarvis.pixel_pen/resources/editor_shorcut.tres")
 
 
 static func load_data(reset : bool = false):

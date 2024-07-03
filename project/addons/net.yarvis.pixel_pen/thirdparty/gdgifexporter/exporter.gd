@@ -2,9 +2,9 @@ extends RefCounted
 
 enum Error { OK = 0, EMPTY_IMAGE = 1, BAD_IMAGE_FORMAT = 2 }
 
-var little_endian := preload("./little_endian.gd").new()
-var lzw := preload("./gif-lzw/lzw.gd").new()
-var converter := preload("./converter.gd")
+var little_endian = load("res://addons/net.yarvis.pixel_pen/thirdparty/gdgifexporter/little_endian.gd").new()
+var lzw = load("res://addons/net.yarvis.pixel_pen/thirdparty/gdgifexporter/gif-lzw/lzw.gd").new()
+var converter := load("res://addons/net.yarvis.pixel_pen/thirdparty/gdgifexporter/converter.gd")
 
 var last_color_table := []
 var last_transparency_index := -1

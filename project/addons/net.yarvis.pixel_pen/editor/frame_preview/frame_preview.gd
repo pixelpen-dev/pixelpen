@@ -2,7 +2,7 @@
 extends Control
 
 
-const ShaderIndex := preload("../../resources/indexed_layer.gdshader")
+var ShaderIndex := load("res://addons/net.yarvis.pixel_pen/resources/indexed_layer.gdshader")
 
 @export var wrapper : Node2D
 @export var camera : Camera2D

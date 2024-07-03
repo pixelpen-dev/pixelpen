@@ -2,8 +2,8 @@
 extends Control
 
 
-const LayerProperties := preload("../layer_properties.tscn")
-const MoveTool := preload("../editor_canvas/move_tool.gd")
+var LayerProperties := load("res://addons/net.yarvis.pixel_pen/editor/layer_properties.tscn")
+var MoveTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/move_tool.gd")
 
 @export var canvas_node : Node2D
 @export var add_layer : TextureButton

@@ -4,7 +4,7 @@ extends Control
 
 signal selected(index)
 
-const shader_checker := preload("../../resources/editor_canvas.gdshader")
+var shader_checker := load("res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader")
 
 enum Mode{
 	BRUSH,

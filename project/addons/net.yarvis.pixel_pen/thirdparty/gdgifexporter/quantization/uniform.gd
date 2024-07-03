@@ -1,6 +1,6 @@
 extends RefCounted
 
-var converter := preload("../converter.gd").new()
+var converter = load("res://addons/net.yarvis.pixel_pen/thirdparty/gdgifexporter/converter.gd").new()
 var transparency := false
 
 

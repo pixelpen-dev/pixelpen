@@ -2,7 +2,7 @@
 extends Control
 
 
-const MoveTool := preload("../editor_canvas/move_tool.gd")
+var MoveTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/move_tool.gd")
 
 
 @export var default_color : Color

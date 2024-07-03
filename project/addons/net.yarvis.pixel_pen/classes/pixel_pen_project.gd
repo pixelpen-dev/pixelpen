@@ -671,7 +671,7 @@ func clean_invisible_color():
 
 
 func reset_brush_to_default():
-	var Tool := preload("../editor/editor_canvas/tool.gd")
+	var Tool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/tool.gd")
 	PixelPen.state.userconfig.brush.clear()
 	for i in range(0, 16):
 		var start : Vector2 = Vector2(0.5, 0.5)

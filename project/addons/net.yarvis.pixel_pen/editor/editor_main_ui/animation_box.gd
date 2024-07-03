@@ -2,16 +2,16 @@
 extends Panel
 
 
-const shader_tint = preload("../../resources/tint_color.gdshader")
+var shader_tint = load("res://addons/net.yarvis.pixel_pen/resources/tint_color.gdshader")
 
-const skip_to_front := preload("../../resources/icon/skip-backward.svg")
-const step_backward := preload("../../resources/icon/step-backward.svg")
-const play := preload("../../resources/icon/play.svg")
-const pause := preload("../../resources/icon/pause.svg")
-const step_forward := preload("../../resources/icon/step-forward.svg")
-const skip_to_end := preload("../../resources/icon/skip-forward.svg")
+var skip_to_front := load("res://addons/net.yarvis.pixel_pen/resources/icon/skip-backward.svg")
+var step_backward := load("res://addons/net.yarvis.pixel_pen/resources/icon/step-backward.svg")
+var play := load("res://addons/net.yarvis.pixel_pen/resources/icon/play.svg")
+var pause := load("res://addons/net.yarvis.pixel_pen/resources/icon/pause.svg")
+var step_forward := load("res://addons/net.yarvis.pixel_pen/resources/icon/step-forward.svg")
+var skip_to_end := load("res://addons/net.yarvis.pixel_pen/resources/icon/skip-forward.svg")
 
-const frame_preview := preload("../frame_preview.tscn")
+var frame_preview := load("res://addons/net.yarvis.pixel_pen/editor/frame_preview.tscn")
 
 @export var animation_menu_list : HBoxContainer
 @export var animation_wrapper_frame_list : VBoxContainer
@@ -435,7 +435,7 @@ func _build_button(name : String,
 	btn.material = mat
 	
 	var hover = Node.new()
-	hover.set_script(preload("button_hover.gd"))
+	hover.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/button_hover.gd"))
 	hover.tool_grup = grup
 	hover.tool_type = type
 	hover.can_active = can_active
@@ -476,7 +476,7 @@ func _build_toggle_button(
 	btn.material = mat
 	
 	var hover = Node.new()
-	hover.set_script(preload("button_hover.gd"))
+	hover.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/button_hover.gd"))
 	hover.tool_grup = grup
 	hover.tool_type = type
 	hover.can_active = can_active

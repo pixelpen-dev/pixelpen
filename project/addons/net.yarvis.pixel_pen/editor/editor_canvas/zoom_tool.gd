@@ -2,8 +2,8 @@
 extends "tool.gd"
 
 
-const zoom_in_texture := preload("../../resources/icon/zoom_in_24.svg")
-const zoom_out_texture := preload("../../resources/icon/zoom_out_24.svg")
+var zoom_in_texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_in_24.svg")
+var zoom_out_texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_out_24.svg")
 
 var pressed_moused_position : Vector2
 var shift_mode : bool = false

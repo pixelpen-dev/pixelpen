@@ -2,8 +2,8 @@
 extends "tool.gd"
 
 
-const magnet_texture := preload("../../resources/icon/magnet.svg")
-const magnet_on_texture := preload("../../resources/icon/magnet-on.svg")
+var magnet_texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/magnet.svg")
+var magnet_on_texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/magnet-on.svg")
 
 
 enum Mode{

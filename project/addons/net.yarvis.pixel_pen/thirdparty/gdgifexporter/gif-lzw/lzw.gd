@@ -1,7 +1,7 @@
 extends RefCounted
 
-var lsbbitpacker := preload("./lsbbitpacker.gd")
-var lsbbitunpacker := preload("./lsbbitunpacker.gd")
+var lsbbitpacker := load("res://addons/net.yarvis.pixel_pen/thirdparty/gdgifexporter/gif-lzw/lsbbitpacker.gd")
+var lsbbitunpacker := load("res://addons/net.yarvis.pixel_pen/thirdparty/gdgifexporter/gif-lzw/lsbbitunpacker.gd")
 
 var code_table := {}
 var entries_counter := 0

@@ -2,9 +2,9 @@
 extends "tool.gd"
 
 
-const selection_union = preload("../../resources/icon/vector-union.svg")
-const selection_difference = preload("../../resources/icon/vector-difference-ba.svg")
-const selection_intersection = preload("../../resources/icon/vector-intersection.svg")
+var selection_union = load("res://addons/net.yarvis.pixel_pen/resources/icon/vector-union.svg")
+var selection_difference = load("res://addons/net.yarvis.pixel_pen/resources/icon/vector-difference-ba.svg")
+var selection_intersection = load("res://addons/net.yarvis.pixel_pen/resources/icon/vector-intersection.svg")
 
 static var sub_tool_selection_type : int:
 	get:

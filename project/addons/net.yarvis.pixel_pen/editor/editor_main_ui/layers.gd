@@ -2,7 +2,7 @@
 extends VBoxContainer
 
 
-const Layer := preload("../layer.tscn")
+var Layer := load("res://addons/net.yarvis.pixel_pen/editor/layer.tscn")
 
 @export var separator_hint : HSeparator
 @export var panel_wrapper : Panel

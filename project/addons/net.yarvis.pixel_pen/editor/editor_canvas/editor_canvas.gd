@@ -3,10 +3,10 @@ extends Node2D
 
 const VIRTUAL_MOUSE_SCALE = 12
 
-const ShaderIndex := preload("../../resources/indexed_layer.gdshader")
-const TintShader := preload("../../resources/skinning_tint.gdshader")
-const CanvasPaint := preload("canvas_paint.gd")
-const MoveTool := preload("move_tool.gd")
+var ShaderIndex := load("res://addons/net.yarvis.pixel_pen/resources/indexed_layer.gdshader")
+var TintShader := load("res://addons/net.yarvis.pixel_pen/resources/skinning_tint.gdshader")
+var CanvasPaint := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/canvas_paint.gd")
+var MoveTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/move_tool.gd")
 
 @export var tile_node : Node2D
 @export var background_canvas : Node2D

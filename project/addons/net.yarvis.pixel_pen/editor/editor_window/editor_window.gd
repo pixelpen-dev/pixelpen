@@ -2,7 +2,7 @@
 extends Window
 
 
-const EditorMainUI := preload("../editor_main_ui.tscn")
+var EditorMainUI := load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui.tscn")
 
 var window_running : bool = false
 

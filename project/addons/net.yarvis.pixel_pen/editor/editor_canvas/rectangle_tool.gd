@@ -2,7 +2,7 @@
 extends "tool.gd"
 
 
-const texture := preload("../../resources/icon/rect_24.svg")
+var texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/rect_24.svg")
 
 static var filled : bool = false
 

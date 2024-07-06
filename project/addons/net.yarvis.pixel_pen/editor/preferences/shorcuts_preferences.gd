@@ -2,7 +2,7 @@
 extends HBoxContainer
 
 
-const default_shorcut : EditorShorcut = preload("../../resources/editor_shorcut.tres")
+var default_shorcut : EditorShorcut = load("res://addons/net.yarvis.pixel_pen/resources/editor_shorcut.tres")
 
 @export var shorcuts_tree : Tree
 @export var edit_button : Button
@@ -155,7 +155,7 @@ func _on_edit_pressed():
 	var line_edit : LineEdit = LineEdit.new()
 	line_edit.set_anchors_and_offsets_preset(Control.PRESET_HCENTER_WIDE)
 	line_edit.placeholder_text = "Linstening for input..."
-	line_edit.set_script(preload("shorcut_listener.gd"))
+	line_edit.set_script(load("shorcut_listener.gd"))
 	wrapper.add_child(line_edit)
 	window.confirmed.connect(func ():
 			if line_edit.record_shorcut.has_valid_event():
@@ -198,7 +198,7 @@ func _on_clear_pressed():
 
 
 func _on_reset_all_pressed():
-	PixelPen.state.userconfig.shorcuts = preload("../../resources/editor_shorcut.tres").duplicate(true)
+	PixelPen.state.userconfig.shorcuts = load("res://addons/net.yarvis.pixel_pen/resources/editor_shorcut.tres").duplicate(true)
 	PixelPen.state.userconfig.save()
 	PixelPen.state.shorcut_changed.emit()
 	shorcuts_tree_node()

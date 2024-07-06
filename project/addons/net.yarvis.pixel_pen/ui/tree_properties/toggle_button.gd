@@ -4,7 +4,7 @@ extends BaseButton
 
 signal value_changed(value)
 
-const _theme := preload("../../resources/default_theme.tres")
+var _theme := load("res://addons/net.yarvis.pixel_pen/resources/default_theme.tres")
 
 
 enum ToggleButtonMode{ TWO, THREE}

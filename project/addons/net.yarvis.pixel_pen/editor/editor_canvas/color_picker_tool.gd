@@ -2,7 +2,7 @@
 extends "tool.gd"
 
 
-const texture := preload("../../resources/icon/color_picker_plus.svg")
+var texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/color_picker_plus.svg")
 
 var shift_mode : bool = false
 

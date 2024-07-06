@@ -4,7 +4,7 @@ extends "tool.gd"
 
 signal confirm_dialog_closed
 
-const texture := preload("../../resources/icon/move_24.svg")
+var texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/move_24.svg")
 
 enum Mode{
 	UNKNOWN = -1,

@@ -2,23 +2,23 @@
 extends Control
 
 
-const shader_tint = preload("../../resources/tint_color.gdshader")
+var shader_tint = load("res://addons/net.yarvis.pixel_pen/resources/tint_color.gdshader")
 
-const select := preload("res://addons/net.yarvis.pixel_pen/resources/icon/arrow_selector_24.svg")
-const move := preload("res://addons/net.yarvis.pixel_pen/resources/icon/move_24.svg")
-const pan := preload("res://addons/net.yarvis.pixel_pen/resources/icon/pan_24.svg")
-const selection := preload("res://addons/net.yarvis.pixel_pen/resources/icon/selection_24.svg")
-const pen := preload("res://addons/net.yarvis.pixel_pen/resources/icon/pen.svg")
-const brush := preload("res://addons/net.yarvis.pixel_pen/resources/icon/brush_24.svg")
-const stamp := preload("res://addons/net.yarvis.pixel_pen/resources/icon/stamp.svg")
-const eraser := preload("res://addons/net.yarvis.pixel_pen/resources/icon/ink_eraser_24.svg")
-const magnet := preload("res://addons/net.yarvis.pixel_pen/resources/icon/magnet.svg")
-const line := preload("res://addons/net.yarvis.pixel_pen/resources/icon/line_24.svg")
-const oval := preload("res://addons/net.yarvis.pixel_pen/resources/icon/circle-outline.svg")
-const rectangle := preload("res://addons/net.yarvis.pixel_pen/resources/icon/rect_24.svg")
-const fill := preload("res://addons/net.yarvis.pixel_pen/resources/icon/ink_24.svg")
-const color_picker := preload("res://addons/net.yarvis.pixel_pen/resources/icon/color_picker_24.svg")
-const zoom := preload("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_in_24.svg")
+var select := load("res://addons/net.yarvis.pixel_pen/resources/icon/arrow_selector_24.svg")
+var move := load("res://addons/net.yarvis.pixel_pen/resources/icon/move_24.svg")
+var pan := load("res://addons/net.yarvis.pixel_pen/resources/icon/pan_24.svg")
+var selection := load("res://addons/net.yarvis.pixel_pen/resources/icon/selection_24.svg")
+var pen := load("res://addons/net.yarvis.pixel_pen/resources/icon/pen.svg")
+var brush := load("res://addons/net.yarvis.pixel_pen/resources/icon/brush_24.svg")
+var stamp := load("res://addons/net.yarvis.pixel_pen/resources/icon/stamp.svg")
+var eraser := load("res://addons/net.yarvis.pixel_pen/resources/icon/ink_eraser_24.svg")
+var magnet := load("res://addons/net.yarvis.pixel_pen/resources/icon/magnet.svg")
+var line := load("res://addons/net.yarvis.pixel_pen/resources/icon/line_24.svg")
+var oval := load("res://addons/net.yarvis.pixel_pen/resources/icon/circle-outline.svg")
+var rectangle := load("res://addons/net.yarvis.pixel_pen/resources/icon/rect_24.svg")
+var fill := load("res://addons/net.yarvis.pixel_pen/resources/icon/ink_24.svg")
+var color_picker := load("res://addons/net.yarvis.pixel_pen/resources/icon/color_picker_24.svg")
+var zoom := load("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_in_24.svg")
 
 @export var toolbox_list : Control
 
@@ -87,7 +87,7 @@ func _build_button(name : String, texture : Texture2D, grup : int, type: int, de
 	btn.material = mat
 	
 	var hover = Node.new()
-	hover.set_script(preload("button_hover.gd"))
+	hover.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/button_hover.gd"))
 	hover.tool_grup = grup
 	hover.tool_type = type
 	hover.can_active = true

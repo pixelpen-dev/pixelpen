@@ -2,7 +2,7 @@
 extends EditorPlugin
 
 
-const EditorWindow := preload("editor/editor_window.tscn")
+var EditorWindow := load("res://addons/net.yarvis.pixel_pen/editor/editor_window.tscn")
 
 var editor_window_instance : Window
 

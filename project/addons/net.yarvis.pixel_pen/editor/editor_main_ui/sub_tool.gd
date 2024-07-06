@@ -2,55 +2,55 @@
 extends Control
 
 
-const SelectTool = preload("../editor_canvas/select_tool.gd")
-const MoveTool = preload("../editor_canvas/move_tool.gd")
-const PenTool = preload("../editor_canvas/pen_tool.gd")
-const BrushTool = preload("../editor_canvas/brush_tool.gd")
-const StampTool = preload("../editor_canvas/stamp_tool.gd")
-const MagnetTool = preload("../editor_canvas/magnet_tool.gd")
-const LineTool = preload("../editor_canvas/line_tool.gd")
-const EllipseTool = preload("../editor_canvas/ellipse_tool.gd")
-const RectangleTool = preload("../editor_canvas/rectangle_tool.gd")
-const SelectionTool = preload("../editor_canvas/selection_tool.gd")
-const FillTool = preload("../editor_canvas/fill_tool.gd")
+var SelectTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/select_tool.gd")
+var MoveTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/move_tool.gd")
+var PenTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/pen_tool.gd")
+var BrushTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/brush_tool.gd")
+var StampTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/stamp_tool.gd")
+var MagnetTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/magnet_tool.gd")
+var LineTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/line_tool.gd")
+var EllipseTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/ellipse_tool.gd")
+var RectangleTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/rectangle_tool.gd")
+var SelectionTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/selection_tool.gd")
+var FillTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/fill_tool.gd")
 
-const undo = preload("../../resources/icon/undo.svg")
-const redo = preload("../../resources/icon/redo.svg")
-const fit_screen = preload("../../resources/icon/fit-to-screen-outline.svg")
-const save = preload("../../resources/icon/content-save.svg")
-const grid = preload("../../resources/icon/grid_3x3_24.svg")
-const tint_black = preload("../../resources/icon/image-filter-black-white.svg")
-const save_alert = preload("../../resources/icon/content-save-alert-outline.svg")
+var undo = load("res://addons/net.yarvis.pixel_pen/resources/icon/undo.svg")
+var redo = load("res://addons/net.yarvis.pixel_pen/resources/icon/redo.svg")
+var fit_screen = load("res://addons/net.yarvis.pixel_pen/resources/icon/fit-to-screen-outline.svg")
+var save = load("res://addons/net.yarvis.pixel_pen/resources/icon/content-save.svg")
+var grid = load("res://addons/net.yarvis.pixel_pen/resources/icon/grid_3x3_24.svg")
+var tint_black = load("res://addons/net.yarvis.pixel_pen/resources/icon/image-filter-black-white.svg")
+var save_alert = load("res://addons/net.yarvis.pixel_pen/resources/icon/content-save-alert-outline.svg")
 
-const cut = preload("../../resources/icon/content-cut.svg")
-const copy = preload("../../resources/icon/content-copy.svg")
-const cancel = preload("../../resources/icon/cancel.svg")
-const commit = preload("../../resources/icon/check-circle-outline.svg")
-const rotate_left = preload("../../resources/icon/rotate-left.svg")
-const rotate_right = preload("../../resources/icon/rotate-right.svg")
-const flip_horizontal = preload("../../resources/icon/flip-horizontal.svg")
-const flip_vertical = preload("../../resources/icon/flip-vertical.svg")
-const scale_left = preload("../../resources/icon/arrow-expand-left.svg")
-const scale_up = preload("../../resources/icon/arrow-expand-up.svg")
-const scale_right = preload("../../resources/icon/arrow-expand-right.svg")
-const scale_down = preload("../../resources/icon/arrow-expand-down.svg")
+var cut = load("res://addons/net.yarvis.pixel_pen/resources/icon/content-cut.svg")
+var copy = load("res://addons/net.yarvis.pixel_pen/resources/icon/content-copy.svg")
+var cancel = load("res://addons/net.yarvis.pixel_pen/resources/icon/cancel.svg")
+var commit = load("res://addons/net.yarvis.pixel_pen/resources/icon/check-circle-outline.svg")
+var rotate_left = load("res://addons/net.yarvis.pixel_pen/resources/icon/rotate-left.svg")
+var rotate_right = load("res://addons/net.yarvis.pixel_pen/resources/icon/rotate-right.svg")
+var flip_horizontal = load("res://addons/net.yarvis.pixel_pen/resources/icon/flip-horizontal.svg")
+var flip_vertical = load("res://addons/net.yarvis.pixel_pen/resources/icon/flip-vertical.svg")
+var scale_left = load("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-left.svg")
+var scale_up = load("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-up.svg")
+var scale_right = load("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-right.svg")
+var scale_down = load("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-down.svg")
 
-const select_color = preload("../../resources/icon/select-color.svg")
-const select_layer = preload("../../resources/icon/layers-search-outline.svg")
+var select_color = load("res://addons/net.yarvis.pixel_pen/resources/icon/select-color.svg")
+var select_layer = load("res://addons/net.yarvis.pixel_pen/resources/icon/layers-search-outline.svg")
 
-const selection_union = preload("../../resources/icon/vector-union.svg")
-const selection_difference = preload("../../resources/icon/vector-difference-ba.svg")
-const selection_intersection = preload("../../resources/icon/vector-intersection.svg")
-const selection_inverse = preload("../../resources/icon/select-inverse.svg")
-const selection_remove = preload("../../resources/icon/remove_selection_24.svg")
-const delete_in_selection = preload("../../resources/icon/delete_in_selection.svg")
+var selection_union = load("res://addons/net.yarvis.pixel_pen/resources/icon/vector-union.svg")
+var selection_difference = load("res://addons/net.yarvis.pixel_pen/resources/icon/vector-difference-ba.svg")
+var selection_intersection = load("res://addons/net.yarvis.pixel_pen/resources/icon/vector-intersection.svg")
+var selection_inverse = load("res://addons/net.yarvis.pixel_pen/resources/icon/select-inverse.svg")
+var selection_remove = load("res://addons/net.yarvis.pixel_pen/resources/icon/remove_selection_24.svg")
+var delete_in_selection = load("res://addons/net.yarvis.pixel_pen/resources/icon/delete_in_selection.svg")
 
-const zoom_in = preload("../../resources/icon/zoom_in_24.svg")
-const zoom_out = preload("../../resources/icon/zoom_out_24.svg")
+var zoom_in = load("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_in_24.svg")
+var zoom_out = load("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_out_24.svg")
 
-const shader_tint = preload("../../resources/tint_color.gdshader")
+var shader_tint = load("res://addons/net.yarvis.pixel_pen/resources/tint_color.gdshader")
 
-const preview_btn := preload("../image_option_btn.tscn")
+var preview_btn := load("res://addons/net.yarvis.pixel_pen/editor/image_option_btn.tscn")
 
 @export var button_list : Control
 @export var toolbar_list : Control
@@ -440,7 +440,7 @@ func _clean_up():
 func _add_separator(visible_callback : Callable = Callable(), target : Control = button_list):
 	var vs = VSeparator.new()
 	if visible_callback.is_valid():
-		vs.set_script(preload("visible_callback.gd"))
+		vs.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/visible_callback.gd"))
 		vs.visible_callback = visible_callback
 		vs.visible = visible_callback.call()
 	target.add_child(vs)
@@ -474,7 +474,7 @@ func _build_button(
 	btn.material = mat
 	
 	var hover = Node.new()
-	hover.set_script(preload("button_hover.gd"))
+	hover.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/button_hover.gd"))
 	hover.tool_grup = grup
 	hover.tool_type = type
 	hover.can_active = can_active
@@ -519,7 +519,7 @@ func _build_toggle_button(
 	btn.material = mat
 	
 	var hover = Node.new()
-	hover.set_script(preload("button_hover.gd"))
+	hover.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/button_hover.gd"))
 	hover.tool_grup = grup
 	hover.tool_type = type
 	hover.can_active = can_active
@@ -548,7 +548,7 @@ func _build_check_box(label : String, toggle_callback : Callable, default_toggle
 	margin.add_child(check_box)
 	
 	if visible_callback.is_valid():
-		margin.set_script(preload("visible_callback.gd"))
+		margin.set_script(load("visible_callback.gd"))
 		margin.visible_callback = visible_callback
 		margin.visible = visible_callback.call()
 	

@@ -15,8 +15,8 @@ static var _prev_paint_coord3 : PackedVector2Array
 static var _prev_replaced_color3 : PackedInt32Array
 static var _prev_paint_coord_array : PackedVector2Array
 
-const color_picker_texture := preload("../../resources/icon/color_picker_24.svg")
-const pan_texture := preload("../../resources/icon/pan_24.svg")
+var color_picker_texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/color_picker_24.svg")
+var pan_texture := load("res://addons/net.yarvis.pixel_pen/resources/icon/pan_24.svg")
 
 
 func _init():

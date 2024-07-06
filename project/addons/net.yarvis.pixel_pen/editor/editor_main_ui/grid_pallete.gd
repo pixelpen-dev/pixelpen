@@ -12,7 +12,7 @@ const I_TOTAL = 255
 var _child_item : Array[Control] = []
 var _grid_focus_index : int = 0
 
-var tr_material := preload("../../resources/tile_transparant_material.tres")
+var tr_material := load("res://addons/net.yarvis.pixel_pen/resources/tile_transparant_material.tres")
 
 
 func _ready():

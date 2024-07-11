@@ -548,7 +548,7 @@ func _build_check_box(label : String, toggle_callback : Callable, default_toggle
 	margin.add_child(check_box)
 	
 	if visible_callback.is_valid():
-		margin.set_script(load("visible_callback.gd"))
+		margin.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/visible_callback.gd"))
 		margin.visible_callback = visible_callback
 		margin.visible = visible_callback.call()
 	

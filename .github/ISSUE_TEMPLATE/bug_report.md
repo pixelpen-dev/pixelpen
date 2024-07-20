@@ -2,7 +2,6 @@
 name: Bug report
 about: Report a bug in PixelPen
 title: ''
-labels: bug
 assignees: ''
 
 ---

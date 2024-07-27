@@ -12,8 +12,8 @@ PixelPen is a free and open-source pixel art editor, proudly created with the Go
 - Ensure the plugin directory is `addons/net.yarvis.pixel_pen`.
 
 > [!TIP]
-> - You can also use our recent commit build here [Artifact](https://github.com/pixelpen-dev/pixelpen/actions).
-> - Please be careful, make sure to backup your project first before using it.
+> - Disable single window mode in editor. When PixelPen launch, it will be in separate window.
+> - You can also use our recent commit build here [Artifact](https://github.com/pixelpen-dev/pixelpen/actions). Please be careful, make sure to backup your project first before using it.
 
 ### Build from Source (Optional):
 - Refer to the official [GDExtension documentation](https://docs.godotengine.org/en/stable/tutorials/scripting/gdextension/gdextension_cpp_example.html).

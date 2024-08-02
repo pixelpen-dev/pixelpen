@@ -92,6 +92,10 @@ func initialized(p_size : Vector2i, p_name : String = "Untitled", p_file_path : 
 	sync_gui_palette()
 	pool_frames = [Frame.create(get_uid())]
 	canvas_pool_frame_uid = pool_frames[0].frame_uid
+	var cell : AnimationCell = AnimationCell.create(get_uid())
+	cell.frame = pool_frames[0]
+	animation_timeline.push_back(cell)
+	animation_frame_index = 0
 	if one_layer:
 		add_layer()
 		active_layer_uid = active_frame.layers[0].layer_uid

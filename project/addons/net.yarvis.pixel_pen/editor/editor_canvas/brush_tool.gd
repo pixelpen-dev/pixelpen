@@ -39,6 +39,10 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 	if shift_mode:
 		pick_color_from_canvas(mouse_position)
 		return
+	if tool_type == PixelPenEnum.ToolBox.TOOL_BRUSH:
+		brush_color_index = _index_color
+	elif tool_type == PixelPenEnum.ToolBox.TOOL_ERASER:
+		brush_color_index = 0
 	_prev_paint_coord_array.clear()
 	var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_layer
 	if index_image != null:

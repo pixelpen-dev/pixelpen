@@ -101,7 +101,9 @@ func update_camera_zoom():
 		var camera_scale : Vector2
 		if PixelPen.state.current_project != null:
 			if show_cache_frame and PixelPen.state.current_project.use_sample:
-				camera_scale = PixelPen.state.current_project._cache_canvs_size as Vector2
+				# NOTE: break compat after typo `_cache_canvs_size`
+				#camera_scale = PixelPen.state.current_project._cache_canvs_size as Vector2
+				camera_scale = PixelPen.state.current_project._cache_pool_frames[0].layers[0].size as Vector2
 			else:
 				camera_scale = PixelPen.state.current_project.canvas_size as Vector2
 		_queue_update_camera_zoom = false
@@ -164,7 +166,9 @@ func _create_layers():
 	_canvas_size = (PixelPen.state.current_project as PixelPenProject).canvas_size
 	if show_cache_frame and PixelPen.state.current_project.use_sample:
 		l_size = (PixelPen.state.current_project as PixelPenProject).get_pool_frame(_frame.frame_uid, true).layers.size()
-		_canvas_size = PixelPen.state.current_project._cache_canvs_size
+		# NOTE: break compat after typo `_cache_canvs_size`
+		#_canvas_size = PixelPen.state.current_project._cache_canvs_size
+		_canvas_size = PixelPen.state.current_project._cache_pool_frames[0].layers[0].size
 	for i in range(l_size):
 		_create_layer(i)
 	_update_shader_layer()

@@ -91,16 +91,19 @@ func load_project(file : String)->bool:
 		if userconfig.recent_projects.has(file_path):
 			userconfig.recent_projects.erase(file_path)
 			userconfig.save()
-	
-	if not ResourceLoader.exists(file):
-		erase_recent.call(file)
-		return false
-	for dependencies in ResourceLoader.get_dependencies(file):
-		if not ResourceLoader.exists(dependencies):
+	if file.get_extension() == "res":
+		if not ResourceLoader.exists(file):
 			erase_recent.call(file)
 			return false
-	var res = ResourceLoader.load(file, "", ResourceLoader.CACHE_MODE_IGNORE)
-	if res and res is PixelPenProject:
+		for dependencies in ResourceLoader.get_dependencies(file):
+			if not ResourceLoader.exists(dependencies):
+				erase_recent.call(file)
+				return false
+	var res = ProjectPacker.load_project(file)
+	if res == null:
+		erase_recent.call(file)
+		return false
+	elif res and res is PixelPenProject:
 		var project_compat_version = res.get("compatibility_version")
 		if project_compat_version == null or MIN_COMPATIBILITY > project_compat_version:
 			erase_recent.call(file)

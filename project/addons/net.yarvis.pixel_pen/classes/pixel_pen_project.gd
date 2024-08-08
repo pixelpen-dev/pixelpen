@@ -29,7 +29,7 @@ const COMPATIBILITY_NUMBER : int = 3
 @export var active_layer_uid : Vector3i
 @export var use_sample : bool = false
 @export var _sample_offset : Vector2i
-@export var _cache_canvs_size : Vector2i
+@export var _cache_canvas_size : Vector2i
 @export var _cache_pool_frames : Array[Frame]
 @export var _cache_canvas_pool_frame_uid : Vector3i
 
@@ -109,6 +109,201 @@ func get_uid():
 	return uid
 
 
+func get_json() -> String:
+	var pool_frames_data : Array = []
+	for frame in pool_frames:
+		pool_frames_data.push_back(frame.get_data())
+	var _cache_pool_frames_data : Array = []
+	for frame in _cache_pool_frames:
+		_cache_pool_frames_data.push_back(frame.get_data())
+	var arr_animation_timeline : Array = []
+	for cell in animation_timeline:
+		arr_animation_timeline.push_back(cell.get_data())
+	var metadata : Dictionary = {
+		"compatibility_version" : compatibility_version,
+		"project_name" : project_name,
+		"file_path" : file_path,
+		"last_export_file_path" : last_export_file_path,
+		"canvas_size" : var_to_str(canvas_size),
+		"palette" : palette.get_data(),
+		"pool_frames" : pool_frames_data,
+		"canvas_pool_frame_uid" : var_to_str(canvas_pool_frame_uid),
+		"show_timeline" : show_timeline,
+		"animation_timeline" : arr_animation_timeline,
+		"animation_frame_index" : animation_frame_index,
+		"animation_fps" : animation_fps,
+		"animation_loop" : animation_loop,
+		"onion_skinning" : onion_skinning,
+		"layer_index_counter" : layer_index_counter,
+		"active_layer_uid" : var_to_str(active_layer_uid),
+		"use_sample" : use_sample,
+		"_sample_offset" : var_to_str(_sample_offset),
+		"_cache_canvas_size" : var_to_str(_cache_canvas_size),
+		"_cache_pool_frames" : _cache_pool_frames_data,
+		"_cache_canvas_pool_frame_uid" : var_to_str(_cache_canvas_pool_frame_uid),
+		"show_grid" : show_grid,
+		"show_tile" : show_tile,
+		"show_preview" : show_preview,
+		"show_symetric_vertical" : show_symetric_vertical,
+		"show_symetric_horizontal" : show_symetric_horizontal,
+		"symetric_guid" : var_to_str(symetric_guid),
+		"background_color" : var_to_str(background_color),
+		"uid_counter" : uid_counter
+	}
+	var json := JSON.new()
+	return json.stringify(metadata)
+
+
+func from_json(json_string : String) -> Error:
+	var json := JSON.new()
+	var err := json.parse(json_string)
+	if err != OK:
+		return err
+
+	var json_data : Dictionary = json.data as Dictionary
+	if json_data.has("compatibility_version"):
+		compatibility_version = json_data["compatibility_version"] as int
+	else:
+		return FAILED
+	if json_data.has("project_name"):
+		project_name = json_data["project_name"] as String
+	else:
+		return FAILED
+	if json_data.has("file_path"):
+		file_path = json_data["file_path"] as String
+	else:
+		return FAILED
+	if json_data.has("last_export_file_path"):
+		last_export_file_path = json_data["last_export_file_path"] as String
+	else:
+		return FAILED
+	if json_data.has("canvas_size"):
+		canvas_size = str_to_var(json_data["canvas_size"]) as Vector2i
+	else:
+		return FAILED
+	if json_data.has("palette"):
+		palette = IndexedPalette.new()
+		if palette.from_data(json_data["palette"]) != OK:
+			return FAILED
+	else:
+		return FAILED
+	if json_data.has("pool_frames"):
+		pool_frames.clear()
+		var pool_frames_data : Array = json_data["pool_frames"] as Array
+		for data in pool_frames_data:
+			var frame := Frame.new()
+			var frame_err := frame.from_data(data)
+			if frame_err != OK:
+				return FAILED
+			pool_frames.push_back(frame)
+
+	else:
+		return FAILED
+	if json_data.has("canvas_pool_frame_uid"):
+		canvas_pool_frame_uid = str_to_var(json_data["canvas_pool_frame_uid"]) as Vector3i
+	else:
+		return FAILED
+	if json_data.has("show_timeline"):
+		show_timeline = json_data["show_timeline"] as bool
+	else:
+		return FAILED
+	if json_data.has("animation_timeline"):
+		animation_timeline.clear()
+		var arr_animation_timeline : Array = json_data["animation_timeline"] as Array
+		for data in arr_animation_timeline:
+			var cell := AnimationCell.new()
+			var cell_err := cell.from_data(data, self)
+			if cell_err != OK:
+				return FAILED
+			animation_timeline.push_back(cell)
+	else:
+		return FAILED
+	if json_data.has("animation_frame_index"):
+		animation_frame_index = json_data["animation_frame_index"] as int
+	else:
+		return FAILED
+	if json_data.has("animation_fps"):
+		animation_fps = json_data["animation_fps"] as float
+	else:
+		return FAILED
+	if json_data.has("animation_loop"):
+		animation_loop = json_data["animation_loop"] as bool
+	else:
+		return FAILED
+	if json_data.has("onion_skinning"):
+		onion_skinning = json_data["onion_skinning"] as bool
+	else:
+		return FAILED
+	if json_data.has("layer_index_counter"):
+		layer_index_counter = json_data["layer_index_counter"] as int
+	else:
+		return FAILED
+	if json_data.has("active_layer_uid"):
+		active_layer_uid = str_to_var(json_data["active_layer_uid"]) as Vector3i
+	else:
+		return FAILED
+	if json_data.has("use_sample"):
+		use_sample = json_data["use_sample"] as bool
+	else:
+		return FAILED
+	if json_data.has("_sample_offset"):
+		_sample_offset = str_to_var(json_data["_sample_offset"]) as Vector2i
+	else:
+		return FAILED
+	if json_data.has("_cache_canvas_size"):
+		_cache_canvas_size = str_to_var(json_data["_cache_canvas_size"]) as Vector2i
+	else:
+		return FAILED
+	if json_data.has("_cache_pool_frames"):
+		_cache_pool_frames.clear()
+		var pool_frames_data : Array = json_data["_cache_pool_frames"] as Array
+		for data in pool_frames_data:
+			var frame := Frame.new()
+			var frame_err := frame.from_data(data)
+			if frame_err != OK:
+				return FAILED
+			_cache_pool_frames.push_back(frame)
+	else:
+		return FAILED
+	if json_data.has("_cache_canvas_pool_frame_uid"):
+		_cache_canvas_pool_frame_uid = str_to_var(json_data["_cache_canvas_pool_frame_uid"]) as Vector3i
+	else:
+		return FAILED
+	if json_data.has("show_grid"):
+		show_grid = json_data["show_grid"] as bool
+	else:
+		return FAILED
+	if json_data.has("show_tile"):
+		show_tile = json_data["show_tile"] as bool
+	else:
+		return FAILED
+	if json_data.has("show_preview"):
+		show_preview = json_data["show_preview"] as bool
+	else:
+		return FAILED
+	if json_data.has("show_symetric_vertical"):
+		show_symetric_vertical = json_data["show_symetric_vertical"] as bool
+	else:
+		return FAILED
+	if json_data.has("show_symetric_horizontal"):
+		show_symetric_horizontal = json_data["show_symetric_horizontal"] as bool
+	else:
+		return FAILED
+	if json_data.has("symetric_guid"):
+		symetric_guid = str_to_var(json_data["symetric_guid"]) as Vector2
+	else:
+		return FAILED
+	if json_data.has("background_color"):
+		background_color = str_to_var(json_data["background_color"]) as BackgroundColor
+	else:
+		return FAILED
+	if json_data.has("uid_counter"):
+		uid_counter = json_data["uid_counter"] as int
+	else:
+		return FAILED
+	return OK
+
+
 func sync_gui_palette(ok_save : bool = false):
 	if palette.is_gui_valid():
 		var sync : bool = palette.is_gui_order_equal_to_color_index_order()
@@ -142,13 +337,17 @@ func set_mode(mode : ProjectMode, mask : Image = null):
 			if sample != null:
 				cache.colormap.blit_rect(sample.colormap, Rect2i(Vector2i.ZERO, sample.colormap.get_size()), _sample_offset)
 		use_sample = false
-		canvas_size = _cache_canvs_size
+
+		# NOTE: break compat after typo `_cache_canvs_size`
+		#canvas_size = _cache_canvs_size 
+		canvas_size = _cache_pool_frames[0].layers[0].size
+
 		pool_frames = _cache_pool_frames
 		canvas_pool_frame_uid = _cache_canvas_pool_frame_uid
 		undo_redo = _cache_undo_redo
 	elif mode == ProjectMode.SAMPLE and mask != null and not use_sample:
 		use_sample = true
-		_cache_canvs_size = canvas_size
+		_cache_canvas_size = canvas_size
 		_cache_pool_frames = pool_frames#get_frames_duplicate(false)
 		_cache_canvas_pool_frame_uid = canvas_pool_frame_uid
 		_cache_undo_redo = undo_redo

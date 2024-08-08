@@ -369,7 +369,7 @@ func _update_title():
 		if PixelPen.state.current_project.use_sample:
 			canvas_size = str("(region ", 
 					PixelPen.state.current_project.canvas_size.x, "x", PixelPen.state.current_project.canvas_size.y , "px of ", 
-					PixelPen.state.current_project._cache_canvs_size.x, "x", PixelPen.state.current_project._cache_canvs_size.y , "px)")
+					PixelPen.state.current_project._cache_canvas_size.x, "x", PixelPen.state.current_project._cache_canvas_size.y , "px)")
 		get_window().title = PixelPen.state.current_project.project_name + " " + canvas_size + " - " + PixelPen.state.EDITOR_TITTLE
 		if PixelPen.state.current_project.file_path == "" or not is_saved:
 			get_window().title = "(*)" + get_window().title
@@ -734,7 +734,7 @@ func _open():
 	var _file_dialog = FileDialog.new()
 	_file_dialog.use_native_dialog = true
 	_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	_file_dialog.filters = ["*.res"]
+	_file_dialog.filters = ["*.res, *.pxpen"]
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 	_file_dialog.current_dir = PixelPen.state.get_directory()
 	_file_dialog.file_selected.connect(func(file):
@@ -777,7 +777,7 @@ func _save_project(file_path : String):
 	var prev_name = PixelPen.state.current_project.project_name
 	PixelPen.state.current_project.file_path = file_path
 	PixelPen.state.current_project.project_name = file_path.get_file().get_basename()
-	var err = ResourceSaver.save(PixelPen.state.current_project, file_path)
+	var err = ProjectPacker.save(PixelPen.state.current_project, file_path)
 	if err == OK:
 		PixelPen.state.userconfig.insert_recent_projects(PixelPen.state.current_project.file_path)
 		_update_recent_submenu()
@@ -791,15 +791,15 @@ func _save_project(file_path : String):
 func _show_save_as_dialog(callback : Callable = Callable()):
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var _file_dialog = FileDialog.new()
-	_file_dialog.current_file = str((PixelPen.state.current_project as PixelPenProject).project_name , ".res")
+	_file_dialog.current_file = str((PixelPen.state.current_project as PixelPenProject).project_name , ".pxpen")
 	_file_dialog.use_native_dialog = true
 	_file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-	_file_dialog.filters = ["*.res"]
+	_file_dialog.filters = ["*.pxpen, *.res"]
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 	_file_dialog.current_dir = PixelPen.state.get_directory()
-	_file_dialog.file_selected.connect(func(file):
+	_file_dialog.file_selected.connect(func(file : String):
 			_file_dialog.hide()
-			callback.call(file)
+			callback.call(file if file.get_extension() != "" else str(file, ".pxpen"))
 			_file_dialog.queue_free()
 			)
 	_file_dialog.canceled.connect(func():

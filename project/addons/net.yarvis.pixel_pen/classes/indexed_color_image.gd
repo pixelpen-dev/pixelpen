@@ -11,9 +11,39 @@ extends Resource
 		colormap = Image.create(size.x, size.y, false, Image.FORMAT_R8)
 @export var visible : bool = true
 @export var colormap : Image
+
 var silhouette : bool = false
 
 var _cache_colormap : Image
+
+
+func get_data() -> Dictionary:
+	return {
+			"layer_uid" : var_to_str(layer_uid),
+			"label" : label,
+			"size" : var_to_str(size),
+			"visible" : visible
+		}
+
+
+func from_data(json_data : Dictionary) -> Error:
+	if json_data.has("layer_uid"):
+		layer_uid = str_to_var(json_data["layer_uid"]) as Vector3i
+	else:
+		return FAILED
+	if json_data.has("label"):
+		label = json_data["label"]
+	else:
+		return FAILED
+	if json_data.has("size"):
+		size = str_to_var(json_data["size"]) as Vector2i
+	else:
+		return FAILED
+	if json_data.has("visible"):
+		visible = json_data["visible"] as bool
+	else:
+		return FAILED
+	return OK
 
 
 func get_duplicate(new_uid : bool = true):

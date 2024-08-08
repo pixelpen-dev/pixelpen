@@ -9,6 +9,35 @@ const INDEX_COLOR_SIZE = 256
 @export var grid_color_index : PackedInt32Array = [] # palette item order visible to user, array value pointing to color_index
 
 
+func get_data() -> Dictionary:
+	var arr : Array = []
+	for c in color_index:
+		arr.push_back(var_to_str(c))
+	return {
+		"color_index" : arr,
+		"grid_color_index" : grid_color_index 
+	}
+
+
+func from_data(json_data : Dictionary) -> Error:
+	if json_data.has("color_index"):
+		color_index.clear()
+		var arr : Array = json_data["color_index"] as Array
+		for item in arr:
+			color_index.push_back(str_to_var(item) as Color)
+	else:
+		return FAILED
+	if json_data.has("grid_color_index"):
+		grid_color_index.clear()
+		var arr : Array = json_data["grid_color_index"] as Array
+		for item in arr:
+			grid_color_index.push_back(item as int)
+	else:
+		return FAILED
+	return OK
+	
+
+
 func is_gui_valid() -> bool:
 	if grid_color_index.size() != color_index.size() - 1:
 		return false

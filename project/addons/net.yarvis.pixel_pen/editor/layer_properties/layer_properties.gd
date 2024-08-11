@@ -28,6 +28,9 @@ func _ready():
 	else:
 		line_edit.placeholder_text = str("Layer ",(PixelPen.state.current_project as PixelPenProject).layer_index_counter + 1)
 	line_edit.text = layer_name
+	line_edit.grab_focus.call_deferred()
+	line_edit.select_all()
+	cycle_on_tab()
 
 
 func _on_confirmed():
@@ -56,8 +59,23 @@ func _on_canceled():
 	queue_free()
 
 
+func _process(_delta):
+	if Input.is_key_pressed(KEY_ENTER) and line_edit.has_focus():
+		get_ok_button().pressed.emit()
+	if Input.is_key_pressed(KEY_ESCAPE):
+		get_cancel_button().pressed.emit()
+
+
 func popup_in_last_position():
 	if last_position != Vector2i.ZERO:
 		popup(Rect2i(last_position, size))
 	else:
 		popup_centered()
+
+
+func cycle_on_tab() -> void:
+	var ok := get_ok_button()
+	var cancel := get_cancel_button()
+	line_edit.focus_next = ok.get_path()
+	line_edit.focus_previous = cancel.get_path()
+	cancel.focus_next = line_edit.get_path()

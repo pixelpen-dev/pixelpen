@@ -23,7 +23,6 @@ size = Vector2i(512, 320)
 visible = true
 theme = ExtResource("1_7thd0")
 dialog_hide_on_ok = false
-dialog_close_on_escape = false
 script = ExtResource("1_bewiu")
 name_node = NodePath("Control/Margin/VBoxContainer/HBoxContainer/LineEditName")
 width_node = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditW")
@@ -74,8 +73,10 @@ text = "Name"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+focus_next = NodePath("../../Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditW")
 placeholder_text = "Untitled"
 clear_button_enabled = true
+select_all_on_focus = true
 caret_blink = true
 
 [node name="Panel" type="Panel" parent="Control/Margin/VBoxContainer"]
@@ -116,9 +117,11 @@ text = "width"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+focus_next = NodePath("../../HBoxContainer3/LineEditH")
 text = "32"
 alignment = 2
 virtual_keyboard_type = 2
+select_all_on_focus = true
 
 [node name="Pixel" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
@@ -140,6 +143,7 @@ size_flags_stretch_ratio = 3.0
 text = "32"
 alignment = 2
 virtual_keyboard_type = 2
+select_all_on_focus = true
 
 [node name="Pixel2" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2

@@ -73,6 +73,10 @@ var shorcuts_tree_structure : Dictionary = {
 		"Fill.tool_fill" : [],
 		"Color Picker.tool_color_picker" : [],
 		"Zoom.tool_zoom" : []
+	},
+	"Navigation" : {
+		"Zoom in.zoom_in" : [],
+		"Zoom out.zoom_out" : [],
 	}
 }
 
@@ -155,7 +159,7 @@ func _on_edit_pressed():
 	var line_edit : LineEdit = LineEdit.new()
 	line_edit.set_anchors_and_offsets_preset(Control.PRESET_HCENTER_WIDE)
 	line_edit.placeholder_text = "Linstening for input..."
-	line_edit.set_script(load("shorcut_listener.gd"))
+	line_edit.set_script(load("res://addons/net.yarvis.pixel_pen/editor/preferences/shorcut_listener.gd"))
 	wrapper.add_child(line_edit)
 	window.confirmed.connect(func ():
 			if line_edit.record_shorcut.has_valid_event():

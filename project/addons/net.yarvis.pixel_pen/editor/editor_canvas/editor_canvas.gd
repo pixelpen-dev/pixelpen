@@ -204,6 +204,19 @@ func update_background_shader_state():
 	background_canvas.visible = true
 
 
+func zoom_input(event: InputEvent) -> bool:
+	if not PixelPen.state or not PixelPen.state.userconfig:
+		return false
+	var shorcut := (PixelPen.state.userconfig as UserConfig).shorcuts
+	if shorcut.zoom_in and shorcut.zoom_in.matches_event(event):
+		zoom(1.1)
+		return true
+	if shorcut.zoom_out and shorcut.zoom_out.matches_event(event):
+		zoom(0.9)
+		return true
+	return false
+
+
 func _input(event: InputEvent):
 	PixelPen.state.debug_log.emit("Input", event)
 	if PixelPen.state.current_project == null:
@@ -220,7 +233,8 @@ func _input(event: InputEvent):
 		if event is InputEventKey:
 			if event.keycode == KEY_SHIFT:
 				canvas_paint.on_shift_pressed(event.is_pressed())
-		
+		if zoom_input(event):
+			return
 		if event and event is InputEventMagnifyGesture:
 			zoom(event.factor)
 		elif event and event is InputEventPanGesture:

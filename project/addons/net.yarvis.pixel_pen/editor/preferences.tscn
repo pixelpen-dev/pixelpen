@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/tree_properties/tree_row.gd" id="4_6utim"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/shorcuts_preferences.gd" id="6_dsxs8"]
 
-[sub_resource type="Resource" id="Resource_h5vb2"]
+[sub_resource type="Resource" id="Resource_nqfg7"]
 script = ExtResource("4_6utim")
 label = "Grid line repeat"
 field = 5
@@ -41,8 +41,10 @@ enum_option = Array[String]([])
 file_value = ""
 file_mode = 4
 file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
+color_value = Color(1, 1, 1, 1)
+color_alpha = true
 
-[sub_resource type="Resource" id="Resource_gogf3"]
+[sub_resource type="Resource" id="Resource_u6eg1"]
 script = ExtResource("4_6utim")
 label = "Checker size"
 field = 5
@@ -76,11 +78,13 @@ enum_option = Array[String]([])
 file_value = ""
 file_mode = 4
 file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
+color_value = Color(1, 1, 1, 1)
+color_alpha = true
 
 [node name="Preferences" type="AcceptDialog" node_paths=PackedStringArray("tab_container")]
 title = "Preferences"
 initial_position = 1
-size = Vector2i(861, 574)
+size = Vector2i(1146, 764)
 visible = true
 theme = ExtResource("1_mhedo")
 ok_button_text = "Close"
@@ -93,15 +97,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 3.6
 offset_top = 3.6
-offset_right = -3.60004
+offset_right = -3.59998
 offset_bottom = -37.6
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 1
 tab_focus_mode = 0
 
 [node name="General" type="HBoxContainer" parent="TabContainer" node_paths=PackedStringArray("tree", "tree_properties")]
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 16
 script = ExtResource("3_k57uy")
@@ -120,9 +122,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
 script = ExtResource("3_74jry")
-structure = Array[ExtResource("4_6utim")]([SubResource("Resource_h5vb2"), SubResource("Resource_gogf3")])
+structure = Array[ExtResource("4_6utim")]([SubResource("Resource_nqfg7"), SubResource("Resource_u6eg1")])
 
 [node name="Shorcuts" type="HBoxContainer" parent="TabContainer" node_paths=PackedStringArray("shorcuts_tree", "edit_button", "reset_button", "clear_button")]
+visible = false
 layout_mode = 2
 script = ExtResource("6_dsxs8")
 shorcuts_tree = NodePath("ShorcutsTree")

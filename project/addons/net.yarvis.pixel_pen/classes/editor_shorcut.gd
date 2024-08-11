@@ -112,3 +112,5 @@ extends Resource
 
 @export_category("Other")
 @export var confirm : Shortcut
+@export var zoom_in : Shortcut
+@export var zoom_out : Shortcut

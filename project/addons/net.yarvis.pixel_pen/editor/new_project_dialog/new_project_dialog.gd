@@ -23,6 +23,9 @@ func _init():
 
 func _ready():
 	_update_canvas_aspect_ratio()
+	name_node.grab_focus.call_deferred()
+	height_node.focus_next = get_ok_button().get_path()
+	get_cancel_button().focus_next = name_node.get_path()
 
 
 func _update_canvas_aspect_ratio():
@@ -64,3 +67,8 @@ func _on_confirmed():
 			_height as int),name_node.text if name_node.text != "" else "Untitled"
 	)
 	PixelPen.state.current_project = current_project
+
+
+func _process(_delta):
+	if Input.is_key_pressed(KEY_ENTER) and (width_node.has_focus() or height_node.has_focus() or name_node.has_focus()):
+		get_ok_button().pressed.emit()

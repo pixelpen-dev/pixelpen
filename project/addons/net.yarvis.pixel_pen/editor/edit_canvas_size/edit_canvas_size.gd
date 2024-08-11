@@ -23,4 +23,12 @@ func _init():
 
 
 func _ready():
-	add_button("Reset", false, "on_reset")
+	var reset_btn := add_button("Reset", false, "on_reset")
+	get_cancel_button().focus_next = width_node.get_path()
+	height_node.focus_next = reset_btn.get_path()
+	width_node.grab_focus.call_deferred()
+
+
+func _process(_delta):
+	if Input.is_key_pressed(KEY_ENTER) and (width_node.has_focus() or height_node.has_focus()):
+		get_ok_button().pressed.emit()

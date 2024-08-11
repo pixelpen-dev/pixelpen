@@ -2,8 +2,15 @@
 extends Window
 
 
+@export var new_btn : Button
+
+
 func _init():
 	visible = false
+
+
+func _ready():
+	new_btn.grab_focus.call_deferred()
 
 
 func _on_new_pressed():
@@ -27,3 +34,8 @@ func _on_import_pressed():
 func _on_close_requested():
 	hide()
 	queue_free()
+
+
+func _process(_delta):
+	if Input.is_key_pressed(KEY_ESCAPE):
+		_on_close_requested()

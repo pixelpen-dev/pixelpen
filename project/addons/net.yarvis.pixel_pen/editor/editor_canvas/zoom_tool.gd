@@ -57,8 +57,11 @@ func _on_shift_pressed(pressed : bool):
 
 func _on_draw_cursor(mouse_position : Vector2):
 	draw_plus_cursor(mouse_position)
-	var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
+
+
+func _on_get_tool_texture() -> Texture2D:
 	if active_sub_tool_type == PixelPenEnum.ToolBoxZoom.TOOL_ZOOM_IN:
-		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, zoom_out_texture if shift_mode else zoom_in_texture)
+		return zoom_out_texture if shift_mode else zoom_in_texture
 	elif active_sub_tool_type == PixelPenEnum.ToolBoxZoom.TOOL_ZOOM_OUT:
-		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, zoom_in_texture if shift_mode else zoom_out_texture)
+		return zoom_in_texture if shift_mode else zoom_out_texture
+	return null

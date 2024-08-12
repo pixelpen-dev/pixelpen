@@ -169,6 +169,10 @@ func on_draw_cursor(mouse_position : Vector2):
 		tool.draw_invalid_cursor(mouse_position)
 
 
+func on_get_tool_texture() -> Texture2D:
+	return tool._on_get_tool_texture()
+
+
 func on_draw_hint(mouse_position : Vector2):
 	if tool.node.virtual_mouse:
 		tool._on_draw_hint(tool.node.virtual_mouse_origin)

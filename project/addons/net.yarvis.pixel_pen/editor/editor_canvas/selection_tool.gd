@@ -121,7 +121,9 @@ func _on_force_cancel():
 
 func _on_draw_cursor(mouse_position : Vector2):
 	draw_plus_cursor(mouse_position)
-	var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
+
+
+func _on_get_tool_texture() -> Texture2D:
 	var texture : Texture2D
 	match sub_tool_selection_type:
 		PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_UNION:
@@ -131,7 +133,8 @@ func _on_draw_cursor(mouse_position : Vector2):
 		PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION:
 			texture = selection_intersection
 	if texture != null:
-		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, texture)
+		return texture
+	return null
 
 
 func _on_draw_hint(mouse_position : Vector2):

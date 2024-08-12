@@ -40,9 +40,10 @@ func _on_shift_pressed(pressed : bool):
 
 
 func _on_draw_cursor(mouse_position : Vector2):
-	if shift_mode:
-		draw_color_picker_cursor(mouse_position)
-		return
 	draw_plus_cursor(mouse_position)
-	var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
-	draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, texture)
+
+
+func _on_get_tool_texture() -> Texture2D:
+	if shift_mode:
+		return color_picker_texture
+	return texture

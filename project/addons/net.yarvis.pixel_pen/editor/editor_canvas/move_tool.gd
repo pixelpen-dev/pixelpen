@@ -235,9 +235,12 @@ func _on_force_cancel():
 
 func _on_draw_cursor(mouse_position : Vector2):
 	draw_plus_cursor(mouse_position)
-	if not _is_rotate_anchor_hovered:
-		var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
-		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, texture)
+
+
+func _on_get_tool_texture() -> Texture2D:
+	if _is_rotate_anchor_hovered:
+		return null
+	return texture
 
 
 func _on_draw_hint(mouse_position : Vector2):

@@ -141,12 +141,15 @@ func _on_force_cancel():
 
 func _on_draw_cursor(mouse_position : Vector2):
 	draw_plus_cursor(mouse_position, 15.0 if is_pressed and mode == Mode.SELECT_PIXEL else 10.0)
-	var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
-	if mode == Mode.SELECT_PIXEL:
-		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, magnet_texture)
-	else:
-		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, magnet_on_texture)
 	node.overlay_hint.material.set_shader_parameter("zoom_bias", node.get_viewport().get_camera_2d().zoom)
+
+
+func _on_get_tool_texture() -> Texture2D:
+	if mode == Mode.SELECT_PIXEL:
+		return magnet_texture
+	else:
+		return magnet_on_texture
+	return null
 
 
 func collecte_pixel(from : Vector2, to : Vector2) -> bool:

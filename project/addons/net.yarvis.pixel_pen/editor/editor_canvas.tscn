@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dde4flu0tmqb3"]
+[gd_scene load_steps=16 format=3 uid="uid://dde4flu0tmqb3"]
 
 [ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas_cursor.gdshader" id="1_iq3vk"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_canvas/editor_canvas.gd" id="1_je1bm"]
@@ -6,6 +6,7 @@
 [ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/grayscale.gdshader" id="3_g2v7b"]
 [ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/marching_ant.gdshader" id="4_n22mx"]
 [ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/marching_ant_filled.gdshader" id="5_6iuph"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_canvas/cursor.gd" id="7_qpw1y"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c4sdf"]
 shader = ExtResource("1_iq3vk")
@@ -41,7 +42,10 @@ shader_parameter/grayscale = false
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_oy7v3"]
 
-[node name="EditorCanvas" type="Node2D" node_paths=PackedStringArray("tile_node", "background_canvas", "onion_skinning", "layers", "camera", "overlay_hint", "selection_tool_hint", "filter")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_06oqe"]
+shader = ExtResource("1_iq3vk")
+
+[node name="EditorCanvas" type="Node2D" node_paths=PackedStringArray("tile_node", "background_canvas", "onion_skinning", "layers", "camera", "overlay_hint", "selection_tool_hint", "filter", "cursor_surface")]
 material = SubResource("ShaderMaterial_c4sdf")
 script = ExtResource("1_je1bm")
 tile_node = NodePath("Tiled")
@@ -52,6 +56,7 @@ camera = NodePath("Camera2D")
 overlay_hint = NodePath("Overlay")
 selection_tool_hint = NodePath("SelectionTool")
 filter = NodePath("Filter")
+cursor_surface = NodePath("CursorSurface/Cursor")
 
 [node name="BackgroudCanvas" type="Sprite2D" parent="."]
 show_behind_parent = true
@@ -94,3 +99,16 @@ texture = SubResource("PlaceholderTexture2D_oy7v3")
 centered = false
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="CursorSurface" type="CanvasLayer" parent="."]
+
+[node name="Cursor" type="Control" parent="CursorSurface"]
+material = SubResource("ShaderMaterial_06oqe")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7_qpw1y")

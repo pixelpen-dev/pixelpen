@@ -165,7 +165,7 @@ func _on_shift_pressed(pressed : bool):
 
 func _on_draw_cursor(mouse_position : Vector2):
 	if shift_mode:
-		draw_color_picker_cursor(mouse_position)
+		draw_plus_cursor(mouse_position)
 		return
 	
 	var has_zoom : bool = node.get_viewport().get_camera_2d() != null
@@ -175,3 +175,9 @@ func _on_draw_cursor(mouse_position : Vector2):
 		
 	# Draw center cursor
 	draw_circle_cursor(mouse_position)
+
+
+func _on_get_tool_texture() -> Texture2D:
+	if shift_mode:
+		return color_picker_texture
+	return null

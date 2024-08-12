@@ -69,7 +69,9 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 
 func _on_draw_cursor(mouse_position : Vector2):
 	draw_plus_cursor(mouse_position)
-	var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
+
+
+func _on_get_tool_texture() -> Texture2D:
 	if active_sub_tool_type == PixelPenEnum.ToolBoxSelect.TOOL_SELECT_COLOR:
 		var texture : Texture2D
 		match SelectionTool.sub_tool_selection_type:
@@ -80,6 +82,7 @@ func _on_draw_cursor(mouse_position : Vector2):
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION:
 				texture = selection_intersection
 		if texture != null:
-			draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, texture)
+			return texture
 	elif active_sub_tool_type == PixelPenEnum.ToolBoxSelect.TOOL_SELECT_LAYER:
-		draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, select_layer_texture)
+		return select_layer_texture
+	return null

@@ -185,7 +185,7 @@ func _on_shift_pressed(pressed : bool):
 
 func _on_draw_cursor(mouse_position : Vector2):
 	if shift_mode:
-		draw_color_picker_cursor(mouse_position)
+		draw_plus_cursor(mouse_position)
 		node.overlay_hint.visible = false
 		return
 	node.overlay_hint.visible = true
@@ -200,6 +200,11 @@ func _on_draw_cursor(mouse_position : Vector2):
 		node.overlay_hint.texture = brush_mask
 		node.overlay_hint.position = floor(mouse_position) - (brush_mask.get_size() - Vector2.ONE) * 0.5
 
+
+func _on_get_tool_texture() -> Texture2D:
+	if shift_mode:
+		return color_picker_texture
+	return null
 
 func update_brush():
 	if PixelPen.state.current_project == null:

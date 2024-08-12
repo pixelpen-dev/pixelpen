@@ -26,3 +26,7 @@ func _on_mouse_motion(mouse_position : Vector2, event_relative : Vector2, callba
 
 func _on_draw_cursor(mouse_position : Vector2):
 	draw_pan_cursor(mouse_position)
+
+
+func _on_get_tool_texture() -> Texture2D:
+	return pan_texture

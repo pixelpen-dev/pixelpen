@@ -82,6 +82,10 @@ func _on_draw_hint(mouse_position : Vector2):
 	pass
 
 
+func _on_get_tool_texture() -> Texture2D:
+	return null
+
+
 func pick_color_from_canvas(mouse_position : Vector2, emit_color_picked : bool = true) -> int:
 	var index_image = (PixelPen.state.current_project as PixelPenProject).active_frame.layers
 	var coord : Vector2 = floor(mouse_position)
@@ -270,14 +274,10 @@ func draw_plus_cursor(mouse_position : Vector2, size : float = 10.0):
 
 func draw_color_picker_cursor(mouse_position : Vector2):
 	draw_plus_cursor(mouse_position)
-	var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
-	draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, color_picker_texture)
 
 
 func draw_pan_cursor(mouse_position : Vector2):
 	draw_plus_cursor(mouse_position)
-	var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
-	draw_texture(mouse_position + Vector2(0.5, -1.5) * cursor_length, pan_texture)
 
 
 func draw_invalid_cursor(mouse_position : Vector2, size : float = 10.0):
@@ -286,13 +286,6 @@ func draw_invalid_cursor(mouse_position : Vector2, size : float = 10.0):
 	var line = Vector2(cursor_length, 0).rotated(PI * -0.25)
 	node.draw_line(mouse_position - line, mouse_position + line, Color.RED, 0.2 * cursor_length)
 
-
-func draw_texture(position : Vector2, texture : Texture2D, scaled : bool = true):
-	var cursor_length : float = (node.get_viewport_transform().affine_inverse() * 20.0).x.x
-	if not scaled:
-		cursor_length = 0.2
-	var rect = Rect2(position, Vector2.ONE * cursor_length)
-	node.draw_texture_rect(texture, rect, false, Color(1,1,1,0.75))
 
 ## Return center mass, if return Vector(-1, -1) -> ellipse outside canvas
 static func get_midpoint_ellipse(start: Vector2, end: Vector2, color : Color, image : Image) -> Vector2:

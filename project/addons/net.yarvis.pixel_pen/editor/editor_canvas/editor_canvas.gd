@@ -16,6 +16,7 @@ var MoveTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/mov
 @export var overlay_hint : Sprite2D
 @export var selection_tool_hint : Sprite2D
 @export var filter : Sprite2D
+@export var cursor_surface : Control
 @export var silhouette : bool = false
 @export var virtual_mouse : bool = false
 @export var show_view_grayscale : bool = false:
@@ -322,10 +323,13 @@ func _draw():
 					if _on_pan_shorcut_mode:
 						if rmb_inject_mode:
 							canvas_paint.tool.draw_pan_cursor(virtual_mouse_origin)
+							cursor_surface.tool_texture = canvas_paint.tool.pan_texture
 						else:
 							canvas_paint.tool.draw_pan_cursor(get_local_mouse_position())
+							cursor_surface.tool_texture = canvas_paint.tool.pan_texture
 					else:
 						canvas_paint.on_draw_cursor(get_local_mouse_position())
+						cursor_surface.tool_texture = canvas_paint.on_get_tool_texture()
 				elif type_hovered == 0:
 					_symetric_guid_color_vertical.a = 0.75
 					canvas_paint.tool.draw_plus_cursor(get_local_mouse_position(), 15)

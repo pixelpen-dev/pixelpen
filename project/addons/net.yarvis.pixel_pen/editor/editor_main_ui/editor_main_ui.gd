@@ -559,7 +559,8 @@ func _init_popup_menu():
 	view_popup.add_separator("", 100)
 	view_popup.add_check_item("Edit selection only", ViewID.EDIT_SELECTION_ONLY)
 	view_popup.add_separator("", 100)
-	view_popup.add_check_item("Show virtual mouse", ViewID.SHOW_VIRTUAL_MOUSE)
+	if OS.get_name() == "Android":
+		view_popup.add_check_item("Show virtual mouse", ViewID.SHOW_VIRTUAL_MOUSE)
 	view_popup.add_check_item("Show grid", ViewID.SHOW_GRID)
 	view_popup.add_check_item("Show vertical mirror guid", ViewID.SHOW_VERTICAL_MIRROR_GUIDE)
 	view_popup.add_check_item("Show horizontal mirror guid", ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE)

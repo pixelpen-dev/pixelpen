@@ -127,6 +127,8 @@ func shorcuts_tree_node():
 				child_tree_item.set_text(1, get_shortcut(child_item.get_extension()))
 				child_tree_item.set_metadata(1, child_item.get_extension())
 			for grandchild_item in shorcuts_tree_structure[key][child_item]:
+				if grandchild_item.get_extension() == "virtual_mouse" and not OS.get_name() == "Android":
+					continue
 				var grandchild_tree_item = shorcuts_tree.create_item(child_tree_item)
 				grandchild_tree_item.collapsed = true
 				grandchild_tree_item.set_text(0, grandchild_item.get_basename())

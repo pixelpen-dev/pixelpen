@@ -1,7 +1,6 @@
 #include "PixelPenCPP.h"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/godot.hpp>
-#include <godot_cpp/classes/geometry2d.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <queue>
 
@@ -191,10 +190,9 @@ Ref<Image> PixelPenCPP::get_color_map_with_mask(const Ref<Image> &p_mask, const 
 
 Ref<Image> PixelPenCPP::get_mask_from_polygon(const PackedVector2Array polygon, const Vector2i mask_size, const Vector2i mask_margin){
     Ref<Image> image = Image::create(mask_size.x + mask_margin.x * 2, mask_size.y + mask_margin.y * 2, false, Image::FORMAT_R8);
-    Geometry2D geometry_2d = Geometry2D();
     for (int y = 0; y < mask_size.y; y++) {
         for (int x = 0; x < mask_size.x; x++) {
-            if( geometry_2d.is_point_in_polygon(Vector2i(x, y), polygon) ){
+            if( PixelPenCPP::is_point_in_polygon(Vector2i(x, y), polygon) ){
                 Color c = Color();
                 c.set_r8(255);
                 image->set_pixel(x + mask_margin.x, y + mask_margin.y, c);
@@ -549,3 +547,78 @@ Ref<Image> PixelPenCPP::get_image_with_mask(PackedColorArray palette_color, cons
 	return cache_image;
 }
 
+// Steal from godot source code since don't know how to use `Geometry2D::is_point_in_polygon`
+bool PixelPenCPP::is_point_in_polygon(const Vector2 &p_point, const PackedVector2Array &p_polygon) {
+	int c = p_polygon.size();
+	if (c < 3) {
+		return false;
+	}
+	const Vector2 *p = p_polygon.ptr();
+	Vector2 further_away(-1e20, -1e20);
+	Vector2 further_away_opposite(1e20, 1e20);
+
+	for (int i = 0; i < c; i++) {
+		further_away = further_away.max(p[i]);
+		further_away_opposite = further_away_opposite.min(p[i]);
+	}
+
+	// Make point outside that won't intersect with points in segment from p_point.
+	further_away += (further_away - further_away_opposite) * Vector2(1.221313, 1.512312);
+
+	int intersections = 0;
+	for (int i = 0; i < c; i++) {
+		const Vector2 &v1 = p[i];
+		const Vector2 &v2 = p[(i + 1) % c];
+
+		Vector2 res;
+		if (PixelPenCPP::segment_intersects_segment(v1, v2, p_point, further_away, &res)) {
+			intersections++;
+			if (res.is_equal_approx(p_point)) {
+				// Point is in one of the polygon edges.
+				return true;
+			}
+		}
+	}
+
+	return (intersections & 1);
+}
+
+// Steal from godot source code since don't know how to use `Geometry2D::is_point_in_polygon`
+bool PixelPenCPP::segment_intersects_segment(const Vector2 &p_from_a, const Vector2 &p_to_a, const Vector2 &p_from_b, const Vector2 &p_to_b, Vector2 *r_result) {
+    Vector2 B = p_to_a - p_from_a;
+    Vector2 C = p_from_b - p_from_a;
+    Vector2 D = p_to_b - p_from_a;
+
+    real_t ABlen = B.dot(B);
+    if (ABlen <= 0) {
+        return false;
+    }
+    Vector2 Bn = B / ABlen;
+    C = Vector2(C.x * Bn.x + C.y * Bn.y, C.y * Bn.x - C.x * Bn.y);
+    D = Vector2(D.x * Bn.x + D.y * Bn.y, D.y * Bn.x - D.x * Bn.y);
+
+    // Fail if C x B and D x B have the same sign (segments don't intersect).
+    if ((C.y < (real_t)-CMP_EPSILON && D.y < (real_t)-CMP_EPSILON) || (C.y > (real_t)CMP_EPSILON && D.y > (real_t)CMP_EPSILON)) {
+        return false;
+    }
+
+    // Fail if segments are parallel or colinear.
+    // (when A x B == zero, i.e (C - D) x B == zero, i.e C x B == D x B)
+    if (Math::is_equal_approx(C.y, D.y)) {
+        return false;
+    }
+
+    real_t ABpos = D.x + (C.x - D.x) * D.y / (D.y - C.y);
+
+    // Fail if segment C-D crosses line A-B outside of segment A-B.
+    if ((ABpos < 0) || (ABpos > 1)) {
+        return false;
+    }
+
+    // Apply the discovered position to line A-B in the original coordinate system.
+    if (r_result) {
+        *r_result = p_from_a + B * ABpos;
+    }
+
+    return true;
+}

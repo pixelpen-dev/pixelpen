@@ -15,8 +15,9 @@ void initialize_pixelpen(ModuleInitializationLevel p_level)
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
-	ClassDB::register_class<PixelPenCPP>();
-	ClassDB::register_class<PixelPenImage>();
+
+	GDREGISTER_CLASS(PixelPenCPP);
+	GDREGISTER_CLASS(PixelPenImage);
 }
 
 void uninitialize_pixelpen(ModuleInitializationLevel p_level) {

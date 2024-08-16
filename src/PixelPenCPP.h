@@ -11,7 +11,8 @@ namespace godot{
 
         private:
             static void flood_fill_iterative(int32_t reference_color, Vector2i start_point, const Ref<Image> &p_color_map, const Ref<Image> &p_image, const bool grow_only_along_axis);
-            
+            static bool is_point_in_polygon(const Vector2 &p_point, const PackedVector2Array &p_polygon);
+            static bool segment_intersects_segment(const Vector2 &p_from_a, const Vector2 &p_to_a, const Vector2 &p_from_b, const Vector2 &p_to_b, Vector2 *r_result);
 
         protected:
             static void _bind_methods();

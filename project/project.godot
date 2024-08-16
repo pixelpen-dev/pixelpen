@@ -13,7 +13,7 @@ config_version=5
 config/name="PixelPen"
 config/version="v1.1.1"
 run/main_scene="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui.tscn"
-config/features=PackedStringArray("4.2", "Mobile")
+config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://addons/net.yarvis.pixel_pen/resources/icon/Icon.png"
 
 [display]

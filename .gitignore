@@ -4,4 +4,5 @@
 *.os
 /project/addons/net.yarvis.pixel_pen/bin/
 *.o
+*.obj
 project/export_presets.cfg

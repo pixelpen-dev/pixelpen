@@ -1,4 +1,5 @@
 <img src="https://raw.githubusercontent.com/pixelpen-dev/pixelpen/main/screenshot.png">
+<img src="https://raw.githubusercontent.com/pixelpen-dev/pixelpen/main/screenshot.gif">
 
 # PixelPen
 
@@ -31,7 +32,7 @@ Developed for the Godot community by:
 
 |||
 |--|--|
-| **Bayu SW, Yarvis Games** | [<img src="https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/twitter.png?raw=true" width="24"/>](https://x.com/yarvisdev) [<img src="https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/github.png?raw=true" width="24"/>](https://github.com/bayu-sw) [<img src="https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/www.png?raw=true" width="24"/>](https://yarvis.net/) |
+| **Bayu SW, Yarvis Games** | [<img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/twitter-x.svg" width="24"/>](https://x.com/yarvisdev) [<img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/github.svg" width="24"/>](https://github.com/bayu-sw) [<img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/globe.svg" width="24"/>](https://yarvis.net/) |
 
 See more contributor in [AUTHOR.md](https://github.com/pixelpen-dev/pixelpen/blob/main/AUTHOR.md)
 

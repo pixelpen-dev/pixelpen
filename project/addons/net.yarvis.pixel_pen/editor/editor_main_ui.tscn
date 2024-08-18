@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://cwymkqj20edan"]
+[gd_scene load_steps=46 format=3 uid="uid://cwymkqj20edan"]
 
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_lcbg8"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/editor_main_ui.gd" id="2_7n4p1"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/branch.gd" id="6_uhkao"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/data_branch.gd" id="7_on08i"]
 [ext_resource type="Texture2D" uid="uid://deog0bonjsm4p" path="res://addons/net.yarvis.pixel_pen/resources/icon/information-outline.svg" id="10_i6fsj"]
+[ext_resource type="PackedScene" uid="uid://7y0nin2svgj7" path="res://addons/net.yarvis.pixel_pen/editor/panels/color_wheel/color_wheel.tscn" id="13_162t8"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/preview_play_pause.gd" id="17_pncom"]
 [ext_resource type="FontFile" uid="uid://b0re2f6plrnns" path="res://addons/net.yarvis.pixel_pen/resources/fonts/inter/static/Inter-Bold.ttf" id="18_uhe2p"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/grid_pallete.gd" id="19_eprkn"]
@@ -414,7 +415,6 @@ stretch_mode = 3
 [node name="Palette" type="MarginContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.3
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
@@ -425,13 +425,13 @@ layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="Grid" type="Control" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer" node_paths=PackedStringArray("color_picker")]
+[node name="Grid" type="Control" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer" node_paths=PackedStringArray("color_wheel")]
 custom_minimum_size = Vector2(0, 624)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("19_eprkn")
-color_picker = NodePath("../../../Picker/ScrollContainer/ColorPicker")
+color_wheel = NodePath("../../../Picker/ScrollContainer/ColorWheel")
 
 [node name="Picker" type="MarginContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer"]
 layout_mode = 2
@@ -445,17 +445,10 @@ theme_override_constants/margin_bottom = 4
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker"]
 layout_mode = 2
 
-[node name="ColorPicker" type="ColorPicker" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker/ScrollContainer"]
+[node name="ColorWheel" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker/ScrollContainer" instance=ExtResource("13_162t8")]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/sv_width = 0
-theme_override_constants/sv_height = 200
-color = Color(0, 0, 0, 1)
-color_mode = 1
-picker_shape = 1
-can_add_swatches = false
-sampler_visible = false
-presets_visible = false
+size_flags_vertical = 3
 
 [node name="SubTool" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout" node_paths=PackedStringArray("button_list", "toolbar_list", "shift_separator", "shift_label", "canvas")]
 layout_mode = 0
@@ -865,7 +858,7 @@ layout_mode = 2
 
 [connection signal="item_rect_changed" from="." to="." method="_on_size_changed"]
 [connection signal="item_rect_changed" from="Background/VBoxContainer/MarginContainer/Layout/Palette" to="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer/Grid" method="_on_palette_item_rect_changed"]
-[connection signal="color_changed" from="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker/ScrollContainer/ColorPicker" to="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer/Grid" method="_on_color_picker_color_changed"]
+[connection signal="color_changed" from="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker/ScrollContainer/ColorWheel" to="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer/Grid" method="_on_color_wheel_color_changed"]
 [connection signal="pressed" from="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools/AddLayer" to="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools" method="_on_add_pressed"]
 [connection signal="pressed" from="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools/DeleteLayer" to="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools" method="_on_trash_pressed"]
 [connection signal="mouse_entered" from="Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer" to="Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer" method="_on_mouse_entered"]

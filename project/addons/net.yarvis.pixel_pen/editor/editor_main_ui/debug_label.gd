@@ -30,7 +30,7 @@ func _process(_delta):
 		text = ""
 		return
 	var txt = str(
-		str("PixelPen ", version, "\n") if version != "" else "", "FPS: ",
+		str("PixelPen v", version, "\n") if version != "" else "", "FPS: ",
 		Engine.get_frames_per_second())
 	data_debug["Memory"] = str(Performance.get_monitor(Performance.MEMORY_STATIC)/1000000, "/",
 			Performance.get_monitor(Performance.MEMORY_STATIC_MAX)/1000000, " mb")

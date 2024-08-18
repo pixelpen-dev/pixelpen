@@ -197,4 +197,3 @@ func build_hint_image():
 		node.selection_tool_hint.material.set_shader_parameter("zoom_bias", node.get_viewport().get_camera_2d().zoom)
 	else:
 		node.selection_tool_hint.texture = null
-

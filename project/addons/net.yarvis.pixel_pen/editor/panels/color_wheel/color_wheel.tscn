@@ -1,0 +1,97 @@
+[gd_scene load_steps=11 format=3 uid="uid://7y0nin2svgj7"]
+
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/panels/color_wheel/color_wheel_script/color_wheel.gd" id="1_ibq4c"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/editor/panels/color_wheel/shader/sv_slider.gdshader" id="1_xdkuq"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/editor/panels/color_wheel/shader/hue_slider.gdshader" id="2_lkj77"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/panels/color_wheel/color_wheel_script/sv_slider.gd" id="2_xsppv"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/panels/color_wheel/color_wheel_script/hue_slider.gd" id="4_jsnlp"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/panels/color_wheel/color_wheel_script/alpha_slider.gd" id="6_1shs5"]
+[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/editor/panels/color_wheel/shader/alpha_slider.gdshader" id="6_ajt15"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g0thh"]
+shader = ExtResource("1_xdkuq")
+shader_parameter/hue = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8odh4"]
+shader = ExtResource("2_lkj77")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4baan"]
+shader = ExtResource("6_ajt15")
+shader_parameter/alpha = 1.0
+
+[node name="ColorWheel" type="Control" node_paths=PackedStringArray("sv_slider", "hue_slider", "alpha_slider")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ibq4c")
+sv_slider = NodePath("VBoxContainer/AspectRatioContainer/SVSlider")
+hue_slider = NodePath("VBoxContainer/HueSlider")
+alpha_slider = NodePath("VBoxContainer/AlphaSlider")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.458824, 0.458824, 0.458824, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SVSlider" type="ColorRect" parent="VBoxContainer/AspectRatioContainer"]
+material = SubResource("ShaderMaterial_g0thh")
+layout_mode = 2
+script = ExtResource("2_xsppv")
+hue = 0.0
+saturation = 0.0
+value = 0.0
+
+[node name="HueSlider" type="ColorRect" parent="VBoxContainer"]
+material = SubResource("ShaderMaterial_8odh4")
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+script = ExtResource("4_jsnlp")
+hue = 0.0
+
+[node name="AlphaSlider" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+script = ExtResource("6_1shs5")
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/AlphaSlider"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_4baan")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[connection signal="double_click" from="VBoxContainer/AspectRatioContainer/SVSlider" to="." method="_on_double_click"]
+[connection signal="sv_changed" from="VBoxContainer/AspectRatioContainer/SVSlider" to="." method="_on_sv_slider_sv_changed"]
+[connection signal="double_click" from="VBoxContainer/HueSlider" to="." method="_on_double_click"]
+[connection signal="hue_changed" from="VBoxContainer/HueSlider" to="." method="_on_hue_slider_hue_changed"]
+[connection signal="alpha_changed" from="VBoxContainer/AlphaSlider" to="." method="_on_alpha_slider_alpha_changed"]
+[connection signal="double_click" from="VBoxContainer/AlphaSlider" to="." method="_on_double_click"]

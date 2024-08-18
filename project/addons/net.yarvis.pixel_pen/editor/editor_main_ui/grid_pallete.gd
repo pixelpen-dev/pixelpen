@@ -6,11 +6,13 @@ const COLOR_RECT_COLOR_NAME = "Color"
 const X_TOTAL = 8
 const I_TOTAL = 255
 
-@export var color_picker : ColorPicker
+@export var color_wheel : Control
 
 
 var _child_item : Array[Control] = []
 var _grid_focus_index : int = 0
+var _double_click_t : float
+var _picker_popup_visible : bool = false
 
 var tr_material := load("res://addons/net.yarvis.pixel_pen/resources/tile_transparant_material.tres")
 
@@ -66,7 +68,7 @@ func _process(_delta):
 				if i >= I_TOTAL:
 					break
 			y += 1
-		color_picker.color = _child_item[_grid_focus_index].get_node(COLOR_RECT_COLOR_NAME).color
+		color_wheel.color = _child_item[_grid_focus_index].get_node(COLOR_RECT_COLOR_NAME).color
 		PixelPen.state.color_picked.emit( PixelPen.state.current_project.palette.gui_index_to_palette_index(_grid_focus_index) )
 		queue_redraw()
 
@@ -95,6 +97,12 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 	wrapper.gui_input.connect(func(event : InputEvent):
 			if event and event is InputEventMouseButton:
 				if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
+					if _picker_popup_visible:
+						return
+					if Time.get_unix_time_from_system() - _double_click_t < 0.5:
+						_on_double_click()
+						return
+					_double_click_t = Time.get_unix_time_from_system()
 					if Input.is_key_pressed(KEY_SHIFT): # Replace color (LMB + SHIFT)
 						var layer : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_layer
 						if layer != null: 
@@ -143,7 +151,7 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 						PixelPen.state.palette_changed.emit()
 					else: # TODO:Pick color (LMB)
 						_grid_focus_index = _child_item.find(wrapper)
-						color_picker.color = ar.color
+						color_wheel.color = ar.color
 						PixelPen.state.color_picked.emit(PixelPen.state.current_project.palette.gui_index_to_palette_index(_grid_focus_index))
 						queue_redraw()
 				elif event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT:
@@ -191,7 +199,24 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 	return wrapper
 
 
-func _on_color_picker_color_changed(color):
+func _on_double_click() -> void:
+	var color_picker := ColorPickerButton.new()
+	color_picker.get_picker().can_add_swatches = false
+	color_picker.get_picker().presets_visible = false
+	color_picker.color = _child_item[_grid_focus_index].get_node(COLOR_RECT_COLOR_NAME).color
+	color_picker.popup_closed.connect(func():
+			color_picker.queue_free()
+			if color_picker.color != _child_item[_grid_focus_index].get_node(COLOR_RECT_COLOR_NAME).color:
+				_on_color_wheel_color_changed(color_picker.color)
+			_picker_popup_visible = false
+			)
+	color_picker.visible = false
+	add_child(color_picker)
+	_picker_popup_visible = true
+	color_picker.get_popup().popup_centered()
+
+
+func _on_color_wheel_color_changed(color):
 	if not PixelPen.state.project_file_changed.get_connections():
 		return
 	if PixelPen.state.current_project == null:

@@ -207,17 +207,6 @@ func from_json(json_string : String) -> Error:
 		show_timeline = json_data["show_timeline"] as bool
 	else:
 		return FAILED
-	if json_data.has("animation_timeline"):
-		animation_timeline.clear()
-		var arr_animation_timeline : Array = json_data["animation_timeline"] as Array
-		for data in arr_animation_timeline:
-			var cell := AnimationCell.new()
-			var cell_err := cell.from_data(data, self)
-			if cell_err != OK:
-				return FAILED
-			animation_timeline.push_back(cell)
-	else:
-		return FAILED
 	if json_data.has("animation_frame_index"):
 		animation_frame_index = json_data["animation_frame_index"] as int
 	else:
@@ -263,6 +252,17 @@ func from_json(json_string : String) -> Error:
 			if frame_err != OK:
 				return FAILED
 			_cache_pool_frames.push_back(frame)
+	else:
+		return FAILED
+	if json_data.has("animation_timeline"):
+		animation_timeline.clear()
+		var arr_animation_timeline : Array = json_data["animation_timeline"] as Array
+		for data in arr_animation_timeline:
+			var cell := AnimationCell.new()
+			var cell_err := cell.from_data(data, self)
+			if cell_err != OK:
+				return FAILED
+			animation_timeline.push_back(cell)
 	else:
 		return FAILED
 	if json_data.has("_cache_canvas_pool_frame_uid"):
@@ -894,3 +894,17 @@ func reset_brush_to_default():
 func reset_stamp_to_default():
 	PixelPen.state.userconfig.stamp.clear()
 	PixelPen.state.userconfig.save()
+
+
+func crop_canvas(mask : Image) -> void:
+	if use_sample:
+		return
+	var rect : Rect2i = PixelPenCPP.get_mask_used_rect(mask)
+	for frame in pool_frames:
+		for layer in frame.layers:
+			var colormap : Image = layer.colormap.duplicate()
+			layer.size = rect.size
+			layer.colormap = colormap.get_region(rect)
+	_cache_pool_frames.clear()
+	undo_redo.clear_history()
+	canvas_size = rect.size

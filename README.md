@@ -1,5 +1,4 @@
 <img src="https://raw.githubusercontent.com/pixelpen-dev/pixelpen/main/screenshot.png">
-<img src="https://raw.githubusercontent.com/pixelpen-dev/pixelpen/main/screenshot.gif">
 
 # PixelPen
 

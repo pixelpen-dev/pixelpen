@@ -31,6 +31,7 @@ extends Resource
 @export var create_stamp : Shortcut
 @export var reset_stamp : Shortcut
 @export var prev_toolbox : Shortcut
+@export var canvas_crop_selection : Shortcut
 @export var canvas_size : Shortcut
 
 @export_subgroup("Layer")

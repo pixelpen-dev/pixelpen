@@ -27,7 +27,7 @@ func from_data(json_data : Dictionary, project : PixelPenProject) -> Error:
 		return FAILED
 	if json_data.has("frame_uid"):
 		var frame_uid = str_to_var(json_data["frame_uid"]) as Vector3i
-		frame = project.get_pool_frame(frame_uid)
+		frame = project.get_pool_frame(frame_uid, project.use_sample)
 	else:
 		return FAILED
 	

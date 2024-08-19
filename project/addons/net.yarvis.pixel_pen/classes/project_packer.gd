@@ -79,5 +79,3 @@ static func save(project : PixelPenProject, path : String) -> Error:
 		zip.close()
 		return OK
 	return FAILED
-
-

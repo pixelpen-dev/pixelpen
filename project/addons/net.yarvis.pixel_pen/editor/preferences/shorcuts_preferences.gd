@@ -22,7 +22,7 @@ var shorcuts_tree_structure : Dictionary = {
 			"Clear selection.remove_selection", "Delete selection.delete_selected", 
 			"Copy.copy", "Cut.cut", "Paste.paste", "Create brush.create_brush",
 			"Reset brush.reset_brush", "Create stamp.create_stamp", "Reset stamp.reset_stamp",
-			"Switch to previous toolbox.prev_toolbox", "Canvas size.canvas_size"
+			"Switch to previous toolbox.prev_toolbox", "Canvas crop selection.canvas_crop_selection", "Canvas size.canvas_size"
 		],
 		"Layer" : [
 			"Add.add_layer", "Delete.delete_layer", "Duplicate layer.duplicate_layer",

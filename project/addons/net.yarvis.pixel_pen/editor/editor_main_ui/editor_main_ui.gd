@@ -58,6 +58,7 @@ enum EditID{
 	CREATE_STAMP,
 	RESET_STAMP,
 	SWITCH_LAST_TOOLBOX,
+	CROP_SELECTION,
 	CANVAS_SIZE
 }
 
@@ -477,6 +478,7 @@ func _init_popup_menu():
 	edit_popup.add_separator("", 100)
 	edit_popup.add_item("Switch to previous toolbox", EditID.SWITCH_LAST_TOOLBOX)
 	edit_popup.add_separator("", 100)
+	edit_popup.add_item("Canvas crop selection", EditID.CROP_SELECTION)
 	edit_popup.add_item("Canvas size...", EditID.CANVAS_SIZE)
 	
 	var layer_popup : PopupMenu = layer_menu.get_popup()
@@ -621,6 +623,7 @@ func _set_shorcut():
 	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CREATE_STAMP), PixelPen.state.userconfig.shorcuts.create_stamp)
 	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.RESET_STAMP), PixelPen.state.userconfig.shorcuts.reset_stamp)
 	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.SWITCH_LAST_TOOLBOX), PixelPen.state.userconfig.shorcuts.prev_toolbox)
+	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CROP_SELECTION), PixelPen.state.userconfig.shorcuts.canvas_crop_selection)
 	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CANVAS_SIZE), PixelPen.state.userconfig.shorcuts.canvas_size)
 	
 	var layer_popup := layer_menu.get_popup()
@@ -687,6 +690,7 @@ func connect_signal():
 	file_menu.get_popup().id_pressed.connect(_on_file_popup_pressed)
 	file_menu.get_popup().about_to_popup.connect(_on_file_menu_about_to_pop)
 	edit_menu.get_popup().id_pressed.connect(_on_edit_popup_pressed)
+	edit_menu.get_popup().about_to_popup.connect(_on_edit_menu_about_to_pop)
 	layer_menu.get_popup().id_pressed.connect(_on_layer_popup_pressed)
 	layer_menu.get_popup().about_to_popup.connect(_on_layer_about_to_popup)
 	palette_menu.get_popup().id_pressed.connect(_on_palette_popup_pressed)
@@ -978,6 +982,14 @@ func _on_file_menu_about_to_pop():
 			PixelPen.state.current_project.animation_timeline.is_empty())
 
 
+func _on_edit_menu_about_to_pop():
+	var popup := edit_menu.get_popup()
+	popup.set_item_disabled(
+		popup.get_item_index(EditID.CROP_SELECTION),
+		PixelPen.state.current_project == null or PixelPen.state.current_project.use_sample or canvas.selection_tool_hint.texture == null
+	)
+
+
 func _on_edit_popup_pressed(id : int):
 	match id:
 		EditID.UNDO:
@@ -1054,7 +1066,16 @@ func _on_edit_popup_pressed(id : int):
 				return
 			if toolbox_dock.prev_toolbox != PixelPenEnum.ToolBox.TOOL_UNKNOWN:
 				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, toolbox_dock.prev_toolbox, true)
-		
+
+		EditID.CROP_SELECTION:
+			if PixelPen.state.current_project == null or PixelPen.state.current_project.use_sample:
+				return
+			if canvas.selection_tool_hint.texture == null:
+				return
+			var mask : Image = canvas.selection_tool_hint.texture.get_image()
+			PixelPen.state.current_project.crop_canvas(MaskSelection.get_image_no_margin(mask))
+			PixelPen.state.project_file_changed.emit()
+
 		EditID.CANVAS_SIZE:
 			_open_canvas_size_window()
 

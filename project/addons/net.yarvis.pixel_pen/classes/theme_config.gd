@@ -22,6 +22,7 @@ extends Node
 @export_subgroup("Dock")
 @export var toolbox_dock : Control
 @export var palette_dock : Control
+@export var color_wheel_dock : Control
 @export var subtool_dock : Control
 @export var preview_dock : Control 
 @export var layer_dock : Control
@@ -56,6 +57,7 @@ func get_default_layout(layout_node : Control)-> DataBranch:
 				Branch.create("Subtool", layout_node.get_path_to(toolbox_dock), layout_node.get_path_to(subtool_dock), ratio.y, true))
 		res.data.push_back(
 				Branch.create("Palette", layout_node.get_path_to(subtool_dock), layout_node.get_path_to(palette_dock), ratio.y, true))
+		
 		res.data.push_back(
 				Branch.create("Canvas", layout_node.get_path_to(palette_dock), layout_node.get_path_to(canvas_dock), 0.3, false))
 		res.data.push_back(
@@ -64,15 +66,17 @@ func get_default_layout(layout_node : Control)-> DataBranch:
 				Branch.create("Preview", layout_node.get_path_to(palette_dock), layout_node.get_path_to(preview_dock), 0.5, true))
 		res.data.push_back(
 				Branch.create("Layer", layout_node.get_path_to(preview_dock), layout_node.get_path_to(layer_dock), 0.35, true))
+		res.data.push_back(
+			Branch.create("ColorWheel", layout_node.get_path_to(palette_dock), layout_node.get_path_to(color_wheel_dock), 0.5, true))
 		return res
 	res.data.push_back(
 			Branch.create("ToolBox", NodePath("."), layout_node.get_path_to(toolbox_dock), 0.0, false))
 	res.data.push_back(
 			Branch.create("Palette", layout_node.get_path_to(toolbox_dock), layout_node.get_path_to(palette_dock), ratio.x, false))
 	res.data.push_back(
-			Branch.create("SubTool", layout_node.get_path_to(palette_dock), layout_node.get_path_to(subtool_dock), 0.2, false))
+			Branch.create("SubTool", layout_node.get_path_to(palette_dock), layout_node.get_path_to(subtool_dock), 0.15, false))
 	res.data.push_back(
-			Branch.create("Preview", layout_node.get_path_to(subtool_dock), layout_node.get_path_to(preview_dock), 0.75, false))
+			Branch.create("Preview", layout_node.get_path_to(subtool_dock), layout_node.get_path_to(preview_dock), 0.8, false))
 	res.data.push_back(
 			Branch.create("Layer", layout_node.get_path_to(preview_dock), layout_node.get_path_to(layer_dock), 0.35, true))
 	res.data.push_back(
@@ -80,7 +84,8 @@ func get_default_layout(layout_node : Control)-> DataBranch:
 	res.data[5].parent_size = 40
 	res.data.push_back(
 			Branch.create("Animation", layout_node.get_path_to(canvas_dock), layout_node.get_path_to(animation_dock), 0.8, true))
-	
+	res.data.push_back(
+			Branch.create("ColorWheel", layout_node.get_path_to(palette_dock), layout_node.get_path_to(color_wheel_dock), 0.5, true))
 	return res
 
 

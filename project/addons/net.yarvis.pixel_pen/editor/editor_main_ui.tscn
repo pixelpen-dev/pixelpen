@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://cwymkqj20edan"]
+[gd_scene load_steps=48 format=3 uid="uid://cwymkqj20edan"]
 
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_lcbg8"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/editor_main_ui.gd" id="2_7n4p1"]
@@ -26,9 +26,9 @@
 [ext_resource type="Texture2D" uid="uid://dhlo056qcyjky" path="res://addons/net.yarvis.pixel_pen/resources/icon/delete_24.svg" id="31_4d0km"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/layers.gd" id="32_cqc51"]
 
-[sub_resource type="Resource" id="Resource_w5lex"]
+[sub_resource type="Resource" id="Resource_168q3"]
 script = ExtResource("6_uhkao")
-name = "Main"
+name = "ToolBox"
 parent = NodePath(".")
 child = NodePath("ToolBox")
 split_ratio = 0.0
@@ -36,19 +36,19 @@ vertical = false
 parent_size = 0.0
 child_size = 0.0
 
-[sub_resource type="Resource" id="Resource_oe575"]
-script = ExtResource("6_uhkao")
-name = "ToolBox"
-parent = NodePath("ToolBox")
-child = NodePath("Palette")
-split_ratio = 0.03125
-vertical = false
-parent_size = 40.0
-child_size = 0.0
-
-[sub_resource type="Resource" id="Resource_id72v"]
+[sub_resource type="Resource" id="Resource_6myo5"]
 script = ExtResource("6_uhkao")
 name = "Palette"
+parent = NodePath("ToolBox")
+child = NodePath("Palette")
+split_ratio = 0.0307929
+vertical = false
+parent_size = 0.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_3af2w"]
+script = ExtResource("6_uhkao")
+name = "SubTool"
 parent = NodePath("Palette")
 child = NodePath("SubTool")
 split_ratio = 0.2
@@ -56,9 +56,9 @@ vertical = false
 parent_size = 0.0
 child_size = 0.0
 
-[sub_resource type="Resource" id="Resource_jpexo"]
+[sub_resource type="Resource" id="Resource_uuklc"]
 script = ExtResource("6_uhkao")
-name = "SubTool"
+name = "Preview"
 parent = NodePath("SubTool")
 child = NodePath("Preview")
 split_ratio = 0.75
@@ -66,9 +66,9 @@ vertical = false
 parent_size = 0.0
 child_size = 0.0
 
-[sub_resource type="Resource" id="Resource_7tfyg"]
+[sub_resource type="Resource" id="Resource_rjtoe"]
 script = ExtResource("6_uhkao")
-name = "PreviewAndLayer"
+name = "Layer"
 parent = NodePath("Preview")
 child = NodePath("LayerPanel")
 split_ratio = 0.35
@@ -76,7 +76,7 @@ vertical = true
 parent_size = 0.0
 child_size = 0.0
 
-[sub_resource type="Resource" id="Resource_3301e"]
+[sub_resource type="Resource" id="Resource_4creq"]
 script = ExtResource("6_uhkao")
 name = "Canvas"
 parent = NodePath("SubTool")
@@ -86,7 +86,7 @@ vertical = true
 parent_size = 40.0
 child_size = 0.0
 
-[sub_resource type="Resource" id="Resource_3ibq2"]
+[sub_resource type="Resource" id="Resource_vrxuf"]
 script = ExtResource("6_uhkao")
 name = "Animation"
 parent = NodePath("Canvas")
@@ -96,9 +96,19 @@ vertical = true
 parent_size = 0.0
 child_size = 0.0
 
-[sub_resource type="Resource" id="Resource_e4k8g"]
+[sub_resource type="Resource" id="Resource_c1hcb"]
+script = ExtResource("6_uhkao")
+name = "ColorWheel"
+parent = NodePath("Palette")
+child = NodePath("ColorWheel")
+split_ratio = 0.5
+vertical = true
+parent_size = 0.0
+child_size = 0.0
+
+[sub_resource type="Resource" id="Resource_irasn"]
 script = ExtResource("7_on08i")
-data = Array[ExtResource("6_uhkao")]([SubResource("Resource_w5lex"), SubResource("Resource_oe575"), SubResource("Resource_id72v"), SubResource("Resource_jpexo"), SubResource("Resource_7tfyg"), SubResource("Resource_3301e"), SubResource("Resource_3ibq2")])
+data = Array[ExtResource("6_uhkao")]([SubResource("Resource_168q3"), SubResource("Resource_6myo5"), SubResource("Resource_3af2w"), SubResource("Resource_uuklc"), SubResource("Resource_rjtoe"), SubResource("Resource_4creq"), SubResource("Resource_vrxuf"), SubResource("Resource_c1hcb")])
 
 [sub_resource type="LabelSettings" id="LabelSettings_ei7lg"]
 font = ExtResource("18_uhe2p")
@@ -107,6 +117,10 @@ font_size = 14
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2ml71"]
 shader = ExtResource("27_cc1ks")
 shader_parameter/tint = Color(0.400698, 0.400698, 0.400698, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_15xhb"]
+font = ExtResource("18_uhe2p")
+font_size = 14
 
 [sub_resource type="LabelSettings" id="LabelSettings_0is3d"]
 
@@ -194,7 +208,7 @@ theme_config = NodePath("ThemeConfig")
 layout_node = NodePath("Background/VBoxContainer/MarginContainer/Layout")
 subtool_dock = NodePath("Background/VBoxContainer/MarginContainer/Layout/SubTool")
 
-[node name="ThemeConfig" type="Node" parent="." node_paths=PackedStringArray("editor_main_ui", "main_panel", "main_menu", "palette_title_panel", "preview_wrapper_panel", "preview_title_panel", "layers_wrapper_panel", "layer_title_panel", "animation_menu_panel", "animation_frame_panel", "toolbox_dock", "palette_dock", "subtool_dock", "preview_dock", "layer_dock", "canvas_dock", "animation_dock")]
+[node name="ThemeConfig" type="Node" parent="." node_paths=PackedStringArray("editor_main_ui", "main_panel", "main_menu", "palette_title_panel", "preview_wrapper_panel", "preview_title_panel", "layers_wrapper_panel", "layer_title_panel", "animation_menu_panel", "animation_frame_panel", "toolbox_dock", "palette_dock", "color_wheel_dock", "subtool_dock", "preview_dock", "layer_dock", "canvas_dock", "animation_dock")]
 script = ExtResource("2_qv6xe")
 editor_main_ui = NodePath("..")
 main_panel = NodePath("../Background")
@@ -208,6 +222,7 @@ animation_menu_panel = NodePath("../Background/VBoxContainer/MarginContainer/Lay
 animation_frame_panel = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Animation/VBoxContainer/AnimationFrame")
 toolbox_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/ToolBox")
 palette_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Palette")
+color_wheel_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/ColorWheel")
 subtool_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/SubTool")
 preview_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/Preview")
 layer_dock = NodePath("../Background/VBoxContainer/MarginContainer/Layout/LayerPanel")
@@ -318,12 +333,12 @@ theme_override_constants/margin_bottom = 0
 [node name="Layout" type="Control" parent="Background/VBoxContainer/MarginContainer"]
 layout_mode = 2
 script = ExtResource("5_ktvsw")
-branches = SubResource("Resource_e4k8g")
+branches = SubResource("Resource_irasn")
 enable = true
 
 [node name="ToolBox" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout" node_paths=PackedStringArray("toolbox_list")]
 layout_mode = 0
-anchor_right = 0.03125
+anchor_right = 0.0307929
 anchor_bottom = 1.0
 offset_left = 4.0
 offset_top = 4.0
@@ -344,9 +359,9 @@ grow_vertical = 2
 
 [node name="Palette" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout"]
 layout_mode = 0
-anchor_left = 0.03125
-anchor_right = 0.225
-anchor_bottom = 1.0
+anchor_left = 0.0307929
+anchor_right = 0.224634
+anchor_bottom = 0.5
 offset_left = 2.0
 offset_top = 4.0
 offset_right = -2.0
@@ -431,29 +446,66 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("19_eprkn")
-color_wheel = NodePath("../../../Picker/ScrollContainer/ColorWheel")
+color_wheel = NodePath("../../../../../ColorWheel/VBoxContainer/Picker/ScrollContainer/ColorWheel")
 
-[node name="Picker" type="MarginContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer"]
+[node name="ColorWheel" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout"]
+layout_mode = 0
+anchor_left = 0.0307929
+anchor_top = 0.5
+anchor_right = 0.224634
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+theme_type_variation = &"BoxPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/VBoxContainer/MarginContainer/Layout/ColorWheel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout/ColorWheel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_type_variation = &"BoxPanelTitle"
+
+[node name="Label" type="Label" parent="Background/VBoxContainer/MarginContainer/Layout/ColorWheel/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Color
+"
+label_settings = SubResource("LabelSettings_15xhb")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Picker" type="MarginContainer" parent="Background/VBoxContainer/MarginContainer/Layout/ColorWheel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.7
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/VBoxContainer/MarginContainer/Layout/ColorWheel/VBoxContainer/Picker"]
 layout_mode = 2
 
-[node name="ColorWheel" parent="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker/ScrollContainer" instance=ExtResource("13_162t8")]
+[node name="ColorWheel" parent="Background/VBoxContainer/MarginContainer/Layout/ColorWheel/VBoxContainer/Picker/ScrollContainer" instance=ExtResource("13_162t8")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="SubTool" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout" node_paths=PackedStringArray("button_list", "toolbar_list", "shift_separator", "shift_label", "canvas")]
 layout_mode = 0
-anchor_left = 0.225
-anchor_right = 0.80625
+anchor_left = 0.224634
+anchor_right = 0.806159
 anchor_bottom = 0.0588235
 offset_left = 2.0
 offset_top = 4.0
@@ -510,7 +562,7 @@ vertical_alignment = 1
 
 [node name="Preview" type="Control" parent="Background/VBoxContainer/MarginContainer/Layout"]
 anchors_preset = 0
-anchor_left = 0.80625
+anchor_left = 0.806159
 anchor_right = 1.0
 anchor_bottom = 0.35
 offset_left = 2.0
@@ -566,7 +618,7 @@ frame_preview = NodePath("../FramePreview")
 
 [node name="LayerPanel" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout"]
 layout_mode = 0
-anchor_left = 0.80625
+anchor_left = 0.806159
 anchor_top = 0.35
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -680,9 +732,9 @@ theme_override_styles/separator = SubResource("StyleBoxLine_84xdt")
 
 [node name="Canvas" type="ColorRect" parent="Background/VBoxContainer/MarginContainer/Layout"]
 layout_mode = 0
-anchor_left = 0.225
+anchor_left = 0.224634
 anchor_top = 0.0588235
-anchor_right = 0.80625
+anchor_right = 0.806159
 anchor_bottom = 0.811765
 offset_left = 2.0
 offset_top = 2.0
@@ -728,9 +780,9 @@ script = ExtResource("23_lv0tc")
 
 [node name="Animation" type="Panel" parent="Background/VBoxContainer/MarginContainer/Layout" node_paths=PackedStringArray("animation_menu_list", "animation_wrapper_frame_list", "animation_frame_list", "animation_unused_frame_list", "playback_timer", "frame_y_size", "animation_fps", "actual_fps")]
 layout_mode = 0
-anchor_left = 0.225
+anchor_left = 0.224634
 anchor_top = 0.811765
-anchor_right = 0.80625
+anchor_right = 0.806159
 anchor_bottom = 1.0
 offset_left = 2.0
 offset_top = 2.0
@@ -858,7 +910,7 @@ layout_mode = 2
 
 [connection signal="item_rect_changed" from="." to="." method="_on_size_changed"]
 [connection signal="item_rect_changed" from="Background/VBoxContainer/MarginContainer/Layout/Palette" to="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer/Grid" method="_on_palette_item_rect_changed"]
-[connection signal="color_changed" from="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Picker/ScrollContainer/ColorWheel" to="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer/Grid" method="_on_color_wheel_color_changed"]
+[connection signal="color_changed" from="Background/VBoxContainer/MarginContainer/Layout/ColorWheel/VBoxContainer/Picker/ScrollContainer/ColorWheel" to="Background/VBoxContainer/MarginContainer/Layout/Palette/VBoxContainer/Palette/ScrollContainer/Grid" method="_on_color_wheel_color_changed"]
 [connection signal="pressed" from="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools/AddLayer" to="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools" method="_on_add_pressed"]
 [connection signal="pressed" from="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools/DeleteLayer" to="Background/VBoxContainer/MarginContainer/Layout/LayerPanel/VBoxContainer/LayersTools" method="_on_trash_pressed"]
 [connection signal="mouse_entered" from="Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer" to="Background/VBoxContainer/MarginContainer/Layout/Canvas/SubViewportContainer" method="_on_mouse_entered"]

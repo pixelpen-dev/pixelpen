@@ -3,12 +3,11 @@ extends Control
 
 
 const COLOR_RECT_COLOR_NAME = "Color"
-const X_TOTAL = 8
 const I_TOTAL = 255
 
 @export var color_wheel : Control
 
-
+var X_TOTAL : int = 8
 var _child_item : Array[Control] = []
 var _grid_focus_index : int = 0
 var _double_click_t : float
@@ -46,11 +45,12 @@ func _draw():
 
 
 func update_palette():
+	X_TOTAL = PixelPen.state.userconfig.palette_gui_row
 	var children = get_children()
 	for child in children:
 		child.queue_free()
 	_child_item.clear()
-	
+
 
 func _process(_delta):
 	if not PixelPen.state.need_connection(get_window()):

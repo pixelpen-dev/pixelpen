@@ -9,6 +9,7 @@ var general_tree_structure : Dictionary = {
 	"Guide" : ["Grid"],
 	"Projects" : [],
 	"Cursor" : [],
+	"Palette" : [],
 	"Animation" : ["Frame", "Onion Skinning"]
 }
 
@@ -36,6 +37,9 @@ var general_structure: Dictionary = {
 			"Hide in canvas", 1 if PixelPen.state.userconfig.hide_cursor_in_canvas else 0,
 			["FALSE", "TRUE"] as Array[String]
 		)] as Array[TreeRow],
+	"/Palette" :[
+		TreeRow.create_range("Grid rows", PixelPen.state.userconfig.palette_gui_row, 1, 32, 1)
+	] as Array[TreeRow],
 	"/Animation/Frame" : [
 		TreeRow.create_int(
 			"Default fps", PixelPen.state.userconfig.default_animation_fps, 1, 1000
@@ -116,6 +120,11 @@ func _on_general_properties_value_changed(index, value):
 			if index == 0:
 				PixelPen.state.userconfig.hide_cursor_in_canvas = (value as int) == 1
 				PixelPen.state.userconfig.save()
+		"/Palette":
+			if index == 0:
+				PixelPen.state.userconfig.palette_gui_row = value as int
+				PixelPen.state.userconfig.save()
+				PixelPen.state.palette_changed.emit()
 		"/Animation/Frame":
 			if index == 0:
 				PixelPen.state.userconfig.default_animation_fps = value as int

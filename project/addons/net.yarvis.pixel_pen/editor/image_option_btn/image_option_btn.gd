@@ -76,7 +76,9 @@ func build_panel(build_mode : Mode):
 		var texture_rect = TextureRect.new()
 		texture_rect.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		texture_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		texture_rect.texture = ImageTexture.create_from_image(_cache_images[i])
+		var tx_img : Image = _cache_images[i].duplicate()
+		tx_img.resize(64, 64, Image.INTERPOLATE_NEAREST)
+		texture_rect.texture = ImageTexture.create_from_image(tx_img)
 		texture_rect.gui_input.connect(func(event):
 				input(vbox.get_children().find(margin), event)
 				)
@@ -84,7 +86,7 @@ func build_panel(build_mode : Mode):
 			texture_rect.material = ShaderMaterial.new()
 			texture_rect.material.shader = shader_checker
 			texture_rect.material.set_shader_parameter("lock_to_global", 0.0)
-			var siz : Vector2i = (Vector2i(64, 64) - Vector2i(16, 16)) / _cache_images[i].get_size()
+			var siz : Vector2i = (Vector2i(64, 64) ) / _cache_images[i].get_size()
 			texture_rect.material.set_shader_parameter("tile_size", siz)
 		
 		if mode == Mode.BRUSH:

@@ -13,6 +13,9 @@ var _child_item : Array[Control] = []
 var _grid_focus_index : int = 0
 var _double_click_t : float
 var _picker_popup_visible : bool = false
+var _is_pressed : bool = false
+var _is_drag : bool = false
+var _hovered_rect : Rect2
 
 var tr_material := load("res://addons/net.yarvis.pixel_pen/resources/tile_transparant_material.tres")
 
@@ -31,12 +34,15 @@ func _ready():
 	custom_minimum_size = Vector2(0, 0)
 
 
+
 func _draw():
 	if not _child_item.is_empty():
 		var rect = Rect2(_child_item[_grid_focus_index].position, _child_item[_grid_focus_index].size)
 		draw_rect(rect, Color.WHITE)
 		rect = Rect2(_child_item[_grid_focus_index].position + Vector2.ONE * 1, _child_item[_grid_focus_index].size - Vector2.ONE * 2)
 		draw_rect(rect, Color.BLACK)
+		if _is_drag:
+			draw_rect(_hovered_rect, Color.MAGENTA)
 
 
 func update_palette():
@@ -71,10 +77,27 @@ func _process(_delta):
 		color_wheel.color = _child_item[_grid_focus_index].get_node(COLOR_RECT_COLOR_NAME).color
 		PixelPen.state.color_picked.emit( PixelPen.state.current_project.palette.gui_index_to_palette_index(_grid_focus_index) )
 		queue_redraw()
+	if _is_pressed and not _is_drag and Time.get_unix_time_from_system() - _double_click_t > 0.5:
+		_is_drag = true
+		_update_hover_rect()
+
+
+func _update_hover_rect() -> void:
+	for child in _child_item:
+		var mouse_pos : Vector2 = get_local_mouse_position()
+		var rect : Rect2 = child.get_rect()
+		if rect.has_point(mouse_pos):
+			if mouse_pos.x < rect.position.x + rect.size.x * 0.5:
+				_hovered_rect = Rect2(rect.position - Vector2(2, 0), Vector2(4, rect.size.y))
+			else:
+				_hovered_rect = Rect2(rect.position + Vector2(rect.size.x - 2, 0), Vector2(4, rect.size.y))
+			queue_redraw()
+			break
 
 
 func _color_item(wrapper_size : Vector2, item_size : Vector2):
 	var wrapper = ColorRect.new()
+	#wrapper.show_behind_parent = true
 	wrapper.size = wrapper_size
 	wrapper.color = Color.TRANSPARENT
 	
@@ -102,6 +125,8 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 					if Time.get_unix_time_from_system() - _double_click_t < 0.5:
 						_on_double_click()
 						return
+					_is_pressed = true
+					_is_drag = false
 					_double_click_t = Time.get_unix_time_from_system()
 					if Input.is_key_pressed(KEY_SHIFT): # Replace color (LMB + SHIFT)
 						var layer : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_layer
@@ -197,6 +222,47 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 						PixelPen.state.palette_changed.emit()
 			)
 	return wrapper
+
+
+func _input(event):
+	if _is_pressed and event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.is_released():
+			if _is_drag:
+				for i in _child_item.size():
+					var child : Control = _child_item[i]
+					var mouse_pos : Vector2 = get_local_mouse_position()
+					var rect : Rect2 = child.get_rect()
+					if rect.has_point(mouse_pos):
+						(PixelPen.state.current_project as PixelPenProject).create_undo_palette_gui("Drag palette item", func():
+								PixelPen.state.project_saved.emit(false)
+								PixelPen.state.palette_changed.emit()
+								)
+						var new_index : int = i
+						if mouse_pos.x >= rect.position.x + rect.size.x * 0.5:
+							new_index += 1
+						if new_index  <= _grid_focus_index:
+							var _color_index = PixelPen.state.current_project.palette.gui_index_to_palette_index(_grid_focus_index)
+							PixelPen.state.current_project.palette.grid_color_index.remove_at(_grid_focus_index)
+							PixelPen.state.current_project.palette.grid_color_index.insert(new_index, _color_index)
+							_grid_focus_index = new_index
+						else:
+							var _color_index = PixelPen.state.current_project.palette.gui_index_to_palette_index(_grid_focus_index)
+							PixelPen.state.current_project.palette.grid_color_index.remove_at(_grid_focus_index)
+							PixelPen.state.current_project.palette.grid_color_index.insert(max(0, new_index - 1), _color_index)
+							_grid_focus_index = max(0, new_index - 1)
+						(PixelPen.state.current_project as PixelPenProject).create_redo_palette_gui(func():
+								PixelPen.state.project_saved.emit(false)
+								PixelPen.state.palette_changed.emit()
+								)
+						PixelPen.state.project_saved.emit(false)
+						PixelPen.state.palette_changed.emit()
+						break
+						
+			_is_pressed = false
+			_is_drag = false
+			queue_redraw()
+	if _is_drag and event is InputEventMouseMotion:
+		_update_hover_rect()
 
 
 func _on_double_click() -> void:

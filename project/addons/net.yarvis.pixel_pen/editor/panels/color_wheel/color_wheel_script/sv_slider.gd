@@ -24,24 +24,24 @@ func _draw() -> void:
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-			if Time.get_unix_time_from_system() - _double_click_t < 0.5 and _first_click_coor.is_equal_approx(get_local_mouse_position()):
+			if Time.get_unix_time_from_system() - _double_click_t < 0.5 and _first_click_coor.is_equal_approx(event.position):
 				double_click.emit()
 			else:
 				(PixelPen.state.current_project as PixelPenProject).create_undo_palette("Change palette color", func ():
 						PixelPen.state.palette_changed.emit()
 						)
 				_double_click_t = Time.get_unix_time_from_system()
-				_first_click_coor = get_local_mouse_position()
+				_first_click_coor = event.position
 				_pressed = true
-				pick()
+				pick(event)
 	
 	if _pressed and event is InputEventMouseMotion:
-		pick()
+		pick(event)
 		sv_changed.emit(saturation, value)
 
 
-func pick() -> void:
-	var coordinate = get_local_mouse_position() / size
+func pick(event: InputEvent) -> void:
+	var coordinate = event.position / size
 	coordinate.x = clampf(coordinate.x, 0.0, 1.0)
 	coordinate.y = clampf(coordinate.y, 0.0, 1.0)
 	saturation = coordinate.x

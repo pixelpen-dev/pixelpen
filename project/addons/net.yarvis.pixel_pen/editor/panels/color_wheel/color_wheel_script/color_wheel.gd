@@ -59,12 +59,12 @@ func _on_double_click() -> void:
 
 
 func _on_sv_slider_sv_changed(s: Variant, v: Variant) -> void:
-	color = Color.from_hsv(hue_slider.hue, s, v)
+	color = Color.from_hsv(hue_slider.hue, s, v, alpha_slider.color.a)
 	color_changed.emit(color)
 
 
 func _on_hue_slider_hue_changed(hue: Variant) -> void:
-	color = Color.from_hsv(hue, sv_slider.saturation, sv_slider.value)
+	color = Color.from_hsv(hue, sv_slider.saturation, sv_slider.value, alpha_slider.color.a)
 	sv_slider.hue = hue
 	sv_slider.queue_redraw()
 	color_changed.emit(color)

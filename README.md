@@ -2,7 +2,7 @@
 
 # PixelPen
 
-PixelPen is a free and open-source pixel art editor, proudly created with the Godot Engine. PixelPen can be used both as a Godot addon and as a standalone application. It is written in GDScript and C++ as a GDExtension plugin.
+PixelPen is a free and open-source pixel art editor, created with the Godot Engine. PixelPen can be used both as a Godot addon and as a standalone application. It is written in GDScript and C++ as a GDExtension plugin.
 
 ## How to Use
 

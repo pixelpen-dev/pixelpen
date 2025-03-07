@@ -124,6 +124,7 @@ func _on_draw_cursor(mouse_position : Vector2):
 		draw_invalid_cursor(mouse_position)
 		node.overlay_hint.visible = false
 	else:
+		draw_plus_cursor(mouse_position)
 		node.overlay_hint.visible = true
 		node.overlay_hint.material.set_shader_parameter("zoom_bias", node.get_viewport().get_camera_2d().zoom)
 		node.overlay_hint.material.set_shader_parameter("outline_color", Color(1, 0, 1, 1))

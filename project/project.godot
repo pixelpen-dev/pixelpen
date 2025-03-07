@@ -27,6 +27,10 @@ window/size/mode=2
 
 enabled=PackedStringArray("res://addons/net.yarvis.pixel_pen/plugin.cfg")
 
+[input_devices]
+
+pen_tablet/driver.windows="wintab"
+
 [rendering]
 
 renderer/rendering_method="mobile"

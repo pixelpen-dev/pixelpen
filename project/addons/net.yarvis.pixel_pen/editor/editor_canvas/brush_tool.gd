@@ -192,6 +192,7 @@ func _on_draw_cursor(mouse_position : Vector2):
 	if brush_mask == null:
 		draw_invalid_cursor(mouse_position)
 	else:
+		draw_plus_cursor(mouse_position)
 		node.overlay_hint.material.set_shader_parameter("zoom_bias", node.get_viewport().get_camera_2d().zoom)
 		node.overlay_hint.material.set_shader_parameter("outline_color", Color(0, 0, 0, 0))
 		node.overlay_hint.material.set_shader_parameter("enable", true)

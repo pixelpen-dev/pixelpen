@@ -23,7 +23,7 @@ jobs:
           submodules: recursive
 
       - name: 🔗 GDExtension Build
-        uses: godotengine/godot-cpp-template/.github/actions/build@main
+        uses: pixelpen-dev/pixelpen/.github/actions/gdextension@main
         with:          
           platform: ${{ matrix.platform }}
           arch: ${{ matrix.arch }}

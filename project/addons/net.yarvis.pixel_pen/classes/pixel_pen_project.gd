@@ -905,6 +905,6 @@ func crop_canvas(mask : Image) -> void:
 			var colormap : Image = layer.colormap.duplicate()
 			layer.size = rect.size
 			layer.colormap = colormap.get_region(rect)
-	_cache_pool_frames.clear()
+	_cache_pool_frames = []
 	undo_redo.clear_history()
 	canvas_size = rect.size

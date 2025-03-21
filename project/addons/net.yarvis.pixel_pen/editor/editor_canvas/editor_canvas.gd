@@ -243,9 +243,9 @@ func _input(event: InputEvent):
 		elif event and event is InputEventMouseButton and not PixelPen.state.current_project.animation_is_play:
 			var is_hovered_symetric = _is_hovered_symetric_guid()
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_LEFT:
-				zoom(0.9)
-			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN or event.button_index == MOUSE_BUTTON_WHEEL_RIGHT:
 				zoom(1.1)
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN or event.button_index == MOUSE_BUTTON_WHEEL_RIGHT:
+				zoom(0.9)
 			elif event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT:
 				_on_pan_shorcut_mode = true
 				_on_pan_shorcut_mode_pressed_moused_position = to_local(get_global_transform() * get_global_mouse_position())

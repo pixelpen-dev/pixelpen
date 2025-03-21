@@ -13,6 +13,7 @@ PixelPen is a free and open-source pixel art editor, created with the Godot Engi
 
 > [!TIP]
 > - Disable single window mode in editor. When PixelPen launch, it will be in separate window.
+> - Use pen tablet driver to `wintab` for windows in project settings.
 > - You can also use our recent commit build here [Artifact](https://github.com/pixelpen-dev/pixelpen/actions). Please be careful, make sure to backup your project first before using it.
 
 ### Build from Source (Optional):

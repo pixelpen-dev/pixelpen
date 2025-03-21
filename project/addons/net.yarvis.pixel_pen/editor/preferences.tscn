@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/tree_properties/tree_row.gd" id="4_6utim"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/shorcuts_preferences.gd" id="6_dsxs8"]
 
-[sub_resource type="Resource" id="Resource_nqfg7"]
+[sub_resource type="Resource" id="Resource_og6we"]
 script = ExtResource("4_6utim")
 label = "Grid line repeat"
 field = 5
@@ -44,7 +44,7 @@ file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images
 color_value = Color(1, 1, 1, 1)
 color_alpha = true
 
-[sub_resource type="Resource" id="Resource_u6eg1"]
+[sub_resource type="Resource" id="Resource_5secq"]
 script = ExtResource("4_6utim")
 label = "Checker size"
 field = 5
@@ -84,7 +84,7 @@ color_alpha = true
 [node name="Preferences" type="AcceptDialog" node_paths=PackedStringArray("tab_container")]
 title = "Preferences"
 initial_position = 1
-size = Vector2i(1146, 764)
+size = Vector2i(1164, 776)
 visible = true
 theme = ExtResource("1_mhedo")
 ok_button_text = "Close"
@@ -101,6 +101,7 @@ offset_right = -3.59998
 offset_bottom = -37.6
 grow_horizontal = 2
 grow_vertical = 2
+current_tab = 0
 tab_focus_mode = 0
 
 [node name="General" type="HBoxContainer" parent="TabContainer" node_paths=PackedStringArray("tree", "tree_properties")]
@@ -109,6 +110,7 @@ theme_override_constants/separation = 16
 script = ExtResource("3_k57uy")
 tree = NodePath("GeneralTree")
 tree_properties = NodePath("GeneralProperties")
+metadata/_tab_index = 0
 
 [node name="GeneralTree" type="Tree" parent="TabContainer/General"]
 layout_mode = 2
@@ -122,9 +124,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
 script = ExtResource("3_74jry")
-structure = Array[ExtResource("4_6utim")]([SubResource("Resource_nqfg7"), SubResource("Resource_u6eg1")])
+structure = Array[ExtResource("4_6utim")]([SubResource("Resource_og6we"), SubResource("Resource_5secq")])
 
-[node name="Shorcuts" type="HBoxContainer" parent="TabContainer" node_paths=PackedStringArray("shorcuts_tree", "edit_button", "reset_button", "clear_button")]
+[node name="Shortcuts" type="HBoxContainer" parent="TabContainer" node_paths=PackedStringArray("shorcuts_tree", "edit_button", "reset_button", "clear_button")]
 visible = false
 layout_mode = 2
 script = ExtResource("6_dsxs8")
@@ -132,52 +134,54 @@ shorcuts_tree = NodePath("ShorcutsTree")
 edit_button = NodePath("ShorcutsEdit/VBoxContainer/Edit")
 reset_button = NodePath("ShorcutsEdit/VBoxContainer/Reset")
 clear_button = NodePath("ShorcutsEdit/VBoxContainer/Clear")
+metadata/_tab_index = 1
 
-[node name="ShorcutsTree" type="Tree" parent="TabContainer/Shorcuts"]
+[node name="ShorcutsTree" type="Tree" parent="TabContainer/Shortcuts"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+focus_mode = 0
 columns = 2
 column_titles_visible = true
 hide_root = true
 
-[node name="ShorcutsEdit" type="MarginContainer" parent="TabContainer/Shorcuts"]
+[node name="ShorcutsEdit" type="MarginContainer" parent="TabContainer/Shortcuts"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Shorcuts/ShorcutsEdit"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Shortcuts/ShorcutsEdit"]
 layout_mode = 2
 
-[node name="Edit" type="Button" parent="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer"]
+[node name="Edit" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
 layout_mode = 2
 disabled = true
 text = "EDIT"
 
-[node name="Reset" type="Button" parent="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer"]
+[node name="Reset" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
 layout_mode = 2
 disabled = true
 text = "RESET"
 
-[node name="Clear" type="Button" parent="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer"]
+[node name="Clear" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
 layout_mode = 2
 disabled = true
 text = "CLEAR"
 
-[node name="Control" type="Control" parent="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer"]
+[node name="Control" type="Control" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ResetAll" type="Button" parent="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer"]
+[node name="ResetAll" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
 layout_mode = 2
 text = "RESET TO DEFAULT"
 
 [connection signal="item_selected" from="TabContainer/General/GeneralTree" to="TabContainer/General" method="_on_general_tree_item_selected"]
 [connection signal="value_changed" from="TabContainer/General/GeneralProperties" to="TabContainer/General" method="_on_general_properties_value_changed"]
-[connection signal="item_selected" from="TabContainer/Shorcuts/ShorcutsTree" to="TabContainer/Shorcuts" method="_on_shorcuts_tree_item_selected"]
-[connection signal="pressed" from="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer/Edit" to="TabContainer/Shorcuts" method="_on_edit_pressed"]
-[connection signal="pressed" from="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer/Reset" to="TabContainer/Shorcuts" method="_on_reset_pressed"]
-[connection signal="pressed" from="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer/Clear" to="TabContainer/Shorcuts" method="_on_clear_pressed"]
-[connection signal="pressed" from="TabContainer/Shorcuts/ShorcutsEdit/VBoxContainer/ResetAll" to="TabContainer/Shorcuts" method="_on_reset_all_pressed"]
+[connection signal="item_selected" from="TabContainer/Shortcuts/ShorcutsTree" to="TabContainer/Shortcuts" method="_on_shorcuts_tree_item_selected"]
+[connection signal="pressed" from="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer/Edit" to="TabContainer/Shortcuts" method="_on_edit_pressed"]
+[connection signal="pressed" from="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer/Reset" to="TabContainer/Shortcuts" method="_on_reset_pressed"]
+[connection signal="pressed" from="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer/Clear" to="TabContainer/Shortcuts" method="_on_clear_pressed"]
+[connection signal="pressed" from="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer/ResetAll" to="TabContainer/Shortcuts" method="_on_reset_all_pressed"]

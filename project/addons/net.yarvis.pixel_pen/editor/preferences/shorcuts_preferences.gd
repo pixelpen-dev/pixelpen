@@ -101,7 +101,7 @@ func shorcuts_tree_node():
 	shorcuts_tree.clear()
 	var root = shorcuts_tree.create_item()
 	shorcuts_tree.set_column_title(0, "Name")
-	shorcuts_tree.set_column_title(1, "Shorcuts")
+	shorcuts_tree.set_column_title(1, "Shortcuts")
 	shorcuts_tree.set_column_title_alignment(0, HORIZONTAL_ALIGNMENT_LEFT)
 	shorcuts_tree.set_column_title_alignment(1, HORIZONTAL_ALIGNMENT_LEFT)
 	shorcuts_tree.set_column_expand(0, true)

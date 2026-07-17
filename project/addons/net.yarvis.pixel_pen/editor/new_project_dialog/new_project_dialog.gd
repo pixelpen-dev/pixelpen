@@ -63,7 +63,7 @@ func _on_size_changed():
 func _on_confirmed():
 	var current_project = PixelPenProject.new()
 	current_project.initialized(
-			Vector2i(_width as int, 
+			Vector2i(_width as int,
 			_height as int),name_node.text if name_node.text != "" else "Untitled"
 	)
 	PixelPen.state.current_project = current_project

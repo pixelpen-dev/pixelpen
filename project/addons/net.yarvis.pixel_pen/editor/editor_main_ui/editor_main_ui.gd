@@ -200,7 +200,7 @@ func _ready():
 			layout_node.branches = theme_config.get_default_layout(layout_node)
 			layout_node.update_layout()
 		return
-	
+
 	PixelPen.state.userconfig.resolve_null()
 	layout_node.branches = theme_config.get_default_layout(layout_node)
 	layout_node.update_layout()
@@ -224,34 +224,34 @@ func _ready():
 func _process(_delta):
 	if not PixelPen.state.need_connection(get_window()):
 		return
-	
+
 	var edit_popup := edit_menu.get_popup()
 	if PixelPen.state.current_project == null:
 		edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.UNDO), true)
 		edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.REDO), true)
 		return
-	
+
 	if PixelPen.state.current_project.undo_redo != null:
 		var undo : bool = PixelPen.state.current_project.undo_redo.has_undo()
 		var redo : bool = PixelPen.state.current_project.undo_redo.has_redo()
-		
+
 		edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.UNDO), not undo)
 		edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.REDO), not redo)
-	
+
 	var can_copy_cut : bool = MoveTool.mode == MoveTool.Mode.UNKNOWN
 	edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.COPY), not can_copy_cut)
 	edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.CUT), not can_copy_cut)
-	
+
 	var can_paste : bool = canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and canvas.canvas_paint.tool.mode != MoveTool.Mode.UNKNOWN
 	edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.PASTE), not can_paste)
 
 
 func _on_project_file_changed():
 	_on_selection_texture_changed()
-	
+
 	var pixelpen_popup = pixel_pen_menu.get_popup()
 	pixelpen_popup.set_item_disabled(pixelpen_popup.get_item_index(PixelPenID.ABOUT), true)
-	
+
 	var disable : bool = PixelPen.state.current_project == null
 
 	animation_menu.disabled = disable
@@ -263,17 +263,17 @@ func _on_project_file_changed():
 		if PixelPen.state.userconfig.brush.is_empty():
 			PixelPen.state.current_project.reset_brush_to_default()
 		quick_export_path_empty = PixelPen.state.current_project.last_export_file_path == ""
-		
+
 		canvas_dock.color = canvas_color_sample if PixelPen.state.current_project.use_sample else canvas_color_base
 
 		edit_menu.get_popup().set_item_disabled(edit_menu.get_popup().get_item_index(EditID.CANVAS_SIZE), PixelPen.state.current_project.use_sample)
-		
+
 		palette_menu.disabled = PixelPen.state.current_project.use_sample
-		
+
 		animation_panel.visible = PixelPen.state.current_project.show_timeline
-		
+
 		animation_menu.disabled = PixelPen.state.current_project.use_sample or not PixelPen.state.current_project.show_timeline
-		
+
 		var animation_popup = animation_menu.get_popup()
 		animation_popup.set_item_checked(animation_popup.get_item_index(AnimationID.TOGGLE_LOOP), PixelPen.state.current_project.animation_loop)
 		animation_popup.set_item_checked(animation_popup.get_item_index(AnimationID.TOGGLE_ONION_SKINNING), PixelPen.state.current_project.onion_skinning)
@@ -284,12 +284,12 @@ func _on_project_file_changed():
 		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE), PixelPen.state.current_project.show_symetric_horizontal)
 		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_TILE), PixelPen.state.current_project.show_tile)
 		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_PREVIEW), PixelPen.state.current_project.show_preview)
-		
+
 		preview_node.visible = PixelPen.state.current_project.show_preview
 
 		view_popup.set_item_checked(view_popup.get_item_index(ViewID.EDIT_SELECTION_ONLY), PixelPen.state.current_project.use_sample)
 		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_ANIMATION_TIMELINE), PixelPen.state.current_project.show_timeline)
-		
+
 		var need_update_layout : bool = false
 		var has_anim_dock : bool = layout_node.has_dock(animation_panel)
 		if PixelPen.state.current_project.show_timeline and not has_anim_dock:
@@ -307,7 +307,7 @@ func _on_project_file_changed():
 			need_update_layout = true
 		if need_update_layout:
 			layout_node.update_layout()
-		
+
 	else:
 		preview_node.visible = true
 		animation_panel.visible = false
@@ -321,7 +321,7 @@ func _on_project_file_changed():
 			need_update_layout = true
 		if need_update_layout:
 			layout_node.update_layout()
-		
+
 		palette_menu.disabled = true
 
 	var file_popup = file_menu.get_popup()
@@ -333,19 +333,19 @@ func _on_project_file_changed():
 	edit_menu.disabled = disable
 	layer_menu.disabled = disable
 	view_menu.disabled = disable
-	
+
 	var is_window_running : bool = false
 	if get_window() and get_window().is_inside_tree() and get_window().has_method("is_window_running"):
 		is_window_running = get_window().is_window_running()
-	
+
 	if disable and (not Engine.is_editor_hint() or is_window_running):
 		var ok = PixelPen.state.load_cache_project()
 		if not ok:
 			_on_request_startup_window()
-	
+
 	if PixelPen.state.current_project != null:
 		PixelPen.state.current_project.undo_redo = UndoRedoManager.new()
-		
+
 	_update_title()
 	_update_recent_submenu()
 	_update_background_color_submenu()
@@ -363,13 +363,13 @@ func _update_title():
 		if PixelPen.state.current_project == null:
 			get_window().title = "Empty - " + PixelPen.state.EDITOR_TITTLE
 			return
-		
+
 		var is_saved : bool = (PixelPen.state.current_project as PixelPenProject).is_saved
-		
+
 		var canvas_size = str("(", PixelPen.state.current_project.canvas_size.x, "x", PixelPen.state.current_project.canvas_size.y , "px)")
 		if PixelPen.state.current_project.use_sample:
-			canvas_size = str("(region ", 
-					PixelPen.state.current_project.canvas_size.x, "x", PixelPen.state.current_project.canvas_size.y , "px of ", 
+			canvas_size = str("(region ",
+					PixelPen.state.current_project.canvas_size.x, "x", PixelPen.state.current_project.canvas_size.y , "px of ",
 					PixelPen.state.current_project._cache_canvas_size.x, "x", PixelPen.state.current_project._cache_canvas_size.y , "px)")
 		get_window().title = PixelPen.state.current_project.project_name + " " + canvas_size + " - " + PixelPen.state.EDITOR_TITTLE
 		if PixelPen.state.current_project.file_path == "" or not is_saved:
@@ -410,7 +410,7 @@ func _init_popup_menu():
 	pixelpen_popup.add_item("Preferences...", PixelPenID.PREFERENCE)
 	pixelpen_popup.add_separator("", 100)
 	pixelpen_popup.add_item("Quit PixePen", PixelPenID.QUIT)
-	
+
 	var file_popup : PopupMenu = file_menu.get_popup()
 	file_popup.add_to_group("pixelpen_popup")
 	file_popup.add_item("New Project...", FileID.NEW)
@@ -427,7 +427,7 @@ func _init_popup_menu():
 	file_popup.add_item("Exports Animation...", FileID.EXPORT_ANIMATION)
 	file_popup.add_separator("", 100)
 	file_popup.add_item("Close Project", FileID.CLOSE)
-	
+
 	recent_submenu = PopupMenu.new()
 	recent_submenu.set_name("recent_submenu")
 	_update_recent_submenu()
@@ -438,7 +438,7 @@ func _init_popup_menu():
 			)
 	file_popup.add_child(recent_submenu)
 	file_popup.set_item_submenu(file_popup.get_item_index(FileID.OPEN_RECENTS), "recent_submenu")
-	
+
 	var import_submenu : PopupMenu = PopupMenu.new()
 	import_submenu.set_name("import_submenu")
 	import_submenu.add_item("*.jpg", ExportAsID.JPG)
@@ -447,7 +447,7 @@ func _init_popup_menu():
 	import_submenu.id_pressed.connect(_on_export)
 	file_popup.add_child(import_submenu)
 	file_popup.set_item_submenu(file_popup.get_item_index(FileID.EXPORT), "import_submenu")
-	
+
 	var export_animation_submenu : PopupMenu = PopupMenu.new()
 	export_animation_submenu.set_name("export_animation_submenu")
 	export_animation_submenu.add_item("[*.png, ...]", ExportAnimationID.FRAME)
@@ -456,7 +456,7 @@ func _init_popup_menu():
 	export_animation_submenu.id_pressed.connect(_on_export_animation)
 	file_popup.add_child(export_animation_submenu)
 	file_popup.set_item_submenu(file_popup.get_item_index(FileID.EXPORT_ANIMATION), "export_animation_submenu")
-	
+
 	var edit_popup : PopupMenu = edit_menu.get_popup()
 	edit_popup.add_to_group("pixelpen_popup")
 	edit_popup.add_item("Undo", EditID.UNDO)
@@ -480,7 +480,7 @@ func _init_popup_menu():
 	edit_popup.add_separator("", 100)
 	edit_popup.add_item("Canvas crop selection", EditID.CROP_SELECTION)
 	edit_popup.add_item("Canvas size...", EditID.CANVAS_SIZE)
-	
+
 	var layer_popup : PopupMenu = layer_menu.get_popup()
 	layer_popup.add_to_group("pixelpen_popup")
 	layer_popup.add_item("Add layer...", LayerID.ADD_LAYER)
@@ -505,7 +505,7 @@ func _init_popup_menu():
 	layer_popup.add_separator("", 100)
 	layer_popup.add_item("Layer active go up", LayerID.LAYER_ACTIVE_GO_UP)
 	layer_popup.add_item("Layer active go down", LayerID.LAYER_ACTIVE_GO_DOWN)
-	
+
 	var palette_popup : PopupMenu = palette_menu.get_popup()
 	palette_popup.add_to_group("pixelpen_popup")
 	palette_popup.add_item("Reset To Default Preset", PaletteID.RESET)
@@ -517,7 +517,7 @@ func _init_popup_menu():
 	palette_popup.add_item("Load and replace...", PaletteID.LOAD_AND_REPLACE)
 	palette_popup.add_item("Load and merge...", PaletteID.LOAD_AND_MERGE)
 	palette_popup.add_item("Save As...", PaletteID.SAVE)
-	
+
 	var animation_popup : PopupMenu = animation_menu.get_popup()
 	animation_popup.add_to_group("pixelpen_popup")
 	animation_popup.add_item("Play/Pause", AnimationID.PLAY_PAUSE)
@@ -544,7 +544,7 @@ func _init_popup_menu():
 	animation_popup.add_separator("", 100)
 	animation_popup.add_item("Create draft frame", AnimationID.CREATE_DRAFT_FRAME)
 	animation_popup.add_item("Delete draft frame", AnimationID.DELETE_DRAFT_FRAME)
-	
+
 	var view_popup : PopupMenu = view_menu.get_popup()
 	view_popup.add_to_group("pixelpen_popup")
 	view_popup.add_item("Rotate canvas -90", ViewID.ROTATE_CANVAS_MIN_90)
@@ -575,7 +575,7 @@ func _init_popup_menu():
 	view_popup.add_check_item("Filter grayscale", ViewID.FILTER_GRAYSCALE)
 	view_popup.add_separator("", 100)
 	view_popup.add_check_item("Show info", ViewID.SHOW_INFO)
-	
+
 	background_color_submenu = PopupMenu.new()
 	background_color_submenu.set_name("background_color_submenu")
 	_update_background_color_submenu()
@@ -586,7 +586,7 @@ func _init_popup_menu():
 			)
 	view_popup.add_child(background_color_submenu)
 	view_popup.set_item_submenu(view_popup.get_item_index(ViewID.BACKGROUND_COLOR), "background_color_submenu")
-	
+
 	view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_PREVIEW), preview_node.visible)
 	view_popup.set_item_checked(view_popup.get_item_index(ViewID.TOGGLE_TINT_SELECTED_LAYER), canvas.silhouette)
 	view_popup.set_item_checked(view_popup.get_item_index(ViewID.FILTER_GRAYSCALE), canvas.show_view_grayscale)
@@ -598,7 +598,7 @@ func _set_shorcut():
 	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.ABOUT), PixelPen.state.userconfig.shorcuts.about)
 	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.PREFERENCE), PixelPen.state.userconfig.shorcuts.preferences)
 	pixelpen_popup.set_item_shortcut(pixelpen_popup.get_item_index(PixelPenID.QUIT), PixelPen.state.userconfig.shorcuts.quit_editor)
-	
+
 	var file_popup := file_menu.get_popup()
 	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.NEW), PixelPen.state.userconfig.shorcuts.new_project)
 	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.OPEN), PixelPen.state.userconfig.shorcuts.open_project)
@@ -607,7 +607,7 @@ func _set_shorcut():
 	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.IMPORT), PixelPen.state.userconfig.shorcuts.import)
 	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.QUICK_EXPORT), PixelPen.state.userconfig.shorcuts.quick_export)
 	file_popup.set_item_shortcut(file_popup.get_item_index(FileID.CLOSE), PixelPen.state.userconfig.shorcuts.close_project)
-	
+
 
 	var edit_popup := edit_menu.get_popup()
 	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.UNDO), PixelPen.state.userconfig.shorcuts.undo)
@@ -625,7 +625,7 @@ func _set_shorcut():
 	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.SWITCH_LAST_TOOLBOX), PixelPen.state.userconfig.shorcuts.prev_toolbox)
 	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CROP_SELECTION), PixelPen.state.userconfig.shorcuts.canvas_crop_selection)
 	edit_popup.set_item_shortcut(edit_popup.get_item_index(EditID.CANVAS_SIZE), PixelPen.state.userconfig.shorcuts.canvas_size)
-	
+
 	var layer_popup := layer_menu.get_popup()
 	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.ADD_LAYER), PixelPen.state.userconfig.shorcuts.add_layer)
 	layer_popup.set_item_shortcut(layer_popup.get_item_index(LayerID.DELETE_LAYER), PixelPen.state.userconfig.shorcuts.delete_layer)
@@ -749,7 +749,7 @@ func _open():
 			)
 	_file_dialog.canceled.connect(func():
 			_file_dialog.queue_free())
-		
+
 	add_child(_file_dialog)
 	_file_dialog.popup_centered(Vector2i(540, 540))
 	_file_dialog.grab_focus()
@@ -810,7 +810,7 @@ func _show_save_as_dialog(callback : Callable = Callable()):
 	_file_dialog.canceled.connect(func():
 			callback.call("")
 			_file_dialog.queue_free())
-	
+
 	add_child(_file_dialog)
 	_file_dialog.popup_centered(Vector2i(540, 540))
 	_file_dialog.grab_focus()
@@ -824,7 +824,7 @@ func _close_project():
 
 func _on_selection_texture_changed():
 	var disable = canvas.selection_tool_hint.texture == null
-	
+
 	var edit_popup = edit_menu.get_popup()
 	edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.INVERSE_SELECTION), disable)
 	edit_popup.set_item_disabled(edit_popup.get_item_index(EditID.CLEAR_SELECTION), disable)
@@ -884,23 +884,23 @@ func _on_pixelpen_popup_pressed(id : int):
 func _on_file_popup_pressed(id : int):
 	if id == FileID.NEW:
 		_new()
-		
+
 	elif id == FileID.OPEN:
 		_open()
-	
+
 	elif id == FileID.SAVE:
 		_save()
-	
+
 	elif id == FileID.SAVE_AS:
 		_save_as()
-		
+
 	elif id == FileID.IMPORT:
 		var callback_no_project = func(file : String):
 			if file != "":
 				var window : ConfirmationDialog = import_window.instantiate()
 				add_child(window)
 				window.confirmed.connect(func():
-						var image : Image = window.get_image() 
+						var image : Image = window.get_image()
 						var current_project = PixelPenProject.new()
 						current_project.initialized(
 								image.get_size(), "Untitled", "", false
@@ -953,7 +953,7 @@ func _on_file_popup_pressed(id : int):
 			get_image_file(callback_no_project, FileDialog.FILE_MODE_OPEN_FILE)
 		else:
 			get_image_file(callback, FileDialog.FILE_MODE_OPEN_FILES)
-	
+
 	elif id == FileID.QUICK_EXPORT:
 		var file : String = PixelPen.state.current_project.last_export_file_path
 		var ext : String = file.get_extension().to_lower()
@@ -964,7 +964,7 @@ func _on_file_popup_pressed(id : int):
 		elif ext == "webp":
 			(PixelPen.state.current_project as PixelPenProject).export_webp_image(file)
 		PixelPen.state.project_saved.emit(false)
-		
+
 		##TODO: remove below on export debug
 		if get_window().has_method("scan"):
 			get_window().scan()
@@ -977,7 +977,7 @@ func _on_file_menu_about_to_pop():
 	var popup := file_menu.get_popup()
 	popup.set_item_disabled(
 			popup.get_item_index(FileID.EXPORT_ANIMATION),
-			PixelPen.state.current_project == null or 
+			PixelPen.state.current_project == null or
 			not PixelPen.state.current_project.show_timeline or
 			PixelPen.state.current_project.animation_timeline.is_empty())
 
@@ -994,7 +994,7 @@ func _on_edit_popup_pressed(id : int):
 	match id:
 		EditID.UNDO:
 			PixelPen.state.current_project.undo()
-		
+
 		EditID.REDO:
 			PixelPen.state.current_project.redo()
 
@@ -1002,7 +1002,7 @@ func _on_edit_popup_pressed(id : int):
 			PixelPen.state.tool_changed.emit(
 					PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 					PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INVERSE, false)
-	
+
 		EditID.CLEAR_SELECTION:
 			PixelPen.state.tool_changed.emit(
 					PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
@@ -1012,25 +1012,25 @@ func _on_edit_popup_pressed(id : int):
 			PixelPen.state.tool_changed.emit(
 					PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 					PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false)
-		
+
 		EditID.COPY:
 			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE:
 				canvas.canvas_paint.tool._show_guid = true
 			else:
 				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
 			PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false)
-		
+
 		EditID.CUT:
 			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE:
 				canvas.canvas_paint.tool._show_guid = true
 			else:
 				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
 			PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false)
-		
+
 		EditID.PASTE:
 			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and canvas.canvas_paint.tool.mode != MoveTool.Mode.UNKNOWN:
 				canvas.canvas_paint.tool._on_move_commit()
-		
+
 		EditID.CREATE_BRUSH:
 			if canvas.selection_tool_hint.texture == null:
 				PixelPen.state.userconfig.make_brush_from_project(null)
@@ -1039,14 +1039,14 @@ func _on_edit_popup_pressed(id : int):
 				PixelPen.state.userconfig.make_brush_from_project(MaskSelection.get_image_no_margin(mask))
 			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_BRUSH:
 				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_BRUSH, true)
-		
+
 		EditID.RESET_BRUSH:
 			PixelPen.state.current_project.reset_brush_to_default()
 			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_BRUSH:
 				subtool_dock._on_tool_changed(PixelPenEnum.ToolBox.TOOL_BRUSH)
 			elif subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_ERASER:
 				subtool_dock._on_tool_changed(PixelPenEnum.ToolBox.TOOL_ERASER)
-		
+
 		EditID.CREATE_STAMP:
 			if canvas.selection_tool_hint.texture == null:
 				PixelPen.state.userconfig.make_stamp_from_project(null)
@@ -1055,12 +1055,12 @@ func _on_edit_popup_pressed(id : int):
 				PixelPen.state.userconfig.make_stamp_from_project(MaskSelection.get_image_no_margin(mask))
 			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_STAMP:
 				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_STAMP, true)
-		
+
 		EditID.RESET_STAMP:
 			PixelPen.state.current_project.reset_stamp_to_default()
 			if subtool_dock.current_toolbox == PixelPenEnum.ToolBox.TOOL_STAMP:
 				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_STAMP, true)
-		
+
 		EditID.SWITCH_LAST_TOOLBOX:
 			if PixelPen.state.current_project == null:
 				return
@@ -1084,45 +1084,45 @@ func _on_layer_popup_pressed(id : int):
 	match id as LayerID:
 		LayerID.ADD_LAYER:
 			layers_tool._on_add_pressed()
-		
+
 		LayerID.DUPLICATE_LAYER:
 			layers_tool._on_duplicate_layer()
-		
+
 		LayerID.COPY_LAYER:
 			layers_tool._on_copy_layer()
-		
+
 		LayerID.CUT_LAYER:
 			layers_tool._on_cut_layer()
-		
+
 		LayerID.DELETE_LAYER:
 			layers_tool._on_trash_pressed()
-		
+
 		LayerID.DUPLICATE_SELECTION:
 			layers_tool._on_duplicate_selection()
-		
+
 		LayerID.PASTE:
 			layers_tool._on_paste()
-		
+
 		LayerID.RENAME_LAYER:
 			var uid = (PixelPen.state.current_project as PixelPenProject).active_layer
 			if uid != null:
 				layers_tool._on_layer_properties(uid.layer_uid)
-		
+
 		LayerID.MERGE_DOWN:
 			layers_tool._on_merge_down()
-		
+
 		LayerID.MERGE_VISIBLE:
 			layers_tool._on_merge_visible()
-		
+
 		LayerID.MERGE_ALL:
 			layers_tool._on_merge_all()
-		
+
 		LayerID.SHOW_ALL_LAYER:
 			layers_tool._on_show_all()
-		
+
 		LayerID.HIDE_ALL_LAYER:
 			layers_tool._on_hide_all()
-		
+
 		LayerID.LAYER_ACTIVE_GO_UP:
 			if MoveTool.mode == MoveTool.Mode.UNKNOWN or PixelPen.state.current_project.multilayer_selected.is_empty():
 				if not PixelPen.state.current_project.active_layer_is_valid():
@@ -1136,7 +1136,7 @@ func _on_layer_popup_pressed(id : int):
 					PixelPen.state.current_project.multilayer_selected.clear()
 					PixelPen.state.current_project.active_layer_uid = PixelPen.state.current_project.active_frame.layers[index].layer_uid
 					PixelPen.state.layer_active_changed.emit(PixelPen.state.current_project.active_layer_uid)
-			
+
 		LayerID.LAYER_ACTIVE_GO_DOWN:
 			if MoveTool.mode == MoveTool.Mode.UNKNOWN or PixelPen.state.current_project.multilayer_selected.is_empty():
 				if not PixelPen.state.current_project.active_layer_is_valid():
@@ -1156,19 +1156,19 @@ func _on_layer_about_to_popup():
 	var multiselect : bool = not PixelPen.state.current_project.multilayer_selected.is_empty()
 	var popup := layer_menu.get_popup()
 	popup.set_item_disabled(popup.get_item_index(LayerID.ADD_LAYER), edit_mode_sample)
-	
+
 	popup.set_item_disabled(popup.get_item_index(LayerID.DELETE_LAYER), disable or edit_mode_sample)
 	popup.set_item_disabled(popup.get_item_index(LayerID.DUPLICATE_LAYER), disable or edit_mode_sample or multiselect)
-	
+
 	popup.set_item_disabled(popup.get_item_index(LayerID.COPY_LAYER), disable or edit_mode_sample or multiselect)
 	popup.set_item_disabled(popup.get_item_index(LayerID.CUT_LAYER), disable or edit_mode_sample or multiselect)
-	
+
 	popup.set_item_disabled(popup.get_item_index(LayerID.DUPLICATE_SELECTION), disable or selection or edit_mode_sample or multiselect)
-	
+
 	popup.set_item_disabled(popup.get_item_index(LayerID.PASTE), (PixelPen.state.current_project as PixelPenProject).cache_copied_colormap == null or edit_mode_sample or multiselect)
-	
+
 	popup.set_item_disabled(popup.get_item_index(LayerID.RENAME_LAYER), disable or multiselect)
-	
+
 	popup.set_item_disabled(popup.get_item_index(LayerID.MERGE_DOWN), disable or edit_mode_sample)
 	popup.set_item_disabled(popup.get_item_index(LayerID.MERGE_VISIBLE), edit_mode_sample)
 	popup.set_item_disabled(popup.get_item_index(LayerID.MERGE_ALL), edit_mode_sample)
@@ -1181,10 +1181,10 @@ func _on_palette_popup_pressed(id : int):
 				PixelPen.state.project_saved.emit(false)
 				PixelPen.state.current_project.unbreak_history()
 				)
-		
+
 		(PixelPen.state.current_project as PixelPenProject).palette.set_color_index_preset()
 		(PixelPen.state.current_project as PixelPenProject).palette.grid_sync_to_palette()
-		
+
 		(PixelPen.state.current_project as PixelPenProject).create_redo_palette_all(func():
 				PixelPen.state.palette_changed.emit()
 				PixelPen.state.project_saved.emit(false)
@@ -1193,7 +1193,7 @@ func _on_palette_popup_pressed(id : int):
 		PixelPen.state.palette_changed.emit()
 		PixelPen.state.project_saved.emit(false)
 		PixelPen.state.current_project.break_history()
-		
+
 	elif id == PaletteID.SORT_COLOR:
 		var new_grid_palette : PackedInt32Array = (PixelPen.state.current_project as PixelPenProject).sort_palette()
 		if new_grid_palette.size() > 0:
@@ -1201,16 +1201,16 @@ func _on_palette_popup_pressed(id : int):
 				PixelPen.state.palette_changed.emit()
 				PixelPen.state.project_saved.emit(false)
 				)
-				
+
 			(PixelPen.state.current_project as PixelPenProject).palette.grid_color_index = new_grid_palette
-			
+
 			(PixelPen.state.current_project as PixelPenProject).create_redo_palette_gui(func():
 					PixelPen.state.palette_changed.emit()
 					PixelPen.state.project_saved.emit(false)
 					)
 			PixelPen.state.palette_changed.emit()
 			PixelPen.state.project_saved.emit(false)
-		
+
 	elif id == PaletteID.DELETE_UNUSED:
 		(PixelPen.state.current_project as PixelPenProject).create_undo_palette("Palette", func():
 				PixelPen.state.palette_changed.emit()
@@ -1223,7 +1223,7 @@ func _on_palette_popup_pressed(id : int):
 				)
 		PixelPen.state.palette_changed.emit()
 		PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == PaletteID.DELETE_SELECTED_COLOR:
 		(PixelPen.state.current_project as PixelPenProject).create_undo_palette_all("Palette", func():
 				PixelPen.state.palette_changed.emit()
@@ -1239,13 +1239,13 @@ func _on_palette_popup_pressed(id : int):
 		PixelPen.state.palette_changed.emit()
 		PixelPen.state.project_saved.emit(false)
 		PixelPen.state.current_project.break_history()
-	
+
 	elif id == PaletteID.CLEAN_INVISIBLE_COLOR:
 		PixelPen.state.current_project.clean_invisible_color()
 		PixelPen.state.palette_changed.emit()
 		PixelPen.state.project_saved.emit(false)
 		PixelPen.state.current_project.undo_redo.clear_history()
-	
+
 	elif id == PaletteID.LOAD_AND_REPLACE:
 		var callback = func(file):
 			if file != "":
@@ -1254,21 +1254,21 @@ func _on_palette_popup_pressed(id : int):
 						PixelPen.state.project_saved.emit(false)
 						PixelPen.state.current_project.unbreak_history()
 						)
-				
+
 				(PixelPen.state.current_project as PixelPenProject).palette.load_image(file)
 				(PixelPen.state.current_project as PixelPenProject).palette.grid_sync_to_palette()
-				
+
 				(PixelPen.state.current_project as PixelPenProject).create_redo_palette_all(func():
 						PixelPen.state.palette_changed.emit()
 						PixelPen.state.project_saved.emit(false)
 						PixelPen.state.current_project.break_history()
 						)
-				
+
 				PixelPen.state.palette_changed.emit()
 				PixelPen.state.project_saved.emit(false)
 				PixelPen.state.current_project.break_history()
 		get_image_file(callback, FileDialog.FILE_MODE_OPEN_FILE)
-		
+
 	elif id == PaletteID.LOAD_AND_MERGE:
 		var callback = func(file):
 			if file != "":
@@ -1277,21 +1277,21 @@ func _on_palette_popup_pressed(id : int):
 						PixelPen.state.project_saved.emit(false)
 						PixelPen.state.current_project.unbreak_history()
 						)
-				
+
 				(PixelPen.state.current_project as PixelPenProject).palette.load_image(file, true)
 				(PixelPen.state.current_project as PixelPenProject).palette.grid_sync_to_palette()
-				
+
 				(PixelPen.state.current_project as PixelPenProject).create_redo_palette_all(func():
 						PixelPen.state.palette_changed.emit()
 						PixelPen.state.project_saved.emit(false)
 						PixelPen.state.current_project.break_history()
 						)
-				
+
 				PixelPen.state.palette_changed.emit()
 				PixelPen.state.project_saved.emit(false)
 				PixelPen.state.current_project.break_history()
 		get_image_file(callback, FileDialog.FILE_MODE_OPEN_FILE)
-		
+
 	elif id == PaletteID.SAVE:
 		var callback = func(file):
 			if file != "":
@@ -1303,37 +1303,37 @@ func _on_animation_popup_pressed(id : int):
 	var project : PixelPenProject = PixelPen.state.current_project as PixelPenProject
 	if id == AnimationID.PLAY_PAUSE:
 		PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_PLAY_PAUSE, false)
-	
+
 	elif id == AnimationID.PREVIEW_PLAY_PAUSE:
 		if not PixelPen.state.current_project.show_preview:
 			return
 		preview_play_timer.anim_play(not preview_play_timer.is_playing)
-	
+
 	elif id == AnimationID.SKIP_TO_FRONT:
 		PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_FRONT, false)
-	
+
 	elif id == AnimationID.SKIP_TO_END:
 		PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_SKIP_TO_END, false)
-	
+
 	elif id == AnimationID.STEP_BACKWARD:
 		PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_BACKWARD, false)
-	
+
 	elif id == AnimationID.STEP_FORWARD:
 		PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_ANIMATION, PixelPenEnum.ToolAnimation.TOOL_ANIMATION_STEP_FORWARD, false)
-	
+
 	elif id == AnimationID.TOGGLE_LOOP:
 		PixelPen.state.current_project.animation_loop = not PixelPen.state.current_project.animation_loop
 		var popup := animation_menu.get_popup()
 		var index = popup.get_item_index(id)
 		popup.set_item_checked(index, PixelPen.state.current_project.animation_loop)
-	
+
 	elif id == AnimationID.TOGGLE_ONION_SKINNING:
 		PixelPen.state.current_project.onion_skinning = not PixelPen.state.current_project.onion_skinning
 		var popup := animation_menu.get_popup()
 		var index = popup.get_item_index(id)
 		popup.set_item_checked(index, PixelPen.state.current_project.onion_skinning)
 		PixelPen.state.layer_items_changed.emit()
-	
+
 	elif id == AnimationID.INSERT_FRAME_LEFT:
 		var cell : AnimationCell = AnimationCell.create(PixelPen.state.current_project.get_uid())
 		var frame = Frame.create(PixelPen.state.current_project.get_uid())
@@ -1346,7 +1346,7 @@ func _on_animation_popup_pressed(id : int):
 		project.add_layer()
 		PixelPen.state.layer_items_changed.emit()
 		PixelPen.state.project_saved.emit(false)
-		
+
 	elif id == AnimationID.INSERT_FRAME_RIGHT:
 		var cell : AnimationCell = AnimationCell.create(PixelPen.state.current_project.get_uid())
 		var frame = Frame.create(PixelPen.state.current_project.get_uid())
@@ -1361,7 +1361,7 @@ func _on_animation_popup_pressed(id : int):
 		project.add_layer()
 		PixelPen.state.layer_items_changed.emit()
 		PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == AnimationID.DUPLICATE_FRAME:
 		if project.animation_frame_index != -1:
 			var cell_index : int = project.animation_frame_index
@@ -1377,7 +1377,7 @@ func _on_animation_popup_pressed(id : int):
 				project.canvas_pool_frame_uid = project.animation_timeline[cell_index + 1].frame.frame_uid
 				PixelPen.state.layer_items_changed.emit()
 				PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == AnimationID.DUPLICATE_FRAME_LINKED:
 		if project.animation_frame_index != -1:
 			var cell_index : int = project.animation_frame_index
@@ -1389,7 +1389,7 @@ func _on_animation_popup_pressed(id : int):
 				project.canvas_pool_frame_uid = project.animation_timeline[cell_index + 1].frame.frame_uid
 				PixelPen.state.layer_items_changed.emit()
 				PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == AnimationID.CONVERT_FRAME_LINKED_TO_UNIQUE:
 		if project.animation_frame_index != -1:
 			var cell_index : int = project.animation_frame_index
@@ -1401,7 +1401,7 @@ func _on_animation_popup_pressed(id : int):
 				project.canvas_pool_frame_uid = cell.frame.frame_uid
 				PixelPen.state.layer_items_changed.emit()
 				PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == AnimationID.MOVE_FRAME_TO_LEFT:
 		if project.animation_frame_index != -1:
 			var cell_index : int = project.animation_frame_index
@@ -1414,7 +1414,7 @@ func _on_animation_popup_pressed(id : int):
 				project.canvas_pool_frame_uid = project.animation_timeline[new_index].frame.frame_uid
 				PixelPen.state.layer_items_changed.emit()
 				PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == AnimationID.MOVE_FRAME_TO_RIGHT:
 		if project.animation_frame_index != -1:
 			var cell_index : int = project.animation_frame_index
@@ -1427,10 +1427,10 @@ func _on_animation_popup_pressed(id : int):
 				project.canvas_pool_frame_uid = project.animation_timeline[new_index].frame.frame_uid
 				PixelPen.state.layer_items_changed.emit()
 				PixelPen.state.project_saved.emit(false)
-		
+
 	elif id == AnimationID.MOVE_FRAME_TO_TIMELINE:
 		if project.animation_frame_index == -1:
-			var cell : AnimationCell = AnimationCell.create(PixelPen.state.current_project.get_uid()) 
+			var cell : AnimationCell = AnimationCell.create(PixelPen.state.current_project.get_uid())
 			cell.frame = project.active_frame
 			var cell_index : int = project.animation_timeline.size()
 			project.animation_timeline.insert(cell_index, cell)
@@ -1438,7 +1438,7 @@ func _on_animation_popup_pressed(id : int):
 			project.canvas_pool_frame_uid = project.animation_timeline[cell_index].frame.frame_uid
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
-		
+
 	elif id == AnimationID.MOVE_FRAME_TO_DRAFT:
 		if project.animation_frame_index != -1:
 			var cell_index : int = project.animation_frame_index
@@ -1451,7 +1451,7 @@ func _on_animation_popup_pressed(id : int):
 					project.canvas_pool_frame_uid = project.animation_timeline[project.animation_frame_index].frame.frame_uid
 				PixelPen.state.layer_items_changed.emit()
 				PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == AnimationID.CREATE_DRAFT_FRAME:
 		var frame = Frame.create(PixelPen.state.current_project.get_uid())
 		project.pool_frames.push_back(frame)
@@ -1460,7 +1460,7 @@ func _on_animation_popup_pressed(id : int):
 		project.add_layer()
 		PixelPen.state.layer_items_changed.emit()
 		PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == AnimationID.DELETE_DRAFT_FRAME:
 		if project.animation_frame_index == -1:
 			if project.pool_frames.size() > 1 and project.active_frame != null:
@@ -1479,77 +1479,77 @@ func _on_animation_about_to_popup():
 func _on_view_popup_pressed(id : int):
 	var popup : PopupMenu = view_menu.get_popup()
 	var index = popup.get_item_index(id)
-	
+
 	if id == ViewID.SHOW_GRID:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
 		PixelPen.state.current_project.show_grid = popup.is_item_checked(index)
 		PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == ViewID.SHOW_VIRTUAL_MOUSE:
 		canvas.center_virtual_mouse()
 		canvas.virtual_mouse = not canvas.virtual_mouse
 		popup.set_item_checked(index, canvas.virtual_mouse)
 		PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == ViewID.SHOW_VERTICAL_MIRROR_GUIDE:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
 		PixelPen.state.current_project.show_symetric_vertical = popup.is_item_checked(index)
 		PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
 		PixelPen.state.current_project.show_symetric_horizontal = popup.is_item_checked(index)
 		PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == ViewID.ROTATE_CANVAS_90:
 		canvas.camera.force_update_scroll()
 		var prev_screen_center = canvas.to_local(canvas.camera.get_screen_center_position())
-		
+
 		canvas.rotate(PI * 0.5)
-		
+
 		canvas.camera.force_update_scroll()
 		canvas.camera.offset -= canvas.to_global(canvas.to_local(canvas.camera.get_screen_center_position()) - prev_screen_center)
-	
+
 	elif id == ViewID.ROTATE_CANVAS_MIN_90:
 		canvas.camera.force_update_scroll()
 		var prev_screen_center = canvas.to_local(canvas.camera.get_screen_center_position())
-		
+
 		canvas.rotate(PI * -0.5)
-		
+
 		canvas.camera.force_update_scroll()
 		canvas.camera.offset -= canvas.to_global(canvas.to_local(canvas.camera.get_screen_center_position()) - prev_screen_center)
-	
+
 	elif id == ViewID.FLIP_CANVAS_HORIZONTAL:
 		canvas.camera.force_update_scroll()
 		var prev_screen_center = canvas.to_local(canvas.camera.get_screen_center_position())
-		
+
 		canvas.scale.x *= -1
-		
+
 		canvas.camera.force_update_scroll()
 		canvas.camera.offset -= canvas.to_global(canvas.to_local(canvas.camera.get_screen_center_position()) - prev_screen_center)
-	
+
 	elif id == ViewID.FLIP_CANVAS_VERTICAL:
 		canvas.camera.force_update_scroll()
 		var prev_screen_center = canvas.to_local(canvas.camera.get_screen_center_position())
-		
+
 		canvas.scale.y *= -1
-		
+
 		canvas.camera.force_update_scroll()
 		canvas.camera.offset -= canvas.to_global(canvas.to_local(canvas.camera.get_screen_center_position()) - prev_screen_center)
-	
+
 	elif id == ViewID.RESET_CANVAS_TRANSFORM:
 		canvas.camera.force_update_scroll()
 		var prev_screen_center = canvas.to_local(canvas.camera.get_screen_center_position())
-		
+
 		canvas.scale = Vector2.ONE
 		canvas.rotation = 0
-		
+
 		canvas.camera.force_update_scroll()
 		canvas.camera.offset -= canvas.to_global(canvas.to_local(canvas.camera.get_screen_center_position()) - prev_screen_center)
-	
+
 	elif id == ViewID.RESET_ZOOM:
 		canvas.update_camera_zoom()
-	
+
 	elif id == ViewID.NEW_IMAGE_REFERENCE:
 		get_image_file(func(files : PackedStringArray):
 				for file in files:
@@ -1560,7 +1560,7 @@ func _on_view_popup_pressed(id : int):
 					window.grab_focus()
 				,FileDialog.FILE_MODE_OPEN_FILES
 				)
-	
+
 	elif id == ViewID.EDIT_SELECTION_ONLY:
 		preview_play_timer.anim_play(false)
 		if (PixelPen.state.current_project as PixelPenProject).use_sample:
@@ -1570,19 +1570,19 @@ func _on_view_popup_pressed(id : int):
 			(PixelPen.state.current_project as PixelPenProject).set_mode(1, mask)
 		popup.set_item_checked(index, (PixelPen.state.current_project as PixelPenProject).use_sample)
 		PixelPen.state.project_file_changed.emit()
-	
+
 	elif id == ViewID.SHOW_TILE:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
 		PixelPen.state.current_project.show_tile = popup.is_item_checked(index)
 		(PixelPen.state.current_project as PixelPenProject).get_image() # Force to create first cache image for tile
 		PixelPen.state.thumbnail_changed.emit()
 		PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == ViewID.SHOW_PREVIEW:
 		PixelPen.state.current_project.show_preview = not PixelPen.state.current_project.show_preview
 		popup.set_item_checked(index, PixelPen.state.current_project.show_preview)
-		preview_node.visible = PixelPen.state.current_project.show_preview 
-		
+		preview_node.visible = PixelPen.state.current_project.show_preview
+
 		var has_dock : bool = layout_node.has_dock(preview_node)
 		if has_dock and not PixelPen.state.current_project.show_preview:
 			layout_node.undock(preview_node)
@@ -1591,13 +1591,13 @@ func _on_view_popup_pressed(id : int):
 			layout_node.dock(preview_node, layer_dock, true, 0.35, true)
 			layout_node.update_layout()
 		PixelPen.state.project_saved.emit(false)
-	
+
 	elif id == ViewID.SHOW_ANIMATION_TIMELINE:
 		PixelPen.state.current_project.show_timeline = not PixelPen.state.current_project.show_timeline
 		popup.set_item_checked(index, PixelPen.state.current_project.show_timeline)
 		animation_panel.visible = PixelPen.state.current_project.show_timeline
 		animation_menu.disabled = not PixelPen.state.current_project.show_timeline or PixelPen.state.current_project.use_sample
-		
+
 		var has_anim_dock : bool = layout_node.has_dock(animation_panel)
 		if has_anim_dock and not PixelPen.state.current_project.show_timeline:
 			layout_node.undock(animation_panel)
@@ -1605,12 +1605,12 @@ func _on_view_popup_pressed(id : int):
 		elif not has_anim_dock and PixelPen.state.current_project.show_timeline:
 			layout_node.dock(animation_panel, canvas_dock, false, 0.8, true)
 			layout_node.update_layout()
-		
+
 		PixelPen.state.project_saved.emit(false)
 		file_menu.get_popup().set_item_disabled(
 			file_menu.get_popup().get_item_index(FileID.EXPORT_ANIMATION)
 			, not PixelPen.state.current_project.show_timeline)
-	
+
 	elif id == ViewID.TOGGLE_TINT_SELECTED_LAYER:
 		var active_layer_uid : Vector3i = (PixelPen.state.current_project as PixelPenProject).active_layer_uid
 		canvas.silhouette = false
@@ -1622,11 +1622,11 @@ func _on_view_popup_pressed(id : int):
 		PixelPen.state.layer_items_changed.emit()
 		PixelPen.state.project_saved.emit(false)
 		popup.set_item_checked(index, canvas.silhouette)
-	
+
 	elif id == ViewID.FILTER_GRAYSCALE:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
 		canvas.show_view_grayscale = popup.is_item_checked(index)
-	
+
 	elif id == ViewID.SHOW_INFO:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
 		debug_label.visible = popup.is_item_checked(index)
@@ -1655,7 +1655,7 @@ func get_image_file(callback : Callable, mode : FileDialog.FileMode = FileDialog
 			else:
 				callback.call("")
 			_file_dialog.queue_free())
-	
+
 	add_child(_file_dialog)
 	_file_dialog.popup_centered(Vector2i(540, 540))
 	_file_dialog.grab_focus()
@@ -1663,15 +1663,15 @@ func get_image_file(callback : Callable, mode : FileDialog.FileMode = FileDialog
 
 func _open_canvas_size_window():
 	var edit_canvas_window = edit_canvas_size.instantiate()
-	edit_canvas_window.canvas_width = PixelPen.state.current_project.canvas_size.x 
+	edit_canvas_window.canvas_width = PixelPen.state.current_project.canvas_size.x
 	edit_canvas_window.canvas_height = PixelPen.state.current_project.canvas_size.y
 	edit_canvas_window.custom_action.connect(func(action):
 			if action == "on_reset":
-				edit_canvas_window.canvas_width = PixelPen.state.current_project.canvas_size.x 
+				edit_canvas_window.canvas_width = PixelPen.state.current_project.canvas_size.x
 				edit_canvas_window.canvas_height = PixelPen.state.current_project.canvas_size.y
 			)
 	edit_canvas_window.confirmed.connect(func():
-			var changed : bool = edit_canvas_window.canvas_width != PixelPen.state.current_project.canvas_size.x 
+			var changed : bool = edit_canvas_window.canvas_width != PixelPen.state.current_project.canvas_size.x
 			changed = changed or edit_canvas_window.canvas_height != PixelPen.state.current_project.canvas_size.y
 			if changed:
 				(PixelPen.state.current_project as PixelPenProject).resize_canvas(
@@ -1692,24 +1692,24 @@ func _open_canvas_size_window():
 func _on_export(id : int):
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var _file_dialog = FileDialog.new()
-	
+
 	if id == ExportAsID.JPG:
 		_file_dialog.current_file = str((PixelPen.state.current_project as PixelPenProject).project_name , ".jpg")
 	elif id == ExportAsID.PNG:
 		_file_dialog.current_file = str((PixelPen.state.current_project as PixelPenProject).project_name , ".png")
 	elif id == ExportAsID.WEBP:
 		_file_dialog.current_file = str((PixelPen.state.current_project as PixelPenProject).project_name , ".webp")
-	
+
 	_file_dialog.use_native_dialog = true
 	_file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-	
+
 	if id == ExportAsID.JPG:
 		_file_dialog.filters = ["*.jpg"]
 	elif id == ExportAsID.PNG:
 		_file_dialog.filters = ["*.png"]
 	elif id == ExportAsID.WEBP:
 		_file_dialog.filters = ["*.webp"]
-		
+
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 	_file_dialog.current_dir = PixelPen.state.get_directory()
 	_file_dialog.file_selected.connect(func(file):
@@ -1720,12 +1720,12 @@ func _on_export(id : int):
 				(PixelPen.state.current_project as PixelPenProject).export_png_image(file)
 			elif id == ExportAsID.WEBP:
 				(PixelPen.state.current_project as PixelPenProject).export_webp_image(file)
-			
+
 			_file_dialog.queue_free()
 			)
 	_file_dialog.canceled.connect(func():
 			_file_dialog.queue_free())
-	
+
 	add_child(_file_dialog)
 	_file_dialog.popup_centered(Vector2i(540, 540))
 	_file_dialog.grab_focus()
@@ -1751,7 +1751,7 @@ func _on_export_animation_frames():
 	var _file_dialog = FileDialog.new()
 	_file_dialog.use_native_dialog = true
 	_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
-	
+
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 	_file_dialog.current_dir = PixelPen.state.get_directory()
 	_file_dialog.dir_selected.connect(func(dir : String):
@@ -1761,7 +1761,7 @@ func _on_export_animation_frames():
 			)
 	_file_dialog.canceled.connect(func():
 			_file_dialog.queue_free())
-	
+
 	add_child(_file_dialog)
 	_file_dialog.popup_centered(Vector2i(540, 540))
 	_file_dialog.grab_focus()
@@ -1770,14 +1770,14 @@ func _on_export_animation_frames():
 func _on_export_animation_gif():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var _file_dialog = FileDialog.new()
-	
+
 	_file_dialog.current_file = str((PixelPen.state.current_project as PixelPenProject).project_name , ".gif")
-	
+
 	_file_dialog.use_native_dialog = true
 	_file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-	
+
 	_file_dialog.filters = ["*.gif"]
-		
+
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 	_file_dialog.current_dir = PixelPen.state.get_directory()
 	_file_dialog.file_selected.connect(func(file):
@@ -1787,7 +1787,7 @@ func _on_export_animation_gif():
 			)
 	_file_dialog.canceled.connect(func():
 			_file_dialog.queue_free())
-	
+
 	add_child(_file_dialog)
 	_file_dialog.popup_centered(Vector2i(540, 540))
 	_file_dialog.grab_focus()

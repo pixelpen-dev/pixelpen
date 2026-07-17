@@ -18,8 +18,8 @@ var shorcuts_tree_structure : Dictionary = {
 			"Quick export.quick_export", "Close project.close_project"
 		],
 		"Edit" : [
-			"Undo.undo", "Redo.redo", "Inverse selection.inverse_selection", 
-			"Clear selection.remove_selection", "Delete selection.delete_selected", 
+			"Undo.undo", "Redo.redo", "Inverse selection.inverse_selection",
+			"Clear selection.remove_selection", "Delete selection.delete_selected",
 			"Copy.copy", "Cut.cut", "Paste.paste", "Create brush.create_brush",
 			"Reset brush.reset_brush", "Create stamp.create_stamp", "Reset stamp.reset_stamp",
 			"Switch to previous toolbox.prev_toolbox", "Canvas crop selection.canvas_crop_selection", "Canvas size.canvas_size"
@@ -33,7 +33,7 @@ var shorcuts_tree_structure : Dictionary = {
 			"Active Go down.active_go_down"
 		],
 		"Animation" : [
-			"Play/Pause.animation_play_pause", "Preview Play/Pause.animation_preview_play_pause", 
+			"Play/Pause.animation_play_pause", "Preview Play/Pause.animation_preview_play_pause",
 			"Skip to front.animation_skip_to_front", "Step backward.animation_step_backward",
 			"Step forward.animation_step_forward", "Skip to end.animation_skip_to_end",
 			"Loop animation playback.loop_playback", "Show onion skinning.animation_onion_skinning",
@@ -48,9 +48,9 @@ var shorcuts_tree_structure : Dictionary = {
 		"View" : [
 			"Rotate canvas -90.rotate_canvas_min90", "Rotate canvas 90.rotate_canvas_90",
 			"Flip canvas horizontal.flip_canvas_horizontal", "Flip canvas vertical.flip_canvas_vertical",
-			"Reset canvas transform.reset_canvas_transform", "Reset zoom.reset_zoom", 
+			"Reset canvas transform.reset_canvas_transform", "Reset zoom.reset_zoom",
 			"Edit selection only.toggle_edit_selection_only", "Show virtual mouse.virtual_mouse",
-			"Show grid.view_show_grid", "Show vertical mirror guide.vertical_mirror", 
+			"Show grid.view_show_grid", "Show vertical mirror guide.vertical_mirror",
 			"Show horizontal mirror guide.horizontal_mirror",
 			"Show tile.view_show_tile", "Show preview.show_preview", "Show animation timeline.show_animation_timeline",
 			"Tint black to layer.toggle_tint_layer",
@@ -107,7 +107,7 @@ func shorcuts_tree_node():
 	shorcuts_tree.set_column_expand(0, true)
 	shorcuts_tree.set_column_expand(1, false)
 	shorcuts_tree.set_column_custom_minimum_width(1, 200)
-	
+
 	for key in shorcuts_tree_structure.keys():
 		var tree_item = shorcuts_tree.create_item(root)
 		tree_item.collapsed = true
@@ -142,11 +142,11 @@ func shorcuts_tree_node():
 func _on_shorcuts_tree_item_selected():
 	var tree_item : TreeItem = shorcuts_tree.get_selected()
 	var has_meta : bool = tree_item.get_metadata(1) != null
-	
+
 	edit_button.disabled = not has_meta
 	reset_button.disabled = not has_meta
 	clear_button.disabled = not has_meta
-	
+
 	if not has_meta:
 		tree_item.collapsed = not tree_item.collapsed
 		tree_item.deselect(0)

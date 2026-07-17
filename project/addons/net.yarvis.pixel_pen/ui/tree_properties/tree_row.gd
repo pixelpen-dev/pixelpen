@@ -132,7 +132,7 @@ static func create_string(
 
 
 static func create_vector2(
-		d_label : String, 
+		d_label : String,
 		d_label_a : String,
 		d_label_b : String,
 		d_value : Vector2,
@@ -153,7 +153,7 @@ static func create_vector2(
 
 
 static func create_vector2i(
-		d_label : String, 
+		d_label : String,
 		d_label_a : String,
 		d_label_b : String,
 		d_value : Vector2i,
@@ -212,4 +212,4 @@ static func create_color(
 	row.color_value = d_value
 	row.color_alpha = d_alpha
 	return row
-	
+

@@ -24,7 +24,7 @@ extends Node
 @export var palette_dock : Control
 @export var color_wheel_dock : Control
 @export var subtool_dock : Control
-@export var preview_dock : Control 
+@export var preview_dock : Control
 @export var layer_dock : Control
 @export var canvas_dock : Control
 @export var animation_dock : Control
@@ -47,7 +47,7 @@ func _ready():
 
 func get_default_layout(layout_node : Control)-> DataBranch:
 	var res := DataBranch.new()
-	
+
 	var ratio : Vector2 = Vector2(40, 40) / get_viewport().get_visible_rect().size
 	if OS.get_name() == "Android" and ratio.y < ratio.x:
 		ratio = Vector2(50, 50) / get_viewport().get_visible_rect().size
@@ -57,7 +57,7 @@ func get_default_layout(layout_node : Control)-> DataBranch:
 				Branch.create("Subtool", layout_node.get_path_to(toolbox_dock), layout_node.get_path_to(subtool_dock), ratio.y, true))
 		res.data.push_back(
 				Branch.create("Palette", layout_node.get_path_to(subtool_dock), layout_node.get_path_to(palette_dock), ratio.y, true))
-		
+
 		res.data.push_back(
 				Branch.create("Canvas", layout_node.get_path_to(palette_dock), layout_node.get_path_to(canvas_dock), 0.3, false))
 		res.data.push_back(
@@ -102,7 +102,7 @@ func _on_theme_changed():
 	if type == 0:
 		editor_main_ui.canvas_color_base = PixelPen.state.userconfig.canvas_base_mode_color
 		editor_main_ui.canvas_color_sample = PixelPen.state.userconfig.canvas_sample_mode_color
-	
+
 	elif type == 1:
 		wrapper_layer_control.default_color = PixelPen.state.userconfig.layer_body_color
 		wrapper_layer_control.active_color = PixelPen.state.userconfig.layer_active_color

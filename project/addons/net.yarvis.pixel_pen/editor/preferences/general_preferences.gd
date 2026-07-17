@@ -20,7 +20,7 @@ var general_structure: Dictionary = {
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
 		),
 		TreeRow.create_vector2i(
-			"Checker size", "WIDTH", "HEIGHT", PixelPen.state.userconfig.checker_size, 
+			"Checker size", "WIDTH", "HEIGHT", PixelPen.state.userconfig.checker_size,
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
 		)] as Array[TreeRow],
 	"/Projects" : [

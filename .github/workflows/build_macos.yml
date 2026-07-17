@@ -23,7 +23,7 @@ jobs:
           submodules: recursive
 
       - name: 🔗 GDExtension Build
-        uses: pixelpen-dev/pixelpen/.github/actions/gdextension@main
+        uses: ./.github/actions/gdextension
         with:
           platform: ${{ matrix.platform }}
           arch: ${{ matrix.arch }}

@@ -637,7 +637,7 @@ func _color_field(tree_row : TreeRow):
 
 func _select_file(callback : Callable, filter : PackedStringArray, mode : FileDialog.FileMode = FileDialog.FILE_MODE_OPEN_FILE):
 	var _file_dialog = FileDialog.new()
-	_file_dialog.use_native_dialog = true
+	_file_dialog.use_native_dialog = not PixelPen.state.is_mobile()
 	_file_dialog.file_mode = mode
 	_file_dialog.filters = filter
 
@@ -666,7 +666,7 @@ func _select_file(callback : Callable, filter : PackedStringArray, mode : FileDi
 			_file_dialog.queue_free())
 
 	add_child(_file_dialog)
-	_file_dialog.popup_centered(Vector2i(540, 540))
+	_file_dialog.popup_centered(PixelPen.state.file_dialog_size(self))
 	_file_dialog.grab_focus()
 
 

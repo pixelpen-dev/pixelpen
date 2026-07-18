@@ -147,3 +147,12 @@ func get_directory():
 			return OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
 		return userconfig.default_workspace
 	return current_project.file_path.get_base_dir()
+
+
+func is_mobile() -> bool:
+	return OS.get_name() == "Android" or OS.get_name() == "iOS"
+
+
+func file_dialog_size(ref : Node) -> Vector2i:
+	var vp : Vector2 = ref.get_viewport().get_visible_rect().size
+	return Vector2i((vp * 0.8).round())

@@ -1,26 +1,26 @@
-[gd_scene load_steps=6 format=3 uid="uid://coamxys3ganlv"]
+[gd_scene format=3 uid="uid://coamxys3ganlv"]
 
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_7thd0"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/new_project_dialog/new_project_dialog.gd" id="1_bewiu"]
-[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="1_y3rtv"]
+[ext_resource type="Script" uid="uid://donmbu1bo2g0p" path="res://addons/net.yarvis.pixel_pen/editor/new_project_dialog/new_project_dialog.gd" id="1_bewiu"]
+[ext_resource type="Shader" uid="uid://dx0che3o2nhp7" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="1_y3rtv"]
+[ext_resource type="Script" uid="uid://cw6xk540keu7j" path="res://addons/net.yarvis.pixel_pen/thirdparty/select-handle/select_line_edit.gd" id="3_0xuis"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enn2t"]
 bg_color = Color(1, 1, 1, 0.027451)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_auk7k"]
 shader = ExtResource("1_y3rtv")
-shader_parameter/origin = null
+shader_parameter/origin = Vector2(0, 0)
 shader_parameter/tint = Vector4(0, 0, 0, 0)
 shader_parameter/tile_size = Vector2(0, 0)
 shader_parameter/lock_to_global = 0.0
 
-[node name="NewProjectDialog" type="ConfirmationDialog" node_paths=PackedStringArray("name_node", "width_node", "height_node", "preview_aspect_ratio", "canvas")]
+[node name="NewProjectDialog" type="ConfirmationDialog" unique_id=83066104 node_paths=PackedStringArray("name_node", "width_node", "height_node", "preview_aspect_ratio", "canvas")]
 snap_2d_transforms_to_pixel = true
 canvas_item_default_texture_filter = 0
 title = "New"
 initial_position = 4
 size = Vector2i(512, 320)
-visible = true
 theme = ExtResource("1_7thd0")
 dialog_hide_on_ok = false
 script = ExtResource("1_bewiu")
@@ -30,7 +30,7 @@ height_node = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxC
 preview_aspect_ratio = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/AspectRatioCanvas")
 canvas = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/AspectRatioCanvas/Canvas")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=1027096045]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -44,7 +44,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Margin" type="MarginContainer" parent="Control"]
+[node name="Margin" type="MarginContainer" parent="Control" unique_id=926655449]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,20 +56,20 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Margin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Margin" unique_id=1658362298]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Margin/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Margin/VBoxContainer" unique_id=1166852970]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Name" type="Label" parent="Control/Margin/VBoxContainer/HBoxContainer"]
+[node name="Name" type="Label" parent="Control/Margin/VBoxContainer/HBoxContainer" unique_id=583446583]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Name"
 
-[node name="LineEditName" type="LineEdit" parent="Control/Margin/VBoxContainer/HBoxContainer"]
+[node name="LineEditName" type="LineEdit" parent="Control/Margin/VBoxContainer/HBoxContainer" unique_id=500035171]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
@@ -79,12 +79,16 @@ clear_button_enabled = true
 select_all_on_focus = true
 caret_blink = true
 
-[node name="Panel" type="Panel" parent="Control/Margin/VBoxContainer"]
+[node name="SelectLineEdit" type="Node" parent="Control/Margin/VBoxContainer/HBoxContainer/LineEditName" unique_id=620021664]
+script = ExtResource("3_0xuis")
+metadata/_custom_type_script = "uid://cw6xk540keu7j"
+
+[node name="Panel" type="Panel" parent="Control/Margin/VBoxContainer" unique_id=704261020]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_enn2t")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/Margin/VBoxContainer/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/Margin/VBoxContainer/Panel" unique_id=869154647]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -96,65 +100,74 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer" unique_id=560950384]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer" unique_id=414986697]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1909131599]
 layout_mode = 2
 
-[node name="Width" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="Width" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=657048941]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "width"
 
-[node name="LineEditW" type="LineEdit" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="LineEditW" type="LineEdit" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=380812345]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
 focus_next = NodePath("../../HBoxContainer3/LineEditH")
 text = "32"
 alignment = 2
-virtual_keyboard_type = 2
 select_all_on_focus = true
+virtual_keyboard_type = 2
 
-[node name="Pixel" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="SelectLineEdit" type="Node" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditW" unique_id=197631495]
+script = ExtResource("3_0xuis")
+metadata/_custom_type_script = "uid://cw6xk540keu7j"
+
+[node name="Pixel" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=852150347]
 layout_mode = 2
 text = "px"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=244884600]
 layout_mode = 2
 
-[node name="Height" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+[node name="Height" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1198608465]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "height"
 
-[node name="LineEditH" type="LineEdit" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+[node name="LineEditH" type="LineEdit" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1177798339]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+focus_next = NodePath("/root/@EditorNode@19513/@Panel@14/@VBoxContainer@15/DockVSplitMain/DockHSplitMain/@VBoxContainer@37/DockVSplitCenter/@VSplitContainer@101/@VBoxContainer@102/@EditorMainScreen@160/MainScreen/@CanvasItemEditor@10138/@VSplitContainer@9897/@HSplitContainer@9899/@HSplitContainer@9901/@Control@9902/@SubViewportContainer@9903/@SubViewport@9904/NewProjectDialog/@HBoxContainer@22122/@Button@22124")
 text = "32"
 alignment = 2
-virtual_keyboard_type = 2
 select_all_on_focus = true
+virtual_keyboard_type = 2
 
-[node name="Pixel2" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+[node name="SelectLineEdit" type="Node" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/LineEditH" unique_id=1332376764]
+script = ExtResource("3_0xuis")
+metadata/_custom_type_script = "uid://cw6xk540keu7j"
+
+[node name="Pixel2" type="Label" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1746012739]
 layout_mode = 2
 text = "px"
 
-[node name="AspectRatioCanvas" type="AspectRatioContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer"]
+[node name="AspectRatioCanvas" type="AspectRatioContainer" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer" unique_id=1725443668]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment_vertical = 0
 
-[node name="Canvas" type="ColorRect" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/AspectRatioCanvas"]
+[node name="Canvas" type="ColorRect" parent="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/AspectRatioCanvas" unique_id=59113397]
 material = SubResource("ShaderMaterial_auk7k")
 layout_mode = 2
 

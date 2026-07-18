@@ -32,3 +32,8 @@ Files: ./project/addons/net.yarvis.pixel_pen/thirdparty/gdgifexporter
 Comment: gdgifexporter
 Copyright: 2020, Igor Santarek (https://github.com/jegor377/godot-gdgifexporter)
 License: MIT
+
+Files: ./project/addons/net.yarvis.pixel_pen/thirdparty/select-handle
+Comment: select-handle
+Copyright: 2026, Bayu Santoso Widodo (https://github.com/bayu-sw/select-handle)
+License: MIT

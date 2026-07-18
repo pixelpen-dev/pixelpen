@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://c8n35hn7ffit6"]
+[gd_scene format=3 uid="uid://c8n35hn7ffit6"]
 
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_cp2yj"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/layer_properties/layer_properties.gd" id="1_s4vgq"]
+[ext_resource type="Script" uid="uid://d1kdg66fxwhx5" path="res://addons/net.yarvis.pixel_pen/editor/layer_properties/layer_properties.gd" id="1_s4vgq"]
+[ext_resource type="Script" uid="uid://cw6xk540keu7j" path="res://addons/net.yarvis.pixel_pen/thirdparty/select-handle/select_line_edit.gd" id="3_432t7"]
 
-[node name="LayerProperties" type="ConfirmationDialog" node_paths=PackedStringArray("line_edit")]
+[node name="LayerProperties" type="ConfirmationDialog" unique_id=1443058465 node_paths=PackedStringArray("line_edit")]
 title = "Layer Properties..."
 size = Vector2i(320, 104)
 theme = ExtResource("1_cp2yj")
@@ -12,7 +13,7 @@ dialog_close_on_escape = false
 script = ExtResource("1_s4vgq")
 line_edit = NodePath("MarginContainer/VBoxContainer/LineEdit")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=132324322]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -27,12 +28,16 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=866737243]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer" unique_id=1015312049]
 layout_mode = 2
 placeholder_text = "Layer Name"
+
+[node name="SelectLineEdit" type="Node" parent="MarginContainer/VBoxContainer/LineEdit" unique_id=494700710]
+script = ExtResource("3_432t7")
+metadata/_custom_type_script = "uid://cw6xk540keu7j"
 
 [connection signal="about_to_popup" from="." to="." method="_on_about_to_popup"]
 [connection signal="canceled" from="." to="." method="_on_canceled"]

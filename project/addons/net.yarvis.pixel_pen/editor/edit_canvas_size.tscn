@@ -1,29 +1,30 @@
-[gd_scene load_steps=4 format=3 uid="uid://bj0oqgbe4c36d"]
+[gd_scene format=3 uid="uid://bj0oqgbe4c36d"]
 
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_be7me"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size/edit_canvas_size.gd" id="1_skqr0"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size/anchor_view.gd" id="2_8mnh6"]
+[ext_resource type="Script" uid="uid://dj52mlq5jnio7" path="res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size/edit_canvas_size.gd" id="1_skqr0"]
+[ext_resource type="Script" uid="uid://clasmdekrg7hb" path="res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size/anchor_view.gd" id="2_8mnh6"]
+[ext_resource type="Script" uid="uid://cw6xk540keu7j" path="res://addons/net.yarvis.pixel_pen/thirdparty/select-handle/select_line_edit.gd" id="3_2cxo8"]
 
-[node name="EditCanvasSize" type="ConfirmationDialog" node_paths=PackedStringArray("width_node", "height_node")]
+[node name="EditCanvasSize" type="ConfirmationDialog" unique_id=251150003 node_paths=PackedStringArray("width_node", "height_node")]
+oversampling_override = 1.0
 title = "Canvas Size"
 initial_position = 1
 size = Vector2i(520, 240)
-visible = true
 theme = ExtResource("1_be7me")
 script = ExtResource("1_skqr0")
 width_node = NodePath("Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/LineEditW")
 height_node = NodePath("Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditH")
 anchor = 1
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=1842826034]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 3.6
 offset_top = 3.6
-offset_right = 516.4
-offset_bottom = 202.4
+offset_right = 516.39996
+offset_bottom = 202.40001
 
-[node name="MarginContainer" type="MarginContainer" parent="Control"]
+[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=1677565670]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,64 +36,73 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer" unique_id=373814586]
 layout_mode = 2
 theme_override_constants/separation = 64
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer" unique_id=2113826427]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1500522835]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=280468552]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 text = "Width"
 
-[node name="LineEditW" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="LineEditW" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1091327953]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "1"
 alignment = 2
-virtual_keyboard_type = 2
 select_all_on_focus = true
+virtual_keyboard_type = 2
 
-[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="SelectLineEdit" type="Node" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/LineEditW" unique_id=1436828710]
+script = ExtResource("3_2cxo8")
+metadata/_custom_type_script = "uid://cw6xk540keu7j"
+
+[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=754501555]
 layout_mode = 2
 text = "px"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/VBoxContainer" unique_id=281712374]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=163304520]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 text = "Height"
 
-[node name="LineEditH" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="LineEditH" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=674263458]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_next = NodePath("/root/@EditorNode@19513/@Panel@14/@VBoxContainer@15/DockVSplitMain/DockHSplitMain/@VBoxContainer@37/DockVSplitCenter/@VSplitContainer@101/@VBoxContainer@102/@EditorMainScreen@160/MainScreen/@CanvasItemEditor@10138/@VSplitContainer@9897/@HSplitContainer@9899/@HSplitContainer@9901/@Control@9902/@SubViewportContainer@9903/@SubViewport@9904/EditCanvasSize/@HBoxContainer@27686/@Button@27692")
 placeholder_text = "1"
 alignment = 2
-virtual_keyboard_type = 2
 select_all_on_focus = true
+virtual_keyboard_type = 2
 
-[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="SelectLineEdit" type="Node" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditH" unique_id=359858211]
+script = ExtResource("3_2cxo8")
+metadata/_custom_type_script = "uid://cw6xk540keu7j"
+
+[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=390270640]
 layout_mode = 2
 text = "px"
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/HBoxContainer" unique_id=2090787126]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 16
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="Control/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="Control/MarginContainer/HBoxContainer/MarginContainer" unique_id=1496374038]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AnchorView" type="Control" parent="Control/MarginContainer/HBoxContainer/MarginContainer/AspectRatioContainer" node_paths=PackedStringArray("parent_window")]
+[node name="AnchorView" type="Control" parent="Control/MarginContainer/HBoxContainer/MarginContainer/AspectRatioContainer" unique_id=930368949 node_paths=PackedStringArray("parent_window")]
 layout_mode = 2
 script = ExtResource("2_8mnh6")
 parent_window = NodePath("../../../../../..")

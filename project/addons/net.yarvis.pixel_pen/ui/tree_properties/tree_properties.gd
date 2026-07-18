@@ -75,6 +75,7 @@ func _step_field(tree_row : TreeRow) -> Control:
 	var wrapper : Control = Control.new()
 	var label : Label = Label.new()
 	var spinner : SpinBox = SpinBox.new()
+	spinner.get_line_edit().add_child(SelectLineEdit.new())
 	var spinner_wrapper : Panel = Panel.new()
 	spinner_wrapper.theme_type_variation = "PanelEdit"
 
@@ -189,6 +190,7 @@ func _string_field(tree_row : TreeRow) -> Control:
 	var wrapper : Control = Control.new()
 	var label : Label = Label.new()
 	var line_edit : LineEdit = LineEdit.new()
+	line_edit.add_child(SelectLineEdit.new())
 
 	wrapper.anchor_left = 0
 	wrapper.anchor_right = 1
@@ -227,7 +229,9 @@ func _vector2_field(tree_row : TreeRow) -> Control:
 	var label_a : Label = Label.new()
 	var label_b : Label = Label.new()
 	var spinner_x : SpinBox = SpinBox.new()
+	spinner_x.get_line_edit().add_child(SelectLineEdit.new())
 	var spinner_y : SpinBox = SpinBox.new()
+	spinner_y.get_line_edit().add_child(SelectLineEdit.new())
 
 	var spinner_wrapper_x : Panel = Panel.new()
 	spinner_wrapper_x.theme_type_variation = "PanelEdit"
@@ -335,7 +339,9 @@ func _vector2i_field(tree_row : TreeRow) -> Control:
 	var label_a : Label = Label.new()
 	var label_b : Label = Label.new()
 	var spinner_x : SpinBox = SpinBox.new()
+	spinner_x.get_line_edit().add_child(SelectLineEdit.new())
 	var spinner_y : SpinBox = SpinBox.new()
+	spinner_y.get_line_edit().add_child(SelectLineEdit.new())
 
 	var spinner_wrapper_x : Panel = Panel.new()
 	spinner_wrapper_x.theme_type_variation = "PanelEdit"
@@ -529,6 +535,7 @@ func _file_field(tree_row : TreeRow):
 	var wrapper : Control = Control.new()
 	var label : Label = Label.new()
 	var line_edit : LineEdit = LineEdit.new()
+	line_edit.add_child(SelectLineEdit.new())
 	var file_button : TextureButton = TextureButton.new()
 	var hover = Node.new()
 	var mat = ShaderMaterial.new()

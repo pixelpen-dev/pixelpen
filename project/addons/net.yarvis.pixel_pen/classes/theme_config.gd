@@ -153,6 +153,12 @@ func _ready():
 	_on_theme_changed()
 
 
+## Desktop toolbox column sizing, in layout units so it scales with the UI
+## scale: the 40-unit icon buttons plus breathing room on each side.
+const TOOLBOX_BUTTON_SIZE := 40.0
+const TOOLBOX_DOCK_PADDING := 7.0
+
+
 func get_default_layout(layout_node : Control)-> DataBranch:
 	var res := DataBranch.new()
 
@@ -177,10 +183,14 @@ func get_default_layout(layout_node : Control)-> DataBranch:
 		res.data.push_back(
 			Branch.create("ColorWheel", layout_node.get_path_to(palette_dock), layout_node.get_path_to(color_wheel_dock), 0.5, true))
 		return res
+	var toolbox_width : float = TOOLBOX_BUTTON_SIZE + 2.0 * TOOLBOX_DOCK_PADDING
 	res.data.push_back(
 			Branch.create("ToolBox", NodePath("."), layout_node.get_path_to(toolbox_dock), 0.0, false))
-	res.data.push_back(
-			Branch.create("Palette", layout_node.get_path_to(toolbox_dock), layout_node.get_path_to(palette_dock), ratio.x, false))
+	var palette_branch := Branch.create("Palette", layout_node.get_path_to(toolbox_dock), layout_node.get_path_to(palette_dock), toolbox_width / get_viewport().get_visible_rect().size.x, false)
+	# Dragging the split (or shrinking the window) must not squeeze the
+	# toolbox below its padded icon width.
+	palette_branch.parent_min_size = toolbox_width
+	res.data.push_back(palette_branch)
 	res.data.push_back(
 			Branch.create("SubTool", layout_node.get_path_to(palette_dock), layout_node.get_path_to(subtool_dock), 0.15, false))
 	res.data.push_back(

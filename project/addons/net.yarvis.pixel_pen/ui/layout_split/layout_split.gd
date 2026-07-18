@@ -21,6 +21,7 @@ var _resize_start_press : Vector2
 var _resize_branch : Branch
 var _resize_range : Vector2
 var _resize_range_start : float
+var _handle : Handle
 
 
 func has_dock(node : Control) -> bool:
@@ -141,7 +142,7 @@ func _ready():
 	update_layout()
 
 
-func _input(event):
+func _gui_input(event):
 	if not get_window().has_focus() or branches == null:
 		return
 	var can_resize : bool = false
@@ -159,38 +160,13 @@ func _input(event):
 					_resize_branch = branch
 					_resize_range_start = branch.split_ratio
 					can_resize_rect = parent_rect.intersection(child_rect)
+					_create_handle(can_resize_rect)
 					_resize_range = branch.parent_rect.size + branch.child_rect.size
 					if can_resize_rect.size.x > can_resize_rect.size.y:
 						_resize_range.x = 0
 					else:
 						_resize_range.y = 0
 					break
-
-	if can_resize or _resize:
-		if event and event is InputEventMouseButton:
-			if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
-				_resize = true
-				_resize_start_press = get_local_mouse_position()
-
-			if not event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
-				_resize = false
-
-		if _resize and event and event is InputEventMouseMotion:
-			var offset : Vector2 = get_local_mouse_position() - _resize_start_press
-			if _resize_range.x == 0:
-				offset.y += _resize_range_start * _resize_range.y
-				_resize_branch.split_ratio = offset.y / _resize_range.y
-			elif _resize_range.y == 0:
-				offset.x += _resize_range_start * _resize_range.x
-				_resize_branch.split_ratio = offset.x / _resize_range.x
-
-	if can_resize:
-		if can_resize_rect.size.x > can_resize_rect.size.y:
-			mouse_default_cursor_shape = Control.CURSOR_VSPLIT
-		else:
-			mouse_default_cursor_shape = Control.CURSOR_HSPLIT
-	elif not _resize:
-		mouse_default_cursor_shape = Control.CURSOR_ARROW
 
 
 func _exit_tree():
@@ -199,6 +175,15 @@ func _exit_tree():
 	for branch in branches.data:
 		if branch.value_changed.is_connected(update_layout):
 			branch.value_changed.disconnect(update_layout)
+
+
+func _on_handle_dragged(drag_offset: Vector2) -> void:
+	if _resize_range.x == 0:
+		drag_offset.y += _resize_range_start * _resize_range.y
+		_resize_branch.split_ratio = drag_offset.y / _resize_range.y
+	elif _resize_range.y == 0:
+		drag_offset.x += _resize_range_start * _resize_range.x
+		_resize_branch.split_ratio = drag_offset.x / _resize_range.x
 
 
 func _update_anchor_branch(branch : Branch):
@@ -269,3 +254,84 @@ func _update_anchor_branch(branch : Branch):
 			branch.set_split_ratio((parent.anchor_right- parent.anchor_left) / anchor_range)
 		branch.parent_rect = parent.get_rect()
 		branch.child_rect = child.get_rect()
+
+
+func _create_handle(edge_rect: Rect2):
+	if _handle == null or _handle.is_queued_for_deletion():
+		_handle = Handle.new()
+		_handle.name = name + "Handle"
+		add_child(_handle)
+		_handle.dragged.connect(_on_handle_dragged)
+
+	_handle.mouse_filter = Control.MOUSE_FILTER_STOP
+	if edge_rect.size.x < edge_rect.size.y:
+		_handle.size.x = BORDER_HOVER_WIDTH * 4
+		_handle.size.y = BORDER_HOVER_WIDTH * 16
+		_handle.position.x = edge_rect.position.x - (_handle.size.x / 2) + (BORDER_HOVER_WIDTH / 2)
+		_handle.position.y = edge_rect.position.y + edge_rect.size.y / 2 - (_handle.size.y / 2)
+	else:
+		_handle.size.x = BORDER_HOVER_WIDTH * 16
+		_handle.size.y = BORDER_HOVER_WIDTH * 4
+		_handle.position.x = edge_rect.position.x + edge_rect.size.x / 2 - (_handle.size.x / 2)
+		_handle.position.y = edge_rect.position.y - _handle.size.y / 2 + (BORDER_HOVER_WIDTH / 2)
+
+	_handle.reset_timer()
+
+
+class Handle extends Panel:
+	signal dragged(offset: Vector2)
+
+	const IDLE_THRESHOLD = 2 # seconds
+
+	var _last_drag_t = 0.0
+	var _start_drag_pos = Vector2.ZERO
+	var _start_drag = false
+
+
+	func reset_timer() -> void:
+		_last_drag_t = 0.0
+
+
+	func _ready() -> void:
+		theme_type_variation = "SplitHandle"
+
+
+	func _process(delta: float) -> void:
+		self._last_drag_t += delta
+		if self._last_drag_t > IDLE_THRESHOLD:
+			queue_free()
+
+
+	func _gui_input(event: InputEvent) -> void:
+		if event and event is InputEventMouseButton:
+			if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
+				_start_drag_pos = get_global_mouse_position()
+				_start_drag = true
+				offset_transform_enabled = true
+				offset_transform_position = Vector2.ZERO
+			elif not event.is_pressed() and _start_drag:
+				_start_drag_pos = Vector2.ZERO
+				_start_drag = false
+				position += offset_transform_position
+				offset_transform_enabled = false
+		if _start_drag and event is InputEventMouseMotion:
+			offset_transform_position = get_global_mouse_position() - _start_drag_pos
+			if size.x < size.y:
+				offset_transform_position.y = 0
+			else:
+				offset_transform_position.x = 0
+			dragged.emit(offset_transform_position)
+
+
+	func _input(event: InputEvent) -> void:
+		var hover_rect = get_rect()
+		hover_rect.position = Vector2.ZERO
+		if hover_rect.has_point(get_local_mouse_position()):
+			reset_timer()
+			self_modulate.a = 1.0
+			if size.x > size.y:
+				mouse_default_cursor_shape = Control.CURSOR_VSPLIT
+			else:
+				mouse_default_cursor_shape = Control.CURSOR_HSPLIT
+		else:
+			self_modulate.a = 0.75

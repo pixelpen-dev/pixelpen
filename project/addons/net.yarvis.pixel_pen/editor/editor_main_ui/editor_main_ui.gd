@@ -765,7 +765,7 @@ func _new():
 func _open():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var _file_dialog = FileDialog.new()
-	_file_dialog.use_native_dialog = true
+	_file_dialog.use_native_dialog = not PixelPen.state.is_mobile()
 	_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	_file_dialog.filters = ["*.res, *.pxpen"]
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -779,7 +779,7 @@ func _open():
 			_file_dialog.queue_free())
 
 	add_child(_file_dialog)
-	_file_dialog.popup_centered(Vector2i(540, 540))
+	_file_dialog.popup_centered(PixelPen.state.file_dialog_size(self))
 	_file_dialog.grab_focus()
 
 
@@ -825,7 +825,7 @@ func _show_save_as_dialog(callback : Callable = Callable()):
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var _file_dialog = FileDialog.new()
 	_file_dialog.current_file = str((PixelPen.state.current_project as PixelPenProject).project_name , ".pxpen")
-	_file_dialog.use_native_dialog = true
+	_file_dialog.use_native_dialog = not PixelPen.state.is_mobile()
 	_file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	_file_dialog.filters = ["*.pxpen, *.res"]
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -840,7 +840,7 @@ func _show_save_as_dialog(callback : Callable = Callable()):
 			_file_dialog.queue_free())
 
 	add_child(_file_dialog)
-	_file_dialog.popup_centered(Vector2i(540, 540))
+	_file_dialog.popup_centered(PixelPen.state.file_dialog_size(self))
 	_file_dialog.grab_focus()
 
 
@@ -1685,7 +1685,7 @@ func get_image_file(callback : Callable, mode : FileDialog.FileMode = FileDialog
 			_file_dialog.queue_free())
 
 	add_child(_file_dialog)
-	_file_dialog.popup_centered(Vector2i(540, 540))
+	_file_dialog.popup_centered(PixelPen.state.file_dialog_size(self))
 	_file_dialog.grab_focus()
 
 
@@ -1728,7 +1728,7 @@ func _on_export(id : int):
 	elif id == ExportAsID.WEBP:
 		_file_dialog.current_file = str((PixelPen.state.current_project as PixelPenProject).project_name , ".webp")
 
-	_file_dialog.use_native_dialog = true
+	_file_dialog.use_native_dialog = not PixelPen.state.is_mobile()
 	_file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 
 	if id == ExportAsID.JPG:
@@ -1755,7 +1755,7 @@ func _on_export(id : int):
 			_file_dialog.queue_free())
 
 	add_child(_file_dialog)
-	_file_dialog.popup_centered(Vector2i(540, 540))
+	_file_dialog.popup_centered(PixelPen.state.file_dialog_size(self))
 	_file_dialog.grab_focus()
 
 
@@ -1777,7 +1777,7 @@ func _on_export_animation(id : int):
 func _on_export_animation_frames():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var _file_dialog = FileDialog.new()
-	_file_dialog.use_native_dialog = true
+	_file_dialog.use_native_dialog = not PixelPen.state.is_mobile()
 	_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
 
 	_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -1791,7 +1791,7 @@ func _on_export_animation_frames():
 			_file_dialog.queue_free())
 
 	add_child(_file_dialog)
-	_file_dialog.popup_centered(Vector2i(540, 540))
+	_file_dialog.popup_centered(PixelPen.state.file_dialog_size(self))
 	_file_dialog.grab_focus()
 
 
@@ -1801,7 +1801,7 @@ func _on_export_animation_gif():
 
 	_file_dialog.current_file = str((PixelPen.state.current_project as PixelPenProject).project_name , ".gif")
 
-	_file_dialog.use_native_dialog = true
+	_file_dialog.use_native_dialog = not PixelPen.state.is_mobile()
 	_file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 
 	_file_dialog.filters = ["*.gif"]
@@ -1817,5 +1817,5 @@ func _on_export_animation_gif():
 			_file_dialog.queue_free())
 
 	add_child(_file_dialog)
-	_file_dialog.popup_centered(Vector2i(540, 540))
+	_file_dialog.popup_centered(PixelPen.state.file_dialog_size(self))
 	_file_dialog.grab_focus()

@@ -202,6 +202,14 @@ func _ready():
 		return
 
 	PixelPen.state.userconfig.resolve_null()
+	# Apply the UI scale before building the default layout: the layout ratios
+	# are derived from the viewport's visible rect, which is in layout units
+	# (window pixels / content_scale_factor). Computing them before the scale
+	# is applied would leave fixed-size docks (e.g. the toolbox) at their
+	# unscaled pixel size once the scale kicks in.
+	_apply_ui_scale()
+	if not PixelPen.state.ui_scale_changed.is_connected(_apply_ui_scale):
+		PixelPen.state.ui_scale_changed.connect(_apply_ui_scale)
 	layout_node.branches = theme_config.get_default_layout(layout_node)
 	layout_node.update_layout()
 	_is_prev_landscape = get_viewport().get_visible_rect().size.x > get_viewport().get_visible_rect().size.y
@@ -209,10 +217,6 @@ func _ready():
 		_cache_layout_landscape = layout_node.branches
 	else:
 		_cache_layout_portrait = layout_node.branches
-
-	_apply_ui_scale()
-	if not PixelPen.state.ui_scale_changed.is_connected(_apply_ui_scale):
-		PixelPen.state.ui_scale_changed.connect(_apply_ui_scale)
 	ThemeConfig.upgrade_icons(self)
 	_init_popup_menu()
 	_set_shorcut()
@@ -228,7 +232,21 @@ func _apply_ui_scale():
 	var window := get_window()
 	if window == null:
 		return
+	var previous_scale : float = window.content_scale_factor
 	ThemeConfig.apply_ui_scale(window, Engine.is_editor_hint())
+	if is_equal_approx(previous_scale, window.content_scale_factor):
+		return
+	# The layout ratios were computed for the previous layout-unit size, so a
+	# live scale change would otherwise keep fixed-size docks (toolbox) at
+	# their old physical size. Rebuild the default layout in the new units.
+	if layout_node != null and layout_node.branches != null:
+		layout_node.branches = theme_config.get_default_layout(layout_node)
+		layout_node.branches.clear_cache()
+		layout_node.update_layout()
+		if _is_prev_landscape:
+			_cache_layout_landscape = layout_node.branches
+		else:
+			_cache_layout_portrait = layout_node.branches
 
 
 func _process(_delta):

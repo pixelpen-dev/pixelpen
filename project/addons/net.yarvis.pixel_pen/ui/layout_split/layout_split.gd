@@ -229,7 +229,9 @@ func _update_anchor_branch(branch : Branch):
 				parent.anchor_bottom = anchor_end.y - (branch.child_rect.size.y / size.y)
 			else:
 				parent.anchor_bottom = anchor_start.y + (anchor_range * branch.split_ratio)
-			parent.anchor_bottom = clampf(parent.anchor_bottom, anchor_start.y + MIN_DOCK_SIZE / size.y, anchor_end.y - MIN_DOCK_SIZE / size.y)
+			var min_parent_y : float = maxf(MIN_DOCK_SIZE, branch.parent_min_size)
+			var min_child_y : float = maxf(MIN_DOCK_SIZE, branch.child_min_size)
+			parent.anchor_bottom = clampf(parent.anchor_bottom, anchor_start.y + min_parent_y / size.y, anchor_end.y - min_child_y / size.y)
 			child.anchor_top = parent.anchor_bottom
 			branch.set_split_ratio((parent.anchor_bottom - parent.anchor_top) / anchor_range)
 		else:
@@ -249,7 +251,9 @@ func _update_anchor_branch(branch : Branch):
 				parent.anchor_right = anchor_end.x - (branch.child_rect.size.x / size.x)
 			else:
 				parent.anchor_right = anchor_start.x + (anchor_range * branch.split_ratio)
-			parent.anchor_right = clampf(parent.anchor_right, anchor_start.x + MIN_DOCK_SIZE / size.y, anchor_end.x - MIN_DOCK_SIZE / size.y)
+			var min_parent_x : float = maxf(MIN_DOCK_SIZE, branch.parent_min_size)
+			var min_child_x : float = maxf(MIN_DOCK_SIZE, branch.child_min_size)
+			parent.anchor_right = clampf(parent.anchor_right, anchor_start.x + min_parent_x / size.x, anchor_end.x - min_child_x / size.x)
 			child.anchor_left = parent.anchor_right
 			branch.set_split_ratio((parent.anchor_right- parent.anchor_left) / anchor_range)
 		branch.parent_rect = parent.get_rect()

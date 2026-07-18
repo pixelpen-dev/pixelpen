@@ -48,6 +48,12 @@ signal value_changed
 @export var parent_size : float = 0.0
 ## Override x if split horizontal or y if split vertical
 @export var child_size : float = 0.0
+## Minimum size (x if split horizontal, y if split vertical) the parent dock
+## may be reduced to by dragging the split or resizing the window.
+## 0.0 falls back to the layout's default minimum dock size. Layout units.
+@export var parent_min_size : float = 0.0
+## Same as parent_min_size, for the child dock.
+@export var child_min_size : float = 0.0
 
 
 var parent_rect : Rect2

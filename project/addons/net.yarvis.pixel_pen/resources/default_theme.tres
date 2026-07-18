@@ -472,6 +472,19 @@ shadow_color = Color(0, 0, 0, 0.3)
 shadow_size = 3
 anti_aliasing = false
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qjttp"]
+bg_color = Color(0.4745098, 0.4745098, 0.4745098, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.2, 0.2, 1)
+border_blend = true
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tvqq4"]
 content_margin_left = 4.0
 content_margin_top = 6.0
@@ -1084,6 +1097,8 @@ PopupMenu/styles/labeled_separator_right = SubResource("StyleBoxLine_suqyl")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_3x1ry")
 PopupMenu/styles/separator = SubResource("StyleBoxLine_msomr")
 PopupPanel/styles/panel = SubResource("StyleBoxFlat_8bnym")
+SplitHandle/base_type = &"Panel"
+SplitHandle/styles/panel = SubResource("StyleBoxFlat_qjttp")
 TabContainer/colors/drop_mark_color = Color(0.2205, 0.783, 0.408, 1)
 TabContainer/colors/font_hovered_color = Color(0.81, 0.81, 0.81, 1)
 TabContainer/colors/font_outline_color = Color(0, 0, 0, 0)

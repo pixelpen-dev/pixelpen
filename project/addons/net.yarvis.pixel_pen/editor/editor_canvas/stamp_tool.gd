@@ -15,6 +15,7 @@ func _init():
 
 
 func _on_request_switch_tool(tool_box_type : int) -> bool:
+	node.overlay_hint.visible = true
 	node.overlay_hint.texture = null
 	node.overlay_hint.position = Vector2.ZERO
 	node.overlay_hint.material.set_shader_parameter("enable", false)

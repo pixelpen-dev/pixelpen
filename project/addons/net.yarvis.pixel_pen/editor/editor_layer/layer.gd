@@ -39,10 +39,11 @@ func _exit_tree():
 
 func _ready():
 	active_rect.self_modulate = default_color
-	
+
 	if not PixelPen.state.need_connection(get_window()):
 		return
-		
+
+	ThemeConfig.upgrade_icons(self)
 	PixelPen.state.layer_active_changed.connect(func(uid):
 			active(layer_uid == uid)
 			)
@@ -116,7 +117,7 @@ func _on_button_pressed():
 	elif not Input.is_key_pressed(KEY_SHIFT) and not PixelPen.state.current_project.multilayer_selected.is_empty():
 		PixelPen.state.current_project.multilayer_selected.clear()
 		PixelPen.state.layer_active_changed.emit(layer_uid)
-		
+
 	if Time.get_unix_time_from_system() - _double_click_timer < 0.5:
 		PixelPen.state.request_layer_properties.emit(layer_uid)
 		pickable.on_hold = false

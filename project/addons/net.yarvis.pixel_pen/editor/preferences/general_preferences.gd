@@ -6,6 +6,7 @@ extends HBoxContainer
 @export var tree_properties : Control
 
 var general_tree_structure : Dictionary = {
+	"Interface" : [],
 	"Guide" : ["Grid"],
 	"Projects" : [],
 	"Cursor" : [],
@@ -13,7 +14,26 @@ var general_tree_structure : Dictionary = {
 	"Animation" : ["Frame", "Onion Skinning"]
 }
 
+## Enum labels and matching scale values for the UI scale preference.
+## Index 0 is Auto (stored as 0.0 in UserConfig.ui_scale).
+const UI_SCALE_LABELS : Array[String] = [
+	"Auto", "1.0x", "1.25x", "1.5x", "1.75x", "2.0x", "2.5x", "3.0x"]
+const UI_SCALE_VALUES : Array[float] = [
+	0.0, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0]
+
+
+static func _ui_scale_value_to_index(value : float) -> int:
+	for i in range(UI_SCALE_VALUES.size()):
+		if is_equal_approx(UI_SCALE_VALUES[i], value):
+			return i
+	return 0
+
 var general_structure: Dictionary = {
+	"/Interface" : [
+		TreeRow.create_enum(
+			"UI scale", _ui_scale_value_to_index(PixelPen.state.userconfig.ui_scale),
+			UI_SCALE_LABELS
+		)] as Array[TreeRow],
 	"/Guide/Grid" : [
 		TreeRow.create_vector2i(
 			"Grid line repeat", "X", "Y", PixelPen.state.userconfig.default_grid_size,
@@ -101,6 +121,12 @@ func _on_general_tree_item_selected():
 
 func _on_general_properties_value_changed(index, value):
 	match current_active_path:
+		"/Interface":
+			if index == 0:
+				var option_index := clampi(value as int, 0, UI_SCALE_VALUES.size() - 1)
+				PixelPen.state.userconfig.ui_scale = UI_SCALE_VALUES[option_index]
+				PixelPen.state.userconfig.save()
+				PixelPen.state.ui_scale_changed.emit()
 		"/Guide/Grid":
 			if index == 0:
 				PixelPen.state.userconfig.default_grid_size = value as Vector2i

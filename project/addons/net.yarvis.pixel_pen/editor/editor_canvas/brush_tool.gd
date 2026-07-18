@@ -64,7 +64,7 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 					PixelPen.state.layer_image_changed.emit(layer_uid)
 					PixelPen.state.project_saved.emit(false))
 			paint_pixel(coord, brush_color_index, false, true)
-			
+
 			callback.call()
 		else:
 			is_pressed_outside = true
@@ -104,7 +104,7 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 			_prev_paint_coord_array.clear()
 			if is_mirrored:
 				callback.call()
-		
+
 		var index_image : IndexedColorImage = PixelPen.state.current_project.active_layer
 		var layer_uid : Vector3i = index_image.layer_uid
 		(PixelPen.state.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():

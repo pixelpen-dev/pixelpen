@@ -34,7 +34,7 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 			mask_selection = MaskSelection.get_image_no_margin(node.selection_tool_hint.texture.get_image())
 			var coords = floor(mouse_position)
 			if mask_selection.get_pixel(coords.x, coords.y).r8 == 0:
-				return 
+				return
 		else:
 			var coord : Vector2i = floor(mouse_position)
 			if index_image.coor_inside_canvas(coord.x, coord.y):
@@ -51,7 +51,7 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 			PixelPen.state.layer_image_changed.emit(layer_uid)
 			PixelPen.state.project_saved.emit(false)
 			)
-		
+
 		index_image.fill_index_on_color_map(_index_color, mask_selection)
 		if node.selection_tool_hint.texture != null:
 			var mirror_line : Vector2i

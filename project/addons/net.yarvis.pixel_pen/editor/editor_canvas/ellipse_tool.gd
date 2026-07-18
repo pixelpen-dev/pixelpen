@@ -84,8 +84,8 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 				mirror_line.y = PixelPen.state.current_project.symetric_guid.y
 			if mirror_line != Vector2i.ZERO and mask_selection == null:
 				index_image.blit_index_on_color_map(
-						_index_color, 
-						get_mirror_image(mirror_line, overlay_image), 
+						_index_color,
+						get_mirror_image(mirror_line, overlay_image),
 						null)
 			elif mirror_line != Vector2i.ZERO:
 				var canvas_with_line : Image = index_image.colormap.duplicate()
@@ -133,7 +133,7 @@ func show_hint(scale : float, force_outline : bool = false):
 	var image : Image = Image.create(node.canvas_size.x, node.canvas_size.y, false, Image.FORMAT_R8 if valid_fill else Image.FORMAT_RGBAF)
 	var color : Color = Color8(_index_color, 0, 0) if valid_fill else get_ink_color()
 	var center_mass : Vector2 = get_midpoint_ellipse(rect_abs.position, rect_abs.end, color, image)
-	
+
 	if valid_fill:
 		var mask : Image = PixelPenCPP.get_image_flood(
 					center_mass as Vector2i,
@@ -141,18 +141,18 @@ func show_hint(scale : float, force_outline : bool = false):
 					Vector2i.ZERO,
 					true
 				)
-		
+
 		var texture_image : Image = Image.create(node.canvas_size.x, node.canvas_size.y, false, Image.FORMAT_RGBAF)
-		
+
 		if mask != null and not mask.is_empty():
 			PixelPenCPP.fill_color(mask, texture_image, get_ink_color(), null)
-		
+
 		get_midpoint_ellipse(rect_abs.position, rect_abs.end, color, texture_image)
 		if node.overlay_hint.texture != null and (node.overlay_hint.texture.get_size() as Vector2i) == texture_image.get_size():
 			node.overlay_hint.texture.update(texture_image)
 		else:
 			node.overlay_hint.texture = ImageTexture.create_from_image(texture_image)
-	
+
 	else:
 		if node.overlay_hint.texture != null and (node.overlay_hint.texture.get_size() as Vector2i) == image.get_size():
 			node.overlay_hint.texture.update(image)

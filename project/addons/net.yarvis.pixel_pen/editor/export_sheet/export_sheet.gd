@@ -37,7 +37,7 @@ func calculate_data():
 	canvas_2d.update_grid(frame_size)
 	canvas_2d.update_margin(Vector2i.ZERO)
 	canvas_2d.update_camera_zoom()
-	
+
 	_frame_image.clear()
 	for i in range(frame_total):
 		_frame_image.push_back(PixelPen.state.current_project.get_image(PixelPen.state.current_project.animation_timeline[i].frame))
@@ -49,7 +49,7 @@ func place_frame():
 	var canvas_size : Vector2i = canvas_2d.checker.texture.size
 	var image : Image = Image.create(canvas_size.x, canvas_size.y, false, Image.FORMAT_RGBAF)
 	var rect : Rect2i = Rect2i(Vector2i.ZERO, PixelPen.state.current_project.canvas_size)
-	
+
 	var sheet_size : Vector2i = properties_node.structure[PropertiesID.SHEETS_SIZE].vector2i_value
 	var margin : Vector2i = properties_node.structure[PropertiesID.SHEETS_MARGIN].vector2i_value
 	var keep_all : bool = properties_node.structure[PropertiesID.LINKED_FRAME].enum_value == 0

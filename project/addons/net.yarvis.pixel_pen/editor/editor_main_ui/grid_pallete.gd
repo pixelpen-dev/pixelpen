@@ -100,7 +100,7 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 	#wrapper.show_behind_parent = true
 	wrapper.size = wrapper_size
 	wrapper.color = Color.TRANSPARENT
-	
+
 	var tr = ColorRect.new()
 	tr.set_anchors_preset(Control.PRESET_CENTER)
 	tr.size = item_size
@@ -108,7 +108,7 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 	tr.mouse_filter = Control.MOUSE_FILTER_PASS
 	tr.material = tr_material
 	wrapper.add_child(tr)
-	
+
 	var ar = ColorRect.new()
 	ar.name = COLOR_RECT_COLOR_NAME
 	ar.set_anchors_preset(Control.PRESET_CENTER)
@@ -116,7 +116,7 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 	ar.position = item_size * -0.5
 	ar.mouse_filter = Control.MOUSE_FILTER_PASS
 	wrapper.add_child(ar)
-	
+
 	wrapper.gui_input.connect(func(event : InputEvent):
 			if event and event is InputEventMouseButton:
 				if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
@@ -130,20 +130,20 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 					_double_click_t = Time.get_unix_time_from_system()
 					if Input.is_key_pressed(KEY_SHIFT): # Replace color (LMB + SHIFT)
 						var layer : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_layer
-						if layer != null: 
+						if layer != null:
 							var layer_uid : Vector3i = layer.layer_uid
 							(PixelPen.state.current_project as PixelPenProject).create_undo_layer("Replace color", layer.layer_uid, func ():
 								PixelPen.state.layer_image_changed.emit(layer_uid)
 								PixelPen.state.project_saved.emit(false)
 								PixelPen.state.palette_changed.emit()
 								)
-								
+
 							var index_a = PixelPen.state.current_project.palette.gui_index_to_palette_index(_grid_focus_index)
 							_grid_focus_index = _child_item.find(wrapper)
 							var index_b = PixelPen.state.current_project.palette.gui_index_to_palette_index(_grid_focus_index)
-							
+
 							layer.replace_color(index_a, index_b)
-							
+
 							(PixelPen.state.current_project as PixelPenProject).create_redo_layer(layer.layer_uid, func ():
 								PixelPen.state.layer_image_changed.emit(layer_uid)
 								PixelPen.state.project_saved.emit(false)
@@ -152,25 +152,25 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 							PixelPen.state.layer_image_changed.emit(layer_uid)
 							PixelPen.state.project_saved.emit(false)
 							PixelPen.state.palette_changed.emit()
-							
+
 					elif Input.is_key_pressed(KEY_ALT): # Copy color (LMB + ALT)
 						(PixelPen.state.current_project as PixelPenProject).create_undo_palette("copy palette", func():
 								PixelPen.state.layer_items_changed.emit()
 								PixelPen.state.project_saved.emit(false)
 								PixelPen.state.palette_changed.emit()
 								)
-							
+
 						var copied_color = PixelPen.state.current_project.palette.gui_to_color(_grid_focus_index)
 						_grid_focus_index = _child_item.find(wrapper)
 						var palette_index = PixelPen.state.current_project.palette.gui_index_to_palette_index(_grid_focus_index)
 						PixelPen.state.current_project.palette.color_index[palette_index] = copied_color
-						
+
 						(PixelPen.state.current_project as PixelPenProject).create_redo_palette(func():
 								PixelPen.state.layer_items_changed.emit()
 								PixelPen.state.project_saved.emit(false)
 								PixelPen.state.palette_changed.emit()
 								)
-						
+
 						PixelPen.state.layer_items_changed.emit()
 						PixelPen.state.project_saved.emit(false)
 						PixelPen.state.palette_changed.emit()
@@ -185,38 +185,38 @@ func _color_item(wrapper_size : Vector2, item_size : Vector2):
 								PixelPen.state.project_saved.emit(false)
 								PixelPen.state.palette_changed.emit()
 								)
-						
+
 						_grid_focus_index = _child_item.find(wrapper)
 						var palette_index = PixelPen.state.current_project.palette.gui_index_to_palette_index(_grid_focus_index)
 						PixelPen.state.current_project.palette.color_index[palette_index].a = 1.0
-						
+
 						(PixelPen.state.current_project as PixelPenProject).create_redo_palette(func():
 								PixelPen.state.project_saved.emit(false)
 								PixelPen.state.palette_changed.emit()
 								)
-						
+
 						PixelPen.state.project_saved.emit(false)
 						PixelPen.state.palette_changed.emit()
 					else: # Swap color (RMB)
 						var gui_index_a : int = _grid_focus_index
 						var gui_index_b = _child_item.find(wrapper)
-						
+
 						var palette_index_prev : int = PixelPen.state.current_project.palette.gui_index_to_palette_index(gui_index_a)
 						(PixelPen.state.current_project as PixelPenProject).create_undo_palette_gui("Swap color", func():
 								PixelPen.state.color_picked.emit(palette_index_prev)
 								PixelPen.state.project_saved.emit(false)
 								PixelPen.state.palette_changed.emit()
 								)
-						
+
 						PixelPen.state.current_project.palette.gui_swap_index(gui_index_a, gui_index_b)
-						
+
 						var palette_index_new : int = PixelPen.state.current_project.palette.gui_index_to_palette_index(gui_index_b)
 						(PixelPen.state.current_project as PixelPenProject).create_redo_palette_gui(func():
 								PixelPen.state.color_picked.emit(palette_index_new)
 								PixelPen.state.project_saved.emit(false)
 								PixelPen.state.palette_changed.emit()
 								)
-						
+
 						_grid_focus_index = gui_index_b
 						PixelPen.state.project_saved.emit(false)
 						PixelPen.state.palette_changed.emit()
@@ -257,7 +257,7 @@ func _input(event):
 						PixelPen.state.project_saved.emit(false)
 						PixelPen.state.palette_changed.emit()
 						break
-						
+
 			_is_pressed = false
 			_is_drag = false
 			queue_redraw()
@@ -291,7 +291,7 @@ func _on_color_wheel_color_changed(color):
 
 	var pallet_index : int = PixelPen.state.current_project.palette.gui_index_to_palette_index(_grid_focus_index)
 	PixelPen.state.current_project.palette.color_index[pallet_index] = color
-	
+
 	PixelPen.state.color_picked.emit(pallet_index)
 	PixelPen.state.project_saved.emit(false)
 

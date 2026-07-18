@@ -210,15 +210,25 @@ func _ready():
 	else:
 		_cache_layout_portrait = layout_node.branches
 
-	if not Engine.is_editor_hint():
-		get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
-		get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
+	_apply_ui_scale()
+	if not PixelPen.state.ui_scale_changed.is_connected(_apply_ui_scale):
+		PixelPen.state.ui_scale_changed.connect(_apply_ui_scale)
+	ThemeConfig.upgrade_icons(self)
 	_init_popup_menu()
 	_set_shorcut()
 	connect_signal()
 	_on_project_file_changed()
 	if OS.get_name() == "Android":
 		OS.request_permissions()
+
+
+## Apply the resolved UI scale to this window. Called at startup and whenever
+## the ui_scale preference changes (via PixelPen.state.ui_scale_changed).
+func _apply_ui_scale():
+	var window := get_window()
+	if window == null:
+		return
+	ThemeConfig.apply_ui_scale(window, Engine.is_editor_hint())
 
 
 func _process(_delta):

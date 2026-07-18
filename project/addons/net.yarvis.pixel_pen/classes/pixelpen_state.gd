@@ -4,6 +4,7 @@ extends Object
 
 
 signal theme_changed
+signal ui_scale_changed
 
 signal debug_log(key, value)
 signal project_file_changed
@@ -58,6 +59,7 @@ var userconfig : UserConfig:
 func disconnect_all_signal():
 	var signals : Array[String] = [
 		"theme_changed",
+		"ui_scale_changed",
 		"debug_log",
 		"project_file_changed",
 		"project_saved",

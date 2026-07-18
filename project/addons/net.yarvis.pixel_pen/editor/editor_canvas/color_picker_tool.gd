@@ -22,14 +22,14 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 				PixelPen.state.palette_changed.emit()
 				PixelPen.state.project_saved.emit(false)
 				)
-		
+
 		PixelPen.state.current_project.palette.color_index[_index_color] = PixelPen.state.current_project.palette.color_index[palette_idx]
-		
+
 		(PixelPen.state.current_project as PixelPenProject).create_redo_palette(func():
 				PixelPen.state.palette_changed.emit()
 				PixelPen.state.project_saved.emit(false)
 				)
-		
+
 		PixelPen.state.palette_changed.emit()
 		PixelPen.state.project_saved.emit(false)
 

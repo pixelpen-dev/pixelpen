@@ -26,6 +26,7 @@ var is_pop : bool = false
 
 
 func _ready():
+	ThemeConfig.upgrade_icons(self)
 	popup_panel.hide()
 
 
@@ -88,7 +89,7 @@ func build_panel(build_mode : Mode):
 			texture_rect.material.set_shader_parameter("lock_to_global", 0.0)
 			var siz : Vector2i = (Vector2i(64, 64) ) / _cache_images[i].get_size()
 			texture_rect.material.set_shader_parameter("tile_size", siz)
-		
+
 		if mode == Mode.BRUSH:
 			var label := Label.new()
 			label.set_anchors_and_offsets_preset(Control.PRESET_HCENTER_WIDE)
@@ -99,7 +100,7 @@ func build_panel(build_mode : Mode):
 			var img_size := _cache_images[i].get_size()
 			label.text = str(img_size.x, "x", img_size.y)
 			texture_rect.add_child(label)
-		
+
 		margin.add_child(texture_rect)
 		vbox.add_child(margin)
 		count += 1

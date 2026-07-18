@@ -47,19 +47,19 @@ func _on_sub_tool_changed(type: int):
 
 	elif type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED:
 		delete_on_selected()
-	
+
 	elif can_commit_selection_polygon and type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_CLOSE_POLYGON:
 		pre_selection_polygon.push_back(pre_selection_polygon[0])
 		_create_selection()
-	
+
 	elif has_point_selection_polygon and type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_CANCEL_POLYGON:
 		pre_selection_polygon.clear()
 		can_commit_selection_polygon = false
 		has_point_selection_polygon = false
-	
+
 	else:
 		super._on_sub_tool_changed(type)
-	
+
 	var yes := active_sub_tool_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_UNION
 	yes = yes or active_sub_tool_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE
 	yes = yes or active_sub_tool_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION
@@ -170,7 +170,7 @@ func _create_selection():
 			_selection_image = MaskSelection.create_image(pre_selection_polygon, node.canvas_size)
 		else:
 			_selection_image = MaskSelection.union_polygon(_selection_image, pre_selection_polygon, node.canvas_size)
-		
+
 	elif active_sub_tool_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE:
 		if _selection_image != null:
 			_selection_image = MaskSelection.difference_polygon(_selection_image, pre_selection_polygon, node.canvas_size)

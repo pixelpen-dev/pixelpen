@@ -14,7 +14,7 @@ var on_hold : bool = false
 func _ready():
 	if not PixelPen.state.need_connection(get_window()):
 		return
-	
+
 	var parent : Button = get_parent()
 	parent.button_down.connect(func():
 			timer = 0
@@ -54,7 +54,7 @@ func _process(delta):
 	if not PixelPen.state.need_connection(get_window()):
 		return
 	if on_hold:
-		timer = min(timer + delta, 0.3) 
+		timer = min(timer + delta, 0.3)
 		if timer == 0.3:
 			_on_pressed()
 			timer = 0
@@ -65,6 +65,6 @@ func _process(delta):
 	if is_pressed:
 		var mouse = (owner as Control).get_global_mouse_position()
 		(owner as Control).get_child(0).global_position = mouse - mouse_offset_position + Vector2(-20, 5)
-		
+
 		if (owner as Control).get_parent().has_method("_on_pickable_pressed"):
 			(owner as Control).get_parent()._on_pickable_pressed(mouse, (owner as Control).layer_uid, 1)

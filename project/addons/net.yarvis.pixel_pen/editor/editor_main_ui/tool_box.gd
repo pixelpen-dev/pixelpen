@@ -4,21 +4,21 @@ extends Control
 
 var shader_tint = load("res://addons/net.yarvis.pixel_pen/resources/tint_color.gdshader")
 
-var select := load("res://addons/net.yarvis.pixel_pen/resources/icon/arrow_selector_24.svg")
-var move := load("res://addons/net.yarvis.pixel_pen/resources/icon/move_24.svg")
-var pan := load("res://addons/net.yarvis.pixel_pen/resources/icon/pan_24.svg")
-var selection := load("res://addons/net.yarvis.pixel_pen/resources/icon/selection_24.svg")
-var pen := load("res://addons/net.yarvis.pixel_pen/resources/icon/pen.svg")
-var brush := load("res://addons/net.yarvis.pixel_pen/resources/icon/brush_24.svg")
-var stamp := load("res://addons/net.yarvis.pixel_pen/resources/icon/stamp.svg")
-var eraser := load("res://addons/net.yarvis.pixel_pen/resources/icon/ink_eraser_24.svg")
-var magnet := load("res://addons/net.yarvis.pixel_pen/resources/icon/magnet.svg")
-var line := load("res://addons/net.yarvis.pixel_pen/resources/icon/line_24.svg")
-var oval := load("res://addons/net.yarvis.pixel_pen/resources/icon/circle-outline.svg")
-var rectangle := load("res://addons/net.yarvis.pixel_pen/resources/icon/rect_24.svg")
-var fill := load("res://addons/net.yarvis.pixel_pen/resources/icon/ink_24.svg")
-var color_picker := load("res://addons/net.yarvis.pixel_pen/resources/icon/color_picker_24.svg")
-var zoom := load("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_in_24.svg")
+var select := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/arrow_selector_24.svg")
+var move := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/move_24.svg")
+var pan := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/pan_24.svg")
+var selection := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/selection_24.svg")
+var pen := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/pen.svg")
+var brush := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/brush_24.svg")
+var stamp := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/stamp.svg")
+var eraser := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/ink_eraser_24.svg")
+var magnet := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/magnet.svg")
+var line := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/line_24.svg")
+var oval := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/circle-outline.svg")
+var rectangle := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/rect_24.svg")
+var fill := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/ink_24.svg")
+var color_picker := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/color_picker_24.svg")
+var zoom := ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_in_24.svg")
 
 @export var toolbox_list : Control
 
@@ -80,19 +80,20 @@ func _build_button(name : String, texture : Texture2D, grup : int, type: int, de
 			PixelPen.state.tool_changed.emit(grup, type, true)
 			)
 	btn.stretch_mode = TextureButton.STRETCH_KEEP_CENTERED
+	btn.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	btn.shortcut = shorcut
-	
+
 	var mat = ShaderMaterial.new()
 	mat.shader = shader_tint
 	btn.material = mat
-	
+
 	var hover = Node.new()
 	hover.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/button_hover.gd"))
 	hover.tool_grup = grup
 	hover.tool_type = type
 	hover.can_active = true
 	btn.add_child(hover)
-	
+
 	toolbox_list.add_child(btn)
 	#btn.owner = toolbox_list.owner
 	hover.is_active = default_active

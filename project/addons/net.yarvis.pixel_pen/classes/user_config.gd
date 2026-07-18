@@ -27,6 +27,9 @@ const PATH := "user://pixelpen_user_config.res"
 @export var layer_secondary_active_color : Color = Color(0.25, 0.25, 0.25, 1.0)
 
 @export_category("Preferences")
+@export_subgroup("Interface")
+## UI scale factor for high-DPI / large screens. 0.0 = Auto (detect from display).
+@export var ui_scale : float = 0.0
 @export_subgroup("General")
 @export var default_grid_size : Vector2i = Vector2i(8, 8)
 @export var checker_size : Vector2i = Vector2i(8, 8)

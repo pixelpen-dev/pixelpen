@@ -26,14 +26,14 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		zoom_scale = -0.2 if shift_mode else 0.2
 	elif active_sub_tool_type == PixelPenEnum.ToolBoxZoom.TOOL_ZOOM_OUT:
 		zoom_scale = 0.2 if shift_mode else -0.2
-		
+
 	node.camera.zoom += node.camera.zoom * zoom_scale
-	
+
 	var current_mouse_offset = node.camera.get_global_transform() * node.camera.get_local_mouse_position()
 	if node.virtual_mouse:
 		current_mouse_offset = node.get_global_transform().affine_inverse() * node.get_canvas_transform().affine_inverse() * prev_screen_offset
 	node.camera.offset -= current_mouse_offset - prev_mouse_offset
-	
+
 	is_pressed = true
 	pressed_moused_position = node.to_local(node.get_global_transform() * node.get_global_mouse_position())
 	if node.selection_tool_hint.texture != null:

@@ -14,39 +14,39 @@ var RectangleTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas
 var SelectionTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/selection_tool.gd")
 var FillTool = load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/fill_tool.gd")
 
-var undo = load("res://addons/net.yarvis.pixel_pen/resources/icon/undo.svg")
-var redo = load("res://addons/net.yarvis.pixel_pen/resources/icon/redo.svg")
-var fit_screen = load("res://addons/net.yarvis.pixel_pen/resources/icon/fit-to-screen-outline.svg")
-var save = load("res://addons/net.yarvis.pixel_pen/resources/icon/content-save.svg")
-var grid = load("res://addons/net.yarvis.pixel_pen/resources/icon/grid_3x3_24.svg")
-var tint_black = load("res://addons/net.yarvis.pixel_pen/resources/icon/image-filter-black-white.svg")
-var save_alert = load("res://addons/net.yarvis.pixel_pen/resources/icon/content-save-alert-outline.svg")
+var undo = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/undo.svg")
+var redo = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/redo.svg")
+var fit_screen = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/fit-to-screen-outline.svg")
+var save = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/content-save.svg")
+var grid = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/grid_3x3_24.svg")
+var tint_black = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/image-filter-black-white.svg")
+var save_alert = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/content-save-alert-outline.svg")
 
-var cut = load("res://addons/net.yarvis.pixel_pen/resources/icon/content-cut.svg")
-var copy = load("res://addons/net.yarvis.pixel_pen/resources/icon/content-copy.svg")
-var cancel = load("res://addons/net.yarvis.pixel_pen/resources/icon/cancel.svg")
-var commit = load("res://addons/net.yarvis.pixel_pen/resources/icon/check-circle-outline.svg")
-var rotate_left = load("res://addons/net.yarvis.pixel_pen/resources/icon/rotate-left.svg")
-var rotate_right = load("res://addons/net.yarvis.pixel_pen/resources/icon/rotate-right.svg")
-var flip_horizontal = load("res://addons/net.yarvis.pixel_pen/resources/icon/flip-horizontal.svg")
-var flip_vertical = load("res://addons/net.yarvis.pixel_pen/resources/icon/flip-vertical.svg")
-var scale_left = load("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-left.svg")
-var scale_up = load("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-up.svg")
-var scale_right = load("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-right.svg")
-var scale_down = load("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-down.svg")
+var cut = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/content-cut.svg")
+var copy = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/content-copy.svg")
+var cancel = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/cancel.svg")
+var commit = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/check-circle-outline.svg")
+var rotate_left = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/rotate-left.svg")
+var rotate_right = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/rotate-right.svg")
+var flip_horizontal = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/flip-horizontal.svg")
+var flip_vertical = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/flip-vertical.svg")
+var scale_left = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-left.svg")
+var scale_up = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-up.svg")
+var scale_right = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-right.svg")
+var scale_down = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/arrow-expand-down.svg")
 
-var select_color = load("res://addons/net.yarvis.pixel_pen/resources/icon/select-color.svg")
-var select_layer = load("res://addons/net.yarvis.pixel_pen/resources/icon/layers-search-outline.svg")
+var select_color = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/select-color.svg")
+var select_layer = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/layers-search-outline.svg")
 
-var selection_union = load("res://addons/net.yarvis.pixel_pen/resources/icon/vector-union.svg")
-var selection_difference = load("res://addons/net.yarvis.pixel_pen/resources/icon/vector-difference-ba.svg")
-var selection_intersection = load("res://addons/net.yarvis.pixel_pen/resources/icon/vector-intersection.svg")
-var selection_inverse = load("res://addons/net.yarvis.pixel_pen/resources/icon/select-inverse.svg")
-var selection_remove = load("res://addons/net.yarvis.pixel_pen/resources/icon/remove_selection_24.svg")
-var delete_in_selection = load("res://addons/net.yarvis.pixel_pen/resources/icon/delete_in_selection.svg")
+var selection_union = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/vector-union.svg")
+var selection_difference = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/vector-difference-ba.svg")
+var selection_intersection = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/vector-intersection.svg")
+var selection_inverse = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/select-inverse.svg")
+var selection_remove = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/remove_selection_24.svg")
+var delete_in_selection = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/delete_in_selection.svg")
 
-var zoom_in = load("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_in_24.svg")
-var zoom_out = load("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_out_24.svg")
+var zoom_in = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_in_24.svg")
+var zoom_out = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/zoom_out_24.svg")
 
 var shader_tint = load("res://addons/net.yarvis.pixel_pen/resources/tint_color.gdshader")
 
@@ -172,7 +172,7 @@ func _build_toolbar():
 			toolbar_list,
 			)
 	_build_toggle_button("Grid", "Grid", grid, grid, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
-			PixelPenEnum.ToolBar.TOOLBAR_SHOW_GRID, true, 
+			PixelPenEnum.ToolBar.TOOLBAR_SHOW_GRID, true,
 			false, PixelPen.state.userconfig.shorcuts.view_show_grid,
 			func ():
 				if PixelPen.state.current_project == null:
@@ -227,7 +227,7 @@ func _on_select_tool():
 
 func _on_move_tool():
 	_clean_up()
-	
+
 	_build_button("Cut", cut, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false, false, PixelPen.state.userconfig.shorcuts.cut, func():
 					return MoveTool.mode == MoveTool.Mode.UNKNOWN
@@ -236,7 +236,7 @@ func _on_move_tool():
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false, false, PixelPen.state.userconfig.shorcuts.copy, func():
 					return MoveTool.mode == MoveTool.Mode.UNKNOWN
 					)
-	
+
 	_build_button("Rotate Left", rotate_left, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_ROTATE_LEFT, false, false, null,
 			func():
@@ -261,10 +261,10 @@ func _on_move_tool():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
 					return not PixelPen.state.current_project.multilayer_selected.is_empty())
-	
+
 	_add_separator(func():
 			return MoveTool.mode != MoveTool.Mode.UNKNOWN)
-	
+
 	_build_button("Scale Shifted Left", scale_left, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_SCALE_LEFT, false, false, null,
 			func():
@@ -289,7 +289,7 @@ func _on_move_tool():
 					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
 					return not PixelPen.state.current_project.multilayer_selected.is_empty())
-	
+
 	_add_separator(func():
 			return MoveTool.mode != MoveTool.Mode.UNKNOWN)
 	_build_button("Cancel Transform", cancel, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
@@ -309,31 +309,31 @@ func _on_selection_tool():
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_UNION, true, SelectionTool.sub_tool_selection_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_UNION)
 	_build_button("Selection Difference", selection_difference, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE, true, SelectionTool.sub_tool_selection_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DIFFERENCE)
-	_build_button("Selection Intersection", selection_intersection, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
+	_build_button("Selection Intersection", selection_intersection, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION, true, SelectionTool.sub_tool_selection_type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INTERSECTION)
 	_add_separator()
-	_build_button("Inverse Selection", selection_inverse, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
+	_build_button("Inverse Selection", selection_inverse, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_INVERSE, false, false, PixelPen.state.userconfig.shorcuts.inverse_selection,
 			func (): return true,
 			func (): return canvas.selection_tool_hint.texture == null
 			)
-	_build_button("Remove Selection", selection_remove, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
+	_build_button("Remove Selection", selection_remove, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_REMOVE, false, false, PixelPen.state.userconfig.shorcuts.remove_selection,
 			func (): return true,
 			func (): return canvas.selection_tool_hint.texture == null
 			)
-	_build_button("Delete Selected Area", delete_in_selection, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
+	_build_button("Delete Selected Area", delete_in_selection, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false, false, PixelPen.state.userconfig.shorcuts.delete_selected,
 			func (): return true,
 			func (): return canvas.selection_tool_hint.texture == null
 			)
 	_add_separator(func():
 			return SelectionTool.has_point_selection_polygon)
-	_build_button("Cancel Polygon", cancel, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
+	_build_button("Cancel Polygon", cancel, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_CANCEL_POLYGON, false, false, null,
 			func():
 				return SelectionTool.has_point_selection_polygon)
-	_build_button("Close Polygon", commit, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, 
+	_build_button("Close Polygon", commit, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_CLOSE_POLYGON, false, false, PixelPen.state.userconfig.shorcuts.confirm,
 			func():
 				return SelectionTool.can_commit_selection_polygon)
@@ -467,12 +467,13 @@ func _build_button(
 			PixelPen.state.tool_changed.emit(grup, type, can_active)
 			)
 	btn.stretch_mode = TextureButton.STRETCH_KEEP_CENTERED
+	btn.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	btn.shortcut = shorcut
-	
+
 	var mat = ShaderMaterial.new()
 	mat.shader = shader_tint
 	btn.material = mat
-	
+
 	var hover = Node.new()
 	hover.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/button_hover.gd"))
 	hover.tool_grup = grup
@@ -481,7 +482,7 @@ func _build_button(
 	hover.visible_callback = visible_callback
 	hover.disable_callback = disable_callback
 	btn.add_child(hover)
-	
+
 	target.add_child(btn)
 	btn.owner = target.owner
 	hover.is_active = default_active
@@ -512,12 +513,13 @@ func _build_toggle_button(
 			PixelPen.state.tool_changed.emit(grup, type, can_active)
 			)
 	btn.stretch_mode = TextureButton.STRETCH_KEEP_CENTERED
+	btn.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	btn.shortcut = shorcut
-	
+
 	var mat = ShaderMaterial.new()
 	mat.shader = shader_tint
 	btn.material = mat
-	
+
 	var hover = Node.new()
 	hover.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/button_hover.gd"))
 	hover.tool_grup = grup
@@ -529,7 +531,7 @@ func _build_toggle_button(
 			return PixelPen.state.current_project != null
 	hover.disable_callback = disable_callback
 	btn.add_child(hover)
-	
+
 	toolbar_list.add_child(btn)
 	btn.owner = toolbar_list.owner
 	hover.is_active = default_active
@@ -542,16 +544,16 @@ func _build_check_box(label : String, toggle_callback : Callable, default_toggle
 	check_box.text = label
 	check_box.button_pressed = default_toggle
 	check_box.toggled.connect(toggle_callback)
-	
+
 	var margin = MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 8)
 	margin.add_child(check_box)
-	
+
 	if visible_callback.is_valid():
 		margin.set_script(load("res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/visible_callback.gd"))
 		margin.visible_callback = visible_callback
 		margin.visible = visible_callback.call()
-	
+
 	button_list.add_child(margin)
 	check_box.owner = button_list.owner
 

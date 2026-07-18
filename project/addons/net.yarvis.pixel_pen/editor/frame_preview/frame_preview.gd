@@ -13,7 +13,7 @@ var ShaderIndex := load("res://addons/net.yarvis.pixel_pen/resources/indexed_lay
 @export var front_control : Control
 @export var use_canvas_frame : bool = false
 @export var show_cache_frame : bool = false
-@export_range(1, 100) var stretch_shrink : int = 1: 
+@export_range(1, 100) var stretch_shrink : int = 1:
 	set(v):
 		stretch_shrink = v
 		viewport_container.stretch_shrink = stretch_shrink

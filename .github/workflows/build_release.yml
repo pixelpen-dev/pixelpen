@@ -1,6 +1,11 @@
 name: 🏹 Build Release
-on: 
+on:
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag for the release (e.g. v1.2.1); created on publish if it doesn't exist"
+        required: true
+        type: string
   #push:
   #  tags:
   #    - "v*.*.*"
@@ -34,6 +39,9 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
+          # From the dispatch input; falls back to the ref name if the
+          # tag-push trigger is ever re-enabled.
+          tag_name: ${{ inputs.tag_name || github.ref_name }}
           name: PixelPen
           files: addons.zip
           generate_release_notes: true

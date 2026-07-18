@@ -66,6 +66,10 @@ func get_duplicate(new_uid : bool = true) -> Frame:
 	var new_layers : Array[IndexedColorImage] = frame.layers.duplicate()
 	for i in range(new_layers.size()):
 		new_layers[i] = new_layers[i].get_duplicate(new_uid)
+	# Resource.duplicate() shares the layers array reference (subresources are
+	# not deep-copied), so the duplicated layers must be assigned back or the
+	# frame keeps aliasing the source's layers.
+	frame.layers = new_layers
 	return frame
 
 

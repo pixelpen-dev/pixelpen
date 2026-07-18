@@ -61,7 +61,7 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 			if node.selection_tool_hint.texture != null:
 				mask_selection = MaskSelection.get_image_no_margin(node.selection_tool_hint.texture.get_image())
 			index_image.blit_index_on_color_map(_index_color, _cache_line_mask, mask_selection)
-			
+
 			var mirror_line : Vector2i
 			if PixelPen.state.current_project.show_symetric_vertical:
 				mirror_line.x = PixelPen.state.current_project.symetric_guid.x
@@ -69,8 +69,8 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 				mirror_line.y = PixelPen.state.current_project.symetric_guid.y
 			if mirror_line != Vector2i.ZERO and mask_selection == null:
 				index_image.blit_index_on_color_map(
-						_index_color, 
-						get_mirror_image(mirror_line, _cache_line_mask), 
+						_index_color,
+						get_mirror_image(mirror_line, _cache_line_mask),
 						null)
 			elif mirror_line != Vector2i.ZERO:
 				var canvas_with_line : Image = index_image.colormap.duplicate()
@@ -81,7 +81,7 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 						if mask_selection.get_pixel(x, y).r8 != 0 and _cache_line_mask.get_pixel(x, y).a != 0:
 							canvas_with_line.set_pixel(x, y, Color8(_index_color, 0, 0, 0))
 				index_image.blit_color_map(get_mirror_image(mirror_line, canvas_with_line), null, Vector2i.ZERO)
-							
+
 			callback.call()
 			(PixelPen.state.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
 					PixelPen.state.layer_image_changed.emit(layer_uid)
@@ -116,15 +116,15 @@ func _on_draw_cursor(mouse_position : Vector2):
 	if is_pressed:
 		var rect : Rect2i = Rect2i(Vector2i.ZERO, node.canvas_size)
 		var color = get_ink_color()
-		var start : Vector2 = floor(start_pressed_position) + Vector2(0.5, 0.5) 
+		var start : Vector2 = floor(start_pressed_position) + Vector2(0.5, 0.5)
 		var end : Vector2 = floor(end_pressed_position) + Vector2(0.5, 0.5)
-		
+
 		node.draw_line(start, end, Color.WHITE)
 		if rect.has_point(floor(start_pressed_position)):
 			node.draw_rect(Rect2(floor(start_pressed_position), Vector2.ONE), Color.WHITE, false)
 		if rect.has_point(floor(end_pressed_position)):
 			node.draw_rect(Rect2(floor(end_pressed_position), Vector2.ONE), Color.WHITE, false)
-		
+
 		_cache_line_mask = Image.create(node.canvas_size.x, node.canvas_size.y, false, Image.FORMAT_RGBAF)
 		var direction : Vector2 = start.direction_to(end)
 		var length : int = start.distance_to(end)
@@ -154,7 +154,7 @@ func _on_draw_cursor(mouse_position : Vector2):
 	else:
 		node.overlay_hint.texture = null
 		_cache_line_mask = null
-			
+
 	draw_plus_cursor(mouse_position)
 
 

@@ -15,7 +15,7 @@ func get_data() -> Dictionary:
 		arr.push_back(var_to_str(c))
 	return {
 		"color_index" : arr,
-		"grid_color_index" : grid_color_index 
+		"grid_color_index" : grid_color_index
 	}
 
 
@@ -35,7 +35,7 @@ func from_data(json_data : Dictionary) -> Error:
 	else:
 		return FAILED
 	return OK
-	
+
 
 
 func is_gui_valid() -> bool:
@@ -127,7 +127,7 @@ func load_image(path : String, merge : bool = false):
 		for x in range(image.get_width()):
 			if merge:
 				while color_index[i].a > 0:
-					i += 1 
+					i += 1
 					if i >= color_index.size():
 						return
 			var color : Color = image.get_pixel(x, y)
@@ -165,31 +165,31 @@ func get_color_index_texture():
 
 
 func get_sorted_palette() -> PackedColorArray:
-	
+
 	var sort = func(a : Color, b : Color)-> bool:
 		var step : float = 8
 		var ah := int(a.h * step)
 		var al := int(a.get_luminance() * step)
 		var av := int(a.v * step)
-		
+
 		if ah % 2 == 1:
 			al = step - al
 			av = step - av
-		
+
 		var bh := int(b.h * step)
 		var bl := int(b.get_luminance() * step)
 		var bv := int(b.v * step)
-		
+
 		if bh % 2 == 1:
 			bl = step - bl
 			bv = step - bv
-		
+
 		if ah == bh:
 			if al == bl:
 				return av > bv
 			return al > bl
 		return ah > bh
-	
+
 	var new_palette : Array[Color] = []
 	for c in range(1, color_index.size()):
 		if color_index[c].a > 0:

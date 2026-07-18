@@ -50,10 +50,10 @@ func update_camera_zoom():
 
 func zoom(factor : float):
 	var prev_mouse_offset = camera.get_local_mouse_position()
-			
+
 	var zoom_scale = factor - 1.0
 	camera.zoom += camera.zoom * zoom_scale * 0.5
-	
+
 	var current_mouse_offset = camera.get_local_mouse_position()
 	camera.offset -= current_mouse_offset - prev_mouse_offset
 	queue_redraw()

@@ -98,7 +98,7 @@ func on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 		if not tool.node.virtual_mouse:
 			tool._on_mouse_pressed(mouse_position, callback)
 			return
-		
+
 		if tool.node.is_hover_virtual_mouse_body(mouse_position, 2):
 			if tool.node.is_hover_virtual_mouse_body(mouse_position, -1): # body
 				tool.node.start_drag_virtual_mouse_from(mouse_position)
@@ -142,7 +142,7 @@ func on_mouse_motion(mouse_position : Vector2, event_relative : Vector2, callbac
 		if not tool.node.virtual_mouse:
 			tool._on_mouse_motion(mouse_position, event_relative, callback)
 			return
-		
+
 		if tool.node.virtual_pressed == 1:
 			tool.node.drag_virtual_mouse(mouse_position)
 			tool._on_mouse_motion(tool.node.virtual_mouse_origin, event_relative, callback)

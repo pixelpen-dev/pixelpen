@@ -67,10 +67,10 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 			var mask : Image = Image.create(layer.size.x, layer.size.y, false, Image.FORMAT_R8)
 			for pixel in moved_pixel:
 				mask.set_pixelv(pixel, Color8(255, 0, 0, 0))
-				
+
 			var offset = node.overlay_hint.position
 			layer.blit_color_map(moved_colormap, mask, Vector2i(floor(offset.x), floor(offset.y)))
-			
+
 			mode = Mode.SELECT_PIXEL
 			var layer_uid : Vector3i = layer.layer_uid
 			(PixelPen.state.current_project as PixelPenProject).create_undo_property(
@@ -82,28 +82,28 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 					PixelPen.state.layer_image_changed.emit(layer_uid)
 					PixelPen.state.project_saved.emit(false),
 				true)
-			
+
 			(PixelPen.state.current_project as PixelPenProject).create_redo_layer(layer.layer_uid, func ():
 					PixelPen.state.layer_image_changed.emit(layer_uid)
 					PixelPen.state.project_saved.emit(false)
 					)
-			
+
 			is_pressed = false
 			layer = null
 			moved_pixel.clear()
 			node.overlay_hint.position = Vector2.ZERO
 			PixelPen.state.layer_image_changed.emit(layer_uid)
 			PixelPen.state.project_saved.emit(false)
-		
+
 		elif shift_mode: # Force to collect pixel
 			mode = Mode.SELECT_PIXEL
-		
+
 		elif mode == Mode.SELECT_PIXEL:
 			start_cut_transform(mouse_position)
-		
+
 		elif mode == Mode.MOVE_PIXEL:
 			mode = Mode.SELECT_PIXEL
-	
+
 	is_pressed = false
 
 
@@ -124,7 +124,7 @@ func _on_shift_pressed(pressed : bool):
 	shift_mode = pressed and mode == Mode.SELECT_PIXEL
 	if request_release and not shift_mode and not is_pressed:
 		start_cut_transform(node.get_local_mouse_position())
-		
+
 	PixelPen.state.toolbox_shift_mode.emit(shift_mode)
 
 
@@ -156,11 +156,11 @@ func collecte_pixel(from : Vector2, to : Vector2) -> bool:
 	var rect : Rect2 = Rect2(Vector2.ZERO, node.canvas_size)
 	if not rect.has_point(from) or not rect.has_point(to):
 		return false
-	
+
 	var just_collected : bool = false
 	var coord_from = floor(from) + Vector2(0.5, 0.5)
 	var coord_to = floor(to) + Vector2(0.5, 0.5)
-	
+
 	var coord : Vector2i = floor(to) as Vector2i
 	if not moved_pixel.has(coord) and rect.has_point(coord) and layer.get_index_on_color_map(coord.x, coord.y) > 0:
 		moved_pixel.push_back(coord)
@@ -179,7 +179,7 @@ func collecte_pixel(from : Vector2, to : Vector2) -> bool:
 				last_collected_coord = coord
 				just_collected = true
 			pixel_visited = floor(pixel_visited + pixel_visited.direction_to(coord_to)) + Vector2(0.5, 0.5)
-	
+
 	if just_collected:
 		var mask : Image = Image.create(layer.size.x + 2, layer.size.y + 2, false, Image.FORMAT_RGBA8)
 		for pixel in moved_pixel:
@@ -204,16 +204,16 @@ func start_cut_transform(mouse_position : Vector2):
 		(PixelPen.state.current_project as PixelPenProject).palette,
 		mask
 	)
-	
+
 	node.overlay_hint.material.set_shader_parameter("fill", true)
-	
+
 	prev_state_colormap = layer.colormap.duplicate()
-	
+
 	moved_colormap = layer.get_color_map_with_mask(mask)
 	layer.empty_index_on_color_map(mask)
 	node._update_layer_image(layer.layer_uid)
-	
-	start_offset = floor(mouse_position) 
+
+	start_offset = floor(mouse_position)
 	mode = Mode.MOVE_PIXEL
 
 

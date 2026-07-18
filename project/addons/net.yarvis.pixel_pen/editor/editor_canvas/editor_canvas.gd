@@ -71,10 +71,10 @@ func _ready():
 				_update_onion_skinning()
 				(PixelPen.state.current_project as PixelPenProject).get_image() # Force to create first cache image for tile
 			_create_tiled()
-			
+
 			update_filter_size()
 			)
-				
+
 	PixelPen.state.layer_items_changed.connect(
 			func():
 				var project : PixelPenProject = PixelPen.state.current_project as PixelPenProject
@@ -83,13 +83,13 @@ func _ready():
 						if not await canvas_paint.tool._on_request_switch_tool(PixelPenEnum.ToolBox.TOOL_MOVE):
 							return
 					project.multilayer_selected.clear()
-				
+
 				if project.show_tile:
 					project.get_image()
 					PixelPen.state.thumbnail_changed.emit()
-				
+
 				_update_onion_skinning()
-				
+
 				_create_layers())
 	PixelPen.state.color_picked.connect(func(color_index):
 			canvas_paint.tool._index_color = color_index
@@ -158,7 +158,7 @@ func update_camera_zoom():
 	if get_viewport_rect().size != Vector2.ZERO:
 		if PixelPen.state.current_project != null:
 			background_canvas.scale = PixelPen.state.current_project.canvas_size as Vector2
-			
+
 		_queue_update_camera_zoom = false
 		var camera_scale_factor = get_viewport_rect().size / background_canvas.scale
 		if camera_scale_factor.x < camera_scale_factor.y:
@@ -222,11 +222,11 @@ func _input(event: InputEvent):
 	PixelPen.state.debug_log.emit("Input", event)
 	if PixelPen.state.current_project == null:
 		return
-	
+
 	if event is InputEventKey:
 		if event.keycode == KEY_SHIFT and event.is_released():
 			canvas_paint.on_shift_pressed(event.is_pressed())
-	
+
 	if event and get_viewport_rect().has_point(get_viewport().get_mouse_position()):
 		if event is InputEventScreenTouch or event is InputEventScreenDrag:
 			_on_gesture(event)
@@ -260,7 +260,7 @@ func _input(event: InputEvent):
 						_on_move_symetric_guid_type = is_hovered_symetric
 					else:
 						canvas_paint.on_mouse_pressed(get_local_mouse_position(), _update_shader_layer)
-					
+
 				elif event.is_released()and event.button_index == MOUSE_BUTTON_LEFT:
 					if _on_move_symetric_guid:
 						_on_move_symetric_guid = false
@@ -345,7 +345,7 @@ func _draw():
 		_draw_symetric_guid()
 	if PixelPen.state.current_project != null and PixelPen.state.current_project.show_tile:
 		draw_rect(Rect2i(Vector2.ZERO, canvas_size), Color.MAGENTA, false)
-	
+
 	if virtual_mouse:
 		var l_scale : float = (get_viewport_transform().affine_inverse() * VIRTUAL_MOUSE_SCALE).x.x
 		if not get_viewport_rect().has_point(get_viewport().get_mouse_position()):
@@ -404,7 +404,7 @@ func _draw_symetric_guid():
 	if get_viewport_transform().affine_inverse().origin == Vector2(-1, -1):
 		return
 	var ca : float = 0.5
-	
+
 	var viewport_zero : Vector2 = get_global_transform().affine_inverse() * get_canvas_transform().affine_inverse() * Vector2.ZERO
 	var viewport_size : Vector2 = get_global_transform().affine_inverse() * get_canvas_transform().affine_inverse() * get_viewport_rect().size
 	var radius_size : float = (get_viewport_transform().affine_inverse() * 10.0).x.x
@@ -422,7 +422,7 @@ func _is_hovered_symetric_guid() -> int:
 	var viewport_zero : Vector2 = get_global_transform().affine_inverse() * get_canvas_transform().affine_inverse() * Vector2.ZERO
 	var viewport_size : Vector2 = get_global_transform().affine_inverse() * get_canvas_transform().affine_inverse() * get_viewport_rect().size
 	var radius_size : float = (get_viewport_transform().affine_inverse() * 10.0).x.x
-	
+
 	var guid_v_pos = Vector2(floor(PixelPen.state.current_project.symetric_guid.x), viewport_zero.y)
 	var guid_h_pos = Vector2(viewport_zero.x, floor(PixelPen.state.current_project.symetric_guid.y))
 	if get_local_mouse_position().distance_to(guid_v_pos) < radius_size * 2:

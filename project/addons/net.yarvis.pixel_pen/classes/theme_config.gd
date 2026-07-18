@@ -40,6 +40,114 @@ static func init_screen():
 		DisplayServer.screen_set_orientation(DisplayServer.SCREEN_SENSOR)
 
 
+const UI_SCALE_MIN := 1.0
+const UI_SCALE_MAX := 3.0
+const UI_SCALE_STEP := 0.25
+
+
+## Detect a sensible UI scale from the current display (desktop only).
+## Prefers DisplayServer.screen_get_scale() (accurate on macOS / Wayland) and
+## falls back to screen DPI / 96. Result is quantized to UI_SCALE_STEP and
+## clamped to [UI_SCALE_MIN, UI_SCALE_MAX]. Returns 1.0 on mobile/web/headless.
+static func get_auto_ui_scale() -> float:
+	var os_name := OS.get_name()
+	if os_name == "Android" or os_name == "iOS" or os_name == "Web":
+		return 1.0
+	if DisplayServer.get_name() == "headless":
+		return 1.0
+	var screen := DisplayServer.window_get_current_screen()
+	var scale := 1.0
+	var reported_scale := DisplayServer.screen_get_scale(screen)
+	if reported_scale > 0.0:
+		scale = reported_scale
+	# On Windows screen_get_scale() commonly returns 1.0 even at higher OS
+	# scaling, so also derive a factor from the physical DPI and take the max.
+	var dpi := DisplayServer.screen_get_dpi(screen)
+	if dpi > 0:
+		scale = maxf(scale, float(dpi) / 96.0)
+	# Quantize to avoid odd fractional factors, then clamp.
+	scale = roundf(scale / UI_SCALE_STEP) * UI_SCALE_STEP
+	return clampf(scale, UI_SCALE_MIN, UI_SCALE_MAX)
+
+
+## Resolve the effective UI scale, honoring the user's ui_scale preference
+## (0.0 = Auto). In the Godot editor plugin, Auto follows the editor scale.
+static func resolve_ui_scale(editor_hint : bool) -> float:
+	var configured := 0.0
+	if PixelPen.state != null and PixelPen.state.userconfig != null:
+		configured = PixelPen.state.userconfig.ui_scale
+	if configured > 0.0:
+		return clampf(configured, UI_SCALE_MIN, UI_SCALE_MAX)
+	if editor_hint and Engine.is_editor_hint() and Engine.has_singleton("EditorInterface"):
+		return Engine.get_singleton("EditorInterface").get_editor_scale()
+	return get_auto_ui_scale()
+
+
+## Apply the resolved UI scale to a window using content_scale_factor while
+## keeping native-resolution rendering (mode DISABLED). Returns the scale used.
+static func apply_ui_scale(window : Window, editor_hint : bool) -> float:
+	var scale := resolve_ui_scale(editor_hint)
+	if window != null:
+		window.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+		window.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
+		window.content_scale_factor = scale
+	return scale
+
+
+## The icon .svg files are imported with svg/scale=ICON_BASE_SCALE so the
+## textures carry enough pixels to stay crisp when the UI scale is above 1.
+## Keep this constant in sync with svg/scale in resources/icon/*.svg.import.
+const ICON_BASE_SCALE := 2.0
+
+static var _icon_cache : Dictionary = {}
+
+
+## Load an icon texture that reports its logical (1x) size for layout while
+## carrying ICON_BASE_SCALE x pixel data, so icons keep their exact current
+## size everywhere but stay sharp when drawn at a higher UI scale.
+static func ui_icon(path : String) -> Texture2D:
+	if _icon_cache.has(path):
+		return _icon_cache[path]
+	var texture : Texture2D = load(path)
+	if texture == null:
+		return null
+	var image : Image = texture.get_image()
+	if image == null or image.is_empty():
+		return texture
+	var icon := ImageTexture.create_from_image(image)
+	icon.set_size_override(Vector2i((image.get_size() as Vector2 / ICON_BASE_SCALE).round()))
+	_icon_cache[path] = icon
+	return icon
+
+
+## Recursively swap icon textures assigned in .tscn files (TextureRect and
+## TextureButton) with their logical-size ui_icon() equivalent, and use linear
+## filtering so the higher-resolution icon downsamples smoothly. Call this on
+## a scene root after instantiation.
+static func upgrade_icons(node : Node):
+	var swap := func(tex):
+		if tex is Texture2D and tex.resource_path.begins_with("res://addons/net.yarvis.pixel_pen/resources/icon/") \
+				and tex.resource_path.ends_with(".svg"):
+			return ui_icon(tex.resource_path)
+		return tex
+	if node is TextureRect:
+		var swapped = swap.call(node.texture)
+		if swapped != node.texture:
+			node.texture = swapped
+			node.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	elif node is TextureButton:
+		var changed := false
+		for property in ["texture_normal", "texture_pressed", "texture_hover", "texture_disabled", "texture_focused"]:
+			var swapped = swap.call(node.get(property))
+			if swapped != node.get(property):
+				node.set(property, swapped)
+				changed = true
+		if changed:
+			node.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	for child in node.get_children():
+		upgrade_icons(child)
+
+
 func _ready():
 	PixelPen.state.theme_changed.connect(_on_theme_changed)
 	_on_theme_changed()

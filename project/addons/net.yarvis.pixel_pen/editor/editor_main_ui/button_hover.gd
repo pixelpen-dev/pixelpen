@@ -42,7 +42,7 @@ func _ready():
 				is_hover = true
 				parent.material.set_shader_parameter("tint", hover_color if not parent.disabled else disable_color)
 			)
-			
+
 	parent.mouse_exited.connect(func():
 			if not is_active:
 				is_hover = false

@@ -24,7 +24,7 @@ func _ready():
 						hover.is_active = hover.is_active
 	PixelPen.state.project_file_changed.connect(disable_btn)
 	disable_btn.call()
-	
+
 	PixelPen.state.request_layer_properties.connect(_on_layer_properties)
 	PixelPen.state.edit_mode_changed.connect(func(mode: PixelPenProject.ProjectMode):
 			add_layer.visible = mode == PixelPenProject.ProjectMode.BASE
@@ -86,10 +86,10 @@ func _on_duplicate_selection():
 	var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_layer
 	if index_image == null:
 		return
-		
+
 	var mask_selection = MaskSelection.get_image_no_margin(canvas_node.selection_tool_hint.texture.get_image())
 	var colormap_image : Image = index_image.get_color_map_with_mask(mask_selection)
-	
+
 	(PixelPen.state.current_project as PixelPenProject).cache_copied_colormap = index_image.get_duplicate()
 	(PixelPen.state.current_project as PixelPenProject).cache_copied_colormap.colormap = colormap_image.duplicate()
 	_on_paste()
@@ -101,7 +101,7 @@ func _on_copy_selection():
 	var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_layer
 	if index_image == null:
 		return
-		
+
 	var mask_selection = MaskSelection.get_image_no_margin(canvas_node.selection_tool_hint.texture.get_image())
 	var colormap_image : Image = index_image.get_color_map_with_mask(mask_selection)
 	(PixelPen.state.current_project as PixelPenProject).cache_copied_colormap = index_image.get_duplicate()
@@ -114,12 +114,12 @@ func _on_cut_selection():
 	var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_layer
 	if index_image == null:
 		return
-		
+
 	var mask_selection = MaskSelection.get_image_no_margin(canvas_node.selection_tool_hint.texture.get_image())
 	var colormap_image : Image = index_image.get_color_map_with_mask(mask_selection)
 	(PixelPen.state.current_project as PixelPenProject).cache_copied_colormap = index_image.get_duplicate()
 	(PixelPen.state.current_project as PixelPenProject).cache_copied_colormap.colormap = colormap_image.duplicate()
-	
+
 	(PixelPen.state.current_project as PixelPenProject).create_undo_layers("Cut selection", func ():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
@@ -152,22 +152,22 @@ func _on_merge_down():
 	var active_layer_index : int = PixelPen.state.current_project.get_image_index(PixelPen.state.current_project.active_layer_uid)
 	if active_layer_index == -1:
 		return
-		
+
 	var below_layer_index : int = active_layer_index - 1
 	if below_layer_index <= -1:
 		return
-	
+
 	(PixelPen.state.current_project as PixelPenProject).create_undo_layers("Merge down", func ():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
 			)
-	
+
 	var active_img = (PixelPen.state.current_project as PixelPenProject).active_layer.get_color_map_with_mask()
 	(PixelPen.state.current_project as PixelPenProject).active_frame.layers[below_layer_index].blit_color_map(active_img, null, Vector2i.ZERO)
 	(PixelPen.state.current_project as PixelPenProject).delete_layer(PixelPen.state.current_project.active_layer_uid)
 	PixelPen.state.current_project.active_layer_uid = (PixelPen.state.current_project as PixelPenProject).active_frame.layers[below_layer_index].layer_uid
 	(PixelPen.state.current_project as PixelPenProject).active_frame.layers[below_layer_index].visible = true
-	
+
 	(PixelPen.state.current_project as PixelPenProject).create_redo_layers(func ():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
@@ -179,7 +179,7 @@ func _on_merge_down():
 func _on_merge_visible():
 	if (PixelPen.state.current_project as PixelPenProject).active_frame.layers.size() <= 1:
 		return
-	
+
 	(PixelPen.state.current_project as PixelPenProject).create_undo_layers("Merge visible", func ():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
@@ -189,7 +189,7 @@ func _on_merge_visible():
 		if (PixelPen.state.current_project as PixelPenProject).active_frame.layers[i].visible:
 			j = i
 			break
-	
+
 	var new_arr : Array[IndexedColorImage] = []
 	var prev_img = (PixelPen.state.current_project as PixelPenProject).active_frame.layers[j].get_color_map_with_mask()
 	var last_index = j
@@ -202,7 +202,7 @@ func _on_merge_visible():
 			new_arr.push_back((PixelPen.state.current_project as PixelPenProject).active_frame.layers[i])
 	new_arr.push_back((PixelPen.state.current_project as PixelPenProject).active_frame.layers[last_index])
 	(PixelPen.state.current_project as PixelPenProject).active_frame.layers = new_arr
-	
+
 	(PixelPen.state.current_project as PixelPenProject).create_redo_layers(func ():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
@@ -214,7 +214,7 @@ func _on_merge_visible():
 func _on_merge_all():
 	if (PixelPen.state.current_project as PixelPenProject).active_frame.layers.size() <= 1:
 		return
-	
+
 	(PixelPen.state.current_project as PixelPenProject).create_undo_layers("Merge all", func ():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
@@ -224,7 +224,7 @@ func _on_merge_all():
 		if (PixelPen.state.current_project as PixelPenProject).active_frame.layers[i].visible:
 			j = i
 			break
-	
+
 	var prev_img = (PixelPen.state.current_project as PixelPenProject).active_frame.layers[j].get_color_map_with_mask()
 	var last_index = j
 	for i in range(j, -1, -1):
@@ -233,7 +233,7 @@ func _on_merge_all():
 			prev_img = (PixelPen.state.current_project as PixelPenProject).active_frame.layers[i].get_color_map_with_mask()
 			last_index = i
 	(PixelPen.state.current_project as PixelPenProject).active_frame.layers = [(PixelPen.state.current_project as PixelPenProject).active_frame.layers[last_index]]
-	
+
 	(PixelPen.state.current_project as PixelPenProject).create_redo_layers(func ():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
@@ -253,7 +253,7 @@ func _on_hide_all():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
 			)
-	
+
 	PixelPen.state.layer_items_changed.emit()
 	PixelPen.state.project_saved.emit(false)
 
@@ -269,7 +269,7 @@ func _on_show_all():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
 			)
-	
+
 	PixelPen.state.layer_items_changed.emit()
 	PixelPen.state.project_saved.emit(false)
 
@@ -279,16 +279,16 @@ func _on_trash_pressed():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
 			)
-	
+
 	PixelPen.state.current_project.delete_layer(PixelPen.state.current_project.active_layer_uid)
 	for layer_uuid in PixelPen.state.current_project.multilayer_selected:
 		PixelPen.state.current_project.delete_layer(layer_uuid)
 	PixelPen.state.current_project.multilayer_selected.clear()
-	
+
 	(PixelPen.state.current_project as PixelPenProject).create_redo_layers(func ():
 			PixelPen.state.layer_items_changed.emit()
 			PixelPen.state.project_saved.emit(false)
 			)
-	
+
 	PixelPen.state.layer_items_changed.emit()
 	PixelPen.state.project_saved.emit(false)

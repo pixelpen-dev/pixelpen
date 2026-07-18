@@ -34,7 +34,7 @@ signal value_changed
 	get:
 		return _split_ratio
 
-## Split horizontal on TRUE. 
+## Split horizontal on TRUE.
 @export var vertical : bool = false:
 	set(new_value):
 		if vertical != new_value:
@@ -67,7 +67,7 @@ static func create(
 			ratio : float = 0.5,
 			split_vertical : bool = false
 			) -> Branch:
-		
+
 	var branch : Branch = Branch.new()
 	branch.name = name
 	branch.parent = node_parent

@@ -63,7 +63,7 @@ var undo_redo : UndoRedoManager
 
 var cache_copied_colormap : IndexedColorImage
 var cache_thumbnail : Image
-var multilayer_selected : Array[Vector3i] 
+var multilayer_selected : Array[Vector3i]
 
 var _cache_undo_redo : UndoRedoManager
 
@@ -339,7 +339,7 @@ func set_mode(mode : ProjectMode, mask : Image = null):
 		use_sample = false
 
 		# NOTE: break compat after typo `_cache_canvs_size`
-		#canvas_size = _cache_canvs_size 
+		#canvas_size = _cache_canvs_size
 		canvas_size = _cache_pool_frames[0].layers[0].size
 
 		pool_frames = _cache_pool_frames
@@ -477,7 +477,7 @@ func create_redo_palette_all(callable : Callable):
 
 
 func create_undo_property(name : String, object : Object, property : String, value : Variant, callable : Callable, create : bool = false):
-	if create: 
+	if create:
 		undo_redo.create_action(name)
 	undo_redo.add_undo_property(object, property, value)
 	undo_redo.add_undo_method(callable)
@@ -577,7 +577,7 @@ func sort_palette() -> PackedInt32Array:
 
 func delete_unused_color_palette():
 	var new_palette : PackedColorArray = []
-	
+
 	for frame in pool_frames:
 		for layer in frame.layers:
 			for x in range(layer.colormap.get_width()):
@@ -586,7 +586,7 @@ func delete_unused_color_palette():
 					var color : Color = palette.color_index[idx]
 					if color not in new_palette:
 						new_palette.push_back(color)
-	
+
 	var i = 0
 	while i < palette.color_index.size() and i < palette.INDEX_COLOR_SIZE:
 		if palette.color_index[i] not in new_palette and palette.color_index[i] != Color.TRANSPARENT:
@@ -623,7 +623,7 @@ func get_index_image(layer_uid : Vector3i) -> IndexedColorImage:
 
 
 func find_index_image(layer_uid : Vector3i, cache : bool = false) -> IndexedColorImage:
-	var frames : Array[Frame] 
+	var frames : Array[Frame]
 	if cache:
 		frames = _cache_pool_frames
 	else:
@@ -641,7 +641,7 @@ func get_layer_image(layer_uid : Vector3i) -> Image:
 	for y in range(canvas_size.y):
 		for x in range(canvas_size.x):
 			image.set_pixel(x, y, palette.color_index[color_map.get_pixel(x, y).r8])
-	
+
 	return image
 
 
@@ -667,7 +667,7 @@ func get_region_project_image(mask : Image = null) -> Image:
 		var image = PixelPenCPP.get_image(palette.color_index, active_frame.layers[index].colormap, false)
 		var rect  = image.get_used_rect()
 		canvas_image.blend_rect(image, rect, rect.position)
-	
+
 	if mask == null:
 		return canvas_image
 	else:
@@ -754,7 +754,7 @@ func export_animation_frame(folder_path : String):
 		var cell : AnimationCell = animation_timeline[cell_i]
 		var img : Image = get_image(cell.frame)
 		img.convert(Image.FORMAT_RGBA8)
-		
+
 		var file_path : String = str(folder_path, "/" , project_name ,"." , cell_i + 1, ".png")
 		img.save_png(file_path)
 
@@ -843,7 +843,7 @@ func resolve_missing_visible_frame() -> bool:
 		if unused.size() > 0:
 			canvas_pool_frame_uid = pool_frames[unused[0]].frame_uid
 			return true
-	
+
 	if animation_timeline.size() > 0:
 		animation_frame_index = 0
 		canvas_pool_frame_uid = animation_timeline[0].frame.frame_uid

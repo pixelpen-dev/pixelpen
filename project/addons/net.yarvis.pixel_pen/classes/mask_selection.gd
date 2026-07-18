@@ -70,7 +70,7 @@ static func difference_polygon(image_a : Image, polygon : PackedVector2Array, si
 			src_rect.position += margin
 			image_a.fill_rect(src_rect, Color8(0, 0, 0))
 			return image_a
-	
+
 	var new_selection_image := MaskSelection.create_image(polygon, size)
 	return difference_image(image_a, new_selection_image)
 
@@ -93,7 +93,7 @@ static func intersection_polygon(image_a : Image, polygon : PackedVector2Array, 
 			var target_image : Image = create_empty(size)
 			target_image.blit_rect(image_a.get_region(src_rect), Rect2i(Vector2i.ZERO, src_rect.size), src_rect.position )
 			return target_image
-	
+
 	var new_selection_image := MaskSelection.create_image(polygon, size)
 	return intersection_image(image_a, new_selection_image)
 

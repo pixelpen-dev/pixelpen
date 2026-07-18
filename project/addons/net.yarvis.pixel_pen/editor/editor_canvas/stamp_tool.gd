@@ -30,16 +30,16 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 	if is_pressed:
 		return
 	is_pressed = true
-	
+
 	var index_image : IndexedColorImage = PixelPen.state.current_project.active_layer
 	if index_image == null:
 		return
-	
+
 	if PixelPen.state.userconfig.stamp.size() <= stamp_index or stamp_index < 0:
 		return
 	var old_palette = PixelPen.state.current_project.palette.color_index.duplicate()
 	var stamp : Image = PixelPen.state.userconfig.stamp[stamp_index]
-	
+
 	var mask_selection : Image
 	var mask_rect : Rect2i
 	if node.selection_tool_hint.texture != null:
@@ -65,7 +65,7 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 				PixelPen.state.current_project.palette.color_index[palette_index] = color
 				new_palette = true
 			stamp_colormap.set_pixel(x, y, Color8(palette_index, 0, 0))
-	
+
 	var layer_uid : Vector3i = index_image.layer_uid
 	(PixelPen.state.current_project as PixelPenProject).create_undo_layer("Stamp", index_image.layer_uid, func ():
 			PixelPen.state.layer_image_changed.emit(layer_uid)
@@ -104,7 +104,7 @@ func _on_mouse_pressed(mouse_position : Vector2, callback : Callable):
 				func():
 					PixelPen.state.palette_changed.emit(),
 				false)
-	
+
 	(PixelPen.state.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
 			PixelPen.state.layer_image_changed.emit(layer_uid)
 			PixelPen.state.project_saved.emit(false)

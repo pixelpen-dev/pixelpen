@@ -30,5 +30,5 @@ func from_data(json_data : Dictionary, project : PixelPenProject) -> Error:
 		frame = project.get_pool_frame(frame_uid, project.use_sample)
 	else:
 		return FAILED
-	
+
 	return OK

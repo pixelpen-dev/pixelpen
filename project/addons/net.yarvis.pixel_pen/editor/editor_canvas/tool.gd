@@ -37,7 +37,7 @@ func _on_sub_tool_changed(type : int):
 			var new_img : Image = MaskSelection.get_inverse_image(node.selection_tool_hint.texture.get_image())
 			node.selection_tool_hint.texture = ImageTexture.create_from_image(new_img)
 			create_selection_redo()
-	
+
 	elif type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_REMOVE:
 		if node.selection_tool_hint.texture != null and PixelPen.state.current_project != null:
 			if tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and node.canvas_paint.tool.mode != node.canvas_paint.tool.Mode.UNKNOWN:
@@ -45,11 +45,11 @@ func _on_sub_tool_changed(type : int):
 			create_selection_undo()
 			node.selection_tool_hint.texture = null
 			create_selection_redo()
-		
+
 	elif type == PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED:
 		if tool_type != PixelPenEnum.ToolBox.TOOL_MOVE or node.canvas_paint.tool.mode == node.canvas_paint.tool.Mode.UNKNOWN:
 			delete_on_selected()
-	
+
 	else:
 		active_sub_tool_type = type
 
@@ -89,12 +89,12 @@ func _on_get_tool_texture() -> Texture2D:
 func pick_color_from_canvas(mouse_position : Vector2, emit_color_picked : bool = true) -> int:
 	var index_image = (PixelPen.state.current_project as PixelPenProject).active_frame.layers
 	var coord : Vector2 = floor(mouse_position)
-		
+
 	var size = index_image.size()
-		
+
 	if size == 0 or not index_image[0].coor_inside_canvas(coord.x, coord.y):
 		return -1
-		
+
 	var palette_idx : int = 0
 	for i in range(size - 1, -1, -1):
 		if index_image[i].visible and PixelPen.state.current_project.palette.color_index[index_image[i].colormap.get_pixel(coord.x, coord.y).r8].a > 0:
@@ -303,7 +303,7 @@ static func get_midpoint_ellipse(start: Vector2, end: Vector2, color : Color, im
 	var center: Vector2 = floor(start + (end - start) * 0.5)
 	var a : int = center.x - floor(start).x
 	var b : int = center.y - floor(start).y
-	
+
 	var x = 0
 	var y = b
 
@@ -360,7 +360,7 @@ static func get_midpoint_ellipse(start: Vector2, end: Vector2, color : Color, im
 	for point in arr_inside_bound:
 		sum_x += point.x
 		sum_y += point.y
-	
+
 	for point in arr_inside_bound:
 		if arr_inside_bound.has(point + Vector2(1,0)) and arr_inside_bound.has(point + Vector2(0,1)) and not arr_inside_bound.has(point + Vector2(1,1)):
 			if bound.has_point((point + Vector2(1,-1)) as Vector2i):
@@ -369,7 +369,7 @@ static func get_midpoint_ellipse(start: Vector2, end: Vector2, color : Color, im
 			if bound.has_point((point + Vector2(-1,1)) as Vector2i):
 				image.set_pixelv((point + Vector2(0,1)) as Vector2i, Color.TRANSPARENT)
 				image.set_pixelv((point + Vector2(-1,1)) as Vector2i, color)
-		
+
 		elif arr_inside_bound.has(point + Vector2(-1,0)) and arr_inside_bound.has(point + Vector2(0,1)) and not arr_inside_bound.has(point + Vector2(-1,1)):
 			if bound.has_point((point + Vector2(-1,-1)) as Vector2i):
 				image.set_pixelv((point + Vector2(-1,0)) as Vector2i, Color.TRANSPARENT)
@@ -377,7 +377,7 @@ static func get_midpoint_ellipse(start: Vector2, end: Vector2, color : Color, im
 			if bound.has_point((point + Vector2(1,1)) as Vector2i):
 				image.set_pixelv((point + Vector2(0,1)) as Vector2i, Color.TRANSPARENT)
 				image.set_pixelv((point + Vector2(1,1)) as Vector2i, color)
-		
+
 		elif arr_inside_bound.has(point + Vector2(-1,0)) and arr_inside_bound.has(point + Vector2(0,-1)) and not arr_inside_bound.has(point + Vector2(-1,-1)):
 			if bound.has_point((point + Vector2(-1,1)) as Vector2i):
 				image.set_pixelv((point + Vector2(-1,0)) as Vector2i, Color.TRANSPARENT)
@@ -385,7 +385,7 @@ static func get_midpoint_ellipse(start: Vector2, end: Vector2, color : Color, im
 			if bound.has_point((point + Vector2(1,-1)) as Vector2i):
 				image.set_pixelv((point + Vector2(0,-1)) as Vector2i, Color.TRANSPARENT)
 				image.set_pixelv((point + Vector2(1,-1)) as Vector2i, color)
-		
+
 		elif arr_inside_bound.has(point + Vector2(1,0)) and arr_inside_bound.has(point + Vector2(0,-1)) and not arr_inside_bound.has(point + Vector2(1,-1)):
 			if bound.has_point((point + Vector2(1,1)) as Vector2i):
 				image.set_pixelv((point + Vector2(1,0)) as Vector2i, Color.TRANSPARENT)
@@ -393,7 +393,7 @@ static func get_midpoint_ellipse(start: Vector2, end: Vector2, color : Color, im
 			if bound.has_point((point + Vector2(-1,-1)) as Vector2i):
 				image.set_pixelv((point + Vector2(0,-1)) as Vector2i, Color.TRANSPARENT)
 				image.set_pixelv((point + Vector2(-1,-1)) as Vector2i, color)
-	
+
 	return Vector2(sum_x / n, sum_y / n)
 
 

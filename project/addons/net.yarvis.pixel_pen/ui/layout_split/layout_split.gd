@@ -27,11 +27,11 @@ func has_dock(node : Control) -> bool:
 	var path_child := get_path_to(node)
 	if path_child.is_empty() or branches == null:
 		return false
-	
+
 	for branch in branches.data:
 		if branch.child == path_child:
 			return true
-	
+
 	return false
 
 ## Make sure the [node_child] path is on the dirrect child of this node. [to_parent] can be this node or dirrect child of this node
@@ -49,7 +49,7 @@ func undock(node_child : Control) -> bool:
 	var child_path := get_path_to(node_child)
 	if child_path.is_empty():
 		return false
-	
+
 	var new_parent_branch : int = -1
 
 	var count : int = branches.data.size()
@@ -61,7 +61,7 @@ func undock(node_child : Control) -> bool:
 
 	if new_parent_branch == -1:
 		return false
-	
+
 	var i : int  = 0
 	count = branches.data.size()
 	var found : bool = false
@@ -84,7 +84,7 @@ func swap(node_a : Control, node_b : Control):
 	var path_b := get_path_to(node_b)
 	if path_a.is_empty() or path_b.is_empty():
 		return
-	
+
 	var count : int = branches.data.size()
 	for i in range(count):
 		var branch : Branch = branches.data[i]
@@ -121,7 +121,7 @@ func update_layout():
 					end_offset.x = BORDER_HOVER_WIDTH * 0.5
 				if child.get_rect().end.y == 0:
 					end_offset.y = BORDER_HOVER_WIDTH * 0.5
-			
+
 			child.offset_left = BORDER_HOVER_WIDTH * 0.5 + start_offset.x
 			child.offset_top = BORDER_HOVER_WIDTH * 0.5 + start_offset.y
 			child.offset_right = BORDER_HOVER_WIDTH * -0.5 - end_offset.x
@@ -146,7 +146,7 @@ func _input(event):
 		return
 	var can_resize : bool = false
 	var can_resize_rect : Rect2
-	
+
 	if not _resize:
 		for branch in branches.data:
 			var parent : Control = get_node_or_null(branch.parent)
@@ -165,16 +165,16 @@ func _input(event):
 					else:
 						_resize_range.y = 0
 					break
-	
+
 	if can_resize or _resize:
 		if event and event is InputEventMouseButton:
 			if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
 				_resize = true
 				_resize_start_press = get_local_mouse_position()
-			
+
 			if not event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
 				_resize = false
-			
+
 		if _resize and event and event is InputEventMouseMotion:
 			var offset : Vector2 = get_local_mouse_position() - _resize_start_press
 			if _resize_range.x == 0:
@@ -183,7 +183,7 @@ func _input(event):
 			elif _resize_range.y == 0:
 				offset.x += _resize_range_start * _resize_range.x
 				_resize_branch.split_ratio = offset.x / _resize_range.x
-	
+
 	if can_resize:
 		if can_resize_rect.size.x > can_resize_rect.size.y:
 			mouse_default_cursor_shape = Control.CURSOR_VSPLIT
@@ -206,12 +206,12 @@ func _update_anchor_branch(branch : Branch):
 	var child := get_node_or_null(branch.child)
 	if parent == null:
 		return
-		
+
 	if not branch.value_changed.is_connected(update_layout):
 		branch.value_changed.connect(update_layout)
-	
+
 	var valid_child : bool = child != null and child.visible
-	
+
 	if valid_child:
 		child.offset_left = 0
 		child.offset_top = 0
@@ -234,7 +234,7 @@ func _update_anchor_branch(branch : Branch):
 			child.anchor_left = anchor_start.x
 			child.anchor_right = anchor_end.x
 			child.anchor_bottom = anchor_end.y
-			
+
 			var anchor_range : float = anchor_end.y - anchor_start.y
 			if branch.parent_size != 0:
 				parent.anchor_bottom = anchor_start.y + (branch.parent_size / size.y)
@@ -254,7 +254,7 @@ func _update_anchor_branch(branch : Branch):
 			child.anchor_top = anchor_start.y
 			child.anchor_right = anchor_end.x
 			child.anchor_bottom = anchor_end.y
-			
+
 			var anchor_range : float = anchor_end.x - anchor_start.x
 			if branch.parent_size != 0:
 				parent.anchor_right = anchor_start.x + (branch.parent_size / size.x)

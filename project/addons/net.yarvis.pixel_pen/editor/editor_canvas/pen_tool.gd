@@ -80,7 +80,7 @@ func _on_mouse_released(mouse_position : Vector2, callback : Callable):
 			_prev_paint_coord_array.clear()
 			if is_mirrored:
 				callback.call()
-		
+
 		var index_image : IndexedColorImage = PixelPen.state.current_project.active_layer
 		var layer_uid : Vector3i = index_image.layer_uid
 		(PixelPen.state.current_project as PixelPenProject).create_redo_layer(index_image.layer_uid, func ():
@@ -142,7 +142,7 @@ func _on_mouse_motion(mouse_position : Vector2, event_relative : Vector2, callba
 				_prev_replaced_color3.clear()
 				paint_pixel(to, _index_color)
 			paint_line(_prev_paint_coord, to, _index_color, pixel_perfect)
-			
+
 			callback.call()
 			if cheat_inside:
 				_prev_paint_coord = floor(mouse_position) + Vector2(0.5, 0.5)
@@ -167,12 +167,12 @@ func _on_draw_cursor(mouse_position : Vector2):
 	if shift_mode:
 		draw_plus_cursor(mouse_position)
 		return
-	
+
 	var has_zoom : bool = node.get_viewport().get_camera_2d() != null
 	if has_zoom and node.get_viewport().get_camera_2d().zoom.length() < 10:
 		# Draw on zoom out cursor pos hint
 		draw_cross_cursor(mouse_position)
-		
+
 	# Draw center cursor
 	draw_circle_cursor(mouse_position)
 

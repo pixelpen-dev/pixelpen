@@ -20,6 +20,7 @@ func _init():
 
 
 func _ready():
+	ThemeConfig.upgrade_icons(self)
 	grid_button.shortcut = PixelPen.state.userconfig.shorcuts.view_show_grid
 
 
@@ -56,13 +57,13 @@ func _on_update_preview_pressed():
 
 
 func update_label():
-	size_label.text = str("Size : (", _src_image.get_width(),"x",_src_image.get_height(),"px) -> (", 
+	size_label.text = str("Size : (", _src_image.get_width(),"x",_src_image.get_height(),"px) -> (",
 			sprite.texture.get_width() , "x", sprite.texture.get_height(),"px)")
 
 
 func scale_up(factor : int):
 	var img_size = _src_image.get_size()
-	if img_size.x * factor >= 1 and img_size.y * factor >= 1: 
+	if img_size.x * factor >= 1 and img_size.y * factor >= 1:
 		var new_img : Image = _src_image.duplicate()
 		new_img.resize(img_size.x * factor, img_size.y * factor, Image.INTERPOLATE_NEAREST)
 		sprite.texture = ImageTexture.create_from_image(new_img)
@@ -70,7 +71,7 @@ func scale_up(factor : int):
 
 func scale_down(factor : int):
 	var img_size = _src_image.get_size()
-	if img_size.x / factor >= 1 and img_size.y / factor >= 1: 
+	if img_size.x / factor >= 1 and img_size.y / factor >= 1:
 		var new_img : Image = _src_image.duplicate()
 		new_img.resize(img_size.x / factor, img_size.y / factor, Image.INTERPOLATE_NEAREST)
 		sprite.texture = ImageTexture.create_from_image(new_img)

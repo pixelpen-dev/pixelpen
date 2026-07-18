@@ -54,7 +54,7 @@ func _init():
 			if toggle_on:
 				value_changed.emit(1 if mode == ToggleButtonMode.TWO else 2)
 			)
-	
+
 	var grub := ButtonGroup.new()
 	left_button.button_group = grub
 	right_button.button_group = grub
@@ -73,9 +73,9 @@ func _build():
 	left_button.anchor_left= 0.0
 	left_button.anchor_top = 0.0
 	left_button.anchor_bottom = 1.0
-	
+
 	mid_button.visible = mode == ToggleButtonMode.THREE
-	
+
 	right_button.theme_type_variation = "ToggleRight"
 	right_button.text = label_right
 	right_button.toggle_mode = true
@@ -83,14 +83,14 @@ func _build():
 	right_button.anchor_top = 0.0
 	right_button.anchor_right = 1.0
 	right_button.anchor_bottom = 1.0
-	
+
 	if mode == ToggleButtonMode.TWO:
 		left_button.anchor_right = 0.5
 		right_button.anchor_left = 0.5
 	else:
 		left_button.anchor_right = 0.33
 		right_button.anchor_left = 0.66
-		
+
 		mid_button.theme_type_variation = "ToggleMid"
 		mid_button.text = label_mid
 		mid_button.toggle_mode = true

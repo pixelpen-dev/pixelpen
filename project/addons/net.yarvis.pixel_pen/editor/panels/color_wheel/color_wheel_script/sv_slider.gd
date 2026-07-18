@@ -34,7 +34,7 @@ func _gui_input(event: InputEvent) -> void:
 				_first_click_coor = event.position
 				_pressed = true
 				pick(event)
-	
+
 	if _pressed and event is InputEventMouseMotion:
 		pick(event)
 		sv_changed.emit(saturation, value)

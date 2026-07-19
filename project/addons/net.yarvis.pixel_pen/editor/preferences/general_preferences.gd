@@ -7,7 +7,7 @@ extends HBoxContainer
 
 var general_tree_structure : Dictionary = {
 	"Interface" : [],
-	"Guide" : ["Grid"],
+	"Guide" : ["Grid", "Hexagon"],
 	"Projects" : [],
 	"Cursor" : [],
 	"Palette" : [],
@@ -42,6 +42,19 @@ var general_structure: Dictionary = {
 		TreeRow.create_vector2i(
 			"Checker size", "WIDTH", "HEIGHT", PixelPen.state.userconfig.checker_size,
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
+		)] as Array[TreeRow],
+	"/Guide/Hexagon" : [
+		TreeRow.create_vector2i(
+			"Hexagon size", "WIDTH", "HEIGHT", PixelPen.state.userconfig.default_hexagon_size,
+			Vector2i(2, 2), Vector2i(16384, 16384), Vector2i.ONE
+		),
+		TreeRow.create_enum(
+			"Orientation", 1 if PixelPen.state.userconfig.hexagon_flat_top else 0,
+			["POINTY TOP", "FLAT TOP"] as Array[String]
+		),
+		TreeRow.create_vector2i(
+			"Shift position", "X", "Y", PixelPen.state.userconfig.hexagon_shift,
+			Vector2i(-16384, -16384), Vector2i(16384, 16384), Vector2i.ONE
 		)] as Array[TreeRow],
 	"/Projects" : [
 		TreeRow.create_file_path(
@@ -135,6 +148,16 @@ func _on_general_properties_value_changed(index, value):
 				PixelPen.state.userconfig.checker_size = value as Vector2i
 				PixelPen.state.userconfig.save()
 				PixelPen.state.layer_items_changed.emit()
+		"/Guide/Hexagon":
+			if index == 0:
+				PixelPen.state.userconfig.default_hexagon_size = value as Vector2i
+				PixelPen.state.userconfig.save()
+			elif index == 1:
+				PixelPen.state.userconfig.hexagon_flat_top = (value as int) == 1
+				PixelPen.state.userconfig.save()
+			elif index == 2:
+				PixelPen.state.userconfig.hexagon_shift = value as Vector2i
+				PixelPen.state.userconfig.save()
 		"/Projects":
 			if index == 0:
 				PixelPen.state.userconfig.default_workspace = value as String

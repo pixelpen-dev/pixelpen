@@ -34,6 +34,7 @@ const COMPATIBILITY_NUMBER : int = 3
 @export var _cache_canvas_pool_frame_uid : Vector3i
 
 @export var show_grid : bool = false
+@export var show_hexagon : bool = false
 @export var show_tile : bool = false
 @export var show_preview : bool = true
 @export var show_symetric_vertical : bool = false
@@ -142,6 +143,7 @@ func get_json() -> String:
 		"_cache_pool_frames" : _cache_pool_frames_data,
 		"_cache_canvas_pool_frame_uid" : var_to_str(_cache_canvas_pool_frame_uid),
 		"show_grid" : show_grid,
+		"show_hexagon" : show_hexagon,
 		"show_tile" : show_tile,
 		"show_preview" : show_preview,
 		"show_symetric_vertical" : show_symetric_vertical,
@@ -273,6 +275,8 @@ func from_json(json_string : String) -> Error:
 		show_grid = json_data["show_grid"] as bool
 	else:
 		return FAILED
+	if json_data.has("show_hexagon"):
+		show_hexagon = json_data["show_hexagon"] as bool
 	if json_data.has("show_tile"):
 		show_tile = json_data["show_tile"] as bool
 	else:

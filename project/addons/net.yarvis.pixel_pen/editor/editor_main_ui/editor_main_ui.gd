@@ -117,6 +117,7 @@ enum AnimationID{
 
 enum ViewID{
 	SHOW_GRID = 0,
+	SHOW_HEXAGON,
 	SHOW_VERTICAL_MIRROR_GUIDE,
 	SHOW_HORIZONTAL_MIRROR_GUIDE,
 	SHOW_VIRTUAL_MOUSE,
@@ -308,6 +309,7 @@ func _on_project_file_changed():
 
 		var view_popup := view_menu.get_popup()
 		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_GRID), PixelPen.state.current_project.show_grid)
+		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_HEXAGON), PixelPen.state.current_project.show_hexagon)
 		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_VERTICAL_MIRROR_GUIDE), PixelPen.state.current_project.show_symetric_vertical)
 		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE), PixelPen.state.current_project.show_symetric_horizontal)
 		view_popup.set_item_checked(view_popup.get_item_index(ViewID.SHOW_TILE), PixelPen.state.current_project.show_tile)
@@ -592,6 +594,7 @@ func _init_popup_menu():
 	if OS.get_name() == "Android":
 		view_popup.add_check_item("Show virtual mouse", ViewID.SHOW_VIRTUAL_MOUSE)
 	view_popup.add_check_item("Show grid", ViewID.SHOW_GRID)
+	view_popup.add_check_item("Show hexagon", ViewID.SHOW_HEXAGON)
 	view_popup.add_check_item("Show vertical mirror guid", ViewID.SHOW_VERTICAL_MIRROR_GUIDE)
 	view_popup.add_check_item("Show horizontal mirror guid", ViewID.SHOW_HORIZONTAL_MIRROR_GUIDE)
 	view_popup.add_check_item("Show tile", ViewID.SHOW_TILE)
@@ -875,6 +878,10 @@ func _on_tool_changed(grup : int, type: int, _grab_active : bool):
 
 			PixelPenEnum.ToolBar.TOOLBAR_SHOW_GRID:
 				_on_view_popup_pressed(ViewID.SHOW_GRID)
+				get_viewport().set_input_as_handled()
+
+			PixelPenEnum.ToolBar.TOOLBAR_SHOW_HEXAGON:
+				_on_view_popup_pressed(ViewID.SHOW_HEXAGON)
 				get_viewport().set_input_as_handled()
 
 			PixelPenEnum.ToolBar.TOOLBAR_TOGGLE_TINT_BLACK_LAYER:
@@ -1511,6 +1518,11 @@ func _on_view_popup_pressed(id : int):
 	if id == ViewID.SHOW_GRID:
 		popup.set_item_checked(index, not popup.is_item_checked(index))
 		PixelPen.state.current_project.show_grid = popup.is_item_checked(index)
+		PixelPen.state.project_saved.emit(false)
+
+	elif id == ViewID.SHOW_HEXAGON:
+		popup.set_item_checked(index, not popup.is_item_checked(index))
+		PixelPen.state.current_project.show_hexagon = popup.is_item_checked(index)
 		PixelPen.state.project_saved.emit(false)
 
 	elif id == ViewID.SHOW_VIRTUAL_MOUSE:

@@ -2,6 +2,7 @@
 extends Node2D
 
 const VIRTUAL_MOUSE_SCALE = 12
+const HEXAGON_DRAW_LIMIT = 20000
 
 var ShaderIndex := load("res://addons/net.yarvis.pixel_pen/resources/indexed_layer.gdshader")
 var TintShader := load("res://addons/net.yarvis.pixel_pen/resources/skinning_tint.gdshader")
@@ -341,6 +342,8 @@ func _draw():
 		_draw_grid(PixelPen.state.userconfig.default_grid_size, 0.075)
 		_draw_grid(PixelPen.state.userconfig.default_grid_size * 2, 0.1)
 		_draw_grid(PixelPen.state.userconfig.default_grid_size * 4, 0.125)
+	if PixelPen.state.current_project != null and PixelPen.state.current_project.show_hexagon:
+		_draw_hexagon(PixelPen.state.userconfig.default_hexagon_size, 0.125)
 	if PixelPen.state.current_project != null:
 		_draw_symetric_guid()
 	if PixelPen.state.current_project != null and PixelPen.state.current_project.show_tile:
@@ -398,6 +401,65 @@ func _draw_grid(grid_size : Vector2i, alpha : float):
 		draw_line(Vector2(x * grid_size.x, 0), Vector2(x * grid_size.x, canvas_size.y), color)
 	for y in range(1 + canvas_size.y / grid_size.y):
 		draw_line(Vector2(0, y * grid_size.y), Vector2(canvas_size.x, y * grid_size.y), color)
+
+
+func _draw_hexagon(hexagon_size : Vector2i, alpha : float):
+	var color = Color(1, 1, 1, alpha)
+	var w : float = maxf(hexagon_size.x, 2)
+	var h : float = maxf(hexagon_size.y, 2)
+	var flat_top : bool = PixelPen.state.userconfig.hexagon_flat_top
+	var step_x : float = w * 0.75 if flat_top else w
+	var step_y : float = h if flat_top else h * 0.75
+	var cols : int = 3 + ceili(canvas_size.x / step_x)
+	var rows : int = 3 + ceili(canvas_size.y / step_y)
+	if cols * rows > HEXAGON_DRAW_LIMIT:
+		return
+	var period_x : float = w * 1.5 if flat_top else w
+	var period_y : float = h if flat_top else h * 1.5
+	var shift := Vector2(
+		fposmod(PixelPen.state.userconfig.hexagon_shift.x, period_x),
+		fposmod(PixelPen.state.userconfig.hexagon_shift.y, period_y)
+	)
+	var bounds : PackedVector2Array = PackedVector2Array([
+		Vector2.ZERO,
+		Vector2(canvas_size.x, 0),
+		Vector2(canvas_size.x, canvas_size.y),
+		Vector2(0, canvas_size.y)
+	])
+	for col in range(-2, cols):
+		for row in range(-2, rows):
+			var center : Vector2
+			if flat_top:
+				center = Vector2(col * step_x, row * step_y + (h * 0.5 if posmod(col, 2) == 1 else 0.0))
+			else:
+				center = Vector2(col * step_x + (w * 0.5 if posmod(row, 2) == 1 else 0.0), row * step_y)
+			_draw_hexagon_shape(center + shift, w, h, flat_top, bounds, color)
+
+
+func _draw_hexagon_shape(center : Vector2, w : float, h : float, flat_top : bool, bounds : PackedVector2Array, color : Color):
+	var points : PackedVector2Array = []
+	if flat_top:
+		points = PackedVector2Array([
+			center + Vector2(-w * 0.5, 0),
+			center + Vector2(-w * 0.25, -h * 0.5),
+			center + Vector2(w * 0.25, -h * 0.5),
+			center + Vector2(w * 0.5, 0),
+			center + Vector2(w * 0.25, h * 0.5),
+			center + Vector2(-w * 0.25, h * 0.5),
+			center + Vector2(-w * 0.5, 0)
+		])
+	else:
+		points = PackedVector2Array([
+			center + Vector2(0, -h * 0.5),
+			center + Vector2(w * 0.5, -h * 0.25),
+			center + Vector2(w * 0.5, h * 0.25),
+			center + Vector2(0, h * 0.5),
+			center + Vector2(-w * 0.5, h * 0.25),
+			center + Vector2(-w * 0.5, -h * 0.25),
+			center + Vector2(0, -h * 0.5)
+		])
+	for piece in Geometry2D.intersect_polyline_with_polygon(points, bounds):
+		draw_polyline(piece, color)
 
 
 func _draw_symetric_guid():

@@ -32,6 +32,9 @@ const PATH := "user://pixelpen_user_config.res"
 @export var ui_scale : float = 0.0
 @export_subgroup("General")
 @export var default_grid_size : Vector2i = Vector2i(8, 8)
+@export var default_hexagon_size : Vector2i = Vector2i(16, 16)
+@export var hexagon_flat_top : bool = false
+@export var hexagon_shift : Vector2i = Vector2i.ZERO
 @export var checker_size : Vector2i = Vector2i(8, 8)
 @export var default_workspace : String = ""
 @export var default_canvas_size : Vector2i = Vector2i(128, 128)

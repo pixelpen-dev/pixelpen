@@ -2,6 +2,8 @@
 extends Control
 
 
+signal layout_drag_finished
+
 const BORDER_HOVER_WIDTH : float = 4
 const MIN_DOCK_SIZE : float = 16
 
@@ -266,6 +268,9 @@ func _create_handle(edge_rect: Rect2):
 		_handle.name = name + "Handle"
 		add_child(_handle)
 		_handle.dragged.connect(_on_handle_dragged)
+		_handle.drag_finished.connect(func():
+				layout_drag_finished.emit()
+				)
 
 	_handle.mouse_filter = Control.MOUSE_FILTER_STOP
 	if edge_rect.size.x < edge_rect.size.y:
@@ -284,6 +289,7 @@ func _create_handle(edge_rect: Rect2):
 
 class Handle extends Panel:
 	signal dragged(offset: Vector2)
+	signal drag_finished
 
 	const IDLE_THRESHOLD = 2 # seconds
 
@@ -318,6 +324,7 @@ class Handle extends Panel:
 				_start_drag = false
 				position += offset_transform_position
 				offset_transform_enabled = false
+				drag_finished.emit()
 		if _start_drag and event is InputEventMouseMotion:
 			offset_transform_position = get_global_mouse_position() - _start_drag_pos
 			if size.x < size.y:

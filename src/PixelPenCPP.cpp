@@ -3,8 +3,31 @@
 #include <godot_cpp/godot.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <queue>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+#include <unordered_map>
+#include <unordered_set>
 
 using namespace godot;
+
+static Ref<Image> ensure_rgba8(const Ref<Image> &p_image){
+    Ref<Image> image = p_image;
+    if(image->is_compressed()){
+        image = image->duplicate();
+        image->decompress();
+        if(image->is_compressed()){
+            return Ref<Image>();
+        }
+    }
+    if(image->get_format() != Image::FORMAT_RGBA8){
+        if(image == p_image){
+            image = image->duplicate();
+        }
+        image->convert(Image::FORMAT_RGBA8);
+    }
+    return image;
+}
 
 
 void PixelPenCPP::_bind_methods(){
@@ -23,6 +46,8 @@ void PixelPenCPP::_bind_methods(){
     ClassDB::bind_static_method("PixelPenCPP", D_METHOD("fill_color", "p_mask1_image", "p_target_image", "color", "p_mask2_image"), &PixelPenCPP::fill_color);
     ClassDB::bind_static_method("PixelPenCPP", D_METHOD("fill_rect_outline", "rect", "color", "p_target", "p_mask"), &PixelPenCPP::fill_rect_outline);
     ClassDB::bind_static_method("PixelPenCPP", D_METHOD("clean_invisible_color", "p_color_map", "palette"), &PixelPenCPP::clean_invisible_color);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("count_distinct_colors", "p_image"), &PixelPenCPP::count_distinct_colors);
+    ClassDB::bind_static_method("PixelPenCPP", D_METHOD("quantize_colors", "p_image", "max_colors"), &PixelPenCPP::quantize_colors);
     ClassDB::bind_static_method("PixelPenCPP", D_METHOD("import_image", "p_layer_image", "p_imported_image", "palette"), &PixelPenCPP::import_image);
     ClassDB::bind_static_method("PixelPenCPP", D_METHOD("get_image", "palette_color", "p_color_map", "mipmap"), &PixelPenCPP::get_image);
     ClassDB::bind_static_method("PixelPenCPP", D_METHOD("get_image_with_mask", "palette_color", "p_color_map" , "p_mask", "mipmap"), &PixelPenCPP::get_image_with_mask);
@@ -483,36 +508,260 @@ void PixelPenCPP::clean_invisible_color(const Ref<Image> &p_color_map, const Pac
 }
 
 
+int64_t PixelPenCPP::count_distinct_colors(const Ref<Image> &p_image){
+    ERR_FAIL_COND_V(p_image.is_null(), 0);
+    Ref<Image> image = ensure_rgba8(p_image);
+    ERR_FAIL_COND_V_MSG(image.is_null(), 0, "p_image could not be decompressed");
+    PackedByteArray data = image->get_data();
+    const uint8_t *bytes = data.ptr();
+    int64_t total = (int64_t)image->get_width() * image->get_height();
+    std::unordered_set<uint32_t> unique_colors;
+    for(int64_t i = 0; i < total; i++){
+        const uint8_t *px = bytes + i * 4;
+        if(px[3] == 0){
+            continue;
+        }
+        unique_colors.insert(((uint32_t)px[0] << 24) | ((uint32_t)px[1] << 16) | ((uint32_t)px[2] << 8) | px[3]);
+    }
+    return (int64_t)unique_colors.size();
+}
+
+
+Ref<Image> PixelPenCPP::quantize_colors(const Ref<Image> &p_image, const int32_t max_colors){
+    ERR_FAIL_COND_V(p_image.is_null(), Ref<Image>());
+    int32_t target = std::max(1, max_colors);
+    Ref<Image> image = ensure_rgba8(p_image);
+    ERR_FAIL_COND_V_MSG(image.is_null(), Ref<Image>(), "p_image could not be decompressed");
+    Vector2i size = image->get_size();
+    PackedByteArray data = image->get_data();
+    const uint8_t *bytes = data.ptr();
+    int64_t total_pixels = (int64_t)size.x * size.y;
+
+    std::unordered_map<uint32_t, int64_t> histogram;
+    for(int64_t i = 0; i < total_pixels; i++){
+        const uint8_t *px = bytes + i * 4;
+        if(px[3] == 0){
+            continue;
+        }
+        histogram[((uint32_t)px[0] << 24) | ((uint32_t)px[1] << 16) | ((uint32_t)px[2] << 8) | px[3]]++;
+    }
+
+    if((int64_t)histogram.size() <= (int64_t)target){
+        return image->duplicate();
+    }
+
+    struct Entry {
+        uint8_t ch[4];
+        int64_t count;
+    };
+    std::vector<Entry> entries;
+    entries.reserve(histogram.size());
+    for(const auto &kv : histogram){
+        Entry e;
+        e.ch[0] = (kv.first >> 24) & 0xFF;
+        e.ch[1] = (kv.first >> 16) & 0xFF;
+        e.ch[2] = (kv.first >> 8) & 0xFF;
+        e.ch[3] = kv.first & 0xFF;
+        e.count = kv.second;
+        entries.push_back(e);
+    }
+
+    struct Box {
+        size_t begin;
+        size_t end;
+        int32_t best_channel;
+        int32_t best_range;
+    };
+    auto compute_stats = [&entries](Box &box){
+        box.best_channel = 0;
+        box.best_range = 0;
+        if(box.end - box.begin < 2){
+            return;
+        }
+        for(int32_t c = 0; c < 4; c++){
+            uint8_t lo = 255;
+            uint8_t hi = 0;
+            for(size_t i = box.begin; i < box.end; i++){
+                lo = std::min(lo, entries[i].ch[c]);
+                hi = std::max(hi, entries[i].ch[c]);
+            }
+            if((int32_t)(hi - lo) > box.best_range){
+                box.best_range = hi - lo;
+                box.best_channel = c;
+            }
+        }
+    };
+    std::vector<Box> boxes;
+    Box first = {0, entries.size(), 0, 0};
+    compute_stats(first);
+    boxes.push_back(first);
+
+    while((int32_t)boxes.size() < target){
+        int32_t best_box = -1;
+        int32_t best_range = 0;
+        for(int32_t b = 0; b < (int32_t)boxes.size(); b++){
+            if(boxes[b].best_range > best_range){
+                best_range = boxes[b].best_range;
+                best_box = b;
+            }
+        }
+        if(best_box == -1 || best_range < 1){
+            break;
+        }
+        Box box = boxes[best_box];
+        int32_t channel = box.best_channel;
+        std::sort(entries.begin() + box.begin, entries.begin() + box.end,
+                [channel](const Entry &a, const Entry &b){
+                    return a.ch[channel] < b.ch[channel];
+                });
+        int64_t total = 0;
+        for(size_t i = box.begin; i < box.end; i++){
+            total += entries[i].count;
+        }
+        int64_t acc = 0;
+        size_t split = box.begin;
+        for(size_t i = box.begin; i < box.end; i++){
+            acc += entries[i].count;
+            if(acc * 2 >= total){
+                split = i + 1;
+                break;
+            }
+        }
+        if(split <= box.begin){
+            split = box.begin + 1;
+        }
+        if(split >= box.end){
+            split = box.end - 1;
+        }
+        Box left = {box.begin, split, 0, 0};
+        Box right = {split, box.end, 0, 0};
+        compute_stats(left);
+        compute_stats(right);
+        boxes[best_box] = left;
+        boxes.push_back(right);
+    }
+
+    std::unordered_map<uint32_t, uint32_t> remap;
+    for(const Box &box : boxes){
+        int64_t total = 0;
+        int64_t sum[4] = {0, 0, 0, 0};
+        for(size_t i = box.begin; i < box.end; i++){
+            for(int32_t c = 0; c < 4; c++){
+                sum[c] += (int64_t)entries[i].ch[c] * entries[i].count;
+            }
+            total += entries[i].count;
+        }
+        if(total == 0){
+            continue;
+        }
+        uint32_t out = 0;
+        for(int32_t c = 0; c < 4; c++){
+            uint8_t avg = (uint8_t)((sum[c] + total / 2) / total);
+            out = (out << 8) | avg;
+        }
+        for(size_t i = box.begin; i < box.end; i++){
+            uint32_t key = ((uint32_t)entries[i].ch[0] << 24) | ((uint32_t)entries[i].ch[1] << 16) | ((uint32_t)entries[i].ch[2] << 8) | entries[i].ch[3];
+            remap[key] = out;
+        }
+    }
+
+    PackedByteArray out_data;
+    out_data.resize(total_pixels * 4);
+    uint8_t *out_bytes = out_data.ptrw();
+    memset(out_bytes, 0, (size_t)total_pixels * 4);
+    for(int64_t i = 0; i < total_pixels; i++){
+        const uint8_t *px = bytes + i * 4;
+        if(px[3] == 0){
+            continue;
+        }
+        uint32_t key = ((uint32_t)px[0] << 24) | ((uint32_t)px[1] << 16) | ((uint32_t)px[2] << 8) | px[3];
+        auto found = remap.find(key);
+        if(found == remap.end()){
+            continue;
+        }
+        uint8_t *out_px = out_bytes + i * 4;
+        out_px[0] = (found->second >> 24) & 0xFF;
+        out_px[1] = (found->second >> 16) & 0xFF;
+        out_px[2] = (found->second >> 8) & 0xFF;
+        out_px[3] = found->second & 0xFF;
+    }
+    return Image::create_from_data(size.x, size.y, false, Image::FORMAT_RGBA8, out_data);
+}
+
+
 PackedColorArray PixelPenCPP::import_image(const Ref<Image> &p_layer_image, const Ref<Image> &p_imported_image, const PackedColorArray palette){
     PackedColorArray returned_palette = palette;
+    ERR_FAIL_COND_V(p_layer_image.is_null() || p_imported_image.is_null(), returned_palette);
+    ERR_FAIL_COND_V_MSG(p_layer_image->get_format() != Image::FORMAT_R8, returned_palette, "not supported p_layer_image format");
+    Ref<Image> imported = ensure_rgba8(p_imported_image);
+    ERR_FAIL_COND_V_MSG(imported.is_null(), returned_palette, "p_imported_image could not be decompressed");
+
     Vector2i layer_size = p_layer_image->get_size();
-    Vector2i imported_size = p_imported_image->get_size();
-    for(int32_t y = 0; y < layer_size.y; y++){
-		for(int32_t x = 0; x < layer_size.x; x++){
-			if (x < imported_size.x && y < imported_size.y){
-                Color color = p_imported_image->get_pixel(x, y);
-                if(color.a == 0){
-                    continue;
-                }
-                int32_t palette_index = returned_palette.find(color);
-                if (palette_index == -1){
-                    palette_index = 0;
-                    for(int32_t i = 1; i < returned_palette.size();  i++){
-                        if(returned_palette[i].a == 0){
-                            palette_index = i;
-                            returned_palette[i] = color;
-                            break;
-                        }
-                    }
-                }
-                if(palette_index != 0){
-                    Color c = Color(0,0,0,0);
-                    c.set_r8(palette_index);
-                    p_layer_image->set_pixel(x, y, c);
-                }
+    Vector2i imported_size = imported->get_size();
+    PackedByteArray imported_data = imported->get_data();
+    const uint8_t *imported_bytes = imported_data.ptr();
+    PackedByteArray layer_data = p_layer_image->get_data();
+    uint8_t *layer_bytes = layer_data.ptrw();
+
+    std::unordered_map<uint32_t, int32_t> lookup;
+    for(int32_t i = 1; i < returned_palette.size(); i++){
+        if(returned_palette[i].a > 0){
+            uint32_t key = returned_palette[i].to_rgba32();
+            if(lookup.find(key) == lookup.end()){
+                lookup[key] = i;
             }
         }
     }
+    int32_t next_free = 1;
+
+    int32_t shared_width = std::min(layer_size.x, imported_size.x);
+    int32_t shared_height = std::min(layer_size.y, imported_size.y);
+    for(int32_t y = 0; y < shared_height; y++){
+        for(int32_t x = 0; x < shared_width; x++){
+            const uint8_t *px = imported_bytes + ((int64_t)y * imported_size.x + x) * 4;
+            if(px[3] == 0){
+                continue;
+            }
+            uint32_t key = ((uint32_t)px[0] << 24) | ((uint32_t)px[1] << 16) | ((uint32_t)px[2] << 8) | px[3];
+            int32_t palette_index = 0;
+            auto found = lookup.find(key);
+            if(found != lookup.end()){
+                palette_index = found->second;
+            }else{
+                while(next_free < returned_palette.size() && returned_palette[next_free].a > 0){
+                    next_free++;
+                }
+                Color color = Color((float)px[0] / 255.0f, (float)px[1] / 255.0f, (float)px[2] / 255.0f, (float)px[3] / 255.0f);
+                if(next_free < returned_palette.size()){
+                    returned_palette[next_free] = color;
+                    palette_index = next_free;
+                    lookup[key] = palette_index;
+                }else{
+                    float best_distance = 1e30f;
+                    for(int32_t i = 1; i < returned_palette.size(); i++){
+                        if(returned_palette[i].a == 0){
+                            continue;
+                        }
+                        Color pc = returned_palette[i];
+                        float dr = pc.r - color.r;
+                        float dg = pc.g - color.g;
+                        float db = pc.b - color.b;
+                        float da = pc.a - color.a;
+                        float d = dr * dr + dg * dg + db * db + da * da;
+                        if(d < best_distance){
+                            best_distance = d;
+                            palette_index = i;
+                        }
+                    }
+                    lookup[key] = palette_index;
+                }
+            }
+            if(palette_index != 0){
+                layer_bytes[(int64_t)y * layer_size.x + x] = (uint8_t)palette_index;
+            }
+        }
+    }
+    p_layer_image->set_data(layer_size.x, layer_size.y, false, Image::FORMAT_R8, layer_data);
     return returned_palette;
 }
 

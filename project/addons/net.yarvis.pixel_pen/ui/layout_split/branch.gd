@@ -54,6 +54,7 @@ signal value_changed
 @export var parent_min_size : float = 0.0
 ## Same as parent_min_size, for the child dock.
 @export var child_min_size : float = 0.0
+@export var fixed_size : float = 0.0
 
 
 var parent_rect : Rect2

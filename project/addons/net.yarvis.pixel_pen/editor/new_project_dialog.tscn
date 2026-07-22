@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://donmbu1bo2g0p" path="res://addons/net.yarvis.pixel_pen/editor/new_project_dialog/new_project_dialog.gd" id="1_bewiu"]
 [ext_resource type="Shader" uid="uid://dx0che3o2nhp7" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="1_y3rtv"]
 [ext_resource type="Script" uid="uid://cw6xk540keu7j" path="res://addons/net.yarvis.pixel_pen/thirdparty/select-handle/select_line_edit.gd" id="3_0xuis"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/accent_button/accent_button.gd" id="4_accent"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enn2t"]
 bg_color = Color(1, 1, 1, 0.027451)
@@ -15,30 +16,38 @@ shader_parameter/tint = Vector4(0, 0, 0, 0)
 shader_parameter/tile_size = Vector2(0, 0)
 shader_parameter/lock_to_global = 0.0
 
-[node name="NewProjectDialog" type="ConfirmationDialog" unique_id=83066104 node_paths=PackedStringArray("name_node", "width_node", "height_node", "preview_aspect_ratio", "canvas")]
+[node name="NewProjectDialog" type="Window" unique_id=83066104 node_paths=PackedStringArray("name_node", "width_node", "height_node", "preview_aspect_ratio", "canvas", "cancel_button", "confirm_button")]
 snap_2d_transforms_to_pixel = true
 canvas_item_default_texture_filter = 0
-title = "New"
+title = "New Project"
 initial_position = 4
-size = Vector2i(512, 320)
+size = Vector2i(512, 340)
+visible = false
+transient = true
+exclusive = true
 theme = ExtResource("1_7thd0")
-dialog_hide_on_ok = false
 script = ExtResource("1_bewiu")
 name_node = NodePath("Control/Margin/VBoxContainer/HBoxContainer/LineEditName")
 width_node = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditW")
 height_node = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/LineEditH")
 preview_aspect_ratio = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/AspectRatioCanvas")
 canvas = NodePath("Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/AspectRatioCanvas/Canvas")
+cancel_button = NodePath("Control/Margin/VBoxContainer/Actions/CancelBtn")
+confirm_button = NodePath("Control/Margin/VBoxContainer/Actions/ConfirmBtn")
+
+[node name="BG" type="Panel" parent="." unique_id=1027096040]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"WindowPanel"
 
 [node name="Control" type="Control" parent="." unique_id=1027096045]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 3.6
-offset_top = 3.6
-offset_right = -3.60001
-offset_bottom = -37.6
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -171,8 +180,16 @@ alignment_vertical = 0
 material = SubResource("ShaderMaterial_auk7k")
 layout_mode = 2
 
-[connection signal="confirmed" from="." to="." method="_on_confirmed"]
-[connection signal="size_changed" from="." to="." method="_on_size_changed"]
-[connection signal="text_changed" from="Control/Margin/VBoxContainer/HBoxContainer/LineEditName" to="." method="_on_line_edit_name_text_changed"]
-[connection signal="text_changed" from="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditW" to="." method="_on_line_edit_w_text_changed"]
-[connection signal="text_changed" from="Control/Margin/VBoxContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/LineEditH" to="." method="_on_line_edit_h_text_changed"]
+[node name="Actions" type="HBoxContainer" parent="Control/Margin/VBoxContainer" unique_id=1027096050]
+layout_mode = 2
+alignment = 2
+theme_override_constants/separation = 10
+
+[node name="CancelBtn" type="Button" parent="Control/Margin/VBoxContainer/Actions" unique_id=1027096051]
+layout_mode = 2
+text = "Cancel"
+
+[node name="ConfirmBtn" type="Button" parent="Control/Margin/VBoxContainer/Actions" unique_id=1027096052]
+layout_mode = 2
+script = ExtResource("4_accent")
+text = "Create"

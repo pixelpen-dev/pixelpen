@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Theme" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/test_ui.gd" id="2_script"]
+
+[node name="TestUI" type="Window"]
+title = "UI Component Gallery"
+initial_position = 4
+size = Vector2i(400, 780)
+visible = false
+transient = true
+theme = ExtResource("1_theme")
+script = ExtResource("2_script")
+
+[node name="BG" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"WindowPanel"
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="Rail" type="VBoxContainer" parent="Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8

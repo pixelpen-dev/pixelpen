@@ -1,5 +1,8 @@
 @tool
-extends ConfirmationDialog
+extends Window
+
+
+signal canceled
 
 
 enum PropertiesID{
@@ -13,6 +16,8 @@ enum PropertiesID{
 
 @export var properties_node : Control
 @export var canvas_2d : Node2D
+@export var cancel_button : Button
+@export var save_button : PixelPenAccentButton
 
 
 var _frame_image : Array[Image] = []
@@ -86,13 +91,27 @@ func _init():
 
 
 func _ready():
+	save_button.accent = PixelPen.state.userconfig.accent_color
+	save_button.pressed.connect(_confirm)
+	cancel_button.pressed.connect(_cancel)
+	close_requested.connect(_cancel)
 	calculate_data()
 	properties_node.build()
 	place_frame()
 
 
+func _cancel():
+	hide()
+	canceled.emit()
+
+
+func _process(_delta):
+	if visible and Input.is_key_pressed(KEY_ESCAPE):
+		_cancel()
+
+
 func _on_tree_properties_value_changed(index, _value):
-	var tree_row : TreeRow = properties_node.structure[index]
+	var tree_row : PixelPenPropertyItem = properties_node.structure[index]
 	match index:
 		PropertiesID.SHEETS_SIZE:
 			canvas_2d.checker.texture.size = tree_row.vector2i_value * PixelPen.state.current_project.canvas_size
@@ -116,7 +135,7 @@ func _on_canvas_item_rect_changed():
 	canvas_2d.update_camera_zoom()
 
 
-func _on_confirmed():
+func _confirm():
 	if properties_node.structure[PropertiesID.FILE_PATH].file_value == "" or canvas_2d.sprite_sheets.texture == null:
 		return
 	var image : Image = canvas_2d.sprite_sheets.texture.get_image()

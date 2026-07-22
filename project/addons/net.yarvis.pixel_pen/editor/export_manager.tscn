@@ -6,9 +6,10 @@
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/branch.gd" id="3_aitvw"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/data_branch.gd" id="4_lnqw5"]
 [ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="5_oodws"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/tree_properties/tree_properties.gd" id="6_a6y63"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/property_sheet/property_sheet.gd" id="6_a6y63"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/export_sheet/canvas_export_2d.gd" id="6_rof74"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/tree_properties/tree_row.gd" id="7_sqmv5"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/property_field/property_item.gd" id="7_sqmv5"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/accent_button/accent_button.gd" id="8_accent"]
 
 [sub_resource type="Resource" id="Resource_5buie"]
 script = ExtResource("3_aitvw")
@@ -219,17 +220,27 @@ file_value = ""
 file_mode = 4
 file_dialog_filters = PackedStringArray("*.png")
 
-[node name="ExportSheet" type="ConfirmationDialog" node_paths=PackedStringArray("properties_node", "canvas_2d")]
+[node name="ExportSheet" type="Window" node_paths=PackedStringArray("properties_node", "canvas_2d", "cancel_button", "save_button")]
 title = "Animation Sheets Export"
 position = Vector2i(0, 21)
 size = Vector2i(1080, 720)
-visible = true
+visible = false
+transient = true
+exclusive = true
 theme = ExtResource("1_eikdn")
-ok_button_text = "Save"
-dialog_hide_on_ok = false
 script = ExtResource("2_paiee")
 properties_node = NodePath("Wrapper/Layout/Menu/MarginContainer/TreeProperties")
 canvas_2d = NodePath("Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D")
+cancel_button = NodePath("Actions/CancelBtn")
+save_button = NodePath("Actions/SaveBtn")
+
+[node name="BG" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"WindowPanel"
 
 [node name="Wrapper" type="Control" parent="."]
 layout_mode = 3
@@ -239,9 +250,32 @@ anchor_bottom = 1.0
 offset_left = 3.6
 offset_top = 3.6
 offset_right = -3.59998
-offset_bottom = -37.6
+offset_bottom = -48.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Actions" type="HBoxContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -44.0
+offset_right = -16.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 2
+theme_override_constants/separation = 10
+
+[node name="CancelBtn" type="Button" parent="Actions"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="SaveBtn" type="Button" parent="Actions"]
+layout_mode = 2
+script = ExtResource("8_accent")
+text = "Save"
 
 [node name="Layout" type="Control" parent="Wrapper"]
 layout_mode = 1
@@ -335,6 +369,5 @@ structure = Array[ExtResource("7_sqmv5")]([SubResource("Resource_8kh0c"), SubRes
 list_margin = 8.0
 column_ratio = 0.4
 
-[connection signal="confirmed" from="." to="." method="_on_confirmed"]
 [connection signal="item_rect_changed" from="Wrapper/Layout/Canvas/SubViewportContainer" to="." method="_on_canvas_item_rect_changed"]
 [connection signal="value_changed" from="Wrapper/Layout/Menu/MarginContainer/TreeProperties" to="." method="_on_tree_properties_value_changed"]

@@ -2,6 +2,45 @@
 
 [ext_resource type="FontFile" uid="uid://mcetkdnsuw5a" path="res://addons/net.yarvis.pixel_pen/resources/fonts/inter/static/Inter-Regular.ttf" id="1_s0rww"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_accnorm"]
+content_margin_left = 18.0
+content_margin_top = 5.0
+content_margin_right = 18.0
+content_margin_bottom = 6.0
+bg_color = Color(0.25, 1, 0.5, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 3
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_acchover"]
+content_margin_left = 18.0
+content_margin_top = 5.0
+content_margin_right = 18.0
+content_margin_bottom = 6.0
+bg_color = Color(0.385, 1, 0.59, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 3
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_accpress"]
+content_margin_left = 18.0
+content_margin_top = 5.0
+content_margin_right = 18.0
+content_margin_bottom = 6.0
+bg_color = Color(0.2, 0.8, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 3
+anti_aliasing = false
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3vr0t"]
 content_margin_left = 3.6
 content_margin_top = 3.6
@@ -424,6 +463,17 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 corner_detail = 3
 anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_42eab"]
+bg_color = Color(0.15, 0.15, 0.15, 0.88235295)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gukvu"]
 content_margin_left = 5.4
@@ -914,17 +964,39 @@ content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0.194349, 0.194349, 0.194349, 1)
-border_width_top = 21
+border_width_left = 4
+border_width_top = 31
+border_width_right = 4
+border_width_bottom = 4
 border_color = Color(0.24, 0.24, 0.24, 1)
-corner_detail = 3
-expand_margin_top = 21.6
-shadow_color = Color(0, 0, 0, 0.3)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 4.0
+expand_margin_top = 32.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
 shadow_size = 3
+shadow_offset = Vector2(0, 1)
 anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jp37x"]
+bg_color = Color(0.23921569, 0.23921569, 0.23921569, 1)
 
 [resource]
 default_font = ExtResource("1_s0rww")
 default_font_size = 14
+AccentButton/base_type = &"Button"
+AccentButton/colors/font_color = Color(0, 0, 0, 0.784314)
+AccentButton/colors/font_focus_color = Color(0, 0, 0, 0.784314)
+AccentButton/colors/font_hover_color = Color(0, 0, 0, 0.784314)
+AccentButton/colors/font_hover_pressed_color = Color(0, 0, 0, 0.784314)
+AccentButton/colors/font_pressed_color = Color(0, 0, 0, 0.784314)
+AccentButton/styles/focus = SubResource("StyleBoxFlat_accnorm")
+AccentButton/styles/hover = SubResource("StyleBoxFlat_acchover")
+AccentButton/styles/normal = SubResource("StyleBoxFlat_accnorm")
+AccentButton/styles/pressed = SubResource("StyleBoxFlat_accpress")
 AcceptDialog/constants/buttons_separation = 7
 AcceptDialog/styles/panel = SubResource("StyleBoxFlat_3vr0t")
 BoxPanel/base_type = &"Panel"
@@ -984,6 +1056,9 @@ HSlider/constants/grabber_offset = 0
 HSlider/styles/grabber_area = SubResource("StyleBoxFlat_04oc6")
 HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_7q8n4")
 HSlider/styles/slider = SubResource("StyleBoxFlat_2qeui")
+IconButton/base_type = &"TextureButton"
+IconButton/colors/default_tint = Color(0.74509805, 0.74509805, 0.74509805, 1)
+IconButton/colors/hover_tint = Color(1, 1, 1, 1)
 Label/colors/font_color = Color(0.81, 0.81, 0.81, 1)
 Label/colors/font_outline_color = Color(0, 0, 0, 0)
 Label/colors/font_shadow_color = Color(0, 0, 0, 0)
@@ -1074,6 +1149,8 @@ Panel/styles/panel = SubResource("StyleBoxFlat_20vr3")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_1orb3")
 PanelEdit/base_type = &"Panel"
 PanelEdit/styles/panel = SubResource("StyleBoxFlat_dk1w1")
+PanelFloat/base_type = &"Panel"
+PanelFloat/styles/panel = SubResource("StyleBoxFlat_42eab")
 PopupMenu/colors/font_accelerator_color = Color(1, 1, 1, 0.35)
 PopupMenu/colors/font_color = Color(0.81, 0.81, 0.81, 1)
 PopupMenu/colors/font_disabled_color = Color(1, 1, 1, 0.35)
@@ -1127,6 +1204,7 @@ TextEdit/styles/focus = SubResource("StyleBoxFlat_ku55h")
 TextEdit/styles/normal = SubResource("StyleBoxFlat_l8oi3")
 TextEdit/styles/read_only = SubResource("StyleBoxFlat_fa06g")
 ToggleLeft/base_type = &"Button"
+ToggleLeft/colors/font_hover_pressed_color = Color(0, 0, 0, 0.784314)
 ToggleLeft/colors/font_pressed_color = Color(0, 0, 0, 0.784314)
 ToggleLeft/styles/disabled = SubResource("StyleBoxFlat_5f8ch")
 ToggleLeft/styles/focus = SubResource("StyleBoxFlat_qd167")
@@ -1134,6 +1212,7 @@ ToggleLeft/styles/hover = SubResource("StyleBoxFlat_xspf1")
 ToggleLeft/styles/normal = SubResource("StyleBoxFlat_olq0s")
 ToggleLeft/styles/pressed = SubResource("StyleBoxFlat_cig1k")
 ToggleMid/base_type = &"Button"
+ToggleMid/colors/font_hover_pressed_color = Color(0, 0, 0, 0.784314)
 ToggleMid/colors/font_pressed_color = Color(0, 0, 0, 0.784314)
 ToggleMid/styles/disabled = SubResource("StyleBoxFlat_vqcqv")
 ToggleMid/styles/focus = SubResource("StyleBoxFlat_j5dej")
@@ -1141,6 +1220,7 @@ ToggleMid/styles/hover = SubResource("StyleBoxFlat_av0nv")
 ToggleMid/styles/normal = SubResource("StyleBoxFlat_3fek7")
 ToggleMid/styles/pressed = SubResource("StyleBoxFlat_nauh7")
 ToggleRight/base_type = &"Button"
+ToggleRight/colors/font_hover_pressed_color = Color(0, 0, 0, 0.784314)
 ToggleRight/colors/font_pressed_color = Color(0, 0, 0, 0.784314)
 ToggleRight/styles/disabled = SubResource("StyleBoxFlat_ewsqt")
 ToggleRight/styles/focus = SubResource("StyleBoxFlat_8a6o2")
@@ -1198,10 +1278,12 @@ Tree/styles/title_button_pressed = SubResource("StyleBoxFlat_02ydr")
 VBoxContainer/constants/separation = 3
 VSeparator/styles/separator = SubResource("StyleBoxLine_5rg64")
 Window/colors/title_color = Color(0.81, 0.81, 0.81, 1)
-Window/constants/close_h_offset = 19
-Window/constants/close_v_offset = 18
+Window/constants/close_h_offset = 26
+Window/constants/close_v_offset = 24
 Window/constants/resize_margin = 16
-Window/constants/title_height = 21
+Window/constants/title_height = 33
 Window/font_sizes/title_font_size = 12
 Window/styles/embedded_border = SubResource("StyleBoxFlat_c1h4b")
 Window/styles/embedded_unfocused_border = SubResource("StyleBoxFlat_c1h4b")
+WindowPanel/base_type = &"Panel"
+WindowPanel/styles/panel = SubResource("StyleBoxFlat_jp37x")

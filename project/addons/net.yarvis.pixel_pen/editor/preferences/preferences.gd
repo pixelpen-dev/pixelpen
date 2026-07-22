@@ -1,8 +1,13 @@
 @tool
-extends AcceptDialog
+extends Window
+
+
+signal confirmed
+signal canceled
 
 
 @export var tab_container : TabContainer
+@export var close_button : Button
 
 
 func _init():
@@ -12,6 +17,8 @@ func _init():
 func _ready():
 	_resize_window()
 	tab_container.current_tab = 0
+	close_button.pressed.connect(_on_close_pressed)
+	close_requested.connect(_on_close_pressed)
 	if not PixelPen.state.ui_scale_changed.is_connected(_resize_window):
 		PixelPen.state.ui_scale_changed.connect(_resize_window)
 
@@ -19,6 +26,16 @@ func _ready():
 func _exit_tree() -> void:
 	if PixelPen.state.ui_scale_changed.is_connected(_resize_window):
 		PixelPen.state.ui_scale_changed.disconnect(_resize_window)
+
+
+func _process(_delta):
+	if visible and Input.is_key_pressed(KEY_ESCAPE):
+		_on_close_pressed()
+
+
+func _on_close_pressed():
+	hide()
+	confirmed.emit()
 
 
 func _resize_window():

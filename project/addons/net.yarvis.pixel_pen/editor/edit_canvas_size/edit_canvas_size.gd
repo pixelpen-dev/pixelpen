@@ -1,9 +1,17 @@
 @tool
-extends ConfirmationDialog
+extends Window
+
+
+signal confirmed
+signal canceled
+signal custom_action(action : StringName)
 
 
 @export var width_node : LineEdit
 @export var height_node : LineEdit
+@export var reset_button : Button
+@export var cancel_button : Button
+@export var apply_button : PixelPenAccentButton
 @export var anchor : PixelPenEnum.ResizeAnchor
 
 var canvas_width : float:
@@ -19,16 +27,35 @@ var canvas_height : float:
 		return max(1, height_node.text as float)
 
 func _init():
+	visible = false
 	add_to_group("pixelpen_popup")
 
 
 func _ready():
-	var reset_btn := add_button("Reset", false, "on_reset")
-	get_cancel_button().focus_next = width_node.get_path()
-	height_node.focus_next = reset_btn.get_path()
+	apply_button.accent = PixelPen.state.userconfig.accent_color
+	apply_button.pressed.connect(_confirm)
+	cancel_button.pressed.connect(_cancel)
+	reset_button.pressed.connect(func(): custom_action.emit("on_reset"))
+	close_requested.connect(_cancel)
+	cancel_button.focus_next = width_node.get_path()
+	height_node.focus_next = reset_button.get_path()
 	width_node.grab_focus.call_deferred()
 
 
+func _confirm():
+	hide()
+	confirmed.emit()
+
+
+func _cancel():
+	hide()
+	canceled.emit()
+
+
 func _process(_delta):
-	if Input.is_key_pressed(KEY_ENTER) and (width_node.has_focus() or height_node.has_focus()):
-		get_ok_button().pressed.emit()
+	if not visible:
+		return
+	if Input.is_key_pressed(KEY_ESCAPE):
+		_cancel()
+	elif Input.is_key_pressed(KEY_ENTER) and (width_node.has_focus() or height_node.has_focus()):
+		_confirm()

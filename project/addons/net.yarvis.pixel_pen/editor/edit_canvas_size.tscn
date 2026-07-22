@@ -4,37 +4,53 @@
 [ext_resource type="Script" uid="uid://dj52mlq5jnio7" path="res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size/edit_canvas_size.gd" id="1_skqr0"]
 [ext_resource type="Script" uid="uid://clasmdekrg7hb" path="res://addons/net.yarvis.pixel_pen/editor/edit_canvas_size/anchor_view.gd" id="2_8mnh6"]
 [ext_resource type="Script" uid="uid://cw6xk540keu7j" path="res://addons/net.yarvis.pixel_pen/thirdparty/select-handle/select_line_edit.gd" id="3_2cxo8"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/accent_button/accent_button.gd" id="4_accent"]
 
-[node name="EditCanvasSize" type="ConfirmationDialog" unique_id=251150003 node_paths=PackedStringArray("width_node", "height_node")]
+[node name="EditCanvasSize" type="Window" unique_id=251150003 node_paths=PackedStringArray("width_node", "height_node", "reset_button", "cancel_button", "apply_button")]
 oversampling_override = 1.0
 title = "Canvas Size"
 initial_position = 1
-size = Vector2i(520, 240)
+size = Vector2i(520, 260)
+visible = false
+transient = true
+exclusive = true
 theme = ExtResource("1_be7me")
 script = ExtResource("1_skqr0")
 width_node = NodePath("Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/LineEditW")
 height_node = NodePath("Control/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/LineEditH")
+reset_button = NodePath("Control/Actions/ResetBtn")
+cancel_button = NodePath("Control/Actions/CancelBtn")
+apply_button = NodePath("Control/Actions/ApplyBtn")
 anchor = 1
+
+[node name="BG" type="Panel" parent="." unique_id=1842826030]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"WindowPanel"
 
 [node name="Control" type="Control" parent="." unique_id=1842826034]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 3.6
-offset_top = 3.6
-offset_right = 516.39996
-offset_bottom = 202.40001
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=1677565670]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -48.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_bottom = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer" unique_id=373814586]
 layout_mode = 2
@@ -106,5 +122,36 @@ size_flags_horizontal = 3
 layout_mode = 2
 script = ExtResource("2_8mnh6")
 parent_window = NodePath("../../../../../..")
+
+[node name="Actions" type="HBoxContainer" parent="Control" unique_id=930368950]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -44.0
+offset_right = -16.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="ResetBtn" type="Button" parent="Control/Actions" unique_id=930368951]
+layout_mode = 2
+text = "Reset"
+
+[node name="Spacer" type="Control" parent="Control/Actions" unique_id=930368952]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CancelBtn" type="Button" parent="Control/Actions" unique_id=930368953]
+layout_mode = 2
+text = "Cancel"
+
+[node name="ApplyBtn" type="Button" parent="Control/Actions" unique_id=930368954]
+layout_mode = 2
+script = ExtResource("4_accent")
+text = "Apply"
 
 [connection signal="gui_input" from="Control/MarginContainer/HBoxContainer/MarginContainer/AspectRatioContainer/AnchorView" to="Control/MarginContainer/HBoxContainer/MarginContainer/AspectRatioContainer/AnchorView" method="_on_gui_input"]

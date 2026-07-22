@@ -32,7 +32,7 @@ func _ready():
 			)
 
 
-func _on_layer_properties(layer_uid : Vector3i) -> ConfirmationDialog:
+func _on_layer_properties(layer_uid : Vector3i) -> Window:
 	var lp = LayerProperties.instantiate()
 	lp.layer_uid = layer_uid
 	add_child(lp)

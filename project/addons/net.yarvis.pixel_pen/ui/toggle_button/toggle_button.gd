@@ -1,5 +1,5 @@
 @tool
-class_name ToggleButton
+class_name PixelPenToggleButton
 extends BaseButton
 
 signal value_changed(value)

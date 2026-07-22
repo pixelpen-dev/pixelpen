@@ -1,5 +1,5 @@
 @tool
-class_name TreeRow
+class_name PixelPenPropertyItem
 extends Resource
 
 
@@ -75,8 +75,8 @@ static func create_int(
 		d_min : int,
 		d_max : int,
 		d_step : int = 1
-		) -> TreeRow:
-	var row = TreeRow.new()
+		) -> PixelPenPropertyItem:
+	var row = PixelPenPropertyItem.new()
 	row.field = FieldMode.INT
 	row.label = d_label
 	row.int_min = d_min
@@ -92,8 +92,8 @@ static func create_float(
 		d_min : float,
 		d_max : float,
 		d_step : float = 0.001
-		) -> TreeRow:
-	var row = TreeRow.new()
+		) -> PixelPenPropertyItem:
+	var row = PixelPenPropertyItem.new()
 	row.field = FieldMode.FLOAT
 	row.label = d_label
 	row.float_min = d_min
@@ -109,8 +109,8 @@ static func create_range(
 		d_min : float,
 		d_max : float,
 		d_step : float = 0.001
-		) -> TreeRow:
-	var row = TreeRow.new()
+		) -> PixelPenPropertyItem:
+	var row = PixelPenPropertyItem.new()
 	row.field = FieldMode.RANGE
 	row.label = d_label
 	row.range_min = d_min
@@ -123,8 +123,8 @@ static func create_range(
 static func create_string(
 		d_label : String,
 		d_value : String
-		) -> TreeRow:
-	var row = TreeRow.new()
+		) -> PixelPenPropertyItem:
+	var row = PixelPenPropertyItem.new()
 	row.field = FieldMode.STRING
 	row.label = d_label
 	row.string_value = d_value
@@ -139,8 +139,8 @@ static func create_vector2(
 		d_min : Vector2,
 		d_max : Vector2,
 		d_step : Vector2 = Vector2.ONE
-		) -> TreeRow:
-	var row : TreeRow = TreeRow.new()
+		) -> PixelPenPropertyItem:
+	var row : PixelPenPropertyItem = PixelPenPropertyItem.new()
 	row.label = d_label
 	row.field = FieldMode.VECTOR2
 	row.vector2_label_x = d_label_a
@@ -160,8 +160,8 @@ static func create_vector2i(
 		d_min : Vector2i,
 		d_max : Vector2i,
 		d_step : Vector2i = Vector2i.ONE
-		) -> TreeRow:
-	var row : TreeRow = TreeRow.new()
+		) -> PixelPenPropertyItem:
+	var row : PixelPenPropertyItem = PixelPenPropertyItem.new()
 	row.label = d_label
 	row.field = FieldMode.VECTOR2I
 	row.vector2i_label_x = d_label_a
@@ -177,8 +177,8 @@ static func create_enum(
 		d_label : String,
 		d_value : int,
 		d_option : Array[String]
-		) -> TreeRow:
-	var row = TreeRow.new()
+		) -> PixelPenPropertyItem:
+	var row = PixelPenPropertyItem.new()
 	row.field = FieldMode.ENUM
 	row.label = d_label
 	row.enum_value = d_value
@@ -191,8 +191,8 @@ static func create_file_path(
 		d_value : String,
 		d_file_mode : FileDialog.FileMode = FileDialog.FILE_MODE_SAVE_FILE,
 		d_file_dialog_filters : PackedStringArray = ["*.png, *.jpg, *.jpeg ; Supported Images"]
-		) -> TreeRow:
-	var row = TreeRow.new()
+		) -> PixelPenPropertyItem:
+	var row = PixelPenPropertyItem.new()
 	row.field = FieldMode.FILE_PATH
 	row.label = d_label
 	row.file_value = d_value
@@ -205,8 +205,8 @@ static func create_color(
 		d_label : String,
 		d_value : Color,
 		d_alpha : bool
-		) -> TreeRow:
-	var row = TreeRow.new()
+		) -> PixelPenPropertyItem:
+	var row = PixelPenPropertyItem.new()
 	row.field = FieldMode.COLOR
 	row.label = d_label
 	row.color_value = d_value

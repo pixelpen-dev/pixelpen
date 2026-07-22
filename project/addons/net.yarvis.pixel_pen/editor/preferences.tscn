@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/preferences.gd" id="1_5y7r0"]
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_mhedo"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/tree_properties/tree_properties.gd" id="3_74jry"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/property_sheet/property_sheet.gd" id="3_74jry"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/general_preferences.gd" id="3_k57uy"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/tree_properties/tree_row.gd" id="4_6utim"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/property_field/property_item.gd" id="4_6utim"]
 [ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/shorcuts_preferences.gd" id="6_dsxs8"]
 
 [sub_resource type="Resource" id="Resource_og6we"]
@@ -81,15 +81,25 @@ file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images
 color_value = Color(1, 1, 1, 1)
 color_alpha = true
 
-[node name="Preferences" type="AcceptDialog" node_paths=PackedStringArray("tab_container")]
+[node name="Preferences" type="Window" node_paths=PackedStringArray("tab_container", "close_button")]
 title = "Preferences"
 initial_position = 1
 size = Vector2i(1164, 776)
 visible = true
+transient = true
+exclusive = true
 theme = ExtResource("1_mhedo")
-ok_button_text = "Close"
 script = ExtResource("1_5y7r0")
 tab_container = NodePath("TabContainer")
+close_button = NodePath("CloseButton")
+
+[node name="BG" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"WindowPanel"
 
 [node name="TabContainer" type="TabContainer" parent="."]
 anchors_preset = 15
@@ -177,6 +187,20 @@ size_flags_vertical = 3
 [node name="ResetAll" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
 layout_mode = 2
 text = "RESET TO DEFAULT"
+
+[node name="CloseButton" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -104.0
+offset_top = -37.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Close"
 
 [connection signal="item_selected" from="TabContainer/General/GeneralTree" to="TabContainer/General" method="_on_general_tree_item_selected"]
 [connection signal="value_changed" from="TabContainer/General/GeneralProperties" to="TabContainer/General" method="_on_general_properties_value_changed"]

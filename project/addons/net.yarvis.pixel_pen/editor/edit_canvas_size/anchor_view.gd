@@ -2,7 +2,7 @@
 extends Control
 
 
-@export var parent_window : ConfirmationDialog
+@export var parent_window : Window
 
 
 func _draw():

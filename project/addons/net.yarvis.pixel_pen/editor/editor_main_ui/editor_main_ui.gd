@@ -135,7 +135,8 @@ enum ViewID{
 	SHOW_PREVIEW,
 	FILTER_GRAYSCALE,
 	SHOW_ANIMATION_TIMELINE,
-	SHOW_INFO
+	SHOW_INFO,
+	RESET_LAYOUT
 }
 
 @export var pixel_pen_menu : MenuButton
@@ -163,7 +164,7 @@ enum ViewID{
 var recent_submenu : PopupMenu
 var background_color_submenu : PopupMenu
 
-var _new_project_dialog : ConfirmationDialog
+var _new_project_dialog : Window
 
 var _cache_layout_portrait : DataBranch
 var _cache_layout_landscape : DataBranch
@@ -176,6 +177,9 @@ func _init():
 
 
 func _on_size_changed():
+	if not is_node_ready():
+		return
+	_apply_safe_area()
 	if OS.get_name() == "Android" and get_rect().size != Vector2.ZERO:
 		var viewport_size = get_viewport().get_visible_rect().size
 		if (_is_prev_landscape and viewport_size.x > viewport_size.y) or (not _is_prev_landscape and viewport_size.x < viewport_size.y):
@@ -186,13 +190,28 @@ func _on_size_changed():
 		elif not _is_prev_landscape and _cache_layout_portrait != null:
 			layout_node.branches = _cache_layout_portrait
 		else:
-			layout_node.branches = theme_config.get_default_layout(layout_node)
+			layout_node.branches = _restore_layout()
 			if _is_prev_landscape:
 				_cache_layout_landscape = layout_node.branches
 			else:
 				_cache_layout_portrait = layout_node.branches
 		layout_node.branches.clear_cache()
 		layout_node.update_layout()
+
+
+func _apply_safe_area():
+	if OS.get_name() != "Android":
+		return
+	var window : Window = get_window()
+	var scale : float = window.content_scale_factor
+	var safe : Rect2 = Rect2(DisplayServer.get_display_safe_area())
+	var win_size : Vector2 = Vector2(window.size) / scale
+	safe.position /= scale
+	safe.size /= scale
+	offset_left = maxf(0.0, safe.position.x)
+	offset_top = maxf(0.0, safe.position.y)
+	offset_right = minf(0.0, safe.end.x - win_size.x)
+	offset_bottom = minf(0.0, safe.end.y - win_size.y)
 
 
 func _ready():
@@ -211,13 +230,19 @@ func _ready():
 	_apply_ui_scale()
 	if not PixelPen.state.ui_scale_changed.is_connected(_apply_ui_scale):
 		PixelPen.state.ui_scale_changed.connect(_apply_ui_scale)
-	layout_node.branches = theme_config.get_default_layout(layout_node)
-	layout_node.update_layout()
+	if not PixelPen.state.ui_scale_changed.is_connected(_apply_safe_area):
+		PixelPen.state.ui_scale_changed.connect(_apply_safe_area)
+	_apply_safe_area()
 	_is_prev_landscape = get_viewport().get_visible_rect().size.x > get_viewport().get_visible_rect().size.y
+	layout_node.branches = _restore_layout()
+	layout_node.branches.clear_cache()
+	layout_node.update_layout()
 	if _is_prev_landscape:
 		_cache_layout_landscape = layout_node.branches
 	else:
 		_cache_layout_portrait = layout_node.branches
+	if not layout_node.layout_drag_finished.is_connected(_on_layout_drag_finished):
+		layout_node.layout_drag_finished.connect(_on_layout_drag_finished)
 	ThemeConfig.upgrade_icons(self)
 	_init_popup_menu()
 	_set_shorcut()
@@ -225,6 +250,59 @@ func _ready():
 	_on_project_file_changed()
 	if OS.get_name() == "Android":
 		OS.request_permissions()
+
+
+func _restore_layout() -> DataBranch:
+	var default_layout : DataBranch = theme_config.get_default_layout(layout_node)
+	var config : UserConfig = PixelPen.state.userconfig
+	var saved : DataBranch = config.layout_landscape if _is_prev_landscape else config.layout_portrait
+	if saved == null:
+		return default_layout
+	if config.layout_signature != ThemeConfig.get_layout_signature():
+		return default_layout
+	if not ThemeConfig.is_layout_valid(saved, layout_node):
+		return default_layout
+	# Re-derive fixed-size docks from the current viewport so their pixel size
+	# is stable across restarts even when the viewport differs from when the
+	# layout was saved (notably on Android).
+	ThemeConfig.refresh_fixed_branches(saved, layout_node)
+	ThemeConfig.sanitize_layout(saved, default_layout)
+	return saved
+
+
+func _on_layout_drag_finished():
+	_save_layout()
+
+
+func _save_layout():
+	if not PixelPen.state.need_connection(get_window()):
+		return
+	if layout_node == null or layout_node.branches == null or not layout_node.enable:
+		return
+	if layout_node.size.x <= 0.0 or layout_node.size.y <= 0.0:
+		return
+	if not ThemeConfig.is_layout_valid(layout_node.branches, layout_node):
+		return
+	ThemeConfig.sanitize_layout(layout_node.branches, theme_config.get_default_layout(layout_node))
+	var config : UserConfig = PixelPen.state.userconfig
+	if _is_prev_landscape:
+		config.layout_landscape = layout_node.branches
+	else:
+		config.layout_portrait = layout_node.branches
+	config.layout_signature = ThemeConfig.get_layout_signature()
+	config.layout_ui_scale = get_window().content_scale_factor
+	config.save()
+
+
+func _reset_layout():
+	layout_node.branches = theme_config.get_default_layout(layout_node)
+	layout_node.branches.clear_cache()
+	layout_node.update_layout()
+	if _is_prev_landscape:
+		_cache_layout_landscape = layout_node.branches
+	else:
+		_cache_layout_portrait = layout_node.branches
+	_save_layout()
 
 
 ## Apply the resolved UI scale to this window. Called at startup and whenever
@@ -239,15 +317,12 @@ func _apply_ui_scale():
 		return
 	# The layout ratios were computed for the previous layout-unit size, so a
 	# live scale change would otherwise keep fixed-size docks (toolbox) at
-	# their old physical size. Rebuild the default layout in the new units.
-	if layout_node != null and layout_node.branches != null:
-		layout_node.branches = theme_config.get_default_layout(layout_node)
+	# their old physical size. Re-derive them without discarding the layout.
+	if layout_node != null and layout_node.branches != null and previous_scale > 0.0:
+		ThemeConfig.rescale_fixed_branches(layout_node.branches, window.content_scale_factor / previous_scale)
 		layout_node.branches.clear_cache()
 		layout_node.update_layout()
-		if _is_prev_landscape:
-			_cache_layout_landscape = layout_node.branches
-		else:
-			_cache_layout_portrait = layout_node.branches
+		_save_layout()
 
 
 func _process(_delta):
@@ -606,6 +681,8 @@ func _init_popup_menu():
 	view_popup.add_check_item("Filter grayscale", ViewID.FILTER_GRAYSCALE)
 	view_popup.add_separator("", 100)
 	view_popup.add_check_item("Show info", ViewID.SHOW_INFO)
+	view_popup.add_separator("", 101)
+	view_popup.add_item("Reset layout", ViewID.RESET_LAYOUT)
 
 	background_color_submenu = PopupMenu.new()
 	background_color_submenu.set_name("background_color_submenu")
@@ -932,7 +1009,7 @@ func _on_file_popup_pressed(id : int):
 	elif id == FileID.IMPORT:
 		var callback_no_project = func(file : String):
 			if file != "":
-				var window : ConfirmationDialog = import_window.instantiate()
+				var window : Window = import_window.instantiate()
 				add_child(window)
 				window.confirmed.connect(func():
 						var image : Image = window.get_image()
@@ -962,7 +1039,7 @@ func _on_file_popup_pressed(id : int):
 						PixelPen.state.palette_changed.emit()
 						)
 				for i in range(files.size()):
-					var window : ConfirmationDialog = import_window.instantiate()
+					var window : Window = import_window.instantiate()
 					add_child(window)
 					window.confirmed.connect(func():
 							(PixelPen.state.current_project as PixelPenProject).import_image(window.get_image() , files[i])
@@ -1519,6 +1596,9 @@ func _on_view_popup_pressed(id : int):
 		popup.set_item_checked(index, not popup.is_item_checked(index))
 		PixelPen.state.current_project.show_grid = popup.is_item_checked(index)
 		PixelPen.state.project_saved.emit(false)
+
+	elif id == ViewID.RESET_LAYOUT:
+		_reset_layout()
 
 	elif id == ViewID.SHOW_HEXAGON:
 		popup.set_item_checked(index, not popup.is_item_checked(index))

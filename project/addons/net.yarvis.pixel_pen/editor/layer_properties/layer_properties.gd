@@ -1,8 +1,14 @@
 @tool
-extends ConfirmationDialog
+extends Window
+
+
+signal confirmed
+signal canceled
 
 
 @export var line_edit : LineEdit
+@export var cancel_button : Button
+@export var ok_button : PixelPenAccentButton
 
 var layer_uid : Vector3i = Vector3i.ZERO
 var layer_name : String = ""
@@ -18,6 +24,10 @@ func _init():
 func _ready():
 	if not PixelPen.state.need_connection(get_parent().get_window()):
 		return
+	ok_button.accent = PixelPen.state.userconfig.accent_color
+	ok_button.pressed.connect(_confirm)
+	cancel_button.pressed.connect(_cancel)
+	close_requested.connect(_cancel)
 	if layer_uid != Vector3i.ZERO:
 		var index_image = (PixelPen.state.current_project as PixelPenProject).get_index_image(layer_uid)
 		if index_image == null:
@@ -33,7 +43,7 @@ func _ready():
 	cycle_on_tab()
 
 
-func _on_confirmed():
+func _confirm():
 	if layer_uid != Vector3i.ZERO and line_edit.text != layer_name and line_edit.text != "":
 		(PixelPen.state.current_project as PixelPenProject).create_undo_layers("Layer Properties", func ():
 				PixelPen.state.layer_items_changed.emit()
@@ -49,21 +59,25 @@ func _on_confirmed():
 	else:
 		layer_name = line_edit.text
 	last_position = position
+	confirmed.emit()
 	hide()
 	queue_free()
 
 
-func _on_canceled():
+func _cancel():
 	last_position = position
+	canceled.emit()
 	hide()
 	queue_free()
 
 
 func _process(_delta):
+	if not visible:
+		return
 	if Input.is_key_pressed(KEY_ENTER) and line_edit.has_focus():
-		get_ok_button().pressed.emit()
-	if Input.is_key_pressed(KEY_ESCAPE):
-		get_cancel_button().pressed.emit()
+		_confirm()
+	elif Input.is_key_pressed(KEY_ESCAPE):
+		_cancel()
 
 
 func popup_in_last_position():
@@ -74,8 +88,6 @@ func popup_in_last_position():
 
 
 func cycle_on_tab() -> void:
-	var ok := get_ok_button()
-	var cancel := get_cancel_button()
-	line_edit.focus_next = ok.get_path()
-	line_edit.focus_previous = cancel.get_path()
-	cancel.focus_next = line_edit.get_path()
+	line_edit.focus_next = ok_button.get_path()
+	line_edit.focus_previous = cancel_button.get_path()
+	cancel_button.focus_next = line_edit.get_path()

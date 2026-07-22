@@ -36,6 +36,8 @@ namespace godot{
             static void fill_color(const Ref<Image> &p_mask1_image, const Ref<Image> &p_target_image, const Color color, const Ref<Image> &p_mask2_image);
             static void fill_rect_outline(const Rect2i rect, const Color color, const Ref<Image> &p_target, const Ref<Image> &p_mask);
             static void clean_invisible_color(const Ref<Image> &p_color_map, const PackedColorArray &palette);
+            static int64_t count_distinct_colors(const Ref<Image> &p_image);
+            static Ref<Image> quantize_colors(const Ref<Image> &p_image, const int32_t max_colors);
             static PackedColorArray import_image(const Ref<Image> &p_layer_image, const Ref<Image> &p_imported_image, const PackedColorArray palette);
             static Ref<Image> get_image(PackedColorArray palette_color, const Ref<Image> &p_color_map, const bool mipmap);
             static Ref<Image> get_image_with_mask(PackedColorArray palette_color, const Ref<Image> &p_color_map, const Ref<Image> &p_mask, const bool mipmap);

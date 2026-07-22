@@ -30,62 +30,62 @@ static func _ui_scale_value_to_index(value : float) -> int:
 
 var general_structure: Dictionary = {
 	"/Interface" : [
-		TreeRow.create_enum(
+		PixelPenPropertyItem.create_enum(
 			"UI scale", _ui_scale_value_to_index(PixelPen.state.userconfig.ui_scale),
 			UI_SCALE_LABELS
-		)] as Array[TreeRow],
+		)] as Array[PixelPenPropertyItem],
 	"/Guide/Grid" : [
-		TreeRow.create_vector2i(
+		PixelPenPropertyItem.create_vector2i(
 			"Grid line repeat", "X", "Y", PixelPen.state.userconfig.default_grid_size,
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
 		),
-		TreeRow.create_vector2i(
+		PixelPenPropertyItem.create_vector2i(
 			"Checker size", "WIDTH", "HEIGHT", PixelPen.state.userconfig.checker_size,
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
-		)] as Array[TreeRow],
+		)] as Array[PixelPenPropertyItem],
 	"/Guide/Hexagon" : [
-		TreeRow.create_vector2i(
+		PixelPenPropertyItem.create_vector2i(
 			"Hexagon size", "WIDTH", "HEIGHT", PixelPen.state.userconfig.default_hexagon_size,
 			Vector2i(2, 2), Vector2i(16384, 16384), Vector2i.ONE
 		),
-		TreeRow.create_enum(
+		PixelPenPropertyItem.create_enum(
 			"Orientation", 1 if PixelPen.state.userconfig.hexagon_flat_top else 0,
 			["POINTY TOP", "FLAT TOP"] as Array[String]
 		),
-		TreeRow.create_vector2i(
+		PixelPenPropertyItem.create_vector2i(
 			"Shift position", "X", "Y", PixelPen.state.userconfig.hexagon_shift,
 			Vector2i(-16384, -16384), Vector2i(16384, 16384), Vector2i.ONE
-		)] as Array[TreeRow],
+		)] as Array[PixelPenPropertyItem],
 	"/Projects" : [
-		TreeRow.create_file_path(
+		PixelPenPropertyItem.create_file_path(
 			"Default workspace folder", PixelPen.state.userconfig.default_workspace,
 			FileDialog.FILE_MODE_OPEN_DIR
 		),
-		TreeRow.create_vector2i(
+		PixelPenPropertyItem.create_vector2i(
 			"Default canvas size", "WIDTH", "HEIGHT", PixelPen.state.userconfig.default_canvas_size,
 			Vector2i.ONE, Vector2i(16384, 16384), Vector2i.ONE
 		)
-	] as Array[TreeRow],
-	"/Cursor" : [TreeRow.create_enum(
+	] as Array[PixelPenPropertyItem],
+	"/Cursor" : [PixelPenPropertyItem.create_enum(
 			"Hide in canvas", 1 if PixelPen.state.userconfig.hide_cursor_in_canvas else 0,
 			["FALSE", "TRUE"] as Array[String]
-		)] as Array[TreeRow],
+		)] as Array[PixelPenPropertyItem],
 	"/Palette" :[
-		TreeRow.create_range("Grid rows", PixelPen.state.userconfig.palette_gui_row, 1, 32, 1)
-	] as Array[TreeRow],
+		PixelPenPropertyItem.create_range("Grid rows", PixelPen.state.userconfig.palette_gui_row, 1, 32, 1)
+	] as Array[PixelPenPropertyItem],
 	"/Animation/Frame" : [
-		TreeRow.create_int(
+		PixelPenPropertyItem.create_int(
 			"Default fps", PixelPen.state.userconfig.default_animation_fps, 1, 1000
 		)
-	] as Array[TreeRow],
+	] as Array[PixelPenPropertyItem],
 	"/Animation/Onion Skinning" : [
-		TreeRow.create_int(
+		PixelPenPropertyItem.create_int(
 			"Onion skin total", PixelPen.state.userconfig.onion_skin_total, 1, 10
 		),
-		TreeRow.create_color("Previous frame tint color", PixelPen.state.userconfig.onion_skin_tint_previous, false),
-		TreeRow.create_color("Next frame tint color", PixelPen.state.userconfig.onion_skin_tint_next, false),
-		TreeRow.create_range("Alpha", PixelPen.state.userconfig.onion_skin_tint_alpha, 0.1, 1.0, 0.01)
-	] as Array[TreeRow]
+		PixelPenPropertyItem.create_color("Previous frame tint color", PixelPen.state.userconfig.onion_skin_tint_previous, false),
+		PixelPenPropertyItem.create_color("Next frame tint color", PixelPen.state.userconfig.onion_skin_tint_next, false),
+		PixelPenPropertyItem.create_range("Alpha", PixelPen.state.userconfig.onion_skin_tint_alpha, 0.1, 1.0, 0.01)
+	] as Array[PixelPenPropertyItem]
 	}
 
 
@@ -127,7 +127,7 @@ func _on_general_tree_item_selected():
 		tree_properties.structure = general_structure[current_active_path]
 	else:
 		tree.get_selected().collapsed = not tree.get_selected().collapsed
-		tree_properties.structure = [] as Array[TreeRow]
+		tree_properties.structure = [] as Array[PixelPenPropertyItem]
 		tree.get_selected().deselect(0)
 	tree_properties.build()
 

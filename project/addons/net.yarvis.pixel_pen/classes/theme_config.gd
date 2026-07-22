@@ -155,22 +155,101 @@ func _ready():
 
 ## Desktop toolbox column sizing, in layout units so it scales with the UI
 ## scale: the 40-unit icon buttons plus breathing room on each side.
+const LAYOUT_VERSION : int = 2
+const MIN_SPLIT_RATIO : float = 0.002
 const TOOLBOX_BUTTON_SIZE := 40.0
 const TOOLBOX_DOCK_PADDING := 7.0
+
+
+static func get_layout_signature() -> String:
+	return str(LAYOUT_VERSION, "|", OS.get_name())
+
+
+static func is_layout_valid(branches : DataBranch, layout_node : Control) -> bool:
+	if branches == null or branches.data.is_empty() or layout_node == null:
+		return false
+	for branch in branches.data:
+		if branch == null:
+			return false
+		if not is_finite(branch.split_ratio) or branch.split_ratio < 0.0 or branch.split_ratio > 1.0:
+			return false
+		if layout_node.get_node_or_null(branch.parent) == null:
+			return false
+		if not branch.child.is_empty() and layout_node.get_node_or_null(branch.child) == null:
+			return false
+	return true
+
+
+static func find_branch(branches : DataBranch, branch_name : String) -> Branch:
+	if branches == null:
+		return null
+	for branch in branches.data:
+		if branch != null and branch.name == branch_name:
+			return branch
+	return null
+
+
+static func sanitize_layout(branches : DataBranch, fallback : DataBranch):
+	if branches == null or fallback == null:
+		return
+	for branch in branches.data:
+		if branch == null:
+			continue
+		var ratio : float = branch.split_ratio
+		if is_finite(ratio) and ratio > MIN_SPLIT_RATIO and ratio < 1.0 - MIN_SPLIT_RATIO:
+			continue
+		var reference : Branch = find_branch(fallback, branch.name)
+		if reference != null:
+			branch.set_split_ratio(reference.split_ratio)
+
+
+static func rescale_fixed_branches(branches : DataBranch, scale_ratio : float):
+	if branches == null or not is_finite(scale_ratio) or scale_ratio <= 0.0:
+		return
+	for branch in branches.data:
+		if branch == null or branch.fixed_size <= 0.0:
+			continue
+		branch.set_split_ratio(clampf(branch.split_ratio * scale_ratio, 0.0, 1.0))
+		if branch.parent_min_size > 0.0:
+			branch.parent_min_size = branch.fixed_size
+
+
+static func refresh_fixed_branches(branches : DataBranch, layout_node : Control):
+	if branches == null or layout_node == null:
+		return
+	var viewport_size : Vector2 = layout_node.get_viewport().get_visible_rect().size
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		return
+	for branch in branches.data:
+		if branch == null or branch.fixed_size <= 0.0:
+			continue
+		var span : float = viewport_size.y if branch.vertical else viewport_size.x
+		if span <= 0.0:
+			continue
+		branch.set_split_ratio(clampf(branch.fixed_size / span, 0.0, 1.0))
+		if branch.parent_min_size > 0.0:
+			branch.parent_min_size = branch.fixed_size
 
 
 func get_default_layout(layout_node : Control)-> DataBranch:
 	var res := DataBranch.new()
 
-	var ratio : Vector2 = Vector2(40, 40) / get_viewport().get_visible_rect().size
+	var viewport : Viewport = layout_node.get_viewport()
+	var viewport_size : Vector2 = viewport.get_visible_rect().size if viewport != null else Vector2(DisplayServer.window_get_size())
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		viewport_size = Vector2(DisplayServer.window_get_size())
+
+	var ratio : Vector2 = Vector2(40, 40) / viewport_size
 	if OS.get_name() == "Android" and ratio.y < ratio.x:
-		ratio = Vector2(50, 50) / get_viewport().get_visible_rect().size
+		ratio = Vector2(50, 50) / viewport_size
 		res.data.push_back(
 				Branch.create("Toolbox", NodePath("."), layout_node.get_path_to(toolbox_dock), 0.0, false))
-		res.data.push_back(
-				Branch.create("Subtool", layout_node.get_path_to(toolbox_dock), layout_node.get_path_to(subtool_dock), ratio.y, true))
-		res.data.push_back(
-				Branch.create("Palette", layout_node.get_path_to(subtool_dock), layout_node.get_path_to(palette_dock), ratio.y, true))
+		var android_subtool := Branch.create("Subtool", layout_node.get_path_to(toolbox_dock), layout_node.get_path_to(subtool_dock), ratio.y, true)
+		android_subtool.fixed_size = 50.0
+		res.data.push_back(android_subtool)
+		var android_palette := Branch.create("Palette", layout_node.get_path_to(subtool_dock), layout_node.get_path_to(palette_dock), ratio.y, true)
+		android_palette.fixed_size = 50.0
+		res.data.push_back(android_palette)
 
 		res.data.push_back(
 				Branch.create("Canvas", layout_node.get_path_to(palette_dock), layout_node.get_path_to(canvas_dock), 0.3, false))
@@ -186,10 +265,11 @@ func get_default_layout(layout_node : Control)-> DataBranch:
 	var toolbox_width : float = TOOLBOX_BUTTON_SIZE + 2.0 * TOOLBOX_DOCK_PADDING
 	res.data.push_back(
 			Branch.create("ToolBox", NodePath("."), layout_node.get_path_to(toolbox_dock), 0.0, false))
-	var palette_branch := Branch.create("Palette", layout_node.get_path_to(toolbox_dock), layout_node.get_path_to(palette_dock), toolbox_width / get_viewport().get_visible_rect().size.x, false)
-	# Dragging the split (or shrinking the window) must not squeeze the
-	# toolbox below its padded icon width.
-	palette_branch.parent_min_size = toolbox_width
+	var palette_branch := Branch.create("Palette", layout_node.get_path_to(toolbox_dock), layout_node.get_path_to(palette_dock), 0.0, false)
+	# Size the toolbox by absolute pixels so its width is viewport-independent
+	# and cannot drift when the layout is restored on a differently sized
+	# viewport (e.g. across app restarts on Android).
+	palette_branch.parent_size = toolbox_width
 	res.data.push_back(palette_branch)
 	res.data.push_back(
 			Branch.create("SubTool", layout_node.get_path_to(palette_dock), layout_node.get_path_to(subtool_dock), 0.15, false))

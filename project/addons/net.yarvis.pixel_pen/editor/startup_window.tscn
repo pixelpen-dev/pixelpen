@@ -1,14 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://c36lucb42c0pv"]
+[gd_scene format=3 uid="uid://c36lucb42c0pv"]
 
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_xyg4t"]
 [ext_resource type="FontFile" uid="uid://mcetkdnsuw5a" path="res://addons/net.yarvis.pixel_pen/resources/fonts/inter/static/Inter-Regular.ttf" id="1_yy08e"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/startup_window/startup_window.gd" id="2_lavm0"]
+[ext_resource type="Script" uid="uid://dv1olm5k0n0eo" path="res://addons/net.yarvis.pixel_pen/editor/startup_window/startup_window.gd" id="2_lavm0"]
 
-[node name="StartupWindow" type="Window" node_paths=PackedStringArray("new_btn")]
+[node name="StartupWindow" type="Window" unique_id=185559646 node_paths=PackedStringArray("new_btn")]
+oversampling_override = 1.0
 title = "Start With"
 position = Vector2i(0, 36)
 size = Vector2i(320, 152)
-visible = false
 wrap_controls = true
 transient = true
 exclusive = true
@@ -17,15 +17,15 @@ theme_override_fonts/title_font = ExtResource("1_yy08e")
 script = ExtResource("2_lavm0")
 new_btn = NodePath("Background/MarginContainer/VBoxContainer/NEW")
 
-[node name="Background" type="Control" parent="."]
-layout_mode = 3
+[node name="Background" type="Panel" parent="." unique_id=44052413]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_type_variation = &"WindowPanel"
 
-[node name="MarginContainer" type="MarginContainer" parent="Background"]
+[node name="MarginContainer" type="MarginContainer" parent="Background" unique_id=2083382882]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,23 +37,23 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer" unique_id=227211955]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="NEW" type="Button" parent="Background/MarginContainer/VBoxContainer"]
+[node name="NEW" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=1806682040]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_yy08e")
 text = "New Project"
 
-[node name="OPEN" type="Button" parent="Background/MarginContainer/VBoxContainer"]
+[node name="OPEN" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=1132388025]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_yy08e")
 text = "Open Project"
 
-[node name="IMPORT" type="Button" parent="Background/MarginContainer/VBoxContainer"]
+[node name="IMPORT" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=804740803]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Import File"

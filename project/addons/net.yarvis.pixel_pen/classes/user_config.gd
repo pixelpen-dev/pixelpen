@@ -10,6 +10,10 @@ const PATH := "user://pixelpen_user_config.res"
 @export var stamp : Array[Image]
 @export var recent_projects : Array = []
 @export var last_open_path : String
+@export var layout_landscape : DataBranch
+@export var layout_portrait : DataBranch
+@export var layout_signature : String = ""
+@export var layout_ui_scale : float = 0.0
 
 @export_category("Style")
 @export var accent_color : Color = Color(0.25, 1, 0.5)

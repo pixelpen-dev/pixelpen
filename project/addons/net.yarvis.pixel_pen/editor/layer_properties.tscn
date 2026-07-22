@@ -3,15 +3,27 @@
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_cp2yj"]
 [ext_resource type="Script" uid="uid://d1kdg66fxwhx5" path="res://addons/net.yarvis.pixel_pen/editor/layer_properties/layer_properties.gd" id="1_s4vgq"]
 [ext_resource type="Script" uid="uid://cw6xk540keu7j" path="res://addons/net.yarvis.pixel_pen/thirdparty/select-handle/select_line_edit.gd" id="3_432t7"]
+[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/accent_button/accent_button.gd" id="4_accent"]
 
-[node name="LayerProperties" type="ConfirmationDialog" unique_id=1443058465 node_paths=PackedStringArray("line_edit")]
-title = "Layer Properties..."
-size = Vector2i(320, 104)
+[node name="LayerProperties" type="Window" unique_id=1443058465 node_paths=PackedStringArray("line_edit", "cancel_button", "ok_button")]
+title = "Layer Properties"
+size = Vector2i(320, 128)
+visible = false
+transient = true
+exclusive = true
 theme = ExtResource("1_cp2yj")
-dialog_hide_on_ok = false
-dialog_close_on_escape = false
 script = ExtResource("1_s4vgq")
 line_edit = NodePath("MarginContainer/VBoxContainer/LineEdit")
+cancel_button = NodePath("Actions/CancelBtn")
+ok_button = NodePath("Actions/OkBtn")
+
+[node name="BG" type="Panel" parent="." unique_id=132324320]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"WindowPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=132324322]
 anchors_preset = 15
@@ -39,6 +51,25 @@ placeholder_text = "Layer Name"
 script = ExtResource("3_432t7")
 metadata/_custom_type_script = "uid://cw6xk540keu7j"
 
-[connection signal="about_to_popup" from="." to="." method="_on_about_to_popup"]
-[connection signal="canceled" from="." to="." method="_on_canceled"]
-[connection signal="confirmed" from="." to="." method="_on_confirmed"]
+[node name="Actions" type="HBoxContainer" parent="." unique_id=132324330]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -44.0
+offset_right = -8.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 2
+theme_override_constants/separation = 10
+
+[node name="CancelBtn" type="Button" parent="Actions" unique_id=132324331]
+layout_mode = 2
+text = "Cancel"
+
+[node name="OkBtn" type="Button" parent="Actions" unique_id=132324332]
+layout_mode = 2
+script = ExtResource("4_accent")
+text = "OK"

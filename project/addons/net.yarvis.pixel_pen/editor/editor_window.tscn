@@ -1,11 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://blwhjcxtblxix"]
+[gd_scene format=3 uid="uid://blwhjcxtblxix"]
 
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_bt5sl"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_window/editor_window.gd" id="1_iiacl"]
+[ext_resource type="Script" uid="uid://vc05hnkw4jw6" path="res://addons/net.yarvis.pixel_pen/editor/editor_window/editor_window.gd" id="1_iiacl"]
 
-[node name="EditorWindow" type="Window"]
+[node name="EditorWindow" type="Window" unique_id=1759577874]
 canvas_item_default_texture_filter = 0
 gui_embed_subwindows = true
+oversampling_override = 1.0
 mode = 2
 title = "Empty - Pixel Pen"
 initial_position = 1

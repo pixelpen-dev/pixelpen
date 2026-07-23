@@ -1,35 +1,27 @@
-[gd_scene load_steps=20 format=3 uid="uid://cn5q432ln7srp"]
+[gd_scene format=3 uid="uid://cn5q432ln7srp"]
 
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_eikdn"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/layout_split.gd" id="2_5ge48"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/export_sheet/export_sheet.gd" id="2_paiee"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/branch.gd" id="3_aitvw"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/data_branch.gd" id="4_lnqw5"]
-[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="5_oodws"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/property_sheet/property_sheet.gd" id="6_a6y63"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/export_sheet/canvas_export_2d.gd" id="6_rof74"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/property_field/property_item.gd" id="7_sqmv5"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/accent_button/accent_button.gd" id="8_accent"]
+[ext_resource type="Script" uid="uid://cl1xaus0m5jm4" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/layout_split.gd" id="2_5ge48"]
+[ext_resource type="Script" uid="uid://kax2rgwdka6g" path="res://addons/net.yarvis.pixel_pen/editor/export_sheet/export_sheet.gd" id="2_paiee"]
+[ext_resource type="Script" uid="uid://dtjjyl0tn8fnq" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/branch.gd" id="3_aitvw"]
+[ext_resource type="Script" uid="uid://kqdnfiosr7rg" path="res://addons/net.yarvis.pixel_pen/ui/layout_split/data_branch.gd" id="4_lnqw5"]
+[ext_resource type="Shader" uid="uid://dx0che3o2nhp7" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="5_oodws"]
+[ext_resource type="Script" uid="uid://ojus3ftsqbfw" path="res://addons/net.yarvis.pixel_pen/ui/property_sheet/property_sheet.gd" id="6_a6y63"]
+[ext_resource type="Script" uid="uid://46d81ookvxdy" path="res://addons/net.yarvis.pixel_pen/editor/export_sheet/canvas_export_2d.gd" id="6_rof74"]
+[ext_resource type="Script" uid="uid://osnqd82e6m2s" path="res://addons/net.yarvis.pixel_pen/ui/property_field/property_item.gd" id="7_sqmv5"]
+[ext_resource type="Script" uid="uid://w38xrx88nhbr" path="res://addons/net.yarvis.pixel_pen/ui/accent_button/accent_button.gd" id="8_accent"]
 
 [sub_resource type="Resource" id="Resource_5buie"]
 script = ExtResource("3_aitvw")
-name = ""
 parent = NodePath(".")
 child = NodePath("Canvas")
 split_ratio = 0.0
-vertical = false
-parent_size = 0.0
-child_size = 0.0
 
 [sub_resource type="Resource" id="Resource_hadps"]
 script = ExtResource("3_aitvw")
-name = ""
 parent = NodePath("Canvas")
 child = NodePath("Menu")
 split_ratio = 0.612837
-vertical = false
-parent_size = 0.0
-child_size = 0.0
 
 [sub_resource type="Resource" id="Resource_14shc"]
 script = ExtResource("4_lnqw5")
@@ -49,178 +41,41 @@ size = Vector2(1408, 80)
 script = ExtResource("7_sqmv5")
 label = "Sheets"
 field = 5
-int_value = 0
-int_min = 0
-int_max = 100
-int_step = 1
-float_value = 0.0
-float_min = 0.0
-float_max = 1.0
-float_step = 0.001
-range_value = 0.0
-range_min = 0.0
-range_max = 1.0
-range_step = 0.001
-string_value = ""
-vector2_label_x = "X"
-vector2_label_y = "Y"
-vector2_value = Vector2(0, 0)
-vector2_min = Vector2(0, 0)
-vector2_max = Vector2(1, 1)
-vector2_step = Vector2(0.001, 0.001)
 vector2i_label_x = "Column"
 vector2i_label_y = "Row"
 vector2i_value = Vector2i(11, 1)
 vector2i_min = Vector2i(1, 1)
 vector2i_max = Vector2i(16384, 16384)
-vector2i_step = Vector2i(1, 1)
-enum_value = 0
-enum_option = Array[String]([])
-file_value = ""
-file_mode = 4
 file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
 
 [sub_resource type="Resource" id="Resource_w8643"]
 script = ExtResource("7_sqmv5")
 label = "Margin"
 field = 5
-int_value = 0
-int_min = 0
-int_max = 100
-int_step = 1
-float_value = 0.0
-float_min = 0.0
-float_max = 1.0
-float_step = 0.001
-range_value = 0.0
-range_min = 0.0
-range_max = 1.0
-range_step = 0.001
-string_value = ""
-vector2_label_x = "X"
-vector2_label_y = "Y"
-vector2_value = Vector2(0, 0)
-vector2_min = Vector2(0, 0)
-vector2_max = Vector2(1, 1)
-vector2_step = Vector2(0.001, 0.001)
-vector2i_label_x = "X"
-vector2i_label_y = "Y"
-vector2i_value = Vector2i(0, 0)
-vector2i_min = Vector2i(0, 0)
 vector2i_max = Vector2i(16384, 16384)
-vector2i_step = Vector2i(1, 1)
-enum_value = 0
-enum_option = Array[String]([])
-file_value = ""
-file_mode = 4
 file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
 
 [sub_resource type="Resource" id="Resource_a0wck"]
 script = ExtResource("7_sqmv5")
 label = "Linked Frame"
 field = 6
-int_value = 0
-int_min = 0
-int_max = 100
-int_step = 1
-float_value = 0.0
-float_min = 0.0
-float_max = 1.0
-float_step = 0.001
-range_value = 0.0
-range_min = 0.0
-range_max = 1.0
-range_step = 0.001
-string_value = ""
-vector2_label_x = "X"
-vector2_label_y = "Y"
-vector2_value = Vector2(0, 0)
-vector2_min = Vector2(0, 0)
-vector2_max = Vector2(1, 1)
-vector2_step = Vector2(0.001, 0.001)
-vector2i_label_x = "X"
-vector2i_label_y = "Y"
-vector2i_value = Vector2i(0, 0)
-vector2i_min = Vector2i(0, 0)
-vector2i_max = Vector2i(100, 100)
-vector2i_step = Vector2i(1, 1)
-enum_value = 0
 enum_option = Array[String](["Keep All", "Keep One"])
-file_value = ""
-file_mode = 4
 file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
 
 [sub_resource type="Resource" id="Resource_r0lea"]
 script = ExtResource("7_sqmv5")
 label = "Directions"
 field = 6
-int_value = 0
-int_min = 0
-int_max = 100
-int_step = 1
-float_value = 0.0
-float_min = 0.0
-float_max = 1.0
-float_step = 0.001
-range_value = 0.0
-range_min = 0.0
-range_max = 1.0
-range_step = 0.001
-string_value = ""
-vector2_label_x = "X"
-vector2_label_y = "Y"
-vector2_value = Vector2(0, 0)
-vector2_min = Vector2(0, 0)
-vector2_max = Vector2(1, 1)
-vector2_step = Vector2(0.001, 0.001)
-vector2i_label_x = "X"
-vector2i_label_y = "Y"
-vector2i_value = Vector2i(0, 0)
-vector2i_min = Vector2i(0, 0)
-vector2i_max = Vector2i(100, 100)
-vector2i_step = Vector2i(1, 1)
-enum_value = 0
 enum_option = Array[String](["Horizontal", "Vertical"])
-file_value = ""
-file_mode = 4
 file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
 
 [sub_resource type="Resource" id="Resource_tu37v"]
 script = ExtResource("7_sqmv5")
 label = "Export Location"
 field = 7
-int_value = 0
-int_min = 0
-int_max = 100
-int_step = 1
-float_value = 0.0
-float_min = 0.0
-float_max = 1.0
-float_step = 0.001
-range_value = 0.0
-range_min = 0.0
-range_max = 1.0
-range_step = 0.001
-string_value = ""
-vector2_label_x = "X"
-vector2_label_y = "Y"
-vector2_value = Vector2(0, 0)
-vector2_min = Vector2(0, 0)
-vector2_max = Vector2(1, 1)
-vector2_step = Vector2(0.001, 0.001)
-vector2i_label_x = "X"
-vector2i_label_y = "Y"
-vector2i_value = Vector2i(0, 0)
-vector2i_min = Vector2i(0, 0)
-vector2i_max = Vector2i(100, 100)
-vector2i_step = Vector2i(1, 1)
-enum_value = 0
-enum_option = Array[String]([])
-file_value = ""
-file_mode = 4
 file_dialog_filters = PackedStringArray("*.png")
 
-[node name="ExportSheet" type="Window" node_paths=PackedStringArray("properties_node", "canvas_2d", "cancel_button", "save_button")]
+[node name="ExportSheet" type="Window" unique_id=1147413418 node_paths=PackedStringArray("properties_node", "canvas_2d", "cancel_button", "save_button")]
 title = "Animation Sheets Export"
 position = Vector2i(0, 21)
 size = Vector2i(1080, 720)
@@ -234,7 +89,7 @@ canvas_2d = NodePath("Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/Can
 cancel_button = NodePath("Actions/CancelBtn")
 save_button = NodePath("Actions/SaveBtn")
 
-[node name="BG" type="Panel" parent="."]
+[node name="BG" type="Panel" parent="." unique_id=74652237]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -242,7 +97,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"WindowPanel"
 
-[node name="Wrapper" type="Control" parent="."]
+[node name="Wrapper" type="Control" parent="." unique_id=1995898756]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -254,30 +109,7 @@ offset_bottom = -48.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Actions" type="HBoxContainer" parent="."]
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = -44.0
-offset_right = -16.0
-offset_bottom = -12.0
-grow_horizontal = 2
-grow_vertical = 0
-alignment = 2
-theme_override_constants/separation = 10
-
-[node name="CancelBtn" type="Button" parent="Actions"]
-layout_mode = 2
-text = "Cancel"
-
-[node name="SaveBtn" type="Button" parent="Actions"]
-layout_mode = 2
-script = ExtResource("8_accent")
-text = "Save"
-
-[node name="Layout" type="Control" parent="Wrapper"]
+[node name="Layout" type="Control" parent="Wrapper" unique_id=743997262]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -289,9 +121,9 @@ branches = SubResource("Resource_14shc")
 border_margin = false
 enable = true
 
-[node name="Canvas" type="ColorRect" parent="Wrapper/Layout"]
+[node name="Canvas" type="ColorRect" parent="Wrapper/Layout" unique_id=1378074032]
 show_behind_parent = true
-layout_mode = 2
+layout_mode = 0
 anchor_right = 0.612837
 anchor_bottom = 1.0
 offset_left = 2.0
@@ -300,7 +132,7 @@ offset_right = -2.0
 offset_bottom = -2.0
 color = Color(0.38, 0.38, 0.38, 1)
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Wrapper/Layout/Canvas"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Wrapper/Layout/Canvas" unique_id=1942701722]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -311,35 +143,35 @@ grow_vertical = 2
 mouse_filter = 0
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="Wrapper/Layout/Canvas/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="Wrapper/Layout/Canvas/SubViewportContainer" unique_id=224918090]
 transparent_bg = true
 handle_input_locally = false
 snap_2d_transforms_to_pixel = true
 canvas_item_default_texture_filter = 0
-size = Vector2i(653, 674)
-render_target_update_mode = 4
+size = Vector2i(653, 664)
+render_target_update_mode = 0
 
-[node name="CanvasExport2D" type="Node2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport" node_paths=PackedStringArray("checker", "sprite_sheets", "camera")]
+[node name="CanvasExport2D" type="Node2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport" unique_id=1660323116 node_paths=PackedStringArray("checker", "sprite_sheets", "camera")]
 script = ExtResource("6_rof74")
 checker = NodePath("Checker")
 sprite_sheets = NodePath("SpriteSheet")
 camera = NodePath("Camera2D")
 
-[node name="Checker" type="Sprite2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D"]
+[node name="Checker" type="Sprite2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D" unique_id=1552465761]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_nqp2i")
 texture = SubResource("PlaceholderTexture2D_bjl1a")
 centered = false
 
-[node name="SpriteSheet" type="Sprite2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D"]
+[node name="SpriteSheet" type="Sprite2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D" unique_id=1564355598]
 show_behind_parent = true
 centered = false
 
-[node name="Camera2D" type="Camera2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D"]
+[node name="Camera2D" type="Camera2D" parent="Wrapper/Layout/Canvas/SubViewportContainer/SubViewport/CanvasExport2D" unique_id=1439360050]
 position = Vector2(704, 40)
-zoom = Vector2(0.417401, 0.417401)
+zoom = Vector2(0.41740057, 0.41740057)
 
-[node name="Menu" type="Panel" parent="Wrapper/Layout"]
+[node name="Menu" type="Panel" parent="Wrapper/Layout" unique_id=2114239965]
 layout_mode = 0
 anchor_left = 0.612837
 anchor_right = 1.0
@@ -350,7 +182,7 @@ offset_right = -2.0
 offset_bottom = -2.0
 theme_type_variation = &"BoxPanel"
 
-[node name="MarginContainer" type="MarginContainer" parent="Wrapper/Layout/Menu"]
+[node name="MarginContainer" type="MarginContainer" parent="Wrapper/Layout/Menu" unique_id=533304098]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -362,12 +194,42 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="TreeProperties" type="Control" parent="Wrapper/Layout/Menu/MarginContainer"]
+[node name="TreeProperties" type="Control" parent="Wrapper/Layout/Menu/MarginContainer" unique_id=1832966168]
 layout_mode = 2
 script = ExtResource("6_a6y63")
 structure = Array[ExtResource("7_sqmv5")]([SubResource("Resource_8kh0c"), SubResource("Resource_w8643"), SubResource("Resource_a0wck"), SubResource("Resource_r0lea"), SubResource("Resource_tu37v")])
-list_margin = 8.0
 column_ratio = 0.4
+
+[node name="Actions" type="HBoxContainer" parent="." unique_id=463968979]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -44.0
+offset_right = -16.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="CancelBtn" type="Button" parent="Actions" unique_id=2146887855]
+layout_mode = 2
+text = "Cancel"
+
+[node name="SaveBtn" type="Button" parent="Actions" unique_id=1200819418]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_type_variation = &"AccentButton"
+theme_override_colors/font_color = Color(0, 0, 0, 0.784314)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 0.784314)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 0.784314)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 0.784314)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 0.784314)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 0.784314)
+text = "Save"
+script = ExtResource("8_accent")
 
 [connection signal="item_rect_changed" from="Wrapper/Layout/Canvas/SubViewportContainer" to="." method="_on_canvas_item_rect_changed"]
 [connection signal="value_changed" from="Wrapper/Layout/Menu/MarginContainer/TreeProperties" to="." method="_on_tree_properties_value_changed"]

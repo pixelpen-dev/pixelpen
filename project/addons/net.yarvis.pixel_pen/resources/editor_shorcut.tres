@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="EditorShorcut" load_steps=98 format=3 uid="uid://djvoltr03l1k0"]
+[gd_resource type="Resource" script_class="EditorShorcut" format=3 uid="uid://djvoltr03l1k0"]
 
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/classes/editor_shorcut.gd" id="1_bhf3x"]
+[ext_resource type="Script" uid="uid://c56f3jy5x08qb" path="res://addons/net.yarvis.pixel_pen/classes/editor_shorcut.gd" id="1_bhf3x"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_16o5n"]
 device = -1

@@ -9,6 +9,7 @@ oversampling_override = 1.0
 title = "Start With"
 position = Vector2i(0, 36)
 size = Vector2i(320, 152)
+visible = false
 wrap_controls = true
 transient = true
 exclusive = true

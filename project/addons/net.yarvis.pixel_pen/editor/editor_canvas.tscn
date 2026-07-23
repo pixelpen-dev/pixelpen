@@ -1,12 +1,12 @@
-[gd_scene load_steps=16 format=3 uid="uid://dde4flu0tmqb3"]
+[gd_scene format=3 uid="uid://dde4flu0tmqb3"]
 
-[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas_cursor.gdshader" id="1_iq3vk"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_canvas/editor_canvas.gd" id="1_je1bm"]
-[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="2_ehwxr"]
-[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/grayscale.gdshader" id="3_g2v7b"]
-[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/marching_ant.gdshader" id="4_n22mx"]
-[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/marching_ant_filled.gdshader" id="5_6iuph"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/editor_canvas/cursor.gd" id="7_qpw1y"]
+[ext_resource type="Shader" uid="uid://cnwq4ax0h20d1" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas_cursor.gdshader" id="1_iq3vk"]
+[ext_resource type="Script" uid="uid://x61plm0umcc3" path="res://addons/net.yarvis.pixel_pen/editor/editor_canvas/editor_canvas.gd" id="1_je1bm"]
+[ext_resource type="Shader" uid="uid://dx0che3o2nhp7" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="2_ehwxr"]
+[ext_resource type="Shader" uid="uid://bl2v87jkepukf" path="res://addons/net.yarvis.pixel_pen/resources/grayscale.gdshader" id="3_g2v7b"]
+[ext_resource type="Shader" uid="uid://iru5yrjqv5po" path="res://addons/net.yarvis.pixel_pen/resources/marching_ant.gdshader" id="4_n22mx"]
+[ext_resource type="Shader" uid="uid://d2qkbpcq87sgb" path="res://addons/net.yarvis.pixel_pen/resources/marching_ant_filled.gdshader" id="5_6iuph"]
+[ext_resource type="Script" uid="uid://b5cyvoiamgwxa" path="res://addons/net.yarvis.pixel_pen/editor/editor_canvas/cursor.gd" id="7_qpw1y"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c4sdf"]
 shader = ExtResource("1_iq3vk")
@@ -45,7 +45,7 @@ shader_parameter/grayscale = false
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_06oqe"]
 shader = ExtResource("1_iq3vk")
 
-[node name="EditorCanvas" type="Node2D" node_paths=PackedStringArray("tile_node", "background_canvas", "onion_skinning", "layers", "camera", "overlay_hint", "selection_tool_hint", "filter", "cursor_surface")]
+[node name="EditorCanvas" type="Node2D" unique_id=1018598846 node_paths=PackedStringArray("tile_node", "background_canvas", "onion_skinning", "layers", "camera", "overlay_hint", "selection_tool_hint", "filter", "cursor_surface")]
 material = SubResource("ShaderMaterial_c4sdf")
 script = ExtResource("1_je1bm")
 tile_node = NodePath("Tiled")
@@ -58,51 +58,51 @@ selection_tool_hint = NodePath("SelectionTool")
 filter = NodePath("Filter")
 cursor_surface = NodePath("CursorSurface/Cursor")
 
-[node name="BackgroudCanvas" type="Sprite2D" parent="."]
+[node name="BackgroudCanvas" type="Sprite2D" parent="." unique_id=1811959840]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_kftd1")
 scale = Vector2(32, 32)
 texture = SubResource("PlaceholderTexture2D_0pfcl")
 centered = false
 
-[node name="OnionSkinning" type="Node2D" parent="."]
+[node name="OnionSkinning" type="Node2D" parent="." unique_id=1393710786]
 show_behind_parent = true
 
-[node name="Tiled" type="Node2D" parent="."]
+[node name="Tiled" type="Node2D" parent="." unique_id=991356710]
 show_behind_parent = true
 
-[node name="Layers" type="Node2D" parent="."]
+[node name="Layers" type="Node2D" parent="." unique_id=112076769]
 show_behind_parent = true
 
-[node name="Overlay" type="Sprite2D" parent="."]
+[node name="Overlay" type="Sprite2D" parent="." unique_id=1027719585]
 show_behind_parent = true
 texture_filter = 1
 material = SubResource("ShaderMaterial_yjwcy")
 centered = false
 
-[node name="SelectionTool" type="Sprite2D" parent="."]
+[node name="SelectionTool" type="Sprite2D" parent="." unique_id=464883725]
 show_behind_parent = true
 texture_filter = 1
 material = SubResource("ShaderMaterial_1abm7")
 centered = false
 offset = Vector2(-1, -1)
 
-[node name="FilterBackBufferCopy" type="BackBufferCopy" parent="."]
+[node name="FilterBackBufferCopy" type="BackBufferCopy" parent="." unique_id=1200834341]
 show_behind_parent = true
 copy_mode = 2
 
-[node name="Filter" type="Sprite2D" parent="."]
+[node name="Filter" type="Sprite2D" parent="." unique_id=1603774748]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_c0u3p")
 position = Vector2(-16, -16)
 texture = SubResource("PlaceholderTexture2D_oy7v3")
 centered = false
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1147535049]
 
-[node name="CursorSurface" type="CanvasLayer" parent="."]
+[node name="CursorSurface" type="CanvasLayer" parent="." unique_id=1964328521]
 
-[node name="Cursor" type="Control" parent="CursorSurface"]
+[node name="Cursor" type="Control" parent="CursorSurface" unique_id=2058525826]
 material = SubResource("ShaderMaterial_06oqe")
 layout_mode = 3
 anchors_preset = 15

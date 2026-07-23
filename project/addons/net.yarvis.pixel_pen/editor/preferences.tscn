@@ -1,91 +1,24 @@
-[gd_scene load_steps=9 format=3 uid="uid://jhd48ca044sy"]
+[gd_scene format=3 uid="uid://jhd48ca044sy"]
 
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/preferences.gd" id="1_5y7r0"]
+[ext_resource type="Script" uid="uid://cctpxbjb40p2j" path="res://addons/net.yarvis.pixel_pen/editor/preferences/preferences.gd" id="1_5y7r0"]
 [ext_resource type="Theme" uid="uid://bsuqu64445rmf" path="res://addons/net.yarvis.pixel_pen/resources/default_theme.tres" id="1_mhedo"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/property_sheet/property_sheet.gd" id="3_74jry"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/general_preferences.gd" id="3_k57uy"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/ui/property_field/property_item.gd" id="4_6utim"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/preferences/shorcuts_preferences.gd" id="6_dsxs8"]
+[ext_resource type="Script" uid="uid://ojus3ftsqbfw" path="res://addons/net.yarvis.pixel_pen/ui/property_sheet/property_sheet.gd" id="3_74jry"]
+[ext_resource type="Script" uid="uid://b1yd3je6ayfuy" path="res://addons/net.yarvis.pixel_pen/editor/preferences/general_preferences.gd" id="3_k57uy"]
+[ext_resource type="Script" uid="uid://osnqd82e6m2s" path="res://addons/net.yarvis.pixel_pen/ui/property_field/property_item.gd" id="4_6utim"]
+[ext_resource type="Script" uid="uid://y2h1djhv2047" path="res://addons/net.yarvis.pixel_pen/editor/preferences/shorcuts_preferences.gd" id="6_dsxs8"]
 
-[sub_resource type="Resource" id="Resource_og6we"]
+[sub_resource type="Resource" id="Resource_sedir"]
 script = ExtResource("4_6utim")
-label = "Grid line repeat"
-field = 5
-int_value = 0
-int_min = 0
-int_max = 100
-int_step = 1
-float_value = 0.0
-float_min = 0.0
-float_max = 1.0
-float_step = 0.001
-range_value = 0.0
-range_min = 0.0
-range_max = 1.0
-range_step = 0.001
-string_value = ""
-vector2_label_x = "X"
-vector2_label_y = "Y"
-vector2_value = Vector2(0, 0)
-vector2_min = Vector2(0, 0)
-vector2_max = Vector2(1, 1)
-vector2_step = Vector2(0.001, 0.001)
-vector2i_label_x = "X"
-vector2i_label_y = "Y"
-vector2i_value = Vector2i(8, 8)
-vector2i_min = Vector2i(1, 1)
-vector2i_max = Vector2i(16384, 16384)
-vector2i_step = Vector2i(1, 1)
-enum_value = 0
-enum_option = Array[String]([])
-file_value = ""
-file_mode = 4
+label = "UI scale"
+field = 6
+enum_option = Array[String](["Auto", "1.0x", "1.25x", "1.5x", "1.75x", "2.0x", "2.5x", "3.0x"])
 file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
-color_value = Color(1, 1, 1, 1)
-color_alpha = true
 
-[sub_resource type="Resource" id="Resource_5secq"]
-script = ExtResource("4_6utim")
-label = "Checker size"
-field = 5
-int_value = 0
-int_min = 0
-int_max = 100
-int_step = 1
-float_value = 0.0
-float_min = 0.0
-float_max = 1.0
-float_step = 0.001
-range_value = 0.0
-range_min = 0.0
-range_max = 1.0
-range_step = 0.001
-string_value = ""
-vector2_label_x = "X"
-vector2_label_y = "Y"
-vector2_value = Vector2(0, 0)
-vector2_min = Vector2(0, 0)
-vector2_max = Vector2(1, 1)
-vector2_step = Vector2(0.001, 0.001)
-vector2i_label_x = "WIDTH"
-vector2i_label_y = "HEIGHT"
-vector2i_value = Vector2i(8, 8)
-vector2i_min = Vector2i(1, 1)
-vector2i_max = Vector2i(16384, 16384)
-vector2i_step = Vector2i(1, 1)
-enum_value = 0
-enum_option = Array[String]([])
-file_value = ""
-file_mode = 4
-file_dialog_filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
-color_value = Color(1, 1, 1, 1)
-color_alpha = true
-
-[node name="Preferences" type="Window" node_paths=PackedStringArray("tab_container", "close_button")]
+[node name="Preferences" type="Window" unique_id=227533034 node_paths=PackedStringArray("tab_container", "close_button")]
+oversampling_override = 1.0
 title = "Preferences"
 initial_position = 1
 size = Vector2i(1164, 776)
-visible = true
 transient = true
 exclusive = true
 theme = ExtResource("1_mhedo")
@@ -93,7 +26,7 @@ script = ExtResource("1_5y7r0")
 tab_container = NodePath("TabContainer")
 close_button = NodePath("CloseButton")
 
-[node name="BG" type="Panel" parent="."]
+[node name="BG" type="Panel" parent="." unique_id=95025541]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -101,7 +34,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"WindowPanel"
 
-[node name="TabContainer" type="TabContainer" parent="."]
+[node name="TabContainer" type="TabContainer" parent="." unique_id=1685380988]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -114,7 +47,7 @@ grow_vertical = 2
 current_tab = 0
 tab_focus_mode = 0
 
-[node name="General" type="HBoxContainer" parent="TabContainer" node_paths=PackedStringArray("tree", "tree_properties")]
+[node name="General" type="HBoxContainer" parent="TabContainer" unique_id=1900869479 node_paths=PackedStringArray("tree", "tree_properties")]
 layout_mode = 2
 theme_override_constants/separation = 16
 script = ExtResource("3_k57uy")
@@ -122,21 +55,21 @@ tree = NodePath("GeneralTree")
 tree_properties = NodePath("GeneralProperties")
 metadata/_tab_index = 0
 
-[node name="GeneralTree" type="Tree" parent="TabContainer/General"]
+[node name="GeneralTree" type="Tree" parent="TabContainer/General" unique_id=61137899]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 focus_mode = 0
 hide_root = true
 
-[node name="GeneralProperties" type="Control" parent="TabContainer/General"]
+[node name="GeneralProperties" type="Control" parent="TabContainer/General" unique_id=1606335681]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
 script = ExtResource("3_74jry")
-structure = Array[ExtResource("4_6utim")]([SubResource("Resource_og6we"), SubResource("Resource_5secq")])
+structure = Array[ExtResource("4_6utim")]([SubResource("Resource_sedir")])
 
-[node name="Shortcuts" type="HBoxContainer" parent="TabContainer" node_paths=PackedStringArray("shorcuts_tree", "edit_button", "reset_button", "clear_button")]
+[node name="Shortcuts" type="HBoxContainer" parent="TabContainer" unique_id=1232871742 node_paths=PackedStringArray("shorcuts_tree", "edit_button", "reset_button", "clear_button")]
 visible = false
 layout_mode = 2
 script = ExtResource("6_dsxs8")
@@ -146,7 +79,7 @@ reset_button = NodePath("ShorcutsEdit/VBoxContainer/Reset")
 clear_button = NodePath("ShorcutsEdit/VBoxContainer/Clear")
 metadata/_tab_index = 1
 
-[node name="ShorcutsTree" type="Tree" parent="TabContainer/Shortcuts"]
+[node name="ShorcutsTree" type="Tree" parent="TabContainer/Shortcuts" unique_id=1475278405]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
@@ -155,40 +88,40 @@ columns = 2
 column_titles_visible = true
 hide_root = true
 
-[node name="ShorcutsEdit" type="MarginContainer" parent="TabContainer/Shortcuts"]
+[node name="ShorcutsEdit" type="MarginContainer" parent="TabContainer/Shortcuts" unique_id=711652303]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Shortcuts/ShorcutsEdit"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Shortcuts/ShorcutsEdit" unique_id=611815966]
 layout_mode = 2
 
-[node name="Edit" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
+[node name="Edit" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer" unique_id=550872334]
 layout_mode = 2
 disabled = true
 text = "EDIT"
 
-[node name="Reset" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
+[node name="Reset" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer" unique_id=467975033]
 layout_mode = 2
 disabled = true
 text = "RESET"
 
-[node name="Clear" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
+[node name="Clear" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer" unique_id=635081586]
 layout_mode = 2
 disabled = true
 text = "CLEAR"
 
-[node name="Control" type="Control" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
+[node name="Control" type="Control" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer" unique_id=1249383532]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ResetAll" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer"]
+[node name="ResetAll" type="Button" parent="TabContainer/Shortcuts/ShorcutsEdit/VBoxContainer" unique_id=2045779233]
 layout_mode = 2
 text = "RESET TO DEFAULT"
 
-[node name="CloseButton" type="Button" parent="."]
+[node name="CloseButton" type="Button" parent="." unique_id=426057149]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0

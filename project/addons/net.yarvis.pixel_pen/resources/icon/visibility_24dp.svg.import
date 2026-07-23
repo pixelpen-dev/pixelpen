@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ptqxmxwwxv7g"
-path="res://.godot/imported/visibility_24.svg-0e3b63e04c039a66fc4b788a0bb386e1.ctex"
+uid="uid://dg4uv47wu3u7c"
+path="res://.godot/imported/visibility_24dp.svg-07231e8dd029000bde538d743978c481.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/net.yarvis.pixel_pen/resources/icon/visibility_24.svg"
-dest_files=["res://.godot/imported/visibility_24.svg-0e3b63e04c039a66fc4b788a0bb386e1.ctex"]
+source_file="res://addons/net.yarvis.pixel_pen/resources/icon/visibility_24dp.svg"
+dest_files=["res://.godot/imported/visibility_24dp.svg-07231e8dd029000bde538d743978c481.ctex"]
 
 [params]
 

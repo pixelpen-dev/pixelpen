@@ -1,17 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://g4rt43ddprks"]
+[gd_scene format=3 uid="uid://g4rt43ddprks"]
 
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/frame_preview/frame_preview.gd" id="1_mf5e8"]
-[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="2_rvwiy"]
-[ext_resource type="Script" path="res://addons/net.yarvis.pixel_pen/editor/frame_preview/sample_border.gd" id="3_5kpbu"]
+[ext_resource type="Script" uid="uid://by4uyjq5bemee" path="res://addons/net.yarvis.pixel_pen/editor/frame_preview/frame_preview.gd" id="1_mf5e8"]
+[ext_resource type="Shader" uid="uid://dx0che3o2nhp7" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="2_rvwiy"]
+[ext_resource type="Script" uid="uid://chv58dt8bmpij" path="res://addons/net.yarvis.pixel_pen/editor/frame_preview/sample_border.gd" id="3_5kpbu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yby2t"]
 shader = ExtResource("2_rvwiy")
-shader_parameter/origin = null
+shader_parameter/origin = Vector2(0, 0)
 shader_parameter/tint = Vector4(0, 0, 0, 0)
 shader_parameter/tile_size = Vector2(16, 16)
 shader_parameter/lock_to_global = 0.0
 
-[node name="FramePreview" type="Control" node_paths=PackedStringArray("wrapper", "camera", "layers", "sample_layers", "checker_sizing", "viewport_container", "front_control")]
+[node name="FramePreview" type="Control" unique_id=176298392 node_paths=PackedStringArray("wrapper", "camera", "layers", "sample_layers", "checker_sizing", "viewport_container", "front_control")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,7 +28,7 @@ checker_sizing = NodePath("CheckerSizing")
 viewport_container = NodePath("SubViewportContainer")
 front_control = NodePath("FrontControl")
 
-[node name="CheckerSizing" type="AspectRatioContainer" parent="."]
+[node name="CheckerSizing" type="AspectRatioContainer" parent="." unique_id=1137270313]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,11 +36,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Checker" type="ColorRect" parent="CheckerSizing"]
+[node name="Checker" type="ColorRect" parent="CheckerSizing" unique_id=254240422]
 material = SubResource("ShaderMaterial_yby2t")
 layout_mode = 2
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1836489373]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -50,7 +50,7 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=283212052]
 transparent_bg = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
@@ -58,22 +58,22 @@ gui_disable_input = true
 size = Vector2i(1280, 720)
 render_target_update_mode = 4
 
-[node name="Wrapper" type="Node2D" parent="SubViewportContainer/SubViewport"]
+[node name="Wrapper" type="Node2D" parent="SubViewportContainer/SubViewport" unique_id=1208286713]
 
-[node name="Layers" type="Node2D" parent="SubViewportContainer/SubViewport/Wrapper"]
+[node name="Layers" type="Node2D" parent="SubViewportContainer/SubViewport/Wrapper" unique_id=2028944783]
 
-[node name="SampleBorder" type="Node2D" parent="SubViewportContainer/SubViewport/Wrapper" node_paths=PackedStringArray("frame_preview")]
+[node name="SampleBorder" type="Node2D" parent="SubViewportContainer/SubViewport/Wrapper" unique_id=284637638 node_paths=PackedStringArray("frame_preview")]
 script = ExtResource("3_5kpbu")
 frame_preview = NodePath("../../../..")
 
-[node name="SampleLayers" type="Node2D" parent="SubViewportContainer/SubViewport/Wrapper/SampleBorder"]
+[node name="SampleLayers" type="Node2D" parent="SubViewportContainer/SubViewport/Wrapper/SampleBorder" unique_id=1802288798]
 show_behind_parent = true
 
-[node name="Camera2D" type="Camera2D" parent="SubViewportContainer/SubViewport/Wrapper"]
+[node name="Camera2D" type="Camera2D" parent="SubViewportContainer/SubViewport/Wrapper" unique_id=1503132978]
 position = Vector2(0.5, 0.5)
 zoom = Vector2(720, 720)
 
-[node name="FrontControl" type="Control" parent="."]
+[node name="FrontControl" type="Control" parent="." unique_id=526740548]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

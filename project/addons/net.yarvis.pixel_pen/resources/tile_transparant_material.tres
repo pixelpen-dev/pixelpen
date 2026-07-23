@@ -1,9 +1,10 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cybmoggejwk8v"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cybmoggejwk8v"]
 
-[ext_resource type="Shader" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="1_8t251"]
+[ext_resource type="Shader" uid="uid://dx0che3o2nhp7" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="1_8t251"]
 
 [resource]
 shader = ExtResource("1_8t251")
-shader_parameter/origin = null
-shader_parameter/tile_size = 6.5
+shader_parameter/origin = Vector2(0, 0)
+shader_parameter/tint = Vector4(0, 0, 0, 0)
+shader_parameter/tile_size = Vector2(8.5, 8.5)
 shader_parameter/lock_to_global = 0.0

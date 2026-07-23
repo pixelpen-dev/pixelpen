@@ -50,6 +50,7 @@ var canvas_size : Vector2i
 var virtual_mouse_offset : Vector2
 var virtual_pressed : int = 0
 var rmb_inject_mode : bool = false
+var is_hover_canvas : bool = false
 
 
 func _ready():
@@ -228,13 +229,16 @@ func _input(event: InputEvent):
 		if event.keycode == KEY_SHIFT and event.is_released():
 			canvas_paint.on_shift_pressed(event.is_pressed())
 
-	if event and get_viewport_rect().has_point(get_viewport().get_mouse_position()):
+	if event is InputEventKey:
+		if event.keycode == KEY_SHIFT:
+			canvas_paint.on_shift_pressed(event.is_pressed())
+
+	if not Engine.is_editor_hint():
+		is_hover_canvas = get_viewport_rect().has_point(get_viewport().get_mouse_position())
+	if event and is_hover_canvas:
 		if event is InputEventScreenTouch or event is InputEventScreenDrag:
 			_on_gesture(event)
 		PixelPen.state.debug_log.emit("Cursor", floor(get_local_mouse_position()))
-		if event is InputEventKey:
-			if event.keycode == KEY_SHIFT:
-				canvas_paint.on_shift_pressed(event.is_pressed())
 		if zoom_input(event):
 			return
 		if event and event is InputEventMagnifyGesture:

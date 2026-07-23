@@ -91,6 +91,7 @@ func _input(event):
 	if not PixelPen.state.need_connection(get_window()):
 		return
 	if Engine.is_editor_hint():
+		editor_canvas.is_hover_canvas = get_global_rect().has_point(get_global_mouse_position())
 		editor_canvas._input(event)
 		return
 	# Forward non-positional events (keyboard) so canvas shortcuts keep

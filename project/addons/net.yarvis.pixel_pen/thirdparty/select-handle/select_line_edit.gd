@@ -109,58 +109,49 @@ func _line_edit_focus_entered():
 
 
 class SelectorLineUtils extends RefCounted:
-	static func get_caret_position(line_edit : LineEdit) -> int:
-		var line = TextLine.new()
-		var font = line_edit.get_theme_font("font")
-		var font_size = line_edit.get_theme_font_size("font_size")
-		var language = line_edit.language
-		var text = line_edit.text
-		if line_edit.secret:
-			text = ""
-			for i in range(line_edit.text.length()):
-				text += line_edit.secret_character
-		line.add_string(text, font, font_size, language)
-		for i in range(line_edit.text.length() * 2):
-			var step = line.get_line_width() / (line_edit.text.length() * 2)
-			if line.hit_test(step * i) == line_edit.caret_column:
-				return step * i
-		return line.get_line_width() as int
+	static func _shaped_line(line_edit : LineEdit) -> TextLine:
+		var line := TextLine.new()
+		line.add_string(_display_text(line_edit), line_edit.get_theme_font("font"), line_edit.get_theme_font_size("font_size"), line_edit.language)
+		return line
 
 
-	static func get_position_at_column(column : int, line_edit : LineEdit) -> int:
-		var line = TextLine.new()
-		var font = line_edit.get_theme_font("font")
-		var font_size = line_edit.get_theme_font_size("font_size")
-		var language = line_edit.language
-		var text = line_edit.text
-		if line_edit.secret:
-			text = ""
-			for i in range(line_edit.text.length()):
-				text += line_edit.secret_character
-		line.add_string(text, font, font_size, language)
-		for i in range(line_edit.text.length() * 2):
-			var step = line.get_line_width() / (line_edit.text.length() * 2)
-			if line.hit_test(step * i) == column:
-				return step * i
-		return line.get_line_width() as int
+	static func _text_start_offset(line_edit : LineEdit, text_width : float) -> float:
+		var style := line_edit.get_theme_stylebox("normal")
+		var margin_left : float = style.get_margin(SIDE_LEFT) if style else 0.0
+		var margin_right : float = style.get_margin(SIDE_RIGHT) if style else 0.0
+		var offset_x : float = style.get_offset().x if style else 0.0
+		var width := line_edit.size.x
+		var rtl := line_edit.is_layout_rtl()
+		match line_edit.alignment:
+			HORIZONTAL_ALIGNMENT_CENTER:
+				if not is_zero_approx(line_edit.get_scroll_offset()):
+					return offset_x
+				return maxf(margin_left, (width - text_width) / 2.0)
+			HORIZONTAL_ALIGNMENT_RIGHT:
+				if rtl:
+					return offset_x
+				return maxf(margin_left, width - ceil(margin_right + text_width))
+			_:
+				if rtl:
+					return maxf(margin_left, width - ceil(margin_right + text_width))
+				return offset_x
+
+
+	static func get_position_at_column(column : int, line_edit : LineEdit) -> float:
+		var line := _shaped_line(line_edit)
+		var carets := TextServerManager.get_primary_interface().shaped_text_get_carets(line.get_rid(), column)
+		var rect : Rect2 = carets.get("leading_rect", Rect2())
+		return _text_start_offset(line_edit, line.get_line_width()) + line_edit.get_scroll_offset() + rect.position.x
+
+
+	static func get_caret_position(line_edit : LineEdit) -> float:
+		return get_position_at_column(line_edit.caret_column, line_edit)
 
 
 	static func get_column_at_position(pos : float, line_edit : LineEdit) -> int:
-		var line = TextLine.new()
-		var font = line_edit.get_theme_font("font")
-		var font_size = line_edit.get_theme_font_size("font_size")
-		var language = line_edit.language
-		var text = line_edit.text
-		if line_edit.secret:
-			text = ""
-			for i in range(line_edit.text.length()):
-				text += line_edit.secret_character
-		line.add_string(text, font, font_size, language)
-		for i in range(line_edit.text.length() * 2):
-			var step = line.get_line_width() / (line_edit.text.length() * 2)
-			if step * i >= pos:
-				return line.hit_test(step * i)
-		return line_edit.text.length()
+		var line := _shaped_line(line_edit)
+		var local_x := pos - _text_start_offset(line_edit, line.get_line_width()) - line_edit.get_scroll_offset()
+		return line.hit_test(local_x)
 
 
 	static func column_word_under_caret(line_edit : LineEdit) -> Vector2i:
@@ -198,35 +189,17 @@ class SelectorLineUtils extends RefCounted:
 		return s
 
 
-	## Horizontal offset the text is shifted by due to non-left alignment. All the
-	## position maths above measure from the text's start (x = 0); with centre/right
-	## alignment the glyphs (and, when empty, the caret) are pushed right, so the
-	## guides must be too. Returns 0 when the text overflows (LineEdit falls back to
-	## left-aligned scrolling, which get_scroll_offset already covers).
-	static func alignment_offset(line_edit : LineEdit) -> float:
-		var align := line_edit.alignment
-		if align == HORIZONTAL_ALIGNMENT_LEFT or align == HORIZONTAL_ALIGNMENT_FILL:
-			return 0.0
-		var line := TextLine.new()
-		# Empty text → width 0, so the formula centres the bare caret.
-		line.add_string(_display_text(line_edit), line_edit.get_theme_font("font"), line_edit.get_theme_font_size("font_size"), line_edit.language)
-		var text_w := line.get_line_width()
-		var inner_w := line_edit.size.x
-		var sb := line_edit.get_theme_stylebox("normal")
-		if sb != null:
-			inner_w -= sb.get_margin(SIDE_LEFT) + sb.get_margin(SIDE_RIGHT)
-		if text_w >= inner_w:
-			return 0.0   # overflowing → left-aligned + scroll_offset handles it
-		if align == HORIZONTAL_ALIGNMENT_RIGHT:
-			return inner_w - text_w
-		return (inner_w - text_w) * 0.5
-
-
 class CaretGuideLine extends Control:
 
 	var line_edit : LineEdit
 	var drag : bool = false
+	var drag_offset : float
 	var guide_visible : bool = true
+
+
+	func _init() -> void:
+		z_as_relative = true
+		z_index = 1
 
 
 	func _get_minimum_size():
@@ -249,16 +222,16 @@ class CaretGuideLine extends Control:
 		style_box.corner_radius_bottom_right = radius
 		style_box.corner_radius_top_left = 0
 		style_box.corner_radius_top_right = radius
-		draw_set_transform(Vector2(4 + size.x / 2, 0), PI / 4)
+		draw_set_transform(Vector2(size.x / 2, 0), PI / 4)
 		draw_style_box(style_box, rect)
 
 
 	func _process(_delta):
 		if line_edit == null:
 			return
-		visible = guide_visible and not line_edit.has_selection() and line_edit.has_focus()
-		position.x = SelectorLineUtils.get_caret_position(line_edit) - (size.x / 2)
-		position.x += line_edit.get_scroll_offset() + SelectorLineUtils.alignment_offset(line_edit)
+		visible = guide_visible and not line_edit.has_selection() and line_edit.has_focus() and not line_edit.text.is_empty()
+		var caret_x = clampf(SelectorLineUtils.get_caret_position(line_edit), 0.0, line_edit.size.x)
+		position.x = caret_x - (size.x / 2)
 		@warning_ignore("integer_division")
 		position.y = (line_edit.size.y / 2) + line_edit.get_theme_font_size("font_size") / 2
 		position += line_edit.global_position
@@ -277,8 +250,10 @@ class CaretGuideLine extends Control:
 		if event is InputEventMouseButton:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				drag = event.pressed
+				if drag:
+					drag_offset = SelectorLineUtils.get_caret_position(line_edit) - line_edit.get_local_mouse_position().x
 		if event is InputEventMouseMotion and drag:
-			var caret_new_pos = line_edit.get_local_mouse_position().x - line_edit.get_scroll_offset() - SelectorLineUtils.alignment_offset(line_edit) - (size.x / 4)
+			var caret_new_pos = line_edit.get_local_mouse_position().x + drag_offset
 			var caret_line_column = SelectorLineUtils.get_column_at_position(caret_new_pos, line_edit)
 			line_edit.caret_column = caret_line_column
 
@@ -289,13 +264,19 @@ class SelectorGuideLine extends Control:
 
 	var line_edit : LineEdit
 
-	var anchor_start : int
-	var anchor_end : int
+	var anchor_start : float
+	var anchor_end : float
 
 	var drag : bool = false
 	var drag_offset : int
 
 	var guide_visible : bool = true
+
+
+	func _init() -> void:
+		z_as_relative = true
+		z_index = 1
+
 
 	func _get_minimum_size() -> Vector2:
 		return Vector2(32, 32)
@@ -330,14 +311,13 @@ class SelectorGuideLine extends Control:
 		var lc_origin = line_edit.get_selection_from_column()
 		var case = lc_origin < lc_caret
 		var lc_start = lc_origin if case else lc_caret
-		anchor_start = SelectorLineUtils.get_position_at_column(lc_start, line_edit)
+		anchor_start = clampf(SelectorLineUtils.get_position_at_column(lc_start, line_edit), 0.0, line_edit.size.x)
 		var lc_end = lc_caret if case else lc_origin
-		anchor_end = SelectorLineUtils.get_position_at_column(lc_end, line_edit)
+		anchor_end = clampf(SelectorLineUtils.get_position_at_column(lc_end, line_edit), 0.0, line_edit.size.x)
 		if is_left:
 			position.x = anchor_start - round(size.x)
 		else:
 			position.x = anchor_end
-		position.x += line_edit.get_scroll_offset() + SelectorLineUtils.alignment_offset(line_edit)
 		@warning_ignore("integer_division")
 		position.y = (line_edit.size.y / 2) + line_edit.get_theme_font_size("font_size") / 2
 		position += line_edit.global_position

@@ -160,7 +160,7 @@ func paint_pixel(pos : Vector2, color_index : int, no_double : bool = false, use
 
 
 func delete_on_selected():
-	if node.selection_tool_hint.texture != null and PixelPen.state.current_project != null:
+	if node.selection_tool_hint.texture != null and PixelPen.state.current_project != null and _can_draw:
 		var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).active_layer
 		if index_image != null:
 			var mask = MaskSelection.get_image_no_margin(node.selection_tool_hint.texture.get_image())

@@ -1121,27 +1121,31 @@ func _on_edit_popup_pressed(id : int):
 					PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_REMOVE, false)
 
 		EditID.DELETE_ON_SELECTION:
-			PixelPen.state.tool_changed.emit(
-					PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-					PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false)
+			if canvas.canvas_paint.tool._can_draw:
+				PixelPen.state.tool_changed.emit(
+						PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
+						PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false)
 
 		EditID.COPY:
-			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE:
-				canvas.canvas_paint.tool._show_guid = true
-			else:
-				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
-			PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false)
+			if canvas.canvas_paint.tool._can_draw:
+				if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE:
+					canvas.canvas_paint.tool._show_guid = true
+				else:
+					PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
+				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false)
 
 		EditID.CUT:
-			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE:
-				canvas.canvas_paint.tool._show_guid = true
-			else:
-				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
-			PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false)
+			if canvas.canvas_paint.tool._can_draw:
+				if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE:
+					canvas.canvas_paint.tool._show_guid = true
+				else:
+					PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX, PixelPenEnum.ToolBox.TOOL_MOVE, true)
+				PixelPen.state.tool_changed.emit(PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL, PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false)
 
 		EditID.PASTE:
-			if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and canvas.canvas_paint.tool.mode != MoveTool.Mode.UNKNOWN:
-				canvas.canvas_paint.tool._on_move_commit()
+			if canvas.canvas_paint.tool._can_draw:
+				if canvas.canvas_paint.tool.tool_type == PixelPenEnum.ToolBox.TOOL_MOVE and canvas.canvas_paint.tool.mode != MoveTool.Mode.UNKNOWN:
+					canvas.canvas_paint.tool._on_move_commit()
 
 		EditID.CREATE_BRUSH:
 			if canvas.selection_tool_hint.texture == null:

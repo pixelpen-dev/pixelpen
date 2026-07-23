@@ -260,38 +260,42 @@ func _on_move_tool():
 	_clean_up()
 
 	_build_button("Cut", cut, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false, false, PixelPen.state.userconfig.shorcuts.cut, func():
-					return MoveTool.mode == MoveTool.Mode.UNKNOWN
-					)
+			PixelPenEnum.ToolBoxMove.TOOL_MOVE_CUT, false, false, PixelPen.state.userconfig.shorcuts.cut,
+			func():
+				return MoveTool.mode == MoveTool.Mode.UNKNOWN,
+			func():
+				return not MoveTool._can_draw)
 	_build_button("Copy", copy, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
-			PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false, false, PixelPen.state.userconfig.shorcuts.copy, func():
-					return MoveTool.mode == MoveTool.Mode.UNKNOWN
-					)
+			PixelPenEnum.ToolBoxMove.TOOL_MOVE_COPY, false, false, PixelPen.state.userconfig.shorcuts.copy,
+			func():
+				return MoveTool.mode == MoveTool.Mode.UNKNOWN,
+			func():
+				return not MoveTool._can_draw)
 
 	_build_button("Rotate Left", rotate_left, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_ROTATE_LEFT, false, false, null,
 			func():
-					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
+				return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.state.current_project.multilayer_selected.is_empty())
+				return not PixelPen.state.current_project.multilayer_selected.is_empty())
 	_build_button("Rotate Right", rotate_right, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_ROTATE_RIGHT, false, false, null,
 			func():
-					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
+				return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.state.current_project.multilayer_selected.is_empty())
+				return not PixelPen.state.current_project.multilayer_selected.is_empty())
 	_build_button("Flip Horizontal", flip_horizontal, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_HORIZONTAL, false, false, null,
 			func():
-					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
+				return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.state.current_project.multilayer_selected.is_empty())
+				return not PixelPen.state.current_project.multilayer_selected.is_empty())
 	_build_button("Flip Vertical", flip_vertical, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_FLIP_VERTICAL, false, false, null,
 			func():
-					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
+				return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.state.current_project.multilayer_selected.is_empty())
+				return not PixelPen.state.current_project.multilayer_selected.is_empty())
 
 	_add_separator(func():
 			return MoveTool.mode != MoveTool.Mode.UNKNOWN)
@@ -299,27 +303,27 @@ func _on_move_tool():
 	_build_button("Scale Shifted Left", scale_left, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_SCALE_LEFT, false, false, null,
 			func():
-					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
+				return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.state.current_project.multilayer_selected.is_empty())
+				return not PixelPen.state.current_project.multilayer_selected.is_empty())
 	_build_button("Scale Shifted Top", scale_up, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_SCALE_UP, false, false, null,
 			func():
-					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
+				return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.state.current_project.multilayer_selected.is_empty())
+				return not PixelPen.state.current_project.multilayer_selected.is_empty())
 	_build_button("Scale Shifted Right", scale_right, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_SCALE_RIGHT, false, false, null,
 			func():
-					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
+				return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.state.current_project.multilayer_selected.is_empty())
+				return not PixelPen.state.current_project.multilayer_selected.is_empty())
 	_build_button("Scale Shifted Down", scale_down, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_SCALE_DOWN, false, false, null,
 			func():
-					return MoveTool.mode != MoveTool.Mode.UNKNOWN,
+				return MoveTool.mode != MoveTool.Mode.UNKNOWN,
 			func():
-					return not PixelPen.state.current_project.multilayer_selected.is_empty())
+				return not PixelPen.state.current_project.multilayer_selected.is_empty())
 
 	_add_separator(func():
 			return MoveTool.mode != MoveTool.Mode.UNKNOWN)
@@ -330,7 +334,9 @@ func _on_move_tool():
 	_build_button("Commit Transform", commit, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxMove.TOOL_MOVE_COMMIT, false, false, PixelPen.state.userconfig.shorcuts.confirm,
 			func():
-				return MoveTool.transformed and  MoveTool.mode != MoveTool.Mode.UNKNOWN)
+				return MoveTool.transformed and  MoveTool.mode != MoveTool.Mode.UNKNOWN,
+			func():
+				return not MoveTool._can_draw)
 	_add_separator()
 
 
@@ -356,7 +362,7 @@ func _on_selection_tool():
 	_build_button("Delete Selected Area", delete_in_selection, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX_SUB_TOOL,
 			PixelPenEnum.ToolBoxSelection.TOOL_SELECTION_DELETE_SELECTED, false, false, PixelPen.state.userconfig.shorcuts.delete_selected,
 			func (): return true,
-			func (): return canvas.selection_tool_hint.texture == null
+			func (): return canvas.selection_tool_hint.texture == null or not SelectionTool._can_draw
 			)
 	_add_separator(func():
 			return SelectionTool.has_point_selection_polygon)

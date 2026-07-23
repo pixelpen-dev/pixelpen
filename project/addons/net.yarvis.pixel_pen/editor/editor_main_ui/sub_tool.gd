@@ -60,6 +60,7 @@ var preview_btn := load("res://addons/net.yarvis.pixel_pen/editor/image_option_b
 @export var canvas : Node2D
 
 var current_toolbox : int
+var _shift_toggled : bool = false
 
 
 func _ready():
@@ -72,6 +73,8 @@ func _ready():
 	PixelPen.state.toolbox_just_changed.connect(func(type):
 			shift_label.visible = canvas.canvas_paint.tool.has_shift_mode
 			shift_separator.visible = canvas.canvas_paint.tool.has_shift_mode
+			_shift_toggled = false
+			shift_label.label_settings.font_color = PixelPen.state.userconfig.label_color
 			current_toolbox = type
 			_on_tool_changed(type)
 			)
@@ -82,11 +85,26 @@ func _ready():
 			_build_toolbar()
 			_on_tool_changed(current_toolbox)
 			)
+	if PixelPen.state.is_mobile():
+		shift_label.mouse_filter = Control.MOUSE_FILTER_STOP
+		shift_label.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		shift_label.tooltip_text = "Tap to toggle the secondary sub tool."
+		shift_label.gui_input.connect(_on_shift_label_input)
 	call_deferred("_build_toolbar")
+
+
+func _on_shift_label_input(event : InputEvent):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_shift_toggled = not _shift_toggled
+		canvas.canvas_paint.tool._on_shift_pressed(_shift_toggled)
+		shift_label.accept_event()
 
 
 func _process(_delta):
 	if not PixelPen.state.need_connection(get_window()):
+		return
+	if PixelPen.state.is_mobile():
+		shift_label.modulate.a = 1.0
 		return
 	var enable : bool = canvas.get_viewport_rect().has_point(canvas.get_viewport().get_mouse_position())
 	shift_label.modulate.a = 1.0 if enable else 0.5

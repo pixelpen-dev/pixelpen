@@ -10,6 +10,7 @@ var MoveTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/mov
 @export var secondary_active_color : Color
 
 @export var visible_btn : Control
+@export var lock_btn : Control
 
 @export var active_btn : Button
 @export var active_rect : ColorRect
@@ -24,6 +25,12 @@ var MoveTool := load("res://addons/net.yarvis.pixel_pen/editor/editor_canvas/mov
 		visible_btn.get_node("ON").visible = v
 		visible_btn.get_node("OFF").visible = !v
 		layer_visible = v
+
+@export var layer_lock : bool = false:
+	set(v):
+		lock_btn.get_node("Locked").visible = v
+		lock_btn.get_node("Unlocked").visible = !v
+		layer_lock = v
 
 var layer_uid : Vector3i
 var _double_click_timer : float
@@ -99,6 +106,18 @@ func _on_visible_gui_input(event):
 					layer_visible = !layer_visible
 					index_image.visible = layer_visible
 					PixelPen.state.layer_visibility_changed.emit(layer_uid, layer_visible)
+					PixelPen.state.project_saved.emit(false)
+
+
+func _on_lock_gui_input(event: InputEvent) -> void:
+	if event and event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.is_pressed():
+				var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).get_index_image(layer_uid)
+				if index_image != null:
+					layer_lock = !layer_lock
+					index_image.lock = layer_lock
+					PixelPen.state.layer_lock_changed.emit(layer_uid, layer_lock)
 					PixelPen.state.project_saved.emit(false)
 
 

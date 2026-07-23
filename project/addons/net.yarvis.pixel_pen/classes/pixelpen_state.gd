@@ -14,6 +14,7 @@ signal color_picked(color)
 signal layer_image_changed(layer_uid)
 signal layer_active_changed(layer_uid)
 signal layer_visibility_changed(layer_uid, visible)
+signal layer_lock_changed(layer_uid, lock)
 signal layer_items_changed
 signal thumbnail_changed
 signal edit_mode_changed(mode)
@@ -68,6 +69,7 @@ func disconnect_all_signal():
 		"layer_image_changed",
 		"layer_active_changed",
 		"layer_visibility_changed",
+		"layer_lock_changed",
 		"layer_items_changed",
 		"thumbnail_changed",
 		"edit_mode_changed",

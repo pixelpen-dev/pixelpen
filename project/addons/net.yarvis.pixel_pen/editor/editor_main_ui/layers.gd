@@ -36,6 +36,7 @@ func _on_project_file_changed():
 		layer.label.text = str(layers[i].label)
 		layer.layer_uid = layers[i].layer_uid
 		layer.layer_visible = layers[i].visible
+		layer.layer_lock = layers[i].lock
 		add_child(layer)
 		i -= 1
 	custom_minimum_size = Vector2i(0, layers.size() * 40)

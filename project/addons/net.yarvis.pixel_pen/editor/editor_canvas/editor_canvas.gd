@@ -104,13 +104,20 @@ func _ready():
 				if child.get_meta("layer_uid") == layer_uid:
 					child.visible = visibility
 					if (PixelPen.state.current_project as PixelPenProject).active_layer_uid == layer_uid:
-						canvas_paint.tool._can_draw = visibility
+						var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).get_index_image(layer_uid)
+						if index_image != null:
+							canvas_paint.tool._can_draw = not index_image.lock and index_image.visible
 					break
+			)
+	PixelPen.state.layer_lock_changed.connect(func(layer_uid, lock):
+			var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).get_index_image(layer_uid)
+			if index_image != null:
+				canvas_paint.tool._can_draw = not index_image.lock and index_image.visible
 			)
 	PixelPen.state.layer_active_changed.connect(func(layer_uid):
 			var index_image : IndexedColorImage = (PixelPen.state.current_project as PixelPenProject).get_index_image(layer_uid)
 			if index_image != null:
-				canvas_paint.tool._can_draw = index_image.visible
+				canvas_paint.tool._can_draw = not index_image.lock and index_image.visible
 			)
 	PixelPen.state.tool_changed.connect(func(grup, type, _grab_active):
 			if grup == PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBOX:

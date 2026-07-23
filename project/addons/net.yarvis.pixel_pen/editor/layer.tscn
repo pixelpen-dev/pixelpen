@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://dg4uv47wu3u7c" path="res://addons/net.yarvis.pixel_pen/resources/icon/visibility_24dp.svg" id="5_ejvck"]
 [ext_resource type="Shader" uid="uid://dx0che3o2nhp7" path="res://addons/net.yarvis.pixel_pen/resources/editor_canvas.gdshader" id="6_jl8wa"]
 [ext_resource type="Script" uid="uid://dtwn03wjesve4" path="res://addons/net.yarvis.pixel_pen/editor/editor_main_ui/pickable.gd" id="7_fmnvr"]
+[ext_resource type="Texture2D" uid="uid://b1sy7gkmsggdw" path="res://addons/net.yarvis.pixel_pen/resources/icon/lock_open_right_24dp.svg" id="9_d1ssu"]
+[ext_resource type="Texture2D" uid="uid://bv53j4lm4piet" path="res://addons/net.yarvis.pixel_pen/resources/icon/lock_24dp.svg" id="10_hdcav"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nv7xa"]
 shader = ExtResource("2_q55v8")
@@ -51,7 +53,15 @@ font = ExtResource("4_gpbab")
 font_size = 12
 font_color = Color(0.701961, 0.701961, 0.701961, 1)
 
-[node name="Layer" type="ColorRect" unique_id=1220624652 node_paths=PackedStringArray("visible_btn", "active_btn", "active_rect", "pickable", "preview", "label")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ckgp8"]
+shader = ExtResource("2_q55v8")
+shader_parameter/tint = Color(0.37254903, 0.37254903, 0.37254903, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t11pa"]
+shader = ExtResource("2_q55v8")
+shader_parameter/tint = Color(0.7019608, 0.7019608, 0.7019608, 1)
+
+[node name="Layer" type="ColorRect" unique_id=1220624652 node_paths=PackedStringArray("visible_btn", "lock_btn", "active_btn", "active_rect", "pickable", "preview", "label")]
 custom_minimum_size = Vector2(0, 40)
 anchors_preset = 10
 anchor_right = 1.0
@@ -64,6 +74,7 @@ default_color = Color(0.19, 0.19, 0.19, 1)
 active_color = Color(0.3, 0.3, 0.3, 1)
 secondary_active_color = Color(0.25, 0.25, 0.25, 1)
 visible_btn = NodePath("DetachedWrapper/HBoxContainer/VisibleHead")
+lock_btn = NodePath("DetachedWrapper/HBoxContainer/Lock")
 active_btn = NodePath("DetachedWrapper/HBoxContainer/Button")
 active_rect = NodePath("DetachedWrapper/HBoxContainer/Button/ActiveColor")
 pickable = NodePath("DetachedWrapper/HBoxContainer/Button/Pickable")
@@ -91,6 +102,7 @@ theme_override_constants/separation = 2
 [node name="VisibleHead" type="ColorRect" parent="DetachedWrapper/HBoxContainer" unique_id=1042784281]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 color = Color(0.2, 0.2, 0.2, 1)
 
 [node name="ON" type="TextureRect" parent="DetachedWrapper/HBoxContainer/VisibleHead" unique_id=53069677]
@@ -202,6 +214,37 @@ text_overrun_behavior = 3
 [node name="Pickable" type="Node" parent="DetachedWrapper/HBoxContainer/Button" unique_id=1482629711]
 script = ExtResource("7_fmnvr")
 
+[node name="Lock" type="ColorRect" parent="DetachedWrapper/HBoxContainer" unique_id=1251906724]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="Unlocked" type="TextureRect" parent="DetachedWrapper/HBoxContainer/Lock" unique_id=545538595]
+material = SubResource("ShaderMaterial_ckgp8")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_d1ssu")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="Locked" type="TextureRect" parent="DetachedWrapper/HBoxContainer/Lock" unique_id=542964360]
+visible = false
+material = SubResource("ShaderMaterial_t11pa")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_hdcav")
+expand_mode = 1
+stretch_mode = 3
+
 [node name="ThemeConfig" type="Node" parent="." unique_id=1055149855 node_paths=PackedStringArray("wrapper_layer_control", "head_layer_control", "detached_layer_control")]
 script = ExtResource("2_iugbb")
 type = 1
@@ -210,3 +253,4 @@ head_layer_control = NodePath("../DetachedWrapper/HBoxContainer/VisibleHead")
 detached_layer_control = NodePath("../DetachedWrapper")
 
 [connection signal="gui_input" from="DetachedWrapper/HBoxContainer/VisibleHead" to="." method="_on_visible_gui_input"]
+[connection signal="gui_input" from="DetachedWrapper/HBoxContainer/Lock" to="." method="_on_lock_gui_input"]

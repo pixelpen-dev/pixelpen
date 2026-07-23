@@ -10,6 +10,7 @@ extends Resource
 		size = v
 		colormap = Image.create(size.x, size.y, false, Image.FORMAT_R8)
 @export var visible : bool = true
+@export var lock : bool = false
 @export var colormap : Image
 
 var silhouette : bool = false
@@ -22,7 +23,8 @@ func get_data() -> Dictionary:
 			"layer_uid" : var_to_str(layer_uid),
 			"label" : label,
 			"size" : var_to_str(size),
-			"visible" : visible
+			"visible" : visible,
+			"lock" : lock
 		}
 
 
@@ -43,6 +45,10 @@ func from_data(json_data : Dictionary) -> Error:
 		visible = json_data["visible"] as bool
 	else:
 		return FAILED
+	if json_data.has("lock"):
+		lock = json_data["lock"] as bool
+	else:
+		lock = false
 	return OK
 
 

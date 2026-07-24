@@ -450,6 +450,9 @@ func _on_project_file_changed():
 
 	if PixelPen.state.current_project != null:
 		PixelPen.state.current_project.undo_redo = UndoRedoManager.new()
+		PixelPen.state.debug_log.emit("File", PixelPen.state.current_project.file_path)
+	else:
+		PixelPen.state.debug_log.emit("File", "")
 
 	_update_title()
 	_update_recent_submenu()
@@ -890,7 +893,7 @@ func _save_project(file_path : String):
 	var prev_name = PixelPen.state.current_project.project_name
 	PixelPen.state.current_project.file_path = file_path
 	PixelPen.state.current_project.project_name = file_path.get_file().get_basename()
-	var err = ProjectPacker.save(PixelPen.state.current_project, file_path)
+	var err = ProjectPacker.save(PixelPen.state.current_project)
 	if err == OK:
 		PixelPen.state.userconfig.insert_recent_projects(PixelPen.state.current_project.file_path)
 		_update_recent_submenu()

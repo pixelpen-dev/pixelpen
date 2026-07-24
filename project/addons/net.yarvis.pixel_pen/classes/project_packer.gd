@@ -46,11 +46,13 @@ static func load_project(path : String) -> PixelPenProject:
 					frame.layers[i].size.y,
 					false, Image.FORMAT_R8, byte)
 		zip.close()
+		project.file_path = path
 		return project
 	return null
 
 
-static func save(project : PixelPenProject, path : String) -> Error:
+static func save(project : PixelPenProject) -> Error:
+	var path : String = project.file_path
 	if path.get_extension()  == "res":
 		var err = ResourceSaver.save(project, path)
 		return err

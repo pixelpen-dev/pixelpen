@@ -157,6 +157,17 @@ keycode = 79
 [sub_resource type="Shortcut" id="Shortcut_6mk4v"]
 events = [SubResource("InputEventKey_kaamj")]
 
+[sub_resource type="InputEventMouseButton" id="InputEventMouseButton_y5a6e"]
+device = -1
+button_mask = 2
+position = Vector2(137, 8)
+global_position = Vector2(146, 54)
+button_index = 2
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_6towp"]
+events = [SubResource("InputEventMouseButton_y5a6e")]
+
 [sub_resource type="InputEventKey" id="InputEventKey_rirj7"]
 device = -1
 command_or_control_autoremap = true
@@ -441,3 +452,4 @@ tool_color_picker = SubResource("Shortcut_xryxf")
 tool_zoom = SubResource("Shortcut_3s6gh")
 tool_ellipse = SubResource("Shortcut_kl33w")
 confirm = SubResource("Shortcut_a6fx7")
+pan = SubResource("Shortcut_6towp")

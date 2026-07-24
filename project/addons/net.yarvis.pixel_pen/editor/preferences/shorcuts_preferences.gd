@@ -77,6 +77,7 @@ var shorcuts_tree_structure : Dictionary = {
 	"Navigation" : {
 		"Zoom in.zoom_in" : [],
 		"Zoom out.zoom_out" : [],
+		"Pan.pan" : [],
 	}
 }
 

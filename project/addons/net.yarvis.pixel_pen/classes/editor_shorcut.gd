@@ -115,3 +115,4 @@ extends Resource
 @export var confirm : Shortcut
 @export var zoom_in : Shortcut
 @export var zoom_out : Shortcut
+@export var pan : Shortcut

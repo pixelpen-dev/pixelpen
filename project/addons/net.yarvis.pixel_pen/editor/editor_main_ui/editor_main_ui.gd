@@ -354,9 +354,6 @@ func _process(_delta):
 func _on_project_file_changed():
 	_on_selection_texture_changed()
 
-	var pixelpen_popup = pixel_pen_menu.get_popup()
-	pixelpen_popup.set_item_disabled(pixelpen_popup.get_item_index(PixelPenID.ABOUT), true)
-
 	var disable : bool = PixelPen.state.current_project == null
 
 	animation_menu.disabled = disable
@@ -975,7 +972,18 @@ func _on_tool_changed(grup : int, type: int, _grab_active : bool):
 
 
 func _on_pixelpen_popup_pressed(id : int):
-	if id == PixelPenID.PREFERENCE:
+	if id == PixelPenID.ABOUT:
+		var window := PixelPenAboutDialog.new()
+		add_child(window)
+		window.confirmed.connect(func():
+				window.queue_free()
+				)
+		window.canceled.connect(func():
+				window.queue_free()
+				)
+		window.popup_centered()
+
+	elif id == PixelPenID.PREFERENCE:
 		var window = preferences_dialog.instantiate()
 		window.visible = false
 		add_child(window)

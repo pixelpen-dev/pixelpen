@@ -3,7 +3,7 @@ extends Label
 
 
 var data_debug : Dictionary = {}
-var version : String
+var version : String = PixelPenAbout.VERSION
 
 
 func _ready():
@@ -14,15 +14,6 @@ func _ready():
 	PixelPen.state.debug_log.connect(func(key, value):
 			data_debug[key] = value
 			)
-
-
-func _enter_tree():
-	if Engine.is_editor_hint():
-		var cfg := ConfigFile.new()
-		if cfg.load("res://addons/net.yarvis.pixel_pen/plugin.cfg") == OK:
-			version = cfg.get_value("plugin", "version")
-	else:
-		version = ProjectSettings.get_setting("application/config/version")
 
 
 func _process(_delta):

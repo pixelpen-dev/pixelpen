@@ -8,7 +8,7 @@ PixelPen is a free and open-source pixel art editor, created with the Godot Engi
 
 ### Plugins:
 - Download the release version of this project from the [Releases page](https://github.com/pixelpen-dev/pixelpen/releases).
-- Alternatively, download it directly from [AssetLib](https://godotengine.org/asset-library/asset/3023).
+- Alternatively, download it directly from [AssetStore](https://store.godotengine.org/asset/yarvis/pixelpen/).
 - Ensure the plugin directory is `addons/net.yarvis.pixel_pen`.
 
 > [!TIP]

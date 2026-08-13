@@ -20,6 +20,7 @@ var fit_screen = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resource
 var save = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/content-save.svg")
 var grid = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/grid_3x3_24.svg")
 var hexagon = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/hive_24dp.svg")
+var diamond = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/diamond_24dp.svg")
 var tint_black = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/image-filter-black-white.svg")
 var save_alert = ThemeConfig.ui_icon("res://addons/net.yarvis.pixel_pen/resources/icon/content-save-alert-outline.svg")
 
@@ -209,6 +210,18 @@ func _build_toolbar():
 				if PixelPen.state.current_project == null:
 					return false
 				return PixelPen.state.current_project.show_hexagon,
+			func ():
+				if PixelPen.state.current_project == null:
+					return true
+				return false,
+			)
+	_build_toggle_button("Diamond", "Diamond", diamond, diamond, PixelPenEnum.ToolBoxGrup.TOOL_GRUP_TOOLBAR,
+			PixelPenEnum.ToolBar.TOOLBAR_SHOW_DIAMOND, true,
+			false, null,
+			func ():
+				if PixelPen.state.current_project == null:
+					return false
+				return PixelPen.state.current_project.show_diamond,
 			func ():
 				if PixelPen.state.current_project == null:
 					return true

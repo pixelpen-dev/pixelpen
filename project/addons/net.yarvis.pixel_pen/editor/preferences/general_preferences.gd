@@ -7,7 +7,7 @@ extends HBoxContainer
 
 var general_tree_structure : Dictionary = {
 	"Interface" : [],
-	"Guide" : ["Grid", "Hexagon"],
+	"Guide" : ["Grid", "Hexagon", "Diamond"],
 	"Projects" : [],
 	"Cursor" : [],
 	"Palette" : [],
@@ -54,6 +54,15 @@ var general_structure: Dictionary = {
 		),
 		PixelPenPropertyItem.create_vector2i(
 			"Shift position", "X", "Y", PixelPen.state.userconfig.hexagon_shift,
+			Vector2i(-16384, -16384), Vector2i(16384, 16384), Vector2i.ONE
+		)] as Array[PixelPenPropertyItem],
+	"/Guide/Diamond" : [
+		PixelPenPropertyItem.create_vector2i(
+			"Diamond size", "WIDTH", "HEIGHT", PixelPen.state.userconfig.default_diamond_size,
+			Vector2i(2, 2), Vector2i(16384, 16384), Vector2i.ONE
+		),
+		PixelPenPropertyItem.create_vector2i(
+			"Shift position", "X", "Y", PixelPen.state.userconfig.diamond_shift,
 			Vector2i(-16384, -16384), Vector2i(16384, 16384), Vector2i.ONE
 		)] as Array[PixelPenPropertyItem],
 	"/Projects" : [
@@ -157,6 +166,13 @@ func _on_general_properties_value_changed(index, value):
 				PixelPen.state.userconfig.save()
 			elif index == 2:
 				PixelPen.state.userconfig.hexagon_shift = value as Vector2i
+				PixelPen.state.userconfig.save()
+		"/Guide/Diamond":
+			if index == 0:
+				PixelPen.state.userconfig.default_diamond_size = value as Vector2i
+				PixelPen.state.userconfig.save()
+			elif index == 1:
+				PixelPen.state.userconfig.diamond_shift = value as Vector2i
 				PixelPen.state.userconfig.save()
 		"/Projects":
 			if index == 0:

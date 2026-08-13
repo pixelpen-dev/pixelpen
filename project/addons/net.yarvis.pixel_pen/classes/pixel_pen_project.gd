@@ -35,6 +35,7 @@ const COMPATIBILITY_NUMBER : int = 3
 
 @export var show_grid : bool = false
 @export var show_hexagon : bool = false
+@export var show_diamond : bool = false
 @export var show_tile : bool = false
 @export var show_preview : bool = true
 @export var show_symetric_vertical : bool = false
@@ -144,6 +145,7 @@ func get_json() -> String:
 		"_cache_canvas_pool_frame_uid" : var_to_str(_cache_canvas_pool_frame_uid),
 		"show_grid" : show_grid,
 		"show_hexagon" : show_hexagon,
+		"show_diamond" : show_diamond,
 		"show_tile" : show_tile,
 		"show_preview" : show_preview,
 		"show_symetric_vertical" : show_symetric_vertical,
@@ -277,6 +279,8 @@ func from_json(json_string : String) -> Error:
 		return FAILED
 	if json_data.has("show_hexagon"):
 		show_hexagon = json_data["show_hexagon"] as bool
+	if json_data.has("show_diamond"):
+		show_diamond = json_data["show_diamond"] as bool
 	if json_data.has("show_tile"):
 		show_tile = json_data["show_tile"] as bool
 	else:

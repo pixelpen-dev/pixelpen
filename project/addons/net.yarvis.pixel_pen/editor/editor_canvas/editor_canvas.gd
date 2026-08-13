@@ -364,6 +364,8 @@ func _draw():
 		_draw_grid(PixelPen.state.userconfig.default_grid_size * 4, 0.125)
 	if PixelPen.state.current_project != null and PixelPen.state.current_project.show_hexagon:
 		_draw_hexagon(PixelPen.state.userconfig.default_hexagon_size, 0.125)
+	if PixelPen.state.current_project != null and PixelPen.state.current_project.show_diamond:
+		_draw_diamond(PixelPen.state.userconfig.default_diamond_size, 0.125)
 	if PixelPen.state.current_project != null:
 		_draw_symetric_guid()
 	if PixelPen.state.current_project != null and PixelPen.state.current_project.show_tile:
@@ -421,6 +423,45 @@ func _draw_grid(grid_size : Vector2i, alpha : float):
 		draw_line(Vector2(x * grid_size.x, 0), Vector2(x * grid_size.x, canvas_size.y), color)
 	for y in range(1 + canvas_size.y / grid_size.y):
 		draw_line(Vector2(0, y * grid_size.y), Vector2(canvas_size.x, y * grid_size.y), color)
+
+
+func _draw_diamond(diamond_size : Vector2i, alpha : float):
+	var color = Color(1, 1, 1, alpha)
+	var w : float = maxf(diamond_size.x, 2)
+	var h : float = maxf(diamond_size.y, 2)
+	# Rows are half a cell tall and every other row is offset by half a cell,
+	# so neighbouring diamonds share whole edges.
+	var step_y : float = h * 0.5
+	var cols : int = 3 + ceili(canvas_size.x / w)
+	var rows : int = 3 + ceili(canvas_size.y / step_y)
+	if cols * rows > HEXAGON_DRAW_LIMIT:
+		return
+	var shift := Vector2(
+		fposmod(PixelPen.state.userconfig.diamond_shift.x, w),
+		fposmod(PixelPen.state.userconfig.diamond_shift.y, h)
+	)
+	var bounds : PackedVector2Array = PackedVector2Array([
+		Vector2.ZERO,
+		Vector2(canvas_size.x, 0),
+		Vector2(canvas_size.x, canvas_size.y),
+		Vector2(0, canvas_size.y)
+	])
+	for col in range(-2, cols):
+		for row in range(-2, rows):
+			var center := Vector2(col * w + (w * 0.5 if posmod(row, 2) == 1 else 0.0), row * step_y)
+			_draw_diamond_shape(center + shift, w, h, bounds, color)
+
+
+func _draw_diamond_shape(center : Vector2, w : float, h : float, bounds : PackedVector2Array, color : Color):
+	var points : PackedVector2Array = PackedVector2Array([
+		center + Vector2(0, -h * 0.5),
+		center + Vector2(w * 0.5, 0),
+		center + Vector2(0, h * 0.5),
+		center + Vector2(-w * 0.5, 0),
+		center + Vector2(0, -h * 0.5)
+	])
+	for piece in Geometry2D.intersect_polyline_with_polygon(points, bounds):
+		draw_polyline(piece, color)
 
 
 func _draw_hexagon(hexagon_size : Vector2i, alpha : float):

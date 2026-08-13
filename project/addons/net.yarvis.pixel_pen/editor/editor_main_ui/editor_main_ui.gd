@@ -195,6 +195,7 @@ func _on_size_changed():
 				_cache_layout_landscape = layout_node.branches
 			else:
 				_cache_layout_portrait = layout_node.branches
+		ThemeConfig.refresh_fixed_branches(layout_node.branches, layout_node)
 		layout_node.branches.clear_cache()
 		layout_node.update_layout()
 
